@@ -1,0 +1,21 @@
+.navbar {
+    background-color: #f8f9fa; /* Adjust the background color as needed */
+  }
+  
+  .logo {
+    height: 60px; /* Adjust the height of the logo */
+
+  }
+  
+  .nav-link {
+    color: #007bff; /* Adjust the link color */
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-size: 30px;
+  }
+  
+  .nav-link:hover {
+    color: #5400b3; /* Adjust the hover color */
+  }
+  
+ 

@@ -1,0 +1,1015 @@
+.candidate-dashboard-container{
+    display: flex;
+    flex-direction:row;
+}
+.left-side{
+    height: 100vh;
+    width: 300px;
+    background-color: rgb(209, 247, 247);
+}
+.rightside{
+    height: 100vh;
+    width: 100vw;
+    background-color:white;
+    overflow:scroll;
+}
+#logo img{
+    height: 100px;
+    width: 200px;
+    border-radius: 60px;
+}
+section{
+    padding: 12px;
+}
+
+
+
+.dashboard{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.data{
+    height: 150px;
+    width: 150px;
+    border: 3px solid gray;
+    text-align: center;
+    border-radius: 10px;
+}
+span {
+    font-size: 13px;
+}
+.status-info{
+    background-color: rgb(154, 184, 204);
+    margin: 12px;
+    color: black;
+}
+
+.candidate-search {
+    position: relative;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 10px;
+
+    margin-left: 250px;
+    margin-top: 5px;
+
+    /* margin-left: 200px; */
+
+ 
+    
+  }
+  .candidate-search input[type="text"]{
+    width:10%;
+  }
+  .candidate-search button {
+    height: 35px;
+    margin-left: 10px; /* Adjust as needed */
+  }
+  
+#user{
+height: 35px;
+margin-left: 10px;
+margin-top: 0px;
+color: rgb(90, 90, 182);
+}
+#user:hover{
+color: rgb(88, 2, 23);
+}
+a{
+text-decoration: none;
+}
+
+
+
+
+
+
+.table{
+    width: 95%;
+    display: flex;
+    margin-left: 30px;
+    margin-right: 50px;
+
+}
+.table tr{
+  width: 500px;
+  justify-content: space-between;
+  font-size: 20px;
+
+
+}
+#thead{
+    background-color: rgb(163, 209, 240);
+
+}
+table {
+    border-collapse: collapse;
+}
+table, th, td ,tr{
+
+    width: 260px;
+    text-align: left;
+
+    
+}
+.search{
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    
+    }
+.search i{
+    font-size: 25px;
+    
+}
+.search button{
+    height: 30px;
+    width: 100px;
+    color: green;
+    background-color: coral;
+    border-radius: 10px;
+    border: none;
+    position: fixed; /* Makes the element stay in place when scrolling */
+    top: 5px; /* Adjust the top position if needed (10px is a small margin) */
+    right: 100px; /* Adjust the right position if needed (10px is a small margin) */
+}
+.search .icon{
+    height: 24px;
+    width: 100px;
+    border-radius: 10px;
+    border: none;
+    position: fixed; /* Makes the element stay in place when scrolling */
+    top: 5px; /* Adjust the top position if needed (10px is a small margin) */
+    right: 20px; /* Adjust the right position if needed (10px is a small margin) */
+}
+#user{
+    margin-left: 10px;
+    margin-top: 5px;
+    color: white;
+    height: 30px;
+    width: 30px;
+}
+
+
+
+/* candidate job */
+/* My Apllicatons*/
+
+ /* .applications-table{
+  margin: 12px;
+  width: 98%;
+  border: none;
+}
+.applications-table th{
+  background-color: rgb(154, 184, 204);
+  text-align: center;
+}
+ .applications-table td{
+  text-align: center;
+} */
+
+.jobs-table-div{
+
+  height: 500px;
+  overflow: scroll;
+
+}
+
+
+.jobs-table , .applications-table{
+  border-collapse: collapse;
+  width: 98%;
+  border: none;
+  margin: 10px;
+}
+
+.jobs-table th,.applications-table th,
+.jobs-table td, .applications-table td {
+  padding: 8px;
+  text-align: center;
+
+  
+}
+
+.jobs-table th, .applications-table th {
+  background-color:rgb(179, 236, 216);
+}
+
+.jobs-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+.jobs-table tr:hover {
+  background-color: #ddd;
+}
+
+.jobs-table th, .applications-table th,
+.jobs-table td, .applications-table td {
+  border: none; 
+}
+
+.applications-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.applications-table tr:hover{
+  background-color: #ddd;
+}
+
+
+
+.dream{
+  /* background-color: rgb(204, 201, 198); */
+  width: 98%;
+  /* margin-top: 150px; */
+  margin-left: 12px;
+ 
+}
+.dream p{
+  text-align: center
+}
+ .apply b{
+  background-color: orangered;
+  color: white;
+  font-size: 18px;
+  padding: 5px;
+}
+
+
+/* dream-company-form */
+.apply-dream-company {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: white
+}
+
+.centered-container {
+  text-align: center;
+}
+
+.centered-form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.success-message {
+  text-align: center;
+  color: green;
+}
+
+
+.span{
+  border: 10px solid rgb(154, 184, 204);
+  padding: 12px;
+  margin: 12px;
+}
+.resume{
+  height: 100px;
+  width: 100px;
+  border: 3px solid gray;
+  text-align: center;
+  border-radius: 10px;
+ 
+}
+
+.resume h3{
+  margin: 15px;
+  padding: 2px;
+  text-align: center;
+}
+.span{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}
+
+
+.adding-resumes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adding-resumes input{
+  padding: 6px;
+  margin: 10px;
+}
+
+/* CandidateDashboard.css */
+
+/* Styles for smaller screens */
+@media (max-width: 768px) {
+  .candidate-dashboard-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .left-side,
+  .rightside {
+    width: 100%;
+  }
+
+  .adding-resumes {
+    text-align: center;
+  }
+
+  .success-message {
+    font-size: 14px;
+  }
+   /* Display left-side and rightside inline for smaller screens */
+ .candidate-dashboard-container .left-side,
+ .candidate-dashboard-container .rightside {
+   width: 100%;
+ }
+
+ .candidate-dashboard-container .rightside {
+   margin-top: 20px; /* Optional: Add margin for spacing between left and right sides */
+ }
+}
+
+
+/* profile */
+.candidate-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+.candidate-details label{
+  text-align: left;
+  margin: 12px;
+}
+.candidate-details button{
+  margin: 12px;
+}
+.next-back{
+  text-align: center;
+  
+}
+.next-back button{
+  /* padding: 12px; */
+  margin: 12px;
+}
+
+
+.companyJob {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+ 
+}
+
+.company-card-job {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease,transform 0.3s ease;; /* Added background-color transition */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.company-card-job:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-color: #f2f2f2;
+  transform: scale(1.05); /* Highlight color */
+}
+
+
+
+
+
+
+
+
+.company-name {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+button.com {
+  background-color: skyblue;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.com:hover {
+  background-color: lightblue;
+}
+
+/* Add this CSS to your stylesheet */
+
+#settings-container {
+  width: 150px; /* Adjust width as needed */
+  background-color: #ffffff; /* Background color */
+  border: 1px solid #ccc; /* Border */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+  padding: 10px; /* Padding inside the container */
+  margin-left: 85%;
+}
+
+#settings-container ul {
+  list-style: none; /* Remove default list styles */
+  padding: 0;
+}
+
+#settings-container li {
+  padding: 8px 0; /* Vertical padding for each setting option */
+  border-bottom: 1px solid #f0f0f0; /* Border between each option */
+}
+
+#settings-container li:last-child {
+  border-bottom: none; /* Remove border from the last option */
+}
+
+#settings-container li a {
+  color: #333333; /* Link color */
+  text-decoration: none; /* Remove default underline */
+}
+
+#settings-container li a:hover {
+  color: #007bff; /* Link color on hover */
+}
+
+#settings-container li svg {
+  margin-right: 10px; /* Spacing between icon and text */
+}
+
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Add this CSS to your stylesheet */
+
+.payment-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 50px auto;
+  max-width: 800px;
+}
+
+.payment-container > div {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.payment-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.payment-options {
+  margin-top: 20px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.payment-option svg {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.payment-history {
+  margin-top: 20px;
+}
+
+.payment-history p {
+  text-align: center;
+  color: #666;
+}
+.payment-div{
+  display: flex;
+  justify-content: end;
+}
+/* companyPage css*/
+.companyPage {
+  background-color: #fff;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center; /* Align text in center */
+}
+
+.companyPage:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.companyPage h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.companyPage p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+
+/*  Candidate search*/
+
+.candidate-search input[type='text'] {
+  padding: 8px 12px; /* Adjust padding as needed */
+  width: 100px;
+  font-size: 16px; /* Adjust font size as needed */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.candidate-search input[type='text']:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: #007bff; /* Border color on focus */
+}
+.candidate-search button {
+  background-color: transparent; /* Transparent background */
+  border: 1px solid rgb(158, 158, 248);
+   /* Remove default button border */
+  cursor: pointer; /* Show pointer cursor */
+}
+
+/* Adjust button icon size */
+.candidate-search button .button {
+  font-size: 16px; /* Adjust icon size as needed */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+}
+
+.pagination .page-item {
+  margin: 0 2px;
+}
+
+.pagination .page-link {
+  display: block;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+.pagination .page-item.active .page-link {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.page-button, .page-link {
+  cursor: pointer;
+  padding: 5px 10px;
+  /* background-color: #f0f0f0; */
+  border: 1px solid #ccc;
+  margin: 0 3px;
+}
+
+.page-button:hover {
+  background-color: #e0e0e0;
+}
+
+.active .page-link {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.page-button:disabled, .page-link:disabled {
+  cursor: not-allowed;
+  /* background-color: #f0f0f0; */
+  border-color: #ccc;
+  color: #999;
+}
+
+
+
+/*My Profile css*/
+.profile-container {
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+}
+
+.profile-item {
+  margin-bottom: 10px;
+}
+
+.profile-label {
+  font-weight: bold;
+}
+
+.profile-value {
+  margin-left: 10px;
+  color: #333;
+}
+
+.profile-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+  background-color: #0056b3;
+}
+/* Add Resume Page*/
+.resume-page {
+  /* margin-top: 100px; */
+  max-width: 600px;
+  height: fit-content;
+  margin: 100px auto;
+  padding: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resume-page h2 {
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.resume-Add {
+  display: flex;
+  flex-direction: column;
+}
+
+.select-type,
+.select,
+.message-type {
+  margin-bottom: 30px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.select select,
+.input input,
+.message textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+.select-file select:focus,
+.input input:focus,
+.message textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.uploadResume button {
+  padding: 12px 20px;
+  height: 20px;
+  width: 100px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+
+
+
+/* get Resume*/
+
+.resume-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  /* border: 5px solid rgb(161, 161, 199);
+  border-radius: 10px; */
+}
+
+.resume-box {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  height: 120px;
+  padding: 20px;
+  margin: 5px;
+  width: 200px;
+  text-align: center;
+  background-color: #f9f9f9;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.resume-box p {
+  margin: 0;
+}
+
+.download button{
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 20px;
+  margin: 5px;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* popup model*/
+/* CSS for modal */
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+}
+
+.modal-content {
+  /* background-color: aquamarine; /* White background
+  border: 1px solid #ccc; */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
+  padding: 20px;
+  max-width: 400px; /* Maximum width */
+  width: 80%; /* Responsive width */
+  height: 200px;
+}
+
+.close {
+  color: #666;
+  cursor: pointer;
+  font-size: 24px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.close:hover {
+  color: #333;
+}
+
+.close:focus {
+  outline: none;
+}
+
+/* popup*/
+.resume-selection-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  max-width: 400px; /* Maximum width */
+  width: 80%; /* Responsive width */
+  height: fit-content;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 9999; /* Ensure the popup is above other elements */
+}
+
+.popup-content {
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #666;
+  font-size: 24px;
+}
+#resumeSelect {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+}
+
+#resumeSelect:focus {
+  outline: none;
+  border-color: #4CAF50; /* Green when focused */
+}
+
+.close:hover {
+  color: #333;
+}
+
+.close:focus {
+  outline: none;
+}
+
+.ok {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 20px;
+  margin-left: 50px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.ok:hover {
+  background-color: #45a049; /* Darker Green */
+}
+
+
+/* popuo singout*/
+/* Style for the overlay */
+#modal-container {
+  position: fixed;
+  top: 0;
+  right: 0; 
+  width: 100%;
+  height: 100%;
+  margin-top: 80px;
+  margin-right: 30px;
+  /* background-color: rgba(0, 0, 0, 0.5); semi-transparent black */
+  display: flex;
+  justify-content: flex-end; 
+  align-items: flex-start; 
+  z-index: 1000; 
+}
+
+
+/* Style for the modal */
+#settings-modal {
+  background-color: #fff; /* white background */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* shadow effect */
+}
+
+/* Style for the list inside the modal */
+#settings-modal ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Style for the list items inside the modal */
+#settings-modal li {
+  margin-bottom: 10px;
+}
+
+/* Style for the close button */
+#settings-modal button {
+  background-color: #007bff; /* blue */
+  color: #fff; /* white text */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style for the close button on hover */
+#settings-modal button:hover {
+  background-color: #0056b3; /* darker blue */
+}
+
+/* Modal container */
+.modal-summary {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;  
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  overflow: auto;
+}
+
+/* Modal content */
+.modal-content-summary {
+  background-color: #fefefe;
+  margin: 10% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 95%;
+  max-width: fit-content; 
+  border-radius: 5px;
+  position: relative;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+/* Header */
+.modal-content-summary h2 {
+  margin-top: 0;
+}
+
+/* Job summary */
+.modal-content-summary pre {
+  margin: 10px;
+
+}
+
+
+.rightside {
+  flex: 1; /* Take the remaining space */
+  overflow: auto; /* Enable scrolling for the right side only */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+}
+
+.rightside::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for webkit browsers */
+}
+

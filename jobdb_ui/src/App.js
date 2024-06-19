@@ -1,4 +1,5 @@
 
+
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
@@ -8,11 +9,16 @@ import About from './pages/About';
 import JobboxCompanyPage from './pages/JobboxCompanyPage';
 import EachCompanyPage from './pages/EachCompanyPage';
 
+import './App.css';
+import AppRoutes from './AppRoutes';
+
+
 
 
 function App() {
   return (
     <div className="App">
+
    <Router basename="/" >
                 <Routes>
                     <Route path='/' element={< Home />} />
@@ -27,7 +33,11 @@ function App() {
 
             </Router>
 
+
+      <AppRoutes />
+
     </div>
+
   );
 }
 
