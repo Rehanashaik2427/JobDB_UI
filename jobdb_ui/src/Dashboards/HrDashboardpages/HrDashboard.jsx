@@ -2,30 +2,22 @@ import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useLocation } from "react-router-dom";
+
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 const HrDashboard = () => {
 
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
- 
-  // const userName=location.state?.userName;
-  const userEmail=location.state?.userEmail;
-
-  console.log(userEmail);
-
-
- 
+  const userEmail = location.state?.userEmail;
+ console.log(userEmail," ")// undefined
   const [userData, setUserData] = useState();
-  const [userName,setUserName]=useState();
+const[userName,setUserName]=useState();
   
- 
-
   const fetchUserData = async (userEmail) => {
     try {
-        const response = await axios.get(`${BASE_API_URL}/getHRName`, {
+        const response = await axios.get(`${BASE_API_URL}/getHRName`, {  // unedefined
           
             params: {
               userEmail: userEmail
@@ -33,12 +25,10 @@ const HrDashboard = () => {
           });
 
           console.log(response.data);
-          
-          
-           setUserName(response.data.userName);
-          
-          
+   
       setUserData(response.data);
+      setUserName(response.data.userName);
+
       
     } catch (error) {
       
@@ -54,7 +44,7 @@ const HrDashboard = () => {
 
  // const userName=userData.userName;
 
-  console.log(userName);
+  console.log(userName); // undefined
 
   const [showSettings, setShowSettings] = useState(false);
 
@@ -103,7 +93,7 @@ console.log (error)
     userEmail: userEmail,
   };
 
-
+console.log(user," ") // unsdefined
   return (
     <div className='hr-dashboard-container'>
          <div className='hr-leftside'>
@@ -111,23 +101,17 @@ console.log (error)
       </div>
 
       <div className='hr-rightside'>
-        {/* <h2>{userName}</h2> */}
        
       <div className="candidate-search">
-            {/* <input type='text' placeholder='serach'></input>
-            <button>
-              <FontAwesomeIcon icon={faSearch} className='button' style={{color:'skyblue'}}/>
-            </button> */}
+
             <div><FontAwesomeIcon icon={faUser} id="user" className='icon'  style={{color:'black'}} onClick={toggleSettings}/></div>
         </div>
         {showSettings && (
         <div id="modal-container">
         <div id="settings-modal">
-          {/* Your settings options here */}
           <ul>
             <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sing out</Link></li>
             <li>Setting </li>
-            {/* Add more settings as needed */}
           </ul>
           <button onClick={toggleSettings}>Close</button>
         </div>

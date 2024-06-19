@@ -7,6 +7,7 @@ export default function CompanRoute() {
     <div>
       <Routes>
         <Route path="/" element={<FindCompany />} />
+
       </Routes>
     </div>
   )
