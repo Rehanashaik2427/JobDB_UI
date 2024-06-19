@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { Button, Container, Form, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'; // Import useHistory from React Router
 
 
@@ -8,7 +9,7 @@ const FindCompany = () => {
         companyName: '',
     });
     const [modalMessageHR, setModalMessageHR] = useState('');
-     const [modalMessageCompany, setModalMessageCompany] = useState('');
+    const [modalMessageCompany, setModalMessageCompany] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -28,9 +29,8 @@ const FindCompany = () => {
             });
 
             if (response.data) {
-                setModalMessageHR('Company already exists. Please register as HR.');
                 // Navigate to HR registration page if company exists
-                
+                setModalMessageHR('Company already exists. Please register as HR.');
             } else {
                 setModalMessageCompany('Company not found. Please fill in company details.');
             }
@@ -43,47 +43,52 @@ const FindCompany = () => {
         setModalMessageHR('');
         setModalMessageCompany('');
     };
-   const companyName= formData.companyName;
-   console.log(companyName);
+    const companyName = formData.companyName;
+    console.log(companyName);
     return (
-        <div className='container-div'>
-            <form className="searchCompany">
-                <div className='company-form'>
-                    <label htmlFor="company">Company Name:</label>
-                    <input 
-                        type="text" 
-                        id="companyName" 
-                        name="companyName" 
-                        value={formData.companyName} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                    <button className="searchCompanyButton" onClick={handleSearch}>Search</button>
-                </div>
-            </form>
-            {modalMessageHR && (
-                <div className="modal1">
-                    <div className="modal-content1">
-                        <span className="close1" onClick={closeModal}>&times;</span>
-                        <p>{modalMessageHR}</p>
-                        {/* No need for Link component here */}
-                        {/* <button onClick={() =>navigate("/signup/hrSignup",{ companyName})} className="companyFormButton">HR</button> */}
-                        <button onClick={() => navigate("/signup/hrSignup", { state: { companyName } })} className="companyFormButton">HR</button>
+        <Container fluid className="d-flex justify-content-center align-items-center vh-100">
+        <Form onSubmit={handleSearch} className="searchCompany w-45">
+            <Form.Group controlId="companyName">
+                <Form.Label><strong>Company Name:</strong></Form.Label>
+                <Form.Control
+                    type="text"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    placeholder='Enter Your Company Name'
+                    required
+                     className="form-control-xm"
+                />
+            </Form.Group>
+            <Button variant="primary" type="submit" className="mt-2">
+                Search
+            </Button>
+        </Form>
 
-                    </div>
-                </div>
-            )}
-             {modalMessageCompany&& (
-                <div className="modal1">
-                    <div className="modal-content1">
-                        <span className="close1" onClick={closeModal}>&times;</span>
-                        <p>{modalMessageCompany}</p>
-                        {/* No need for Link component here */}
-                        <button onClick={() => navigate("/companies")} className="companyFormButton">Fill Company Form</button>
-                    </div>
-                </div>
-            )}
-        </div>
+        <Modal show={!!modalMessageHR} onHide={closeModal}>
+            <Modal.Header closeButton>
+                <Modal.Title>Company Found</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{modalMessageHR}</Modal.Body>
+            <Modal.Footer>
+                <Button variant="primary" onClick={() => navigate("/signup/hrSignup", { state: { companyName } })}>
+                    Register as HR
+                </Button>
+            </Modal.Footer>
+        </Modal>
+
+        <Modal show={!!modalMessageCompany} onHide={closeModal}>
+            <Modal.Header closeButton>
+                <Modal.Title>Company Not Found</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{modalMessageCompany}</Modal.Body>
+            <Modal.Footer>
+                <Button variant="primary" onClick={() => navigate("/companies")}>
+                    Fill Company Form
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    </Container>
     );
 };
 

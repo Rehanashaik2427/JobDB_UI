@@ -27,7 +27,7 @@ const Home = () => {
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
               <Nav.Link as={Link} to="/admin-register">Admin</Nav.Link>
-              <Nav.Link as={Link} to="/jobboxCompanyPage">Companies</Nav.Link>
+              <Nav.Link as={Link} to="/jobdbcompanies">Companies</Nav.Link>
               <Nav.Link as={Link} to="/candidates">Candidates</Nav.Link>
               <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
               <Nav.Link as={Link} to="/signup">Signup</Nav.Link>

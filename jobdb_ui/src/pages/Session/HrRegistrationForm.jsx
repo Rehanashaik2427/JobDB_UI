@@ -76,11 +76,12 @@ const HrRegistrationForm = () => {
           setRegistrationSuccess(true);
     
          
-          navigate('/hr-RegSuccess'); 
+          navigate('/signup/hrSignup/registration-success-msg'); 
     
         }  catch (error) {
           if (error.message.includes("User already exists")) {
             setEmailExistsError(true);
+            navigate('/signup/hrSignup/registration-success-msg/user-signin',{ state: initialValues.userRole })
           } else {
             console.error('Error registering candidate:', error);
           }
@@ -100,7 +101,7 @@ const HrRegistrationForm = () => {
                         <div className="w-100 h-100 justify-content-center d-flex flex-column">
                             <SocialButtons
                                 isLogin
-                                routeUrl="/signin"
+                                routeUrl="/signup/hrSignup/registration-success-msg/user-signin"
                                 googleHandler={() => alert("google")}
                                 facebookHandler={() => alert("facebook")}
                             />

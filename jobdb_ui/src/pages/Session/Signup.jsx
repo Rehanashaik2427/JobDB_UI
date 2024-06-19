@@ -8,9 +8,6 @@ const Signup = () => {
 const navigate = useNavigate();
   const handleUserTypeChange = (type) => {
     setUserType(type);
-    if (type === "admin") {
-      navigate("/admin");
-    }
     if (type === "hr") {
       navigate("/findCompany");
     }
@@ -27,14 +24,7 @@ const navigate = useNavigate();
         <Form onSubmit={(event) => event.preventDefault()} className="user-registration-form">
           <p style={{ textAlign: 'center' }}>Select your role and please fill the details</p>
           <div className="radio-group">
-            <Form.Check
-              type="radio"
-              label="Admin"
-              name="userType"
-              value="admin"
-              onChange={() => handleUserTypeChange("admin")}
-              checked={userType === "admin"}
-            />
+           
             <Form.Check
               type="radio"
               label="HR"
