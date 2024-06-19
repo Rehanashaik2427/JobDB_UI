@@ -1,17 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useHistory } from 'react-router-dom';
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const EachCompanyPage = () => {
+const EachCompanyPage = (props) => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  const companyId = location.state?.companyId;
+  const companyId = location.state?.companyId; // Access companyId from URL parameter
+
   const [company, setCompany] = useState();
   const [countOfApplications, setCountOfApplications] = useState();
   const [countOfHR, setCountOfHR] = useState();
   const [countOfJobs, setCountOfJobs] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const fetchCompany = async () => {
     try {
@@ -62,37 +62,31 @@ const EachCompanyPage = () => {
     fetchCountOfApplicationByCompany();
     fetchCountOfHRByCompany();
     fetchCountOfJobsByCompany();
-  },[]);
+  }, [companyId]);
 
   return (
     <div>
       <div className="companyPage">
         {company ? (
           <div>
-            <h2>Company Name :{company.companyName}</h2>
+            <h2>Company Name: {company.companyName}</h2>
             <p>{company.description}</p>
             <p>{company.jobboxEmail}</p>
             <p>Total Applications: {countOfApplications}</p>
             {countOfHR > 0 ? (
-            <p>HR mapped = Yes</p>
-                 ) : (
-            <p>HR mapped = No</p>
-                )}
+              <p>HR mapped = Yes</p>
+            ) : (
+              <p>HR mapped = No</p>
+            )}
             <p>Total HRs Join: {countOfHR}</p>
             <p>Total Jobs Posted By HRs: {countOfJobs}</p>
-            <div> 
-            <h2> To View the Applications please </h2>
-            <div className="company-buttons">
-              <button onClick={() => history.push({ pathname: '/hr-registeration', state: { companyName: company.companyName } })}>Claim as HR</button>
-              
-              <button onClick={() => history.push({ pathname: '/hr-signin', state: { companyName: company.companyName } })}>Login</button>
+            <div>
+              <h2>To View the Applications please</h2>
+              <div className="company-buttons">
+                <button onClick={() => navigate({ pathname: '/hr-registeration', state: { companyName: company.companyName } })}>Claim as HR</button>
+                <button onClick={() => navigate({ pathname: '/hr-signin', state: { companyName: company.companyName } })}>Login</button>
+              </div>
             </div>
-
-           {/* <Link to={{pathname:'/hr-registeration', state: { companyName:company.companyName }}}> Claim as HR</Link>   </h2> */}
-            
-            </div>
-
-
           </div>
         ) : (
           <p>Loading company details...</p>
