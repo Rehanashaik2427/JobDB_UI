@@ -1,14 +1,11 @@
-import { faBuilding, faFile, faFileLines, faHome, faHouse, faLayerGroup, faMoneyCheckDollar, faSearch, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';// Import Link from react-router-dom
-import './CandidateDashboard.css';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Container, Modal, Row } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { Button, Col, Container, Form, Row, Modal } from 'react-bootstrap';
 
 const CandidateDashboard = () => {
   const location = useLocation();
@@ -16,7 +13,7 @@ const CandidateDashboard = () => {
  // const userName=location.state.userName;
   const userId = location.state?.userId;
   console.log(userId);
-
+  const navigate = useNavigate();
 
   const [userData, setUserData] = useState();
   const [userName, setUserName] = useState();
@@ -134,16 +131,9 @@ const CandidateDashboard = () => {
     }
   };
   useEffect(() => {
-
     fetchTotalShortlistedApplications(userId);
 
   }, [userId]);
-
-
-
-
-
-
 
   console.log(userId);
   const [showModal, setShowModal] = useState(false);
@@ -164,7 +154,7 @@ const CandidateDashboard = () => {
       <div className='rightside'>
         <Container className="top-right-content">
           <Row className="candidate-search d-flex justify-content-end ">
-            
+
             <Col xs={4} md={2}>
               <div className="user-icon">
                 <FontAwesomeIcon
@@ -173,8 +163,6 @@ const CandidateDashboard = () => {
                   style={{ color: 'black', cursor: 'pointer', fontSize: '2.5em' }} // Adjust fontSize as needed
                   onClick={toggleModal}
                 />
-
-
               </div>
             </Col>
           </Row>
@@ -200,12 +188,16 @@ const CandidateDashboard = () => {
 
         <Container className="my-dashboard-container ">
           <h3 className='status-info'>My application status</h3>
-          <Row className="dashboard d-flex">
-            <Col xs={3} md={4} className="data" style={{ maxHeight: '100px', maxWidth: '100px' }}>
+          <Row className="dashboard d-flex mt-4">
+            <Col xs={3} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px',marginLeft:'20px'}}>
               <Link
                 to={{
                   pathname: '/candidate-companies',
                   state: { userName: userName, userId: userId }
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
                 }}
               >
                 <p>Applied to</p>
@@ -213,22 +205,25 @@ const CandidateDashboard = () => {
                 <p>companies</p>
               </Link>
             </Col>
-            <Col xs={6} md={4} className="data" style={{ maxHeight: '100px', maxWidth: '100px' }}>
+            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
               <Link
                 to={{
                   pathname: '/resume',
                   state: { userName: userName, userId: userId }
+                }} onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/candidate-dashboard/resume', { state: { userName, userId } });
                 }}
               >
                 <h4>{countOfResume !== null ? countOfResume : 'Loading...'}</h4>
                 <p>resumes</p>
               </Link>
             </Col>
-            <Col xs={6} md={4} className="data" style={{ maxHeight: '100px', maxWidth: '100px' }}>
+            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
               <h1>250</h1>
               <h4>resume views</h4>
             </Col>
-            <Col xs={6} md={4} className="data" style={{ maxHeight: '100px', maxWidth: '100px' }}>
+            <Col xs={6} md={4} className="data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
               <Link
                 to={{
                   pathname: '/my-application',
@@ -239,15 +234,18 @@ const CandidateDashboard = () => {
                 <h4>shortlist</h4>
               </Link>
             </Col>
-            <Col xs={6} md={4} className="data" style={{ maxHeight: '100px', maxWidth: '100px' }}>
+            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' , textAlign:'center',marginRight:'20px' }}>
               <Link
                 to={{
                   pathname: '/candidate-companies',
                   state: { userName: userName, userId: userId }
+                }}  onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
                 }}
               >
-                <h4>{countOfTotalCompanies !== null ? countOfTotalCompanies : 'Loading...'}</h4>
-                <p>companies</p>
+                <h4 className='text-align-center'>{countOfTotalCompanies !== null ? countOfTotalCompanies : 'Loading...'}</h4>
+                <h5 className='text-align-center'>companies</h5>
               </Link>
             </Col>
           </Row>

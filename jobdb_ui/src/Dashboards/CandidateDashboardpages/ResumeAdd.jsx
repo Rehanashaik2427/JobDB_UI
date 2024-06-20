@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 
 const ResumeAdd = () => {
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -84,50 +85,69 @@ const ResumeAdd = () => {
     
     return (
         <div className='candidate-dashboard-container'>
-            <div className='left-side'>
-                <CandidateLeftSide user={user} />
-            </div>
-            <div className='resume-page'>
-                <h2>Add Resume</h2>
-                <form onSubmit={handleSubmit} className='resume-Add'>
-                    <div className='select-type'>
-                        <label>Select Type:</label>
-                        <select value={fileType} onChange={handleFileTypeChange}>
-                            <option value="file">File</option>
-                            <option value="link">Link</option>
-                            <option value="brief">Brief</option>
-                        </select>
-                    </div>
-                    {fileType === 'file' && (
-                        <div className='select-file'>
-                            <label>Select File:</label>
-                            <input type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} />
-                        </div>
-                    )}
-                    {fileType === 'link' && (
-                        <div className='select-link'>
-                            <label>Enter Link:</label>
-                            <input type='text' value={link} onChange={handleLinkChange} />
-                        </div>
-                    )}
-                    {fileType === 'brief' && (
-                        <div className='message-type'>
-                            <label>Brief Resume:</label>
-                           <pre><textarea value={briefMessage} onChange={handleBriefMessageChange}></textarea></pre>
-                        </div>
-                    )}
-                        <div className='message-type'>
-                            <label>Resume Title:</label>
-                            <textarea value={message} onChange={handleMessageChange}></textarea>
-                        </div>
-                    <div>
+      <div className='left-side'>
+        <CandidateLeftSide user={{ userName: userName, userId: userId }} />
 
-                        <button type="submit" className='uploadResume'>Upload Resume</button>
-                    </div>
-                </form>
-                {successMessage && <p>{successMessage}</p>}
-            </div>
-        </div>
+      </div>
+        <Col sm={9} className='resume-page' style={{ paddingLeft: '20px' }}>
+          <h2>Add Resume</h2>
+          <Form onSubmit={handleSubmit} className='resume-Add'>
+            <Form.Group as={Row} className='select-type'>
+              <Form.Label column sm={3}>Select Type:</Form.Label>
+              <Col sm={9}>
+                <Form.Control as='select' value={fileType} onChange={handleFileTypeChange}>
+                  <option value="file">File</option>
+                  <option value="link">Link</option>
+                  <option value="brief">Brief</option>
+                </Form.Control>
+              </Col>
+            </Form.Group>
+
+            {fileType === 'file' && (
+              <Form.Group as={Row} className='select-file'>
+                <Form.Label column sm={3}>Select File:</Form.Label>
+                <Col sm={9}>
+                  <Form.Control type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} />
+                </Col>
+              </Form.Group>
+            )}
+
+            {fileType === 'link' && (
+              <Form.Group as={Row} className='select-link'>
+                <Form.Label column sm={3}>Enter Link:</Form.Label>
+                <Col sm={9}>
+                  <Form.Control type='text' value={link} onChange={handleLinkChange} />
+                </Col>
+              </Form.Group>
+            )}
+
+            {fileType === 'brief' && (
+              <Form.Group as={Row} className='message-type'>
+                <Form.Label column sm={3}>Brief Resume:</Form.Label>
+                <Col sm={9}>
+                  <Form.Control as='textarea' value={briefMessage} onChange={handleBriefMessageChange} />
+                </Col>
+              </Form.Group>
+            )}
+
+            <Form.Group as={Row} className='message-type'  style={{marginTop: '20px'}}>
+              <Form.Label column sm={3}>Resume Title:</Form.Label>
+              <Col sm={9}>
+                <Form.Control as='textarea' value={message} onChange={handleMessageChange} />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row}>
+              <Col sm={{ span: 9, offset: 3 }}>
+                <Button type="submit" className='uploadResume'>Upload Resume</Button>
+              </Col>
+            </Form.Group>
+          </Form>
+
+          {successMessage && <p>{successMessage}</p>}
+        </Col>
+      </div>
+    
     );
 };
 

@@ -1,60 +1,110 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { useLocation } from "react-router-dom";
 import CandidateLeftSide from "./CandidateLeftSide";
 import './CandidateDashboard.css';
+import { useNavigate } from "react-router-dom";
 
-const CompamyPage= ()=> {
+const CompamyPage = () => {
 
-  const BASE_API_URL="http://localhost:8082/api/jobbox";
-    const location=useLocation();
-    const companyId=location.state?.companyId;
-    const userName=location.state?.userName;
-    const userId=location.state?.userId;
-    const [company,setCompany]=useState();
+  const BASE_API_URL = "http://localhost:8082/api/jobbox";
+  const location = useLocation();
 
-    const fetchCompany = async () => {
-        try {
-            const response = await axios.get(`${BASE_API_URL}/displayCompanyById?companyId=${companyId}`);
-          setCompany(response.data); // Set the fetched jobs to state
-        } catch (error) {
-          console.error('Error fetching jobs:', error);
-        }
-      };
-    
-      // useEffect hook to fetch jobs when the component mounts
-      useEffect(() => {
-        fetchCompany();
-      }, []);
+  const companyId = location.state?.companyId; // Access companyId from URL parameter
+const userName=location.state?.userName;
+const userId=location.state?.userId;
+  const [company, setCompany] = useState();
+  const [countOfApplications, setCountOfApplications] = useState();
+  const [countOfHR, setCountOfHR] = useState();
+  const [countOfJobs, setCountOfJobs] = useState();
+  const navigate = useNavigate();
 
-      const user = {
-        userName: userName,
-        
-        userId: userId,
-       };
-    
-      return (
-        
-        <div className='candidate-dashboard-container'>
-        <div className='left-side'>
-       <CandidateLeftSide user={user} />
-     </div>
-    <div className="companyPage">
-            {company ? (
-                <div>
-                    <h2>{company.companyName}</h2>
-                    <p>{company.discription}</p>
-                    <p>{company.jobboxEmail}</p>
-                    
-                </div>
+  const fetchCompany = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_API_URL}/displayCompanyById?companyId=${companyId}`
+      );
+      setCompany(response.data);
+    } catch (error) {
+      console.error('Error fetching company details:', error);
+    }
+  };
+
+  const fetchCountOfApplicationByCompany = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_API_URL}/countOfApplicationsByCompany?companyId=${companyId}`
+      );
+      setCountOfApplications(response.data);
+    } catch (error) {
+      console.error('Error fetching count of applications:', error);
+    }
+  };
+
+  const fetchCountOfHRByCompany = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_API_URL}/countOfHRByCompany?companyId=${companyId}`
+      );
+      setCountOfHR(response.data);
+    } catch (error) {
+      console.error('Error fetching count of HRs:', error);
+    }
+  };
+
+  const fetchCountOfJobsByCompany = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_API_URL}/countOfJobsByCompany?companyId=${companyId}`
+      );
+      setCountOfJobs(response.data);
+    } catch (error) {
+      console.error('Error fetching count of jobs:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCompany();
+    fetchCountOfApplicationByCompany();
+    fetchCountOfHRByCompany();
+    fetchCountOfJobsByCompany();
+  }, [companyId]);
+
+  return (
+    <div className='candidate-dashboard-container'>
+      <div className='left-side'>
+        <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+
+      </div>
+      <div className="companyPage">
+        {company ? (
+          <div>
+            <h2>Company Name: {company.companyName}</h2>
+            <p>{company.description}</p>
+            <p>{company.jobboxEmail}</p>
+            <p>Total Applications: {countOfApplications}</p>
+            {countOfHR > 0 ? (
+              <p>HR mapped = Yes</p>
             ) : (
-                <p>Loading company details...</p>
+              <p>HR mapped = No</p>
             )}
-        </div>
-        </div>
+            <p>Total HRs Join: {countOfHR}</p>
+            <p>Total Jobs Posted By HRs: {countOfJobs}</p>
+            <div>
+              <h2>To View the Applications please</h2>
+              <div className="company-buttons">
+                <button onClick={() => navigate({ pathname: '/hr-registeration', state: { companyName: company.companyName } })}>Claim as HR</button>
+                <button onClick={() => navigate({ pathname: '/hr-signin', state: { companyName: company.companyName } })}>Login</button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p>Loading company details...</p>
+        )}
+      </div>
+    </div>
+  );
+};
 
-    );
-
-}
 
 export default CompamyPage;

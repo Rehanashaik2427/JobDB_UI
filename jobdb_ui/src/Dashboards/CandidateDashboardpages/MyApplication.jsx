@@ -2,13 +2,17 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Form, Link, useLocation } from 'react-router-dom';
+
+
+
+
+import { Link, useLocation } from 'react-router-dom';
 
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { Button, Col, Container, Modal, Pagination, Table } from 'react-bootstrap';
+import { Button, Col, Container, Form, Modal, Pagination, Table } from 'react-bootstrap';
 
-const MyApplication = () => {
+const MyApplication= () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
   const userName = location.state?.userName;
@@ -354,7 +358,6 @@ const MyApplication = () => {
       </div>
     </div>
   );
-}
-
+};
 export default MyApplication;
    

@@ -1,8 +1,7 @@
 import { faCreditCard, faGlobe, faPaperclip, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useLocation } from 'react-router-dom'; // Import Link from react-router-dom
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 

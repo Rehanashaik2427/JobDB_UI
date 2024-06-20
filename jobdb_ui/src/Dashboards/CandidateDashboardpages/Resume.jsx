@@ -2,10 +2,10 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
-import './CandidateDashboard.css';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 import CandidateLeftSide from './CandidateLeftSide';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 const Resume = () => {
   const BASE_API_URL="http://localhost:8082/api/jobbox";
@@ -13,7 +13,7 @@ const Resume = () => {
   const userName=location.state?.userName;
   const userId=location.state?.userId;
   const [showMessage, setShowMessage] = useState(false);
-
+const navigate=useNavigate();
 
   const [resumes, setResumes] = useState([]);
 
@@ -87,83 +87,77 @@ alert("Failed To delete")
   return (
     <div className='candidate-dashboard-container'>
     <div className='left-side'>
-   <CandidateLeftSide user={user} />
- </div>
+      <CandidateLeftSide user={{ userName: userName, userId: userId }} />
 
-      <div className='rightside'>
-      <div className="top-right-content">
+    </div>
+      <Col sm={9} className='right-side'>
+        <div className="top-right-content">
           <div className="candidate-search">
-            <input type='text' placeholder='serach'></input>
-            <button>
-              <FontAwesomeIcon icon={faSearch} className='button' style={{color:'skyblue'}}/>
-            </button>
-            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{color:'black'}} onClick={toggleSettings}/></div>
-          
+            <input type='text' placeholder='search' />
+            <Button variant="light" onClick={() => alert('Search clicked')}>
+              <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+            </Button>
+            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
           </div>
-         
-    
         </div>
-        {showSettings && (
-        <div id="modal-container">
-        <div id="settings-modal">
-          {/* Your settings options here */}
-          <ul>
-            <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sing out</Link></li>
-            <li>Setting </li>
-            {/* Add more settings as needed */}
-          </ul>
-          <button onClick={toggleSettings}>Close</button>
-        </div>
-        </div>
-      )}
 
-{showBriefSettings && (
-         <div className="modal-summary">
-         <div className="modal-content-summary">
-         <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
-          {showMessage}
-        </div>
-        </div>
-      )}
+        {showSettings && (
+          <div id="modal-container">
+            <div id="settings-modal">
+              <ul>
+                <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
+                <li>Setting</li>
+                {/* Add more settings as needed */}
+              </ul>
+              <Button onClick={toggleSettings}>Close</Button>
+            </div>
+          </div>
+        )}
+
+        {showBriefSettings && (
+          <div className="modal-summary">
+            <div className="modal-content-summary">
+              <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
+              {showMessage}
+            </div>
+          </div>
+        )}
 
         <div>
-          <h1 style={{textAlign:'center'}}>MY RESUMES</h1>
-          
-            
-            <div className='resume-div'>
-                {resumes.map((resume, index) => (
-                        <span className='resume-box' key={index}>
-                        {/* {resume.fileName} */} <h1>Resume :{index+1}</h1>
-                        <h3>{resume.message}</h3>
+          <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
 
-                        {resume.fileType === 'file' && (
-                                <button className='download' onClick={() => handleDownload(resume.id, resume.fileName)}>Download</button>
-                            )}
-                            {resume.fileType === 'link' && (
-                                <a href={resume.fileName} target="_blank" rel="noopener noreferrer">Open Link</a>
-                            )}
-                            {resume.fileType === 'brief' && (
-                                <button className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</button>
-                            )}
-                        <button className='download' onClick={() => handleDelete(resume.id,resume.fileName)}>Delete</button>
+          <div className='resume-div d-flex flex-wrap'>
+              {resumes.map((resume, index) => (
+                <Card className='resume-card' key={index}>
+                  <Card.Body>
+                    <Card.Title>Resume : {index + 1}</Card.Title>
+                    <Card.Text>{resume.message}</Card.Text>
 
+                    {resume.fileType === 'file' && (
+                      <Button variant="primary" size="sm" className='download' onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
+                    )}
+                    {resume.fileType === 'link' && (
+                      <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
+                    )}
+                    {resume.fileType === 'brief' && (
+                      <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
+                    )}
 
-
-                    </span>
-                ))}
+                    <Button variant="danger" size="sm" className='delete' style={{marginLeft: '10px'}} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
+                  </Card.Body>
+                </Card>
+              ))}
             </div>
-        
-          <div className='adding-resumes'>
-          <Link to={{
-          pathname: '/resumeAdd',
-          state: { userName: userName,userId:userId }
-        }}>ADD NEW RESUME</Link>
-           
-       
+          <div className='adding-resumes' style={{marginTop: '50px'}}>
+            <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
+            }} >ADD NEW RESUME</Link>
+          </div>
         </div>
-      </div>
-    </div>
-    </div>
+      </Col>
+   
+  </div>
   );
 };
 

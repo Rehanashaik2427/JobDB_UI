@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, FormControl, Pagination, Row } from 'react-bootstrap';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const JobboxCompanyPage = () => {
@@ -15,6 +15,7 @@ const JobboxCompanyPage = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
   const handlePreviousPage = () => {
     if (page > 0) {
       setPage(page - 1);
@@ -82,6 +83,10 @@ const JobboxCompanyPage = () => {
     event.preventDefault();
     fetchCompanyBySearch();
   };
+  const handleClick = (companyId) => {
+    navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })
+    alert('Button clicked!');
+  };
 
 
 
@@ -90,7 +95,6 @@ const JobboxCompanyPage = () => {
     <div className="top-right-content">
       <div className="candidate-search">
         <Form onSubmit={handleSubmit} className="searchCompany w-45">
-          <Form.Label><h1>Companies that we have</h1></Form.Label>
           <Row className="align-items-center justify-content-center">
 
             <Col xs={4}>
@@ -125,7 +129,7 @@ const JobboxCompanyPage = () => {
                 <Card.Body>
                   <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                   <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                  <Link
+                  {/* <Link
                     to={{
                       pathname: `/jobboxCompanyPage/eachCompanyPage/${company.companyId}`, // Adjusted pathname to include companyId as URL parameter
                       state: { companyId: company.companyId }
@@ -133,7 +137,10 @@ const JobboxCompanyPage = () => {
                     className='btn btn-primary'
                   >
                     View
-                  </Link>
+                  </Link> */}
+                  <Button onClick={() => handleClick(company.companyId)}>
+                    View
+                  </Button>
                 </Card.Body>
               </Card>
 
@@ -145,7 +152,7 @@ const JobboxCompanyPage = () => {
         </div>
 
         <nav className="d-flex justify-content-center">
-          <Pagination>
+          <Pagination style={{ color: "purple" }}>
             <Pagination.Prev onClick={handlePreviousPage} disabled={page === 0} />
             {[...Array(totalPages).keys()].map((pageNumber) => (
               <Pagination.Item key={pageNumber} active={pageNumber === page} onClick={() => handlePageChange(pageNumber)}>

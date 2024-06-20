@@ -2,14 +2,13 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 
 const Applications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
-  const history = useHistory();
 
   const location = useLocation();
   const userName = location.state?.userName;

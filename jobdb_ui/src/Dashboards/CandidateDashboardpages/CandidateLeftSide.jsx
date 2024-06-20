@@ -1,81 +1,113 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Nav, Navbar } from 'react-bootstrap';
-import { faMoneyCheckDollar, faHouse, faUser, faBuilding, faLayerGroup, faFileLines, faFile } from '@fortawesome/free-solid-svg-icons';
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding, faFile, faFileLines, faHouse, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
+
 import './CandidateDashboard.css';
 
 function CandidateLeftSide({ user }) {
   const { userName, userId } = user;
+  const navigate = useNavigate();
 
   return (
     <Navbar expand="lg" className="flex-column align-items-start" style={{ backgroundColor: 'rgb(209, 247, 247)', color: 'black' }}>
-      <Navbar.Brand>
-        <img
-          src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png"
-          alt="jobboxlogo"
-          style={{ height: '50px' }} // Adjust height as needed
-        />
-      </Navbar.Brand>
+      <Container fluid className="flex-column">
+        <Nav className="flex-column full-height align-items-start" style={{ color: 'black' }}>
+          <Navbar.Brand>
+            <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
+          </Navbar.Brand>
 
-      <Navbar.Text>
-        <h2>Welcome {userName}</h2>
-      </Navbar.Text>
+          <Navbar.Text>
+            <h2>Welcome {userName}</h2>
+          </Navbar.Text>
 
-      <Nav className="flex-column full-height align-items-start" style={{ color: 'black' }}>
-        <Nav.Link as={Link} to={{
-          pathname: '/candidate-dashboard',
-          state: { userName, userId }
-        }} style={{ color: 'black' }}>
-          <FontAwesomeIcon icon={faHouse} /> Dashboard
-        </Nav.Link>
+          <Link
+            to="/candidate-dashboard"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard', { state: { userName, userId } });
+            }}
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            <FontAwesomeIcon icon={faHouse} /> Dashboard
+          </Link>
 
-        <Nav.Link as={Link} to={{
-          pathname: '/candidate-dashboard/candidate-jobs',
-          state: { userName, userId }
-        }} style={{ color: 'black' }}>
-          <FontAwesomeIcon icon={faLayerGroup} /> Jobs
-        </Nav.Link>
+          <Link
+            to="/candidate-dashboard/candidate-jobs"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/candidate-jobs', { state: { userName, userId } });
+            }}
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            <FontAwesomeIcon icon={faLayerGroup} /> Jobs
+          </Link>
 
-        <Nav.Link as={Link} to={{
-          pathname: '/candidate-dashboard/candidate-companies',
-          state: { userName, userId }
-        }} style={{ color: 'black' }}>
-          <FontAwesomeIcon icon={faBuilding} /> Companies
-        </Nav.Link>
+          <Link
+            to="/candidate-dashboard/candidate-companies"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
+            }}
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            <FontAwesomeIcon icon={faBuilding} /> Companies
+          </Link>
 
-        <Nav.Link as={Link} to={{
-          pathname: '/candidate-dashboard/my-application',
-          state: { userName, userId }
-        }} style={{ color: 'black' }}>
-          <FontAwesomeIcon icon={faFileLines} /> My Application
-        </Nav.Link>
+          <Link
+            to="/candidate-dashboard/my-application"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/my-application', { state: { userName, userId } });
+            }}
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            <FontAwesomeIcon icon={faFileLines} /> My Application
+          </Link>
 
-        <Nav.Link as={Link} to={{
-          pathname: '/resume',
-          state: { userName, userId }
-        }} style={{ color: 'black' }}>
-          <FontAwesomeIcon icon={faFile} /> My Resume
-        </Nav.Link>
+          <Link
+            to="/candidate-dashboard/resume"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/resume', { state: { userName, userId } });
+            }}
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            <FontAwesomeIcon icon={faFile} /> My Resume
+          </Link>
 
-        <Nav.Link as={Link} to={{
-          pathname: '/profile',
-          state: { userName, userId }
-        }} style={{ color: 'black' }}>
-          <FontAwesomeIcon icon={faUser} /> My Profile
-        </Nav.Link>
+          <Link
+            to="/candidate-dashboard/profile"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/profile', { state: { userName, userId } });
+            }}
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            <FontAwesomeIcon icon={faUser} /> My Profile
+          </Link>
 
-        <Nav.Link as={Link} to={{
-          pathname: '/payment',
-          state: { userName, userId }
-        }} style={{ color: 'black' }}>
-          <FontAwesomeIcon icon={faMoneyCheckDollar} /> Payments/Credits
-        </Nav.Link>
+          <Link
+            to="/candidate-dashboard/payment"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/payment', { state: { userName, userId } });
+            }}
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            <FontAwesomeIcon icon={faMoneyCheckDollar} /> Payments/Credits
+          </Link>
 
-        <Nav.Link as={Link} to="/contact" style={{ color: 'black' }}>
-          Contact us
-        </Nav.Link>
-      </Nav>
+          <Link
+            to="/contact"
+            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
+          >
+            Contact us
+          </Link>
+
+        </Nav>
+      </Container>
     </Navbar>
   );
 }

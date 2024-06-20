@@ -2,16 +2,17 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { Button, Card } from 'react-bootstrap';
 
 const CandidatesCompanies = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
-
+  const navigate = useNavigate();
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -72,12 +73,15 @@ const CandidatesCompanies = () => {
     setShowSettings(!showSettings);
   };
 
-
+  const handleClick = (companyId) => {
+    navigate("/candidate-dashboard/companyPage", { state: { companyId: companyId,userName: userName, userId: userId } })
+    alert('Button clicked!');
+  };
 
   return (
     <div className='candidate-dashboard-container'>
       <div className='left-side'>
-      <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+        <CandidateLeftSide user={{ userName: userName, userId: userId }} />
 
       </div>
       <div className='rightside'>
@@ -91,32 +95,35 @@ const CandidatesCompanies = () => {
                 value={search}
                 onChange={handleSearchChange}
               />
-              <button type="submit">
-                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-              </button>
+             <Button variant="light" onClick={() => alert('Search clicked')}>
+              <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+            </Button>
             </form>
+            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
           </div>
           <div className="companyJob">
             <h1>Companies that we have</h1>
-            <div className="cards">
-              {companies.length > 0 ? (
-                companies.map((company) => (
-                  <div className="company-card-job" key={company.companyId}>
-                    <p className="company-name">Company Name: <b>{company.companyName}</b></p>
-                    <p>Company Email: <b>{company.companyEmail}</b></p>
-                    <p>Industry: <b>{company.industry}</b></p>
-                    <Link to={{
-                      pathname: '/companyPage',
-                      state: { companyId: company.companyId, userName, userId }
-                    }}>
-                      <button className='com'><h3>View</h3></button>
-                    </Link>
-                  </div>
-                ))
-              ) : (
-                <p>Loading companies...</p>
-              )}
-            </div>
+            <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
+          {companies.length > 0 ? (
+            companies.map((company) => (
+              <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}>
+                <Card.Body>
+                  <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                  <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+        
+                  <Button onClick={() => handleClick(company.companyId)}>
+                    View
+                  </Button>
+                </Card.Body>
+              </Card>
+
+
+            ))
+          ) : (
+            <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
+          )}
+        </div>
+
             <nav>
               <ul className='pagination'>
                 <li>
@@ -133,7 +140,7 @@ const CandidatesCompanies = () => {
               </ul>
             </nav>
           </div>
-          <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
+
           {showSettings && (
             <div id="modal-container">
               <div id="settings-modal">
