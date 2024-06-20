@@ -72,15 +72,13 @@ const CandidatesCompanies = () => {
     setShowSettings(!showSettings);
   };
 
-  const user = {
-    userName,
-    userId,
-  };
+
 
   return (
     <div className='candidate-dashboard-container'>
       <div className='left-side'>
-        <CandidateLeftSide user={user} />
+      <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+
       </div>
       <div className='rightside'>
         <div className="top-right-content">

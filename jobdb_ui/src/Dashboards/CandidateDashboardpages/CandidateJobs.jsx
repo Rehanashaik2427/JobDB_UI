@@ -6,7 +6,7 @@ import { Form, Link, useLocation } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
-import { Button, Col, Container, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Container, Modal, Pagination, Row, Table } from 'react-bootstrap';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -14,7 +14,6 @@ const CandidateJobs = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
-  console.log(userId);
 
   const [jobs, setJobs] = useState([]);
   const [applyjobs, setApplyJobs] = useState([]);
@@ -140,7 +139,7 @@ const CandidateJobs = () => {
   const fetchJobBySearch = async () => {
     try {
       const params = {
-        search:search,
+        search: search,
         page: page,
         size: pageSize,
         sortBy: sortedColumn,
@@ -149,13 +148,6 @@ const CandidateJobs = () => {
       const response = await axios.get(`${BASE_API_URL}/searchJobs`, { params });
       setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
-
-      const statuses = await Promise.all(response.data.content.map(job => hasUserApplied(job.jobId, userId)));
-      const statusesMap = {};
-      response.data.content.forEach((job, index) => {
-        statusesMap[job.jobId] = statuses[index];
-      });
-
     } catch (error) {
       console.log("No data Found" + error);
     }
@@ -185,14 +177,15 @@ const CandidateJobs = () => {
   };
 
   const user = {
-    userName:userName,
-    userId:userId,
+    userName: userName,
+    userId: userId,
   };
 
   return (
     <div className='candidate-dashboard-container'>
       <div className='left-side'>
-        <CandidateLeftSide user={user} />
+      <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+
       </div>
 
       <div className='rightside'>
@@ -244,7 +237,6 @@ const CandidateJobs = () => {
               </div>
             </Col>
           </Row>
-
           {showSettings && (
             <Modal show={showSettings} onHide={toggleSettings} centered>
               <Modal.Header closeButton>
@@ -321,7 +313,6 @@ const CandidateJobs = () => {
                   </Modal.Footer>
                 </Modal>
               )}
-
 
               <nav className="d-flex justify-content-center">
                 <Pagination>

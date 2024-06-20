@@ -2,10 +2,11 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Form, Link, useLocation } from 'react-router-dom';
+
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { Button, Col, Container, Modal, Pagination, Table } from 'react-bootstrap';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -243,108 +244,113 @@ const MyApplication = () => {
   return (
     <div className='candidate-dashboard-container'>
       <div className='left-side'>
-        <CandidateLeftSide user={user} />
+      <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+
       </div>
       <div className='rightside'>
-        
-        <div className="top-right-content">
-          <div className="candidate-search">
-            <form className="candidate-search1" onSubmit={handleSubmit}>
-
-              <input
-                type='text'
-                name='search'
-                placeholder='Search'
-                value={search}
-                onChange={handleSearchChange}
-              />
-              <button type="submit">
-              <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-              </button>
-             </form> 
-            <div><FontAwesomeIcon icon={faUser} id="user" className='icon'  style={{color:'black'}} onClick={toggleSettings}/></div>
-          </div>
-          {showSettings && (
-        <div id="modal-container">
-        <div id="settings-modal">
-         
-          <ul>
-            <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sing out</Link></li>
-            <li>Setting </li>
-           
-          </ul>
-          <button onClick={toggleSettings}>Close</button>
-        </div>
-        </div>
-      )}
-        </div>
-        <div>
-          {applications.length > 0 ? ( 
-            <div>
-              <h2>My Applications</h2>
-               <div>
-              {/* <h1 style={{ textAlign: 'center' }}>MY APPLICATIONS</h1> */}
-              <div className='applications-table'>
-                <table className='applications-table'>
-                  <thead>
-                    <tr>
-                      <th onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th>Company Name</th>
-                      <th>Job Title</th>
-                      <th>Applied On</th>
-                    <th onClick={() => handleSort('companyName')}>
-                    Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th onClick={() => handleSort('jobRole')}>
-                    Job Title {sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th onClick={() => handleSort('appliedOn')}>
-                    Applied On {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                      <th>Resume Profile</th>
-                      <th>Job Status</th>
-                      <th onClick={() => handleSort('applicationStatus')}>
-                    Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {applications.map(application => (
-                      <tr key={application.id}>
-                        <td>{application.companyName}</td>
-                        <td>{application.jobRole}</td>
-                        <td>{application.appliedOn}</td>
-                        <td>{resumeNames[application.resumeId]}</td>
-                        <td>{renderJobStatus(application.applicationId)}</td> 
-                        <td>{application.applicationStatus}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+        <Container>
+          <div className="top-right-content">
+            <div className="candidate-search">
+              <Form onSubmit={handleSubmit} className="candidate-search1">
+                <Form.Row className="align-items-center">
+                  <Col xs={9}>
+                    <Form.Control
+                      type='text'
+                      name='search'
+                      placeholder='Search'
+                      value={search}
+                      onChange={handleSearchChange}
+                    />
+                  </Col>
+                  <Col xs={3}>
+                    <Button type="submit">
+                      <FontAwesomeIcon icon={faSearch} style={{ color: 'skyblue' }} />
+                    </Button>
+                  </Col>
+                </Form.Row>
+              </Form>
+              <div>
+                <FontAwesomeIcon
+                  icon={faUser}
+                  id="user"
+                  className='icon'
+                  style={{ color: 'black' }}
+                  onClick={toggleSettings}
+                />
               </div>
-              <nav>
-        <ul className='pagination'>
-          <li>
-            <button className='page-button'  onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-          </li>
-          {[...Array(totalPages).keys()].map((pageNumber) => (
-            <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-              <button className='page-link'  onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-            </li>
-          ))}
-          <li>
-            <button className='page-button'  onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-          </li>
-        </ul>
-      </nav>
-                </div>
             </div>
-          ) : (
-            <h1>No applications found.</h1>
-          )}
-        </div>
+            {showSettings && (
+              <Modal show={showSettings} onHide={toggleSettings} centered>
+                <Modal.Header closeButton>
+                  <Modal.Title>Settings</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ul>
+                    <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
+                    <li>Setting</li>
+                  </ul>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={toggleSettings}>Close</Button>
+                </Modal.Footer>
+              </Modal>
+            )}
+          </div>
+          <div>
+            {applications.length > 0 ? (
+              <div>
+                <h2>My Applications</h2>
+                <div className='applications-table'>
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('companyName')}>
+                          Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th onClick={() => handleSort('jobRole')}>
+                          Job Title {sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th onClick={() => handleSort('appliedOn')}>
+                          Applied On {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th>Resume Profile</th>
+                        <th>Job Status</th>
+                        <th onClick={() => handleSort('applicationStatus')}>
+                          Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {applications.map(application => (
+                        <tr key={application.id}>
+                          <td>{application.companyName}</td>
+                          <td>{application.jobRole}</td>
+                          <td>{application.appliedOn}</td>
+                          <td>{resumeNames[application.resumeId]}</td>
+                          <td>{renderJobStatus(application.applicationId)}</td>
+                          <td>{application.applicationStatus}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+                <nav>
+                  <Pagination>
+                    <Pagination.Prev onClick={handlePreviousPage} disabled={page === 0} />
+                    {[...Array(totalPages).keys()].map((pageNumber) => (
+                      <Pagination.Item key={pageNumber} active={pageNumber === page} onClick={() => handlePageChange(pageNumber)}>
+                        {pageNumber + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next onClick={handleNextPage} disabled={page === totalPages - 1} />
+                  </Pagination>
+                </nav>
+              </div>
+            ) : (
+              <h1>No applications found.</h1>
+            )}
+          </div>
+        </Container>
       </div>
     </div>
   );

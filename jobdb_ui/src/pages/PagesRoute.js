@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom'; // Use HashRouter
-import HrDashboard from '../Dashboards/HrDashboardpages/HrDashboard';
+
 import About from './About';
 import CompanRoute from './Companies/CompanRoute';
 import JobboxCompanyPage from './Companies/JobboxCompanyPage';
@@ -12,7 +12,9 @@ import UserRoute from './Session/UserRoute';
 import EachCompanyPage from './Companies/EachCompanyPage';
 
 import UserSignin from './Session/UserSignin';
-import CandidateDashboard from '../Dashboards/CandidateDashboardpages/CandidateDashboard';
+
+import CandidateDashbaordRoute from '../Dashboards/CandidateDashboardpages/CandidateDashbaordRoute';
+import HrDashbaordRoute from '../Dashboards/HrDashboardpages/HrDashbaordRoute';
 
 
 const PagesRoute = () => {
@@ -35,8 +37,8 @@ const PagesRoute = () => {
           <Route path='/jobdbcompanies' element={<JobboxCompanyPage />}/>
 
 
-          <Route path='/hr-dashboard/*' element={<HrDashboard />}/>
-          <Route path='/candidate-dashboard/*' element={< CandidateDashboard/>} />
+          <Route path='/hr-dashboard/*' element={<HrDashbaordRoute/>}/>
+          <Route path='/candidate-dashboard/*' element={< CandidateDashbaordRoute/>} />
         </Routes>
 
       </Router>

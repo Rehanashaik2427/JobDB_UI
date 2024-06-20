@@ -21,7 +21,8 @@ const CandidateDashboard = () => {
   const [userData, setUserData] = useState();
   const [userName, setUserName] = useState();
 
-
+  console.log(userName);
+  console.log(userData);
 
   const fetchUserData = async (userId) => {
     try {
@@ -151,16 +152,13 @@ const CandidateDashboard = () => {
     setShowModal(!showModal);
   };
 
-  const user = {
-    userName: userName,
 
-    userId: userId,
-  };
 
   return (
     <div className='candidate-dashboard-container'>
       <div className='left-side'>
-        <CandidateLeftSide user={user} />
+      <CandidateLeftSide user={{ userName, userId }} />
+
       </div>
 
       <div className='rightside'>
