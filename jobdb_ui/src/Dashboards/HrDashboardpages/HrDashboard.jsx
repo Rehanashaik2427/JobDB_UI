@@ -10,12 +10,12 @@ import HrLeftSide from './HrLeftSide';
 const HrDashboard = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  const userEmail = location.state?.userEmail;
+  const [userEmail, setUserEmail] = useState(location.state?.userEmail || '');
   const [userData, setUserData] = useState(null);
-  const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
-  const [countOfJobs, setCountOfJobs] = useState(Number(localStorage.getItem('countOfJobs')) || 0);
-  const [countOfApplications, setCountOfApplications] = useState(Number(localStorage.getItem('countOfApplications')) || 0);
-  const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(Number(localStorage.getItem('countOfShortlistedCandiCompany')) || 0);
+  const [userName, setUserName] = useState('');
+  const [countOfJobs, setCountOfJobs] = useState(0);
+  const [countOfApplications, setCountOfApplications] = useState(0);
+  const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
 
   useEffect(() => {
     if (userEmail) {
@@ -30,9 +30,7 @@ const HrDashboard = () => {
         params: { userEmail: userEmail }
       });
       setUserData(response.data);
-      const name = response.data.userName;
-      setUserName(name);
-      localStorage.setItem('userName', name);
+      setUserName(response.data.userName);
     } catch (error) {
       console.error('Error fetching user data:', error);
       setUserData(null);
@@ -41,17 +39,19 @@ const HrDashboard = () => {
 
   const fetchCounts = async (userEmail) => {
     try {
-      const jobsResponse = await axios.get(`${BASE_API_URL}/CountOfJobsPostedByEachCompany?userEmail=${userEmail}`);
-      const applicationsResponse = await axios.get(`${BASE_API_URL}/CountOfApplicationByEachCompany?userEmail=${userEmail}`);
-      const shortlistedResponse = await axios.get(`${BASE_API_URL}/CountOfShortlistedCandidatesByEachCompany?userEmail=${userEmail}`);
+      const jobsResponse = await axios.get(`${BASE_API_URL}/CountOfJobsPostedByEachCompany`, {
+        params: { userEmail: userEmail }
+      });
+      const applicationsResponse = await axios.get(`${BASE_API_URL}/CountOfApplicationByEachCompany`, {
+        params: { userEmail: userEmail }
+      });
+      const shortlistedResponse = await axios.get(`${BASE_API_URL}/CountOfShortlistedCandidatesByEachCompany`, {
+        params: { userEmail: userEmail }
+      });
 
       setCountOfJobs(jobsResponse.data);
       setCountOfApplications(applicationsResponse.data);
       setCountOfShortlistedCandiCompany(shortlistedResponse.data);
-
-      localStorage.setItem('countOfJobs', jobsResponse.data);
-      localStorage.setItem('countOfApplications', applicationsResponse.data);
-      localStorage.setItem('countOfShortlistedCandiCompany', shortlistedResponse.data);
     } catch (error) {
       console.error('Error fetching counts:', error);
     }
@@ -68,7 +68,7 @@ const HrDashboard = () => {
     userEmail: userEmail,
   };
 
-
+  console.log("email" , userEmail , " name",userName)
   return (
     <Container fluid className="hr-dashboard-container">
       <Row>

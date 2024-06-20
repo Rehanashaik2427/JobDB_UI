@@ -8,6 +8,7 @@ import { Button, Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
 
 import { Link } from 'react-router-dom';
 
+import './PagesStyle/Pages.css';
 
 const Home = () => {
   return (
