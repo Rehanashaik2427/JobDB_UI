@@ -37,7 +37,7 @@ function CandidateLeftSide({ user }) {
             </Nav.Link>
 
             <Nav.Link as={Link} to={{
-              pathname: '/candidate-jobs',
+              pathname: '/candidate-dashboard/candidate-jobs',
               state: { userName: userName, userId: userId }
             }} style={{ color: 'black' }}>
               <FontAwesomeIcon icon={faLayerGroup} /> Jobs

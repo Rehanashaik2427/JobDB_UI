@@ -34,13 +34,16 @@ const HrRegistrationForm = () => {
   });
 
   const validatePassword = (values) => {
-      const { password, confirmPassword } = values;
+      const { password, confirmPassword } = values; 
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,12}$/;
-      const isValidPassword = passwordRegex.test(password) && password === confirmPassword;
-
+      const isValidPassword = passwordRegex.test(password) ;
+      const isMatchPassword=password === confirmPassword;
       if (!isValidPassword) {
           setPasswordCriteriaError(true);
           return false;
+      }else if(!isMatchPassword){
+        setPasswordMatchError(true);
+        return false;
       }
 
       return true;
@@ -76,12 +79,11 @@ const HrRegistrationForm = () => {
           setRegistrationSuccess(true);
     
          
-          navigate('/signup/hrSignup/registration-success-msg'); 
+          navigate('/hr-RegSuccess'); 
     
         }  catch (error) {
           if (error.message.includes("User already exists")) {
             setEmailExistsError(true);
-            navigate('/signup/hrSignup/registration-success-msg/user-signin',{ state: initialValues.userRole })
           } else {
             console.error('Error registering candidate:', error);
           }
@@ -101,7 +103,7 @@ const HrRegistrationForm = () => {
                         <div className="w-100 h-100 justify-content-center d-flex flex-column">
                             <SocialButtons
                                 isLogin
-                                routeUrl="/signup/hrSignup/registration-success-msg/user-signin"
+                                routeUrl="/signin"
                                 googleHandler={() => alert("google")}
                                 facebookHandler={() => alert("facebook")}
                             />

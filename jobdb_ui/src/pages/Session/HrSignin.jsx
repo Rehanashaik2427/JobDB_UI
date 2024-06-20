@@ -1,16 +1,15 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Link,  useNavigate } from 'react-router-dom';
-import './Home.css';
-
-const Candidates = () => {
+import { useNavigate } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+const HrSignin = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [formData, setFormData] = useState({
     userEmail: '',
     password: '',
   });
 
-  const navigate = useNavigate();
+  const navigate= useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -19,20 +18,23 @@ const Candidates = () => {
 
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-   try{
+    try {
+
+     
+     
 
       const response = await axios.get(`${BASE_API_URL}/login?userEmail=${formData.userEmail}&password=${formData.password}`);
       const user = response.data;
 
 
       if (user) {
-        if (user.userRole === 'Candidate') {
-          navigate('/candidate-dashboard', { userId: user.userId });
+        if (user.userRole === 'HR' && user.userStatus ==='Approved') {
+          navigate('/hr-dashboard', { userEmail: formData.userEmail });
         } else {
-          setErrorMessage("You do not have permission to login as Candidate . Please enter the correct email ID.");
+          setErrorMessage("You do not have permission to login as HR. Please enter the correct email ID.");
         }
       } else {
         setErrorMessage("Invalid email or password.");
@@ -47,30 +49,27 @@ const Candidates = () => {
   return (
     <div className="centered-form">
       <div className="form-container">
-        <h2>Candidate Sign In</h2>
-        <form onSubmit={handleSubmit}>
+        <h2>HR Sign In</h2>
+        <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label htmlFor="login-email">Email:</label>
-            <input type="email" id="login-email" name="userEmail" value={formData.userEmail} placeholder='email' onChange={handleInputChange} required />
+            <label htmlFor="userEmail">Email:</label>
+            <input type="email" id="userEmail" name="userEmail" value={formData.userEmail} onChange={handleInputChange} placeholder='email' required />
           </div>
           <div className="form-group">
-            <label htmlFor="login-password">Password:</label>
-            <input type="password" id="login-password" name="password" value={formData.password} placeholder='password' onChange={handleInputChange} required />
+            <label htmlFor="password">Password:</label>
+            <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} placeholder='password' required />
           </div>
           <div className="form-group">
             <button type="submit">Login</button>
+            <Link to={{pathname:"/forget-password", state:{userRole:"HR"}}}>Forget Password?</Link>
           </div>
           {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         </form>
-        <div className="candidate-login-switch-form">
-          <Link to={{pathname:"/forget-password", state:{userRole:"candidate"}}}>Forget Password?</Link>
-          Don't have an account? <Link to="/candidate-signup">Signup</Link>
-        </div>
       </div>
     </div>
   );
 };
 
-export default Candidates;
+export default HrSignin;
 
