@@ -2,7 +2,7 @@ import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { Col, Container, Row } from 'react-bootstrap';
 import './HrDashboard.css';
@@ -17,10 +17,19 @@ const HrDashboard = () => {
   const [countOfApplications, setCountOfApplications] = useState(0);
   const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (userEmail) {
       fetchUserData(userEmail);
       fetchCounts(userEmail);
+    }
+  }, [userEmail]);
+
+  useEffect(() => {
+    const storedUserName = localStorage.getItem(`userName_${userEmail}`);
+    if (storedUserName) {
+      setUserName(storedUserName);
     }
   }, [userEmail]);
 
@@ -31,6 +40,8 @@ const HrDashboard = () => {
       });
       setUserData(response.data);
       setUserName(response.data.userName);
+      localStorage.setItem(`userName_${userEmail}`, response.data.userName); // Store userName with user-specific key
+
     } catch (error) {
       console.error('Error fetching user data:', error);
       setUserData(null);
@@ -64,11 +75,11 @@ const HrDashboard = () => {
   };
 
   const user = {
-    userName: userName,
+    userName: userData?.userName || '',
     userEmail: userEmail,
   };
 
-  console.log("email" , userEmail , " name",userName)
+  console.log("email", userEmail, " name", userName)
   return (
     <Container fluid className="hr-dashboard-container">
       <Row>
@@ -87,7 +98,7 @@ const HrDashboard = () => {
                 onClick={toggleSettings}
               />
             </Col>
-   
+
 
             {showSettings && (
               <div className="modal-container">
@@ -108,7 +119,7 @@ const HrDashboard = () => {
               <Col md={6} className="box">
                 <h2>Jobs</h2>
                 <img src="https://cdn-icons-png.flaticon.com/128/3688/3688609.png" className="animated-icons" alt="Jobs Icon" />
-                <Link to={{ pathname: '/posted-jobs', state: { userName: userName, userEmail: userEmail } }}>
+                <Link to="/hr-dashboard/posted-jobs" onClick={(e) => { e.preventDefault(); navigate('/hr-dashboard/posted-jobs', { state: { userName: userName, userEmail: userEmail } }) }} className="nav-link">
                   <h4> {countOfJobs} posted by us</h4>
                 </Link>
               </Col>
@@ -127,7 +138,7 @@ const HrDashboard = () => {
                 <h4>Shortlisted Candidates  {countOfShortlistedCandiCompany}</h4>
               </Col>
               <Col md={6} className="box">
-                <Link to={{ pathname: '/dreamApplication', state: { userName: userName, userEmail: userEmail } }}>
+                <Link to="/hr-dashboard/dream-applications" onClick={(e) => { e.preventDefault(); navigate('/hr-dashboard/dream-applications', { state: { userName: userName, userEmail: userEmail } }) }} className="nav-link">
                   <h2>Dream Applications</h2>
                   <img src="https://cdn-icons-png.flaticon.com/128/15597/15597760.png" className="animated-icons" alt="Activities Icon" />
                 </Link>

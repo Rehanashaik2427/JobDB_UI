@@ -1,20 +1,22 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaSave } from "react-icons/fa";
-import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from "./HrLeftSide";
 
 const UpdateJob = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  const history=useHistory();
-  const [userData, setUserData] = useState({});
+  const navigate=useNavigate();
+  
   
   const [editableJobDetails, setEditableJobDetails] = useState(false);
   const [jobDetails, setJobDetails] = useState({});
-  const { jobId, userName, userEmail } = location.state;
+  const { jobId, userName, userEmail } = location.state || {};
 
-  console.log(userEmail);
+  console.log(location.state);
+
+  console.log(userEmail,userName,jobId);
   
   
   useEffect(() => {
@@ -23,9 +25,9 @@ const UpdateJob = () => {
     }
   }, [jobId]);
 
-  const fetchJobDetails = async (id) => {
+  const fetchJobDetails = async (jobId) => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/getJob`, { params: { jobId: id } });
+      const response = await axios.get(`${BASE_API_URL}/getJob?jobId=${jobId}`,);
       setJobDetails(response.data);
       setFormData(response.data);
     } catch (error) {
@@ -45,10 +47,7 @@ const UpdateJob = () => {
     jobsummary: ''
   });
 
-  const user = {
-    userName: userName,
-    userEmail: userEmail,
-  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,7 +67,7 @@ const UpdateJob = () => {
     try {
       await axios.put(`${BASE_API_URL}/updateJob?jobId=${jobId}`,formData); // Assuming your endpoint for updating jobs is /updateJob
       alert('Job details updated successfully.');
-      history.push({
+      navigate({
         pathname: '/post-jobs',
         state: {
           userName: userName,
@@ -82,7 +81,10 @@ const UpdateJob = () => {
     }
   };
 
-  
+  const user = {
+    userName: userName,
+    userEmail: userEmail,
+  };
 
   return (
     <div className='hr-dashboard-container'>

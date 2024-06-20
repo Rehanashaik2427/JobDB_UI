@@ -174,7 +174,7 @@ const PostedJobs = () => {
               <tbody>
                 {jobs.map(job => (
                   <tr key={job.id}>
-                    <td>{job.hrName}</td>
+                    <td>{job.userName}</td>
                     <td>{job.companyName}</td>
                     <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
                     <td>{job.jobType}</td>

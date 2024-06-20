@@ -198,7 +198,12 @@ const ViewApplications = () => {
 
 
 
-  const user = { userEmail };
+  
+  const user = {
+    userName: userName,
+    userEmail: userEmail,
+  };
+
 
   return (
     <div className='hr-dashboard-container'>

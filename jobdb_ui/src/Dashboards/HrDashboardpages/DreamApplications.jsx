@@ -1,13 +1,14 @@
-import { Link, useLocation } from "react-router-dom/cjs/react-router-dom.min";
-import HrLeftSide from "./HrLeftSide";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { Link, useLocation } from "react-router-dom";
+import HrLeftSide from "./HrLeftSide";
 
 const DreamApplication =()=>{
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
     const location = useLocation();
+    const userName = location.state?.userName;
     const userEmail = location.state?.userEmail;
-    const userName=location.state?.userName;
     const [applications, setApplications] = useState([]);
     const [filterStatus, setFilterStatus] = useState('all');
     const [resumeTypes, setResumeTypes] = useState({});
@@ -154,13 +155,19 @@ const DreamApplication =()=>{
     };
    
   
-    const user = { userEmail };
+   
+  const user = {
+    userName: userName,
+    userEmail: userEmail,
+  };
+
   
     return (
-      <div className='hr-dashboard-container'>
-        <div className='hr-leftside'>
+      <Container fluid className="hr-dashboard-container">
+      <Row>
+        <Col md={3} className="hr-leftside">
           <HrLeftSide user={user} />
-        </div>
+        </Col>
         <div className='hr-rightside'>
           <div className="application-div">
             <div className="filter">
@@ -239,7 +246,8 @@ const DreamApplication =()=>{
             )}
           </div>
         </div>
-      </div>
+        </Row>
+        </Container>
     );  
 };
 export default DreamApplication;
