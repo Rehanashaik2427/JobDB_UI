@@ -18,6 +18,7 @@ const MyJobs = () => {
   const [selectedJobSummary, setSelectedJobSummary] = useState('');
 
   const navigate = useNavigate();
+
   const [search, setSearch] = useState('');
 
   const [showSettings, setShowSettings] = useState(false);
@@ -227,15 +228,13 @@ const MyJobs = () => {
                         <td>
                           <Button
                             className='update'
-                            onClick={() =>    navigate({
-                              pathname:'/hr-dashboard/my-jobs/update-job',
+                            onClick={() => navigate('/hr-dashboard/my-jobs/update-job', {
                               state: {
                                 userName: userName,
                                 userEmail: userEmail,
                                 jobId: job.jobId,
                               }
-                            })
-                          }
+                            })}
                           >
                             Update
                           </Button>
