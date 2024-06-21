@@ -88,7 +88,7 @@ text-decoration: none;
 
 
 
-
+/* 
 .table{
     width: 95%;
     display: flex;
@@ -116,7 +116,7 @@ table, th, td ,tr{
     text-align: left;
 
     
-}
+} */
 .search{
     
     display: flex;

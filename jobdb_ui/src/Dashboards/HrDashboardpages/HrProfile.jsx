@@ -2,6 +2,7 @@ import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
 
@@ -33,12 +34,13 @@ const HrProfile = () => {
   };
 
   return (
-    <div className='hr-dashboard-container'>
-      <div className='hr-leftside'>
-        <HrLeftSide user={{ userName: userName, userEmail: userEmail }} />
-      </div>
+<Container fluid className="dashboard-container">
+      <Row>
+        <Col md={3} className="leftside">
+          <HrLeftSide user={{ userName, userEmail }} />
+        </Col>
 
-      <div className='rightside'>
+        <Col md={18} className="rightside">
         <div className="top-right-content">
           <div className="candidate-search">
             <div>
@@ -77,8 +79,9 @@ const HrProfile = () => {
             )}
           </div>
         </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

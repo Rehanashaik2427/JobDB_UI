@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import AddJob from './AddJob.jsx'
+import ApplicationDetails from './ApplicationDetails.jsx'
 import Applications from './Applications.jsx'
 import DreamApplication from './DreamApplications.jsx'
 import HrDashboard from './HrDashboard.jsx'
@@ -24,6 +25,7 @@ const HrDashbaordRoute = () => {
       <Route path="/profile" element={<HrProfile />} />
       <Route path="/dream-applications" element={<DreamApplication />} />
       <Route path="/hr-applications/view-applications" element={<ViewApplications />} />
+      <Route path="/hr-applications/view-applications/applicationDetails" element={<ApplicationDetails />} />
       <Route path="/my-jobs/addJob" element={<AddJob />} />
     
 

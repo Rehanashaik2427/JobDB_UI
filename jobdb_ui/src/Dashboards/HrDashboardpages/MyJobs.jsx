@@ -2,7 +2,7 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
@@ -144,16 +144,25 @@ const MyJobs = () => {
     setSelectedJobSummary('');
   };
 
+  const popover = (summary) => (
+    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
+      <Popover.Body>
+        {summary}
+        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
 
+        </span>
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
-    <Container fluid className="hr-dashboard-container">
+    <Container fluid className="dashboard-container">
       <Row>
-        <Col md={3} className="hr-leftside">
+        <Col md={3} className="leftside">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 
-        <Col md={9} className="hr-rightside">
+        <Col md={18} className="rightside">
           <div className="candidate-search">
             <form className="candidate-search1" onSubmit={handleSubmit}>
               <input
@@ -191,30 +200,30 @@ const MyJobs = () => {
               </div>
             </div>
           )}
-          {/* <h2>Job posted by {userName}</h2> */}
+          <h2 className='text-center'>Job posted by {userName}</h2>
           <div className='job-list'>
             {jobs.length > 0 && (
 
-              <table id='jobTable1'>
-                <thead>
+              <Table hover className='text-center'>
+                <thead className="table-light">
                   <tr>
-                    <th onClick={() => handleSort('jobTitle')}>
+                    <th scope="col" onClick={() => handleSort('jobTitle')}>
                       Job Title {sortedColumn === 'jobTitle' && sortOrder === 'asc' && '▲'}
                       {sortedColumn === 'jobTitle' && sortOrder === 'desc' && '▼'}
                     </th>
-                    <th onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th>Job Description</th>
-                    <th>Action</th>
+                    <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col">Job Description</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {/* {currentJobs.map(job => ( */}
                   {jobs.map(job => (
-                    job.jobId !== 0 && (
+                    job.jobId && (
                       <tr key={job.id}>
                         <td>{job.jobTitle}</td>
                         <td>{job.jobType}</td>
@@ -223,29 +232,24 @@ const MyJobs = () => {
                         <td>{job.numberOfPosition}</td>
                         <td>{job.applicationDeadline}</td>
                         <td>
-                          <button className='description' onClick={() => handleJobDescription(job.jobsummary)}>Description</button>
+                        <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                          <Button variant="secondary"className='description btn-rounded' >Description</Button>
+                        </OverlayTrigger>
                         </td>
                         <td>
-                          <Button
-                            className='update'
-                            onClick={() => navigate('/hr-dashboard/my-jobs/update-job', {
-                              state: {
-                                userName: userName,
-                                userEmail: userEmail,
-                                jobId: job.jobId,
-                              }
-                            })}
-                          >
-                            Update
-                          </Button>
+                          <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } })}>
+                            <i className="nav-icon i-Pen-2 font-weight-bold" style={{ color: 'darkgreen' }} />
+                          </span>
+                          <span className='delete cursor-pointer text-danger me-2' onClick={() => handleDelete(job.jobId)}>
+                            <i className="nav-icon i-Close-Window font-weight-bold" style={{ color: 'darkred' }} />
+                          </span>
 
-                          <button className='delete' onClick={() => handleDelete(job.jobId)}>Delete</button>
                         </td>
                       </tr>
                     )
                   ))}
                 </tbody>
-              </table>
+              </Table>
 
             )}
 

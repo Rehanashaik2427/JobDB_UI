@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import CandidateLeftSide from "./CandidateLeftSide";
+import { Col, Container, Row } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
 import './CandidateDashboard.css';
-import { useNavigate } from "react-router-dom";
+import CandidateLeftSide from "./CandidateLeftSide";
 
 const CompamyPage = () => {
 
@@ -11,8 +11,8 @@ const CompamyPage = () => {
   const location = useLocation();
 
   const companyId = location.state?.companyId; // Access companyId from URL parameter
-const userName=location.state?.userName;
-const userId=location.state?.userId;
+  const userName = location.state?.userName;
+  const userId = location.state?.userId;
   const [company, setCompany] = useState();
   const [countOfApplications, setCountOfApplications] = useState();
   const [countOfHR, setCountOfHR] = useState();
@@ -71,38 +71,42 @@ const userId=location.state?.userId;
   }, [companyId]);
 
   return (
-    <div className='candidate-dashboard-container'>
-      <div className='left-side'>
-        <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+    <Container fluid className="dashboard-container">
+      <Row>
+        <Col md={3} className="leftside">
+          <CandidateLeftSide user={{ userName, userId }} />
+        </Col>
 
-      </div>
-      <div className="companyPage">
-        {company ? (
-          <div>
-            <h2>Company Name: {company.companyName}</h2>
-            <p>{company.description}</p>
-            <p>{company.jobboxEmail}</p>
-            <p>Total Applications: {countOfApplications}</p>
-            {countOfHR > 0 ? (
-              <p>HR mapped = Yes</p>
-            ) : (
-              <p>HR mapped = No</p>
-            )}
-            <p>Total HRs Join: {countOfHR}</p>
-            <p>Total Jobs Posted By HRs: {countOfJobs}</p>
-            <div>
-              <h2>To View the Applications please</h2>
-              <div className="company-buttons">
-                <button onClick={() => navigate({ pathname: '/hr-registeration', state: { companyName: company.companyName } })}>Claim as HR</button>
-                <button onClick={() => navigate({ pathname: '/hr-signin', state: { companyName: company.companyName } })}>Login</button>
+        <Col md={18} className="rightside">
+          <div className="companyPage">
+            {company ? (
+              <div>
+                <h2>Company Name: {company.companyName}</h2>
+                <p>{company.description}</p>
+                <p>{company.jobboxEmail}</p>
+                <p>Total Applications: {countOfApplications}</p>
+                {countOfHR > 0 ? (
+                  <p>HR mapped = Yes</p>
+                ) : (
+                  <p>HR mapped = No</p>
+                )}
+                <p>Total HRs Join: {countOfHR}</p>
+                <p>Total Jobs Posted By HRs: {countOfJobs}</p>
+                <div>
+                  <h2>To View the Applications please</h2>
+                  <div className="company-buttons">
+                    <button onClick={() => navigate({ pathname: '/hr-registeration', state: { companyName: company.companyName } })}>Claim as HR</button>
+                    <button onClick={() => navigate({ pathname: '/hr-signin', state: { companyName: company.companyName } })}>Login</button>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <p>Loading company details...</p>
+            )}
           </div>
-        ) : (
-          <p>Loading company details...</p>
-        )}
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

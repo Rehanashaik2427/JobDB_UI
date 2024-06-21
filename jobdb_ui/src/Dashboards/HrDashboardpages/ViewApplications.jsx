@@ -1,6 +1,10 @@
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import './HrDashboard.css';
 import HrLeftSide from "./HrLeftSide";
 
@@ -96,7 +100,7 @@ const ViewApplications = () => {
     setSortOrder(order);
 
   };
-  
+
 
   const updateStatus = async (applicationId, newStatus) => {
     console.log(applicationId);
@@ -130,7 +134,7 @@ const ViewApplications = () => {
     const fileName = fileNames[resumeId];
     if (fileType === 'file') {
       return (
-        <button onClick={() => handleDownload(resumeId, fileName)}>Download</button>
+        <Button className="btn-sm" variant="primary" onClick={() => handleDownload(resumeId, fileName)}>Download</Button>
       );
     } else if (fileType === 'link') {
       return (
@@ -138,7 +142,7 @@ const ViewApplications = () => {
       );
     } else if (fileType === 'brief') {
       return (
-        <button onClick={() => openPopup(fileName)}>Open Brief</button>
+        <Button className="btn-sm" variant="primary" onClick={() => openPopup(fileName)}>Open Brief</Button>
       );
     } else {
       return null; // Handle other file types as needed
@@ -198,105 +202,115 @@ const ViewApplications = () => {
 
 
 
-  
+
   const user = {
     userName: userName,
     userEmail: userEmail,
   };
-
+  const navigate = useNavigate();
 
   return (
-    <div className='hr-dashboard-container'>
-      <div className='hr-leftside'>
-        <HrLeftSide user={user} />
-      </div>
-      <div className='hr-rightside'>
-        <div className="application-div">
-          <div className="filter">
-            <label htmlFor="status">Filter by Status:</label>
-            <select id="status" onChange={handleFilterChange} value={filterStatus}>
-              <option value="all">All</option>
-              <option value="Shortlisted">Shortlisted</option>
-              <option value="Under Preview">Under Preview</option>
-              <option value="Not Shortlisted">Rejected</option>
-            </select>
-          </div>
-          {showBriefSettings && (
-            <div className="modal-summary">
-              <div className="modal-content-summary">
-                <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
-                {showMessage}
-              </div>
-            </div>
-          )}
-          {applications.length === 0 ? (
-            <section class='not-yet'>
-              <h2>Sorry, you haven't received any applications yet.</h2>
-            </section>
-          ) : (
-            <div>
-              <div>
-                <table id='jobTable1' style={{ marginTop: '12px' }}>
-                  <thead>
-                    <tr>
-                      <th >Job Title</th>
-                      <th >Candidate Name</th>
-                      <th >Candidate Email</th>                      <th>Resume ID</th>
-                      <th onClick={() => handleSort('appliedOn')}>Date{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th onClick={() => handleSort('applicationStatus')}>Application Status{sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th>View Details</th>
-                      <th>Application Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {applications.map(application => (
-                      <tr key={application.id}>
-                        <td>{application.jobRole}</td>
-                        <td>{candidateName[application.candidateId]}</td>
-                        <td>{candidateEmail[application.candidateId]}</td>
-                        <td>{renderResumeComponent(application.resumeId)}</td>
-                        <td>{application.appliedOn}</td>
-                        <td>{application.applicationStatus}</td>
-                        <td>
-                          <Link
-                            to={{
-                              pathname: '/applicationDetails',
-                              state: { userEmail: userEmail, applicationId: application.applicationId }
-                            }}
-                          >
-                            <button>View</button>
-                          </Link>
-                        </td>
-                        <td>
-                          <button onClick={() => updateStatus(application.applicationId, 'Shortlisted')} className="select">Select</button>
-                          <button onClick={() => updateStatus(application.applicationId, 'Not Shortlisted')} className="reject">Reject</button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <nav>
-                  <ul className='pagination'>
-                    <li>
-                      <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                    </li>
-                    {[...Array(totalPages).keys()].map((pageNumber) => (
-                      <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                        <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                      </li>
-                    ))}
-                    <li>
-                      <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          )}
+    <Container fluid className="dashboard-container">
+      <Row>
+        <Col md={3} className="leftside">
+          <HrLeftSide user={{ userName, userEmail }} />
+        </Col>
 
-        </div>
-      </div>
-    </div>
+        <Col md={18} className="rightside">
+
+          <div className="application-div">
+            <div className="filter">
+              <label htmlFor="status">Filter by Status:</label>
+              <select id="status" onChange={handleFilterChange} value={filterStatus}>
+                <option value="all">All</option>
+                <option value="Shortlisted">Shortlisted</option>
+                <option value="Under Preview">Under Preview</option>
+                <option value="Not Shortlisted">Rejected</option>
+              </select>
+            </div>
+            {showBriefSettings && (
+              <div className="modal-summary">
+                <div className="modal-content-summary">
+                  <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
+                  {showMessage}
+                </div>
+              </div>
+            )}
+            {applications.length === 0 ? (
+              <section class='not-yet'>
+                <h2>Sorry, you haven't received any applications yet.</h2>
+              </section>
+            ) : (
+              <div>
+                <div>
+                  <Table hover className='text-center'>
+                    <thead className="table-light">
+                      <tr>
+                        <th scope="col">Job Title</th>
+                        <th scope="col">Candidate Name</th>
+                        <th scope="col">Candidate Email</th>
+                        <th scope="col">Resume ID</th>
+                        <th scope="col" onClick={() => handleSort('appliedOn')}>Date{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col" onClick={() => handleSort('applicationStatus')}>Application Status{sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col">View Details</th>
+                        <th scope="col">Application Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {applications.map(application => (
+                        <tr key={application.id}>
+                          <td>{application.jobRole}</td>
+                          <td>{candidateName[application.candidateId]}</td>
+                          <td>{candidateEmail[application.candidateId]}</td>
+                          <td>{renderResumeComponent(application.resumeId)}</td>
+                          <td>{application.appliedOn}</td>
+                          <td>{application.applicationStatus}</td>
+                          <td>
+                            <Link
+                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail, applicationId: application.applicationId } }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, applicationId: application.applicationId } });
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faEye} style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }} />
+                            </Link>
+                          </td>
+                          <td>
+                            <span className="icon-button select" onClick={() => updateStatus(application.applicationId, 'Shortlisted')}>
+                              <BsCheckCircle />
+                            </span>
+                            <span className="icon-button reject" onClick={() => updateStatus(application.applicationId, 'Not Shortlisted')}>
+                              <BsXCircle />
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                  <nav>
+                    <ul className='pagination'>
+                      <li>
+                        <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
+                      </li>
+                      {[...Array(totalPages).keys()].map((pageNumber) => (
+                        <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
+                          <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
+                        </li>
+                      ))}
+                      <li>
+                        <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            )}
+
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

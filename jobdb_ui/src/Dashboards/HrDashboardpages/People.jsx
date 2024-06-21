@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+import { Col, Container, Row, Table } from 'react-bootstrap';
 import HrLeftSide from './HrLeftSide';
 
 const People = () => {
@@ -44,11 +45,11 @@ const People = () => {
 
 
     useEffect(() => {
-        if(searchQuery){
+        if (searchQuery) {
             handleSearch();
         }
         else
-        fetchHRData();
+            fetchHRData();
     }, [userEmail, page, pageSize, sortedColumn, sortOrder]); // Empty dependency array ensures the effect runs only once when the component mounts
 
 
@@ -114,93 +115,91 @@ const People = () => {
     };
 
     return (
-        <div className='hr-dashboard-container'>
-            <div className='hr-leftside'>
-                <HrLeftSide user={user} />
-            </div>
+        <Container fluid className="dashboard-container">
+            <Row>
+                <Col md={3} className="leftside">
+                    <HrLeftSide user={{ userName, userEmail }} />
+                </Col>
 
-            <div className='hr-rightside'>
-                <div>
-                    <div className="candidate-search">
-                        <input
-                            type='text'
-                            placeholder='Enter Emp Name'
-                            value={search}
-                            onChange={handleSearchChange}
-                        />
-                        <button onClick={handleSearch}>
-                            <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                        </button>
-                        <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
-                    </div>
-                    {showSettings && (
-                        <div id="modal-container">
-                            <div id="settings-modal">
-                                <ul>
-                                    <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
-                                    <li>Settings</li>
-                                </ul>
-                                <button onClick={toggleSettings}>Close</button>
-                            </div>
+                <Col md={18} className="rightside">
+
+
+                    <div>
+                        <div className="candidate-search">
+                            <input
+                                type='text'
+                                placeholder='Enter Emp Name'
+                                value={search}
+                                onChange={handleSearchChange}
+                            />
+                            <button onClick={handleSearch}>
+                                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+                            </button>
+                            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
                         </div>
-                    )}
-                </div>
-                <div>
-                    <table id='jobTable1'>
-                        <thead>
-                            <tr>
-                                <th onClick={() => handleSort('userId')}>
-                                    HR ID {sortedColumn === 'userId' && (sortOrder === 'asc' ? '▲' : '▼')}
-                                </th>
-                                <th onClick={() => handleSort('userName')}>
-                                    HR Name {sortedColumn === 'userName' && (
-                                        sortOrder === 'asc' ? '▲' : '▼'
-                                    )}
-                                </th>
-                                <th onClick={() => handleSort('userEmail')}>
-                                    Email {sortedColumn === 'userEmail' && (
-                                        sortOrder === 'asc' ? '▲' : '▼'
-                                    )}
-                                </th>
-                                <th>Company Name </th>
-                                <th>PhoneNumber</th>
-                                {/* <th onClick={() => handleSort('phone')}>
-                                    Phone Number {sortedColumn === 'phone' && (
-                                        sortOrder === ' ' ? '▲' : '▼'
-                                    )}
-                                </th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {people.map(person => (
-                                <tr key={person.userId}>
-                                    <td>{person.userId}</td>
-                                    <td>{person.userName}</td>
-                                    <td>{person.userEmail}</td>
-                                    <td>{person.companyName}</td>
-                                    <td>{person.phone}</td>
+                        {showSettings && (
+                            <div id="modal-container">
+                                <div id="settings-modal">
+                                    <ul>
+                                        <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
+                                        <li>Settings</li>
+                                    </ul>
+                                    <button onClick={toggleSettings}>Close</button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        <Table hover className='text-center'>
+                            <thead className="table-light">
+                                <tr>
+                                    <th scope="col" onClick={() => handleSort('userId')}>
+                                        HR ID {sortedColumn === 'userId' && (sortOrder === 'asc' ? '▲' : '▼')}
+                                    </th>
+                                    <th scope="col" onClick={() => handleSort('userName')}>
+                                        HR Name {sortedColumn === 'userName' && (
+                                            sortOrder === 'asc' ? '▲' : '▼'
+                                        )}
+                                    </th>
+                                    <th scope="col" onClick={() => handleSort('userEmail')}>
+                                        Email {sortedColumn === 'userEmail' && (
+                                            sortOrder === 'asc' ? '▲' : '▼'
+                                        )}
+                                    </th>
+                                    <th scope="col">Company Name </th>
+                                    <th scope="col">PhoneNumber</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <nav>
-                    <ul className='pagination'>
-                        <li>
-                            <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                        </li>
-                        {[...Array(totalPages).keys()].map((pageNumber) => (
-                            <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                                <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
+                            </thead>
+                            <tbody>
+                                {people.map(person => (
+                                    <tr key={person.userId}>
+                                        <td>{person.userId}</td>
+                                        <td>{person.userName}</td>
+                                        <td>{person.userEmail}</td>
+                                        <td>{person.companyName}</td>
+                                        <td>{person.phone}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>                </div>
+                    <nav>
+                        <ul className='pagination'>
+                            <li>
+                                <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
                             </li>
-                        ))}
-                        <li>
-                            <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+                            {[...Array(totalPages).keys()].map((pageNumber) => (
+                                <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
+                                    <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
+                                </li>
+                            ))}
+                            <li>
+                                <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
+                            </li>
+                        </ul>
+                    </nav>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 

@@ -145,13 +145,13 @@ const CandidateDashboard = () => {
 
 
   return (
-    <div className='candidate-dashboard-container'>
-      <div className='left-side'>
-      <CandidateLeftSide user={{ userName, userId }} />
+    <Container fluid className="dashboard-container">
+      <Row>
+        <Col md={3} className="leftside">
+          <CandidateLeftSide user={{ userName, userId }} />
+        </Col>
 
-      </div>
-
-      <div className='rightside'>
+        <Col md={18} className="rightside">
         <Container className="top-right-content">
           <Row className="candidate-search d-flex justify-content-end ">
 
@@ -200,9 +200,9 @@ const CandidateDashboard = () => {
                   navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
                 }}
               >
-                <p>Applied to</p>
+                <h5>Applied to</h5>
                 <h4>{countOfCompanies !== null ? countOfCompanies : 'Loading...'}</h4>
-                <p>companies</p>
+                <h5>companies</h5>
               </Link>
             </Col>
             <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
@@ -216,14 +216,14 @@ const CandidateDashboard = () => {
                 }}
               >
                 <h4>{countOfResume !== null ? countOfResume : 'Loading...'}</h4>
-                <p>resumes</p>
+                <h5>resumes</h5>
               </Link>
             </Col>
             <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
               <h1>250</h1>
               <h4>resume views</h4>
             </Col>
-            <Col xs={6} md={4} className="data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
+            <Col xs={6} md={4} className=" d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
               <Link
                 to={{
                   pathname: '/my-application',
@@ -250,8 +250,9 @@ const CandidateDashboard = () => {
             </Col>
           </Row>
         </Container>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

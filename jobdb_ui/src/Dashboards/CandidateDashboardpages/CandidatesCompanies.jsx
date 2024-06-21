@@ -2,10 +2,10 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { Button, Card } from 'react-bootstrap';
 
 const CandidatesCompanies = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -79,12 +79,13 @@ const CandidatesCompanies = () => {
   };
 
   return (
-    <div className='candidate-dashboard-container'>
-      <div className='left-side'>
-        <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+    <Container fluid className="dashboard-container">
+    <Row>
+      <Col md={3} className="leftside">
+        <CandidateLeftSide user={{ userName, userId }} />
+      </Col>
 
-      </div>
-      <div className='rightside'>
+      <Col md={18} className="rightside">
         <div className="top-right-content">
           <div className="candidate-search">
             <form className="candidate-search1" onSubmit={handleSubmit}>
@@ -153,8 +154,10 @@ const CandidatesCompanies = () => {
             </div>
           )}
         </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
+
   );
 };
 
