@@ -1,10 +1,10 @@
-import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Modal, Row } from 'react-bootstrap';
+import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './CandidateDashboard.css';
+
 import CandidateLeftSide from './CandidateLeftSide';
 
 const CandidateDashboard = () => {
@@ -136,58 +136,56 @@ const CandidateDashboard = () => {
   }, [userId]);
 
   console.log(userId);
-  const [showModal, setShowModal] = useState(false);
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
+
+  const toggleSettings = () => {
+    navigate('/');
   };
 
 
 
   return (
-    <Container fluid className="dashboard-container">
+    <div fluid className="dashboard-container">
       <Row>
         <Col md={3} className="leftside">
           <CandidateLeftSide user={{ userName, userId }} />
         </Col>
 
-        <Col md={18} className="rightside">
-        <Container className="top-right-content">
-          <Row className="candidate-search d-flex justify-content-end ">
+       
 
-            <Col xs={4} md={2}>
-              <div className="user-icon">
-                <FontAwesomeIcon
-                  icon={faUser}
-                  className='icon'
-                  style={{ color: 'black', cursor: 'pointer', fontSize: '2.5em' }} // Adjust fontSize as needed
-                  onClick={toggleModal}
-                />
+      <div className='rightside'>
+        <Container className="top-right-content ">
+          <Row className=" d-flex justify-content-end ">
+
+            <Col xs={4} md={1}>
+            <div className="user col px-3 header-part-right" style={{marginTop:'10px'}}>
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+                  
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </Col>
           </Row>
         </Container>
 
-        <Modal show={showModal} onHide={toggleModal} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Settings</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <ul>
-              <li>
-                <FontAwesomeIcon icon={faSignOutAlt} />
-                <Link to="/">Sign out</Link>
-              </li>
-              <li>Setting</li>
-            </ul>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={toggleModal}>Close</Button>
-          </Modal.Footer>
-        </Modal>
+
 
         <Container className="my-dashboard-container ">
-          <h3 className='status-info'>My application status</h3>
+          <h3 className='status-info' style={{marginTop:'10px'}}>My application status</h3>
           <Row className="dashboard d-flex mt-4">
             <Col xs={3} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px',marginLeft:'20px'}}>
               <Link
@@ -223,7 +221,8 @@ const CandidateDashboard = () => {
               <h1>250</h1>
               <h4>resume views</h4>
             </Col>
-            <Col xs={6} md={4} className=" d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
+
+            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data"style={{ maxHeight: '150px', maxWidth: '150px' }}>
               <Link
                 to={{
                   pathname: '/my-application',
@@ -250,9 +249,9 @@ const CandidateDashboard = () => {
             </Col>
           </Row>
         </Container>
-        </Col>
-      </Row>
-    </Container>
+       </div>
+       </Row> 
+    </div>
   );
 };
 

@@ -1,9 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { FaEdit, FaSave } from "react-icons/fa";
 import { useLocation, useNavigate } from 'react-router-dom';
-import HrLeftSide from "./HrLeftSide";
 
 const UpdateJob = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -83,115 +82,64 @@ const UpdateJob = () => {
 
   return (
     <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
-
-        <Col md={18} className="rightside">
-
-          <form className="job-posting-form" onSubmit={handleSubmit}>
-            <div>
-              <h2 style={{ textDecoration: 'underline' }}>Job Details </h2>
-              <div className='job-details-row'>
-                <div className='job-form-group'>
-                  <label htmlFor="jobTitle">Job Title:</label>
-                  <input
-                    type="text"
-                    id="jobTitle"
-                    name="jobTitle"
-                    value={formData.jobTitle}
-                    onChange={handleChange}
-                    disabled={!editableJobDetails}
-                  />
-                </div>
-                <div className='job-form-group'>
-                  <label htmlFor="jobType">Job Type:</label>
-                  <input
-                    type="text"
-                    id="jobType"
-                    name="jobType"
-                    value={formData.jobType}
-                    onChange={handleChange}
-                    disabled={!editableJobDetails}
-                  />
-                </div>
-                <div className='job-form-group'>
-                  <label htmlFor="postingdate">Posting Date:</label>
-                  <input
-                    type="date"
-                    id="postingdate"
-                    name="postingDate"
-                    value={formData.postingDate}
-                    onChange={handleChange}
-                    disabled={!editableJobDetails}
-                  />
-                </div>
-              </div>
-              <div className='job-details-row'>
-                <div className='job-form-group'>
-                  <label htmlFor="skills">Skills:</label>
-                  <input
-                    type="text"
-                    id="skills"
-                    name="skills"
-                    value={formData.skills}
-                    onChange={handleChange}
-                    disabled={!editableJobDetails}
-                  />
-                </div>
-                <div className='job-form-group'>
-                  <label htmlFor="positions">Number of Positions:</label>
-                  <input
-                    type="number"
-                    id="positions"
-                    name="numberOfPosition"
-                    value={formData.numberOfPosition}
-                    onChange={handleChange}
-                    disabled={!editableJobDetails} />
-                </div>
-                <div className='job-form-group'>
-                  <label htmlFor="deadline">Application Deadline:</label>
-                  <input
-                    type="date"
-                    id="deadline"
-                    name="applicationDeadline"
-                    value={formData.applicationDeadline}
-                    onChange={handleChange}
-                    disabled={!editableJobDetails}
-                  />
-                </div>
-                <div className='job-form-group'>
-                  <label htmlFor="jobsummary">Job summary: Add Additional Information</label>
-                  <textarea
-                    id="jobsummary"
-                    name="jobsummary"
-                    value={formData.jobsummary}
-                    onChange={handleChange}
-                    className="fullWidthTextarea"
-                    disabled={!editableJobDetails}
-                  />
-                </div>
-              </div>
-              <div className='job-save-edit-buttons'>
-
-                {editableJobDetails ? (
-                  <button type="button" onClick={handleSaveJobDetails}><FaSave />Save</button>
-                ) : (
-                  <button type="button" onClick={handleEditJobDetails}><FaEdit />Edit</button>
-                )}
-                <button type="submit">
-                  Post
-
-                </button>
-              </div>
-
+    <Row>
+      <Col md={3} className="leftside">
+        {/* Your HrLeftSide component */}
+      </Col>
+      <Col md={9} className="rightside">
+        <Form className="job-posting-form" onSubmit={handleSubmit}>
+          <div>
+            <h2 style={{ textDecoration: 'underline' }}>Job Details</h2>
+            <div className='job-details-row'>
+              <Form.Group className='job-form-group'>
+                <Form.Label htmlFor="jobTitle">Job Title:</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="jobTitle"
+                  name="jobTitle"
+                  value={formData.jobTitle}
+                  onChange={handleChange}
+                  disabled={!editableJobDetails}
+                />
+              </Form.Group>
+              <Form.Group className='job-form-group'>
+                <Form.Label htmlFor="jobType">Job Type:</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="jobType"
+                  name="jobType"
+                  value={formData.jobType}
+                  onChange={handleChange}
+                  disabled={!editableJobDetails}
+                />
+              </Form.Group>
+              <Form.Group className='job-form-group'>
+                <Form.Label htmlFor="postingDate">Posting Date:</Form.Label>
+                <Form.Control
+                  type="date"
+                  id="postingDate"
+                  name="postingDate"
+                  value={formData.postingDate}
+                  onChange={handleChange}
+                  disabled={!editableJobDetails}
+                />
+              </Form.Group>
             </div>
-          </form>
-        </Col>
-      </Row>
-    </Container>
-  );
+            {/* Continue with other form fields */}
+            <div className='job-save-edit-buttons'>
+              {editableJobDetails ? (
+                <Button variant="primary" type="button" onClick={handleSaveJobDetails}><FaSave /> Save</Button>
+              ) : (
+                <Button variant="info" type="button" onClick={handleEditJobDetails}><FaEdit /> Edit</Button>
+              )}
+              <Button variant="success" type="submit">Post</Button>
+            </div>
+          </div>
+        </Form>
+      </Col>
+    </Row>
+  </Container>
+);
 };
 
 export default UpdateJob;

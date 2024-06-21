@@ -1,12 +1,14 @@
 
-import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row, Table } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+
+import { Button, Dropdown } from 'react-bootstrap';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -21,7 +23,7 @@ const MyApplication = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchResumeNames();
@@ -180,7 +182,7 @@ const MyApplication = () => {
   };
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   const getResumeName = async (resumeId) => {
@@ -242,106 +244,105 @@ const MyApplication = () => {
   };
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
 
-        <Col md={18} className="rightside">
-
-
-          <div className="top-right-content">
-            <div className="candidate-search">
-              <form className="candidate-search1" onSubmit={handleSubmit}>
-
-                <input
-                  type='text'
-                  name='search'
-                  placeholder='Search'
-                  value={search}
-                  onChange={handleSearchChange}
-                />
-                <button type="submit">
-                  <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                </button>
-              </form>
-              <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
-            </div>
-            {showSettings && (
-              <div id="modal-container">
-                <div id="settings-modal">
-
-                  <ul>
-                    <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sing out</Link></li>
-                    <li>Setting </li>
-
-                  </ul>
-                  <button onClick={toggleSettings}>Close</button>
-                </div>
-              </div>
-            )}
-          </div>
+    <div className='candidate-dashboard-container'>
+      <div className='left-side'>
+        <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+      </div>
+      <div className='right-side'>
+        {/* Header section */}
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2>My Applications</h2>
           <div>
-            {applications.length > 0 ? (
-              <div>
-                <h2 className='text-center'>My Applications</h2>
-                <div>
-                  {/* <h1 style={{ textAlign: 'center' }}>MY APPLICATIONS</h1> */}
-                  <div className='applications-table'>
-                  <Table hover className='text-center'>
-                <thead className="table-light">
+            {/* Search input and button */}
+            <form className="candidate-search" onSubmit={fetchApplications}>
+              <input
+                type='text'
+                name='search'
+                placeholder='Search'
+                value={search}
+                onChange={handleSearchChange}
+              />
+              <Button variant="light" type="submit">
+                <FontAwesomeIcon icon={faSearch} style={{ color: 'skyblue' }} />
+              </Button>
+            </form>
 
-                        <tr>
-                          <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                          <th scope="col"onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                          <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                          <th scope="col">Resume Profile</th>
-                          <th scope="col">Job Status</th>
-                          <th scope="col" onClick={() => handleSort('applicationStatus')}>
-                            Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {applications.map(application => (
-                          <tr key={application.id}>
-                            <td>{application.companyName}</td>
-                            <td>{application.jobRole}</td>
-                            <td>{application.appliedOn}</td>
-                            <td>{resumeNames[application.resumeId]}</td>
-                            <td>{renderJobStatus(application.applicationId)}</td>
-                            <td>{application.applicationStatus}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </div>
-                  <nav>
-                    <ul className='pagination'>
-                      <li>
-                        <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                      </li>
-                      {[...Array(totalPages).keys()].map((pageNumber) => (
-                        <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                          <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                        </li>
-                      ))}
-                      <li>
-                        <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
-            ) : (
-              <h1>No applications found.</h1>
-            )}
+            {/* User dropdown */}
+            <Dropdown>
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <FontAwesomeIcon icon={faUser} className='icon' style={{ color: 'black' }} />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+
+        {/* Applications table */}
+        <Table hover className='text-center'>
+          <thead className="table-light">
+
+            <tr>
+              <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+              <th scope="col" onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+              <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+              <th scope="col">Resume Profile</th>
+              <th scope="col">Job Status</th>
+              <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {applications.map(application => (
+              <tr key={application.id}>
+                <td>{application.companyName}</td>
+                <td>{application.jobRole}</td>
+                <td>{application.appliedOn}</td>
+                <td>{resumeNames[application.resumeId]}</td>
+                <td>{renderJobStatus(application.applicationId)}</td>
+                <td>{application.applicationStatus}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+
+        {/* Pagination */}
+        <nav>
+          <ul className='pagination'>
+            <li>
+              <Button className='page-button' onClick={() => handlePageChange(page - 1)} disabled={page === 0}>
+                Previous
+              </Button>
+            </li>
+            {[...Array(totalPages).keys()].map((pageNumber) => (
+              <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
+                <Button className='page-link' onClick={() => handlePageChange(pageNumber)}>
+                  {pageNumber + 1}
+                </Button>
+              </li>
+            ))}
+            <li>
+              <Button className='page-button' onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1}>
+                Next
+              </Button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
   );
-}
+};
 
 export default MyApplication;
+
+
+

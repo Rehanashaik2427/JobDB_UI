@@ -1,10 +1,10 @@
-import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Col, Container, Row, Table } from 'react-bootstrap';
+import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
 import HrLeftSide from './HrLeftSide';
 
 const People = () => {
@@ -104,9 +104,9 @@ const People = () => {
         setSortedColumn(column);
         setSortOrder(order);
     };
-
+    const navigate = useNavigate();
     const toggleSettings = () => {
-        setShowSettings(!showSettings);
+        navigate('/');
     };
 
     const user = {
@@ -122,34 +122,29 @@ const People = () => {
                 </Col>
 
                 <Col md={18} className="rightside">
+                <div className="user col px-3 header-part-right">
+                                        <Dropdown>
+                                            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                                                <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu className="mt-3">
 
 
-                    <div>
-                        <div className="candidate-search">
-                            <input
-                                type='text'
-                                placeholder='Enter Emp Name'
-                                value={search}
-                                onChange={handleSearchChange}
-                            />
-                            <button onClick={handleSearch}>
-                                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                            </button>
-                            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
-                        </div>
-                        {showSettings && (
-                            <div id="modal-container">
-                                <div id="settings-modal">
-                                    <ul>
-                                        <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
-                                        <li>Settings</li>
-                                    </ul>
-                                    <button onClick={toggleSettings}>Close</button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <div>
+                                                <Dropdown.Item as={Link} to="/">
+                                                    <i className="i-Data-Settings me-1" /> Account settings
+                                                </Dropdown.Item>
+
+
+
+                                                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                                                    <i className="i-Lock-2 me-1" /> Sign out
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </div>
+
+                    
                         <Table hover className='text-center'>
                             <thead className="table-light">
                                 <tr>
@@ -168,39 +163,41 @@ const People = () => {
                                     </th>
                                     <th scope="col">Company Name </th>
                                     <th scope="col">PhoneNumber</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {people.map(person => (
-                                    <tr key={person.userId}>
-                                        <td>{person.userId}</td>
-                                        <td>{person.userName}</td>
-                                        <td>{person.userEmail}</td>
-                                        <td>{person.companyName}</td>
-                                        <td>{person.phone}</td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>                </div>
-                    <nav>
-                        <ul className='pagination'>
-                            <li>
-                                <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                            </li>
-                            {[...Array(totalPages).keys()].map((pageNumber) => (
-                                <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                                    <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                                </li>
-                            ))}
-                            <li>
-                                <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                            </li>
-                        </ul>
-                    </nav>
-                </Col>
-            </Row>
-        </Container>
-    );
+                                    </thead>
+                                    <tbody>
+                                        {people.map(person => (
+                                            <tr key={person.userId}>
+                                                <td>{person.userId}</td>
+                                                <td>{person.userName}</td>
+                                                <td>{person.userEmail}</td>
+                                                <td>{person.companyName}</td>
+                                                <td>{person.phone}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
+                            
+                            <nav>
+                                <ul className='pagination'>
+                                    <li>
+                                        <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
+                                    </li>
+                                    {[...Array(totalPages).keys()].map((pageNumber) => (
+                                        <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
+                                            <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
+                                        </li>
+                                    ))}
+                                    <li>
+                                        <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </Col>
+                    </Row>
+                </Container>
+
+                );
 }
 
-export default People;
+                export default People;

@@ -1,10 +1,12 @@
-import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom'; // Import Link from react-router-dom
+import { Col } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import './CandidateDashboard.css';
+
+import { Dropdown } from 'react-bootstrap';
 import CandidateLeftSide from './CandidateLeftSide';
 
 
@@ -14,6 +16,9 @@ const Profile = () => {
   const userId = location.state?.userId;
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const [userData, setUserData] = useState();
+
+  
+  const navigate = useNavigate();
 
   const getUser = async (userId) => {
     try {
@@ -27,14 +32,12 @@ const Profile = () => {
     getUser(userId);
   }, [userId]);
 
-  const [showSettings, setShowSettings] = useState(false);
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
-
-
+ 
   const user = {
     userName: userName,
 
@@ -42,67 +45,68 @@ const Profile = () => {
   };
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
+    <div fluid className="dashboard-container">
+      
         <Col md={3} className="leftside">
           <CandidateLeftSide user={{ userName, userId }} />
         </Col>
 
-        <Col md={18} className="rightside">
-          <div className="top-right-content">
-            <div className="top-right-content">
-              <div className="candidate-search">
-                <input type='text' placeholder='serach'></input>
-                <button>
-                  <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                </button>
-                <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
+     
+    
+      <div className='rightside'>
+      
+     
+      <div className="d-flex justify-content-end">
+      <div className="candidate-search">
+        <div className="user col px-3">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer ">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon align-item-end' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
 
+                  <Dropdown.Menu className="mt-3">
+                  
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+                 
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
-
-
-            </div>
-            {showSettings && (
-              <div id="modal-container">
-                <div id="settings-modal">
-                  {/* Your settings options here */}
-                  <ul>
-                    <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sing out</Link></li>
-                    <li>Setting </li>
-                    {/* Add more settings as needed */}
-                  </ul>
-                  <button onClick={toggleSettings}>Close</button>
-                </div>
               </div>
-            )}
-
-            <div className="profile-container">
-              {userData && (
-                <>
-                  <div className="profile-item">
-                    <span className="profile-label">Name:</span>
-                    <span className="profile-value">{userData.userName}</span>
-                  </div>
-                  <div className="profile-item">
-                    <span className="profile-label">Email:</span>
-                    <span className="profile-value">{userData.userEmail}</span>
-                  </div>
-                  <div className="profile-item">
-                    <span className="profile-label">PhoneNumber:</span>
-                    <span className="profile-value">{userData.phone}</span>
-                  </div>
-                  {/* <button className="profile-button" onClick={handleEdit}>Edit</button> */}
-                </>
-              )}
-            </div>
-
+              </div>
+       <div className="profile-container">
+      {userData && (
+      <>
+      <div className="profile-item">
+        <span className="profile-label">Name:</span>
+        <span className="profile-value">{userData.userName}</span>
+      </div>
+      <div className="profile-item">
+        <span className="profile-label">Email:</span>
+        <span className="profile-value">{userData.userEmail}</span>
+      </div>
+      <div className="profile-item">
+        <span className="profile-label">PhoneNumber:</span>
+        <span className="profile-value">{userData.phone}</span>
+      </div>
+      {/* <button className="profile-button" onClick={handleEdit}>Edit</button> */}
+    </>
+  )}
+</div>
 
 
-          </div>
-        </Col>
-      </Row>
-    </Container>
+     
+    </div>
+      </div>
+
   )
 }
 
-export default Profile
+export default Profile;

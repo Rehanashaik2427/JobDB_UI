@@ -1,12 +1,15 @@
-import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+
+import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Modal, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Button, Modal, Popover } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
+
+import { Dropdown, Pagination } from 'react-bootstrap';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -16,6 +19,7 @@ const CandidateJobs = () => {
   const userId = location.state?.userId;
   console.log(userId);
 
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [applyjobs, setApplyJobs] = useState([]);
   const [showResumePopup, setShowResumePopup] = useState(false);
@@ -78,7 +82,7 @@ const CandidateJobs = () => {
   };
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   const handleApplyButtonClick = (jobId) => {
@@ -209,158 +213,164 @@ const CandidateJobs = () => {
 
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    
+    <div className='candidate-dashboard-container'>
+      <div className='left-side'>
+        <CandidateLeftSide user={user} />
+      </div>
 
-        <Col md={18} className="rightside">
-          {showResumePopup && (
-            <Modal show={true} onHide={() => setShowResumePopup(false)}>
-              <Modal.Header >
-                <Modal.Title>Select Resume</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <ResumeSelectionPopup
-                  resumes={resumes}
-                  onSelectResume={handleResumeSelect}
-                  onClose={() => setShowResumePopup(false)}
+      <div className='rightside'>
+       
+      {showResumePopup && (
+        <Modal show={true} onHide={() => setShowResumePopup(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Select Resume</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <ResumeSelectionPopup
+              resumes={resumes}
+              onSelectResume={handleResumeSelect}
+              onClose={() => setShowResumePopup(false)}
+            />
+          </Modal.Body>
+        </Modal>
+      )}
+
+        <div className="d-flex justify-content-end">
+          <div className="top-right-content">
+            <div className="candidate-search">
+              <form className="candidate-search1" onSubmit={handleSubmit}>
+                <input
+                  type='text'
+                  name='search'
+                  placeholder='Search'
+                  value={search}
+                  onChange={handleSearchChange}
                 />
-              </Modal.Body>
-            </Modal>
-          )}
+                <Button variant="light" onClick={() => alert('Search clicked')}>
+                  <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+                </Button>
+              </form>
+              <div className="user col px-3 header-part-right">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
 
 
-          <div className="page">
-            <div className="top-right-content">
-              <div className="candidate-search">
-                <form className="candidate-search1" onSubmit={handleSubmit}>
-                  <input
-                    type='text'
-                    name='search'
-                    placeholder='Search'
-                    value={search}
-                    onChange={handleSearchChange}
-                  />
-                  <button type="submit">
-                    <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                  </button>
-                </form>
-                <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </div>
+          </div>
 
-            {showSettings && (
-              <div id="modal-container">
-                <div id="settings-modal">
-                  <ul>
-                    <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/">Sign out</Link></li>
-                    <li>Setting</li>
-                  </ul>
-                  <button onClick={toggleSettings}>Close</button>
+
+        </div>
+
+        {jobs.length > 0 && (
+          <div>
+            <h2>Jobs For {userName}</h2>
+            <table className='jobs-table'>
+              <thead>
+                <tr>
+                  <th onClick={() => handleSort('jobTitle')}>
+                    Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th >
+                    Company Name
+                  </th>
+                  <th onClick={() => handleSort('applicationDeadline')}>
+                    Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th onClick={() => handleSort('skills')}>
+                    Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th>Job Summary</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {jobs.map(job => (
+                  <tr key={job.id} id='job-table-list'>
+                    <td>{job.jobTitle}</td>
+                    <td>{job.companyName}</td>
+                    <td>{job.applicationDeadline}</td>
+                    <td>{job.skills}</td>
+                    <td><button onClick={() => handleViewSummary(job.jobsummary)}>View Summary</button></td>
+                    <td>
+                      {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
+                        <h4>Applied</h4>
+                      ) : (
+                        <Button onClick={() => handleApplyButtonClick(job.jobId)}>Apply</Button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {selectedJobSummary && (
+              <div className="modal-summary">
+                <div className="modal-content-summary">
+                  <span className="close" onClick={handleCloseModalSummary}>&times;</span>
+                  <div className="job-summary">
+                    <h3>Job Summary</h3>
+                    <p>{selectedJobSummary}</p>
+                  </div>
                 </div>
               </div>
             )}
+
+            <nav>
+              <Pagination>
+                <Pagination.Prev onClick={handlePreviousPage} disabled={page === 0} />
+                {[...Array(totalPages).keys()].map((pageNumber) => (
+                  <Pagination.Item
+                    key={pageNumber}
+                    active={pageNumber === page}
+                    onClick={() => handlePageChange(pageNumber)}
+                  >
+                    {pageNumber + 1}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next onClick={handleNextPage} disabled={page === totalPages - 1} />
+              </Pagination>
+            </nav>
           </div>
+        )}
 
-          {jobs.length > 0 && (
-            <div>
-              <h2 className='text-center'>Jobs For {userName}</h2>
-              <Table hover className='text-center large-text'>
-                <thead className="table-light">
-                  <tr>
-                    <th onClick={() => handleSort('jobTitle')}>
-                      Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th onClick={() => handleSort('companyName')}>
-                      Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th onClick={() => handleSort('applicationDeadline')}>
-                      Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th onClick={() => handleSort('skills')}>
-                      Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th>Job Summary</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {jobs.map(job => (
-                    <tr key={job.id} id='job-table-list'>
-                      <td>{job.jobTitle}</td>
-                      <td>{job.companyName}</td>
-                      <td>{job.applicationDeadline}</td>
-                      <td>{job.skills}</td>
-                      <td>
-                        <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                          <Button className="text-black btn-sm btn-rounded" variant="secondary " style={{ fontSize: '12px', padding: '1px 5px' }}>
-                            View Summary
-                          </Button>
-                        </OverlayTrigger>
-                      </td>
-                      <td>
-                        {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
-                          <h5>Applied</h5>
-                        ) : (
-                          <Button className="text-black btn-sm btn-rounded" variant="secondary" onClick={() => handleApplyButtonClick(job.jobId, job.jobStatus)} 
-                          style={{ fontSize: '12px', padding: '1px 5px' }}>
-                            <h5>Apply</h5>
-                          </Button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+        {jobs.length === 0 && <h1>No jobs found.</h1>}
 
-              {selectedJobSummary && showModalSummary && (
-                <div className="modal-summary">
-                  <div className="modal-content-summary">
-                    <span className="close" onClick={handleCloseModalSummary}>&times;</span>
-                    <div className="job-summary">
-                      <h3>Job Summary</h3>
-                      <p>{selectedJobSummary}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
+        <div className="dream">
+          <p>Can't find your dream company. Don't worry, you can still apply to them.</p>
+          <p>Just add the name of your dream company and apply to them directly.</p>
+          <Link to={{ pathname: '/candidate-dashboard/dream-company', state: { userName: userName, userId: userId } }} className="app d-flex justify-content-center" onClick={(e) => {
+            e.preventDefault();
+            navigate('/candidate-dashboard/dream-company', { state: { userName, userId } });
+          }}>
+            <Button variant="primary" className="apply">
+              Apply to your dream company
+            </Button>
+          </Link>
+        </div>
 
-              <nav>
-                <ul className='pagination'>
-                  <li>
-                    <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                  </li>
-                  {[...Array(totalPages).keys()].map((pageNumber) => (
-                    <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                      <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                    </li>
-                  ))}
-                  <li>
-                    <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          )}
-
-          {jobs.length === 0 && <h1>No jobs found.</h1>}
-          <div className="dream">
-            <p>Can't find your dream company. Don't worry, you can still apply to them.</p>
-            <p>Just add the name of your dream company and apply to them directly.</p>
-            <Link to={{ pathname: '/candidate-dashboard/dream-company', state: { userName: userName, userId: userId } }} className="app">
-              <nav className="apply" style={{ textAlign: 'center' }}><b>Apply to your dream company</b></nav>
-            </Link>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+      </div>
+    </div>
   );
 };
 
 export default CandidateJobs;
-
 
 
 

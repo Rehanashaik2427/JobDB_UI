@@ -1,8 +1,8 @@
-import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button, Col, Container, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
@@ -21,7 +21,7 @@ const MyJobs = () => {
 
   const [search, setSearch] = useState('');
 
-  const [showSettings, setShowSettings] = useState(false);
+
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
@@ -36,7 +36,7 @@ const MyJobs = () => {
   };
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   const handlePreviousPage = () => {
@@ -163,33 +163,48 @@ const MyJobs = () => {
         </Col>
 
         <Col md={18} className="rightside">
-          <div className="candidate-search">
-            <form className="candidate-search1" onSubmit={handleSubmit}>
-              <input
-                type='text'
-                name='search'
-                placeholder='Search'
-                value={search}
-                onChange={handleSearchChange}
-              />
-              <button type="submit">
-                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-              </button>
-            </form>
+          <div className="d-flex justify-content-end ">
+            <div className="top-right-content">
+              <div className="candidate-search">
+                <form className="candidate-search1" onSubmit={handleSubmit}>
+                  <input
+                    type='text'
+                    name='search'
+                    placeholder='Search'
+                    value={search}
+                    onChange={handleSearchChange}
+                  />
+                  <Button variant="light" onClick={() => alert('Search clicked')}>
+                    <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+                  </Button>
+                </form>
+                <div className="user col px-3 header-part-right">
+                  <Dropdown>
+                    <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                      <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                    </Dropdown.Toggle>
 
-            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
-          </div>
-          {showSettings && (
-            <div id="modal-container">
-              <div id="settings-modal">
-                <ul>
-                  <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sing out</Link></li>
-                  <li>Setting </li>
-                </ul>
-                <button onClick={toggleSettings}>Close</button>
+                    <Dropdown.Menu className="mt-3">
+
+
+                      <Dropdown.Item as={Link} to="/">
+                        <i className="i-Data-Settings me-1" /> Account settings
+                      </Dropdown.Item>
+
+
+
+                      <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                        <i className="i-Lock-2 me-1" /> Sign out
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               </div>
             </div>
-          )}
+
+
+          </div>
+
 
           {showJobDescription && (
             <div className="modal-summary">
@@ -201,6 +216,7 @@ const MyJobs = () => {
             </div>
           )}
           <h2 className='text-center'>Job posted by {userName}</h2>
+          
           <div className='job-list'>
             {jobs.length > 0 && (
 
@@ -232,9 +248,9 @@ const MyJobs = () => {
                         <td>{job.numberOfPosition}</td>
                         <td>{job.applicationDeadline}</td>
                         <td>
-                        <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                          <Button variant="secondary"className='description btn-rounded' >Description</Button>
-                        </OverlayTrigger>
+                          <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                            <Button variant="secondary" className='description btn-rounded' >Description</Button>
+                          </OverlayTrigger>
                         </td>
                         <td>
                           <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } })}>

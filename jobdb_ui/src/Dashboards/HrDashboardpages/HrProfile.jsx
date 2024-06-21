@@ -1,9 +1,9 @@
-import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
 
 const HrProfile = () => {
@@ -28,57 +28,65 @@ const HrProfile = () => {
       console.log(error);
     }
   };
-
+  const navigate = useNavigate();
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   return (
-<Container fluid className="dashboard-container">
+    <Container fluid className="dashboard-container">
       <Row>
         <Col md={3} className="leftside">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 
         <Col md={18} className="rightside">
-        <div className="top-right-content">
-          <div className="candidate-search">
-            <div>
-              <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} />
+
+          <div className="d-flex justify-content-end">
+            <div className="candidate-search">
+              <div className="user col px-3">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </div>
           </div>
-        </div>
-        {showSettings && (
-          <div id="modal-container">
-            <div id="settings-modal">
-              <ul>
-                <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/">Sign out</Link></li>
-                <li>Setting</li>
-              </ul>
-              <button onClick={toggleSettings}>Close</button>
+          <div>
+            <div className="profile-container">
+              {userData && (
+                <>
+                  <div className="profile-item">
+                    <span className="profile-label">Name:</span>
+                    <span className="profile-value">{userData.userName}</span>
+                  </div>
+                  <div className="profile-item">
+                    <span className="profile-label">Email:</span>
+                    <span className="profile-value">{userData.userEmail}</span>
+                  </div>
+                  <div className="profile-item">
+                    <span className="profile-label">PhoneNumber:</span>
+                    <span className="profile-value">{userData.phone}</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
-        )}
-        <div>
-          <div className="profile-container">
-            {userData && (
-              <>
-                <div className="profile-item">
-                  <span className="profile-label">Name:</span>
-                  <span className="profile-value">{userData.userName}</span>
-                </div>
-                <div className="profile-item">
-                  <span className="profile-label">Email:</span>
-                  <span className="profile-value">{userData.userEmail}</span>
-                </div>
-                <div className="profile-item">
-                  <span className="profile-label">PhoneNumber:</span>
-                  <span className="profile-value">{userData.phone}</span>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
         </Col>
       </Row>
     </Container>
