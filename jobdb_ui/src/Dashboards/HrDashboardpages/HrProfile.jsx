@@ -1,4 +1,3 @@
-// HrProfile.js
 import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
@@ -10,19 +9,15 @@ const HrProfile = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const [userData, setUserData] = useState({});
   const location = useLocation();
-  const userName = location.state?.userName;
-  const userEmail = location.state?.userEmail;
-
-  const user = {
-    userName: userName,
-    userEmail: userEmail,
-  };
-
+  const userName = location.state?.userName || '';
+  const userEmail = location.state?.userEmail || '';
   const [showSettings, setShowSettings] = useState(false);
 
-  const toggleSettings = () => {
-    setShowSettings(!showSettings);
-  };
+  useEffect(() => {
+    if (userEmail) {
+      getUser(userEmail);
+    }
+  }, [userEmail]);
 
   const getUser = async (userEmail) => {
     try {
@@ -33,18 +28,14 @@ const HrProfile = () => {
     }
   };
 
-  useEffect(() => {
-    if (userEmail) {
-      getUser(userEmail);
-    }
-  }, [userEmail]);
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
 
-
-  console.log("userEmail", userEmail , ' username ', userName)
   return (
     <div className='hr-dashboard-container'>
       <div className='hr-leftside'>
-        <HrLeftSide user={user} />
+        <HrLeftSide user={{ userName: userName, userEmail: userEmail }} />
       </div>
 
       <div className='rightside'>

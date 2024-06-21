@@ -2,7 +2,7 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
@@ -17,7 +17,7 @@ const MyJobs = () => {
   const [showJobDescription, setShowJobDescription] = useState(false);
   const [selectedJobSummary, setSelectedJobSummary] = useState('');
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
   const [showSettings, setShowSettings] = useState(false);
@@ -99,17 +99,6 @@ const navigate = useNavigate();
     setSortedColumn(column);
     setSortOrder(order);
   };
-  const handleUpdate = (jobId) => {
-    navigate({
-      pathname: '/update-job',
-      state: {
-        userName: userName,
-        userEmail: userEmail,
-        jobId: jobId
-      }
-    });
-  };
-
 
 
   const handleDelete = async (jobId) => {
@@ -153,17 +142,14 @@ const navigate = useNavigate();
     setShowJobDescription(false);
     setSelectedJobSummary('');
   };
-  
-  const user = {
-    userName: userName,
-    userEmail: userEmail,
-  };
+
+
 
   return (
     <Container fluid className="hr-dashboard-container">
       <Row>
         <Col md={3} className="hr-leftside">
-          <HrLeftSide  user={user} />
+          <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 
         <Col md={9} className="hr-rightside">
@@ -239,7 +225,21 @@ const navigate = useNavigate();
                           <button className='description' onClick={() => handleJobDescription(job.jobsummary)}>Description</button>
                         </td>
                         <td>
-                          <button className='update' onClick={() => handleUpdate(job.jobId)}>Update</button>
+                          <Button
+                            className='update'
+                            onClick={() =>    navigate({
+                              pathname:'/hr-dashboard/my-jobs/update-job',
+                              state: {
+                                userName: userName,
+                                userEmail: userEmail,
+                                jobId: job.jobId,
+                              }
+                            })
+                          }
+                          >
+                            Update
+                          </Button>
+
                           <button className='delete' onClick={() => handleDelete(job.jobId)}>Delete</button>
                         </td>
                       </tr>
@@ -275,8 +275,15 @@ const navigate = useNavigate();
 
 
           <button className='add-job-button'>
-            <Link to={{ pathname: '/addJob', state: { userName: userName, userEmail: userEmail } }}>Add Job</Link>
-          </button>
+            <Link
+              to={{ pathname: '/hr-dashboard/my-jobs/addJob', state: { userName: userName, userEmail: userEmail } }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/hr-dashboard/my-jobs/addJob', { state: { userName: userName, userEmail: userEmail } });
+              }}
+            >
+              Add Job
+            </Link>          </button>
         </Col>
       </Row>
     </Container>

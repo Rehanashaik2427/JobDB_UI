@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
 
 const AddJob = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  const history = useHistory(); 
+  const navigate = useNavigate();
 
   const { userName, userEmail } = location.state || {};
   console.log(userEmail);
@@ -51,7 +50,7 @@ const AddJob = () => {
       if (response.ok) {
         console.log("Job posted successfully", formData);
         alert("Job posted successfully");
-        history.push('/jodAddSuccess', { userName: userName, userEmail: userEmail });
+        navigate('/jodAddSuccess', { userName: userName, userEmail: userEmail });
       } else {
         console.error("Error posting job");
       }

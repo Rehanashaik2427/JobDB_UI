@@ -2,14 +2,14 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 
 const Applications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
-
+  const navigate = useNavigate();
   const location = useLocation();
   const userName = location.state?.userName;
   const userEmail = location.state?.userEmail;
@@ -109,11 +109,11 @@ const Applications = () => {
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
-        order = sortOrder === 'asc' ? 'desc' : 'asc';
+      order = sortOrder === 'asc' ? 'desc' : 'asc';
     }
     setSortedColumn(column);
     setSortOrder(order);
-};
+  };
 
   const user = {
     userName: userName,
@@ -177,14 +177,17 @@ const Applications = () => {
                         <td>{job.applicationDeadline}</td>
                         <td>
                           <Link
-                            to={{
-                              pathname: '/viewApplications',
-                              state: { userName: userName, userEmail: userEmail, jobId: job.jobId }
+                            to="/hr-dashboard/hr-applications/view-applications"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } });
                             }}
+                            className="nav-link"
                           >
                             <button>View Application</button>
                           </Link>
                         </td>
+
                       </tr>
                     )
                   ))}
