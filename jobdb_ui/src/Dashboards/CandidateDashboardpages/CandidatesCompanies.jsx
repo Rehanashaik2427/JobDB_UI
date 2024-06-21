@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './CandidateDashboard.css';
+
 import CandidateLeftSide from './CandidateLeftSide';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Dropdown } from 'react-bootstrap';
 
 const CandidatesCompanies = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -70,7 +70,7 @@ const CandidatesCompanies = () => {
   };
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   const handleClick = (companyId) => {
@@ -85,7 +85,7 @@ const CandidatesCompanies = () => {
 
       </div>
       <div className='rightside'>
-        <div className="top-right-content">
+      <div className="d-flex justify-content-end">
           <div className="candidate-search">
             <form className="candidate-search1" onSubmit={handleSubmit}>
               <input
@@ -99,7 +99,28 @@ const CandidatesCompanies = () => {
               <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
             </Button>
             </form>
-            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
+            <div className="user col px-3 header-part-right">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+                  
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+                 
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+          </div>
           </div>
           <div className="companyJob">
             <h1>Companies that we have</h1>
@@ -140,19 +161,7 @@ const CandidatesCompanies = () => {
               </ul>
             </nav>
           </div>
-
-          {showSettings && (
-            <div id="modal-container">
-              <div id="settings-modal">
-                <ul>
-                  <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/">Sign out</Link></li>
-                  <li>Setting</li>
-                </ul>
-                <button onClick={toggleSettings}>Close</button>
-              </div>
-            </div>
-          )}
-        </div>
+       
       </div>
     </div>
   );

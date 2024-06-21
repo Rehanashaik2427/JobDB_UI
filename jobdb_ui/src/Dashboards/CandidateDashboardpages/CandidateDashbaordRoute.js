@@ -28,8 +28,8 @@ const CandidateDashbaordRoute = () => {
       <Route path='/payment' element={<Payment />} />
       <Route path='/my-application' element={<MyApplication />} />
       <Route path='/resumeAdd' element={<ResumeAdd />} />
-      <Route path='companyPage' element={<CompamyPage />} />
-      <Route path='resumePopUp' element={<ResumeSelectionPopup />} />
+      <Route path='/companyPage' element={<CompamyPage />} />
+      <Route path='/resumePopUp' element={<ResumeSelectionPopup />} />
       <Route path='/dream-company' element={<DreamCompany/>}/>
     </Routes>
 

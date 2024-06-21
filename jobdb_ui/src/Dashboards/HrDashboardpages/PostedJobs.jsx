@@ -2,10 +2,11 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
+import { Button, Dropdown } from 'react-bootstrap';
 
 const PostedJobs = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -89,11 +90,9 @@ const PostedJobs = () => {
       else
     fetchJobs(userEmail);
   }, [userEmail,search,page,pageSize,sortedColumn, sortOrder]);
-
-  const [showSettings, setShowSettings] = useState(false);
-
+  const navigate = useNavigate();
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   const handleSearchChange = (event) => {
@@ -131,32 +130,47 @@ const PostedJobs = () => {
       </div>
 
       <div className='hr-rightside'>
-        <div className="candidate-search">
-        <form className="candidate-search1"  onSubmit={handleSubmit}>
-          <input
-            type='text'
-            name='search'
-            placeholder='Search'
-            value={search}
-            onChange={handleSearchChange}
-          />
-          <button type="submit">
-            <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-          </button>
-          </form>
-          <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
-        </div>
-        {showSettings && (
-          <div id="modal-container">
-            <div id="settings-modal">
-              <ul>
-                <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
-                <li>Setting </li>
-              </ul>
-              <button onClick={toggleSettings}>Close</button>
+      <div className="d-flex justify-content-end">
+          <div className="top-right-content">
+            <div className="candidate-search">
+              <form className="candidate-search1" onSubmit={handleSubmit}>
+                <input
+                  type='text'
+                  name='search'
+                  placeholder='Search'
+                  value={search}
+                  onChange={handleSearchChange}
+                />
+                <Button variant="light" onClick={() => alert('Search clicked')}>
+                  <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+                </Button>
+              </form>
+              <div className="user col px-3 header-part-right">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </div>
           </div>
-        )}
+
+
+        </div>
         <div>
           <div className="jobs_list">
             <table id='jobTable1'>

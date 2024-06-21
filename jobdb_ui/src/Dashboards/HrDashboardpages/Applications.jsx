@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
+import { Button, Dropdown } from 'react-bootstrap';
 
 const Applications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -25,7 +26,7 @@ const Applications = () => {
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   const handlePreviousPage = () => {
@@ -126,35 +127,48 @@ const Applications = () => {
         <HrLeftSide user={user} />
       </div>
       <div className='hr-rightside'>
-        <div className="applications">
-          <div className="candidate-search">
-            <form className="candidate-search1" onSubmit={handleSubmit}>
-              <input
-                type='text'
-                placeholder='Search by job title'
-                value={search}
-                onChange={handleSearchChange}
-              />
-              <button>
-                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-              </button>
-            </form>
-            <div>
-              <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} />
+      <div className="top-right-content">
+      <div className="d-flex justify-content-end">
+          <div className="top-right-content">
+            <div className="candidate-search">
+              <form className="candidate-search1" onSubmit={handleSubmit}>
+                <input
+                  type='text'
+                  name='search'
+                  placeholder='Search'
+                  value={search}
+                  onChange={handleSearchChange}
+                />
+                <Button variant="light" onClick={() => alert('Search clicked')}>
+                  <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+                </Button>
+              </form>
+              <div className="user col px-3 header-part-right">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </div>
           </div>
 
-          {showSettings && (
-            <div id="modal-container">
-              <div id="settings-modal">
-                <ul>
-                  <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
-                  <li>Settings</li>
-                </ul>
-                <button onClick={toggleSettings}>Close</button>
-              </div>
-            </div>
-          )}
+
+        </div>
 
           <div className='job-list'>
             {jobs.length > 0 && (
@@ -228,7 +242,7 @@ const Applications = () => {
 
       </div>
 
-    </div>
+      </div>
 
   );
 }

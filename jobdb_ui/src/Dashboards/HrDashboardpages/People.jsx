@@ -2,9 +2,10 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import HrLeftSide from './HrLeftSide';
+import { Button, Dropdown } from 'react-bootstrap';
 
 const People = () => {
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -88,7 +89,7 @@ const People = () => {
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
-
+   
     const handleSearch = () => {
         const filtered = people.filter(person =>
             person.userName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -103,9 +104,9 @@ const People = () => {
         setSortedColumn(column);
         setSortOrder(order);
     };
-
+    const navigate = useNavigate();
     const toggleSettings = () => {
-        setShowSettings(!showSettings);
+      navigate('/');
     };
 
     const user = {
@@ -120,31 +121,45 @@ const People = () => {
             </div>
 
             <div className='hr-rightside'>
-                <div>
-                    <div className="candidate-search">
-                        <input
-                            type='text'
-                            placeholder='Enter Emp Name'
-                            value={search}
-                            onChange={handleSearchChange}
-                        />
-                        <button onClick={handleSearch}>
-                            <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                        </button>
-                        <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
-                    </div>
-                    {showSettings && (
-                        <div id="modal-container">
-                            <div id="settings-modal">
-                                <ul>
-                                    <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
-                                    <li>Settings</li>
-                                </ul>
-                                <button onClick={toggleSettings}>Close</button>
-                            </div>
-                        </div>
-                    )}
-                </div>
+            <div className="top-right-content">
+            <div className="d-flex justify-content-end">
+         
+            <div className="candidate-search">
+              <form className="candidate-search1" >
+                <input
+                  type='text'
+                  name='search'
+                  placeholder='Search'
+                  value={search}
+                  onChange={handleSearchChange}
+                />
+                <Button variant="light" onClick={() => alert('Search clicked')}>
+                  <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+                </Button>
+              </form>
+              <div className="user col px-3 header-part-right">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
+          </div>
                 <div>
                     <table id='jobTable1'>
                         <thead>
@@ -200,6 +215,7 @@ const People = () => {
                     </ul>
                 </nav>
             </div>
+        </div>
         </div>
     );
 }

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding, faFile, faFileLines, faHouse, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
 
-import './CandidateDashboard.css';
+
 
 function CandidateLeftSide({ user }) {
   const { userName, userId } = user;
@@ -41,7 +41,7 @@ function CandidateLeftSide({ user }) {
             }}
             style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
           >
-            <FontAwesomeIcon icon={faLayerGroup} /> Jobs
+            <FontAwesomeIcon icon={faLayerGroup} /> Jobs     
           </Link>
 
           <Link

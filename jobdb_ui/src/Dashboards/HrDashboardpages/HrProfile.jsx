@@ -2,8 +2,9 @@ import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
+import { Dropdown } from 'react-bootstrap';
 
 const HrProfile = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -27,9 +28,9 @@ const HrProfile = () => {
       console.log(error);
     }
   };
-
+  const navigate = useNavigate();
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   return (
@@ -39,24 +40,31 @@ const HrProfile = () => {
       </div>
 
       <div className='rightside'>
-        <div className="top-right-content">
-          <div className="candidate-search">
-            <div>
-              <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} />
-            </div>
-          </div>
-        </div>
-        {showSettings && (
-          <div id="modal-container">
-            <div id="settings-modal">
-              <ul>
-                <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/">Sign out</Link></li>
-                <li>Setting</li>
-              </ul>
-              <button onClick={toggleSettings}>Close</button>
-            </div>
-          </div>
-        )}
+      <div className="d-flex justify-content-end">
+      <div className="candidate-search">
+        <div className="user col px-3">
+             <Dropdown>
+               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                 <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+               </Dropdown.Toggle>
+
+               <Dropdown.Menu className="mt-3">
+
+
+                 <Dropdown.Item as={Link} to="/">
+                   <i className="i-Data-Settings me-1" /> Account settings
+                 </Dropdown.Item>
+
+
+
+                 <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                   <i className="i-Lock-2 me-1" /> Sign out
+                 </Dropdown.Item>
+               </Dropdown.Menu>
+             </Dropdown>
+           </div>
+         </div>
+       </div>
         <div>
           <div className="profile-container">
             {userData && (

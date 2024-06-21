@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import CandidateLeftSide from './CandidateLeftSide';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 
 const Resume = () => {
   const BASE_API_URL="http://localhost:8082/api/jobbox";
@@ -13,7 +13,7 @@ const Resume = () => {
   const userName=location.state?.userName;
   const userId=location.state?.userId;
   const [showMessage, setShowMessage] = useState(false);
-const navigate=useNavigate();
+
 
   const [resumes, setResumes] = useState([]);
 
@@ -58,11 +58,9 @@ const navigate=useNavigate();
   }
 
  
-  
-  const [showSettings, setShowSettings] = useState(false);
-
+  const navigate = useNavigate();
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
   
 const handleDelete=async(resumeId)=>{
@@ -91,28 +89,37 @@ alert("Failed To delete")
 
     </div>
       <Col sm={9} className='right-side'>
-        <div className="top-right-content">
+      <div className="d-flex justify-content-end">
           <div className="candidate-search">
             <input type='text' placeholder='search' />
             <Button variant="light" onClick={() => alert('Search clicked')}>
               <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
             </Button>
-            <div><FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} onClick={toggleSettings} /></div>
+            <div className="user col px-3 header-part-right">
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+                  
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
+
+                 
+
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
           </div>
         </div>
 
-        {showSettings && (
-          <div id="modal-container">
-            <div id="settings-modal">
-              <ul>
-                <li><FontAwesomeIcon icon={faSignOutAlt} /><Link to="/"> Sign out</Link></li>
-                <li>Setting</li>
-                {/* Add more settings as needed */}
-              </ul>
-              <Button onClick={toggleSettings}>Close</Button>
-            </div>
-          </div>
-        )}
+       
 
         {showBriefSettings && (
           <div className="modal-summary">

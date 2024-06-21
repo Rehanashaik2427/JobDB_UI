@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 const HrDashboard = () => {
@@ -56,22 +56,26 @@ const HrDashboard = () => {
       const applicationsResponse = await axios.get(`${BASE_API_URL}/CountOfApplicationByEachCompany`, {
         params: { userEmail: userEmail }
       });
+        setCountOfJobs(jobsResponse.data);
+      setCountOfApplications(applicationsResponse.data);
       const shortlistedResponse = await axios.get(`${BASE_API_URL}/CountOfShortlistedCandidatesByEachCompany`, {
         params: { userEmail: userEmail }
       });
 
-      setCountOfJobs(jobsResponse.data);
-      setCountOfApplications(applicationsResponse.data);
+    
       setCountOfShortlistedCandiCompany(shortlistedResponse.data);
     } catch (error) {
       console.error('Error fetching counts:', error);
     }
   };
 
-  const [showSettings, setShowSettings] = useState(false);
+console.log("...>>"+countOfJobs);
+console.log("...>>"+countOfApplications);
+console.log("...>>"+countOfShortlistedCandiCompany);
+console.log("...>>"+countOfJobs);
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
+    navigate('/');
   };
 
   const user = {
@@ -88,32 +92,32 @@ const HrDashboard = () => {
         </Col>
 
         <Col md={9} className="hr-rightside">
-          <Row>
-            <Col md={4} className="candidate-search">
-              <FontAwesomeIcon
-                icon={faUser}
-                id="user"
-                className="icon"
-                style={{ color: 'black' }}
-                onClick={toggleSettings}
-              />
-            </Col>
+        <Row className=" d-flex justify-content-end ">
+
+<Col xs={4} md={1}>
+          <div className="user col px-3 header-part-right" style={{marginTop:'10px'}}>
+                <Dropdown>
+                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="mt-3">
+                  
+
+                    <Dropdown.Item as={Link} to="/">
+                      <i className="i-Data-Settings me-1" /> Account settings
+                    </Dropdown.Item>
 
 
-            {showSettings && (
-              <div className="modal-container">
-                <div className="settings-modal">
-                  <ul>
-                    <li>
-                      <FontAwesomeIcon icon={faSignOutAlt} />
-                      <Link to="/">Sign out</Link>
-                    </li>
-                    <li>Setting</li>
-                  </ul>
-                  <button onClick={toggleSettings}>Close</button>
-                </div>
+                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                      <i className="i-Lock-2 me-1" /> Sign out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
-            )}
+              </Col>
+
+           
 
             <Row style={{ marginBottom: '5rem' }}>
               <Col md={6} className="box">
