@@ -8,11 +8,11 @@ import React, { useEffect, useState } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 
-import './CandidateDashboard.css';
+
 import CandidateLeftSide from './CandidateLeftSide';
 import { Button, Col, Container, Form, Modal, Pagination, Table } from 'react-bootstrap';
 
-const MyApplication= () => {
+const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
   const userName = location.state?.userName;

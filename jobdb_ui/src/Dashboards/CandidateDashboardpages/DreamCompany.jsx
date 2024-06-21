@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
-import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import {  useLocation } from 'react-router-dom';
 import axios from 'axios';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
 import CandidateLeftSide from './CandidateLeftSide';
+import { Button, Container, Form, Modal } from 'react-bootstrap';
 
    const BASE_API_URL="http://localhost:8082/api/jobbox";
 
@@ -13,7 +14,7 @@ const DreamCompany = () => {
   const location=useLocation();
   const userName=location.state?.userName;
   const userId=location.state?.userId;
- 
+  const navigate = useNavigate();
   const currentDate = new Date().toLocaleDateString();
 
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ const DreamCompany = () => {
     industry: '',
     location: '',
     discription: '',      // Corrected typo
-    date: '',
+    date: currentDate,
   });
 
   const companyName=formData.companyName;
@@ -128,50 +129,64 @@ const saveCompanyData = async (formData) => {
    };
   return (
     <div className='candidate-dashboard-container'>
-       <div className='left-side'>
-       <CandidateLeftSide user={user} />
-     </div>
-     <div className='rightside'>
-      <div className="centered-content">
-      {showResumePopup && (
-            <div className="modal">
-                <div className="modal-content">
-                    <span className="close" onClick={() => setShowResumePopup(false)}>&times;</span>
-                    <ResumeSelectionPopup
-                        resumes={resumes}
-                        onSelectResume={handleResumeSelect}
-                        onClose={() => setShowResumePopup(false)}
-                    />
-                </div>
-            </div>  
-        )}
-        <form onSubmit={handleSubmit} className="centered-form">
-          <div className="form-group">
-            <label htmlFor="companyName">Company Name:</label>
-            <input type="text" id="companyName" name="companyName" value={formData.companyName} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="resume">Resume:</label>
-            <button onClick={handleApplyButtonClick}>Select Resume</button>
-          </div>
-          <div className="form-group">
-            <input type="submit" value="Apply" className="apply-button" />
-          </div>
-          {showMessage && (
-        <div className="success-message">
-          <h1>Congratulations</h1>
-          <h3>You successfully applied to your Dream Company</h3>
-          <h3><Link   to={{
-          pathname: '/candidate-dashboard',
-          state: { userName: userName, userId:userId }
-        }}>Go back to dashboard</Link></h3>
-        </div>
-      )}
-        </form>
-       
+      <div className='left-side'>
+        <CandidateLeftSide user={ { userName: userName, userId: userId } } />
       </div>
-   
-    </div>
+      <div className='rightside'>
+        <Container>
+          <div className="centered-content">
+            {showResumePopup && (
+              <Modal show={showResumePopup} onHide={() => setShowResumePopup(false)} centered>
+                <Modal.Header closeButton>
+                  <Modal.Title>Select Resume</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ResumeSelectionPopup
+                    resumes={resumes}
+                    onSelectResume={handleResumeSelect}
+                    onClose={() => setShowResumePopup(false)}
+                  />
+                </Modal.Body>
+              </Modal>
+            )}
+            <Form onSubmit={handleSubmit} className="centered-form">
+              <Form.Group>
+                <Form.Label htmlFor="companyName">Company Name:</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="companyName"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label htmlFor="resume">Resume:</Form.Label>
+                <Button onClick={handleApplyButtonClick}>Select Resume</Button>
+              </Form.Group>
+              <Form.Group>
+                <Button type="submit" className="apply-button">Apply</Button>
+              </Form.Group>
+              {showMessage && (
+                <div className="success-message">
+                  <h1>Congratulations</h1>
+                  <h3>You successfully applied to your Dream Company</h3>
+                  <h3>
+                    <Link to={{
+                      pathname: '/candidate-dashboard',
+                      state: { userName: userName, userId: userId }
+                    }}  onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/candidate-dashboard', { state: { userName, userId } });
+                    }}>Go back to dashboard</Link>
+                  </h3>
+                </div>
+              )}
+            </Form>
+          </div>
+        </Container>
+      </div>
     </div>
   );
 };

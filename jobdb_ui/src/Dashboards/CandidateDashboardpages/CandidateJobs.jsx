@@ -2,7 +2,7 @@ import { faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Form, Link, useLocation } from 'react-router-dom';
+import { Form, Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
@@ -14,6 +14,7 @@ const CandidateJobs = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
+  const navigate = useNavigate();
 
   const [jobs, setJobs] = useState([]);
   const [applyjobs, setApplyJobs] = useState([]);
@@ -334,8 +335,11 @@ const CandidateJobs = () => {
           <div className="dream">
             <p>Can't find your dream company. Don't worry, you can still apply to them.</p>
             <p>Just add the name of your dream company and apply to them directly.</p>
-            <Link to={{ pathname: '/dream-company', state: { userName: userName, userId: userId } }} className="app">
-              <Button variant="primary" className="apply" style={{ textAlign: 'center' }}>
+            <Link to={{ pathname: '/candidate-dashboard/dream-company', state: { userName: userName, userId: userId } }} className="app" >
+              <Button variant="primary" className="apply" style={{ textAlign: 'center' }}   onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/dream-company', { state: { userName, userId } });
+            }}>
                 <b>Apply to your dream company</b>
               </Button>
             </Link>
