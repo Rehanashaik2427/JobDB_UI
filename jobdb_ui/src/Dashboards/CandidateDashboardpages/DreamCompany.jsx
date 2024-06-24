@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Container, Form, Modal } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -127,13 +127,12 @@ const DreamCompany = () => {
     userId: userId,
   };
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    <div className='candidate-dashboard-container'>
+    <div className='left-side'>
+      <CandidateLeftSide user={user} />
+    </div>
 
-        <Col md={18} className="rightside">
+    <div className='rightside'>
           <Container>
             <div className="centered-content">
               {showResumePopup && (
@@ -187,9 +186,7 @@ const DreamCompany = () => {
               </Form>
             </div>
           </Container>
-        </Col>
-      </Row>
-    </Container>
+</div></div>
   );
 };
 

@@ -83,7 +83,7 @@ const FindCompany = () => {
             </Modal.Header>
             <Modal.Body>{modalMessageCompany}</Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={() => navigate("/companies")}>
+                <Button variant="primary" onClick={() => navigate("/findCompany/company-form")}>
                     Fill Company Form
                 </Button>
             </Modal.Footer>

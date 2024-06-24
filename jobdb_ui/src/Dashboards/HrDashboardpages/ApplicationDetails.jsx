@@ -7,8 +7,7 @@ import HrLeftSide from "./HrLeftSide";
 const ApplicationDetails = () => {
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
     const location = useLocation();
-    const userEmail = location.state?.userEmail;
-    const userName = location.state?.userName;
+    const { userEmail, userName } = location.state || {};
     const applicationId = location.state?.applicationId;
     const [application, setApplication] = useState();
     const [candidate, setCandidate] = useState();
@@ -54,7 +53,6 @@ const ApplicationDetails = () => {
         }
     }, [application]);
 
-    const user = { userEmail };
 
     return (
         <Container fluid className="dashboard-container">

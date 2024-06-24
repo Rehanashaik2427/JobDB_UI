@@ -143,17 +143,17 @@ const CandidateDashboard = () => {
   };
 
 
-
+  const user = {
+    userName: userName,
+    userId: userId,
+  };
   return (
-    <div fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    <div className='candidate-dashboard-container'>
+    <div className='left-side'>
+      <CandidateLeftSide user={user} />
+    </div>
 
-       
-
-      <div className='rightside'>
+    <div className='rightside'>
         <Container className="top-right-content ">
           <Row className=" d-flex justify-content-end ">
 
@@ -246,12 +246,13 @@ const CandidateDashboard = () => {
                 <h4 className='text-align-center'>{countOfTotalCompanies !== null ? countOfTotalCompanies : 'Loading...'}</h4>
                 <h5 className='text-align-center'>companies</h5>
               </Link>
-            </Col>
+      
+          </Col>
           </Row>
-        </Container>
-       </div>
-       </Row> 
-    </div>
+          </Container>
+          </div>
+          </div>
+        
   );
 };
 

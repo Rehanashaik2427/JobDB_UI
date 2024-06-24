@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
-import './HrDashboard.css';
+import ReactPaginate from 'react-paginate';
 import HrLeftSide from './HrLeftSide';
 
 const PostedJobs = () => {
@@ -116,22 +116,20 @@ const PostedJobs = () => {
   };
 
 
-
-
-  const user = {
-    userName: userName,
-    userEmail: userEmail,
+  const handlePageClick = (data) => {
+    setPage(data.selected);
   };
+
+
 
 
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={3} className="leftside">
+        <Col md={3} className="leftside full-height">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-
-        <Col md={18} className="rightside">
+        <Col md={9} className="rightside">
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar" >
               <input style={{ borderRadius: '6px', height: '35px' }}
@@ -195,25 +193,21 @@ const PostedJobs = () => {
               </div>
             )}
           </div>
-
-
-
-
-          <nav>
-            <ul className='pagination'>
-              <li>
-                <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-              </li>
-              {[...Array(totalPages).keys()].map((pageNumber) => (
-                <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                  <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                </li>
-              ))}
-              <li>
-                <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-              </li>
-            </ul>
-          </nav>
+          <div className="pagination-container">
+            <ReactPaginate
+              previousLabel={<i className="i-Previous" />}
+              nextLabel={<i className="i-Next1" />}
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={totalPages}
+              marginPagesDisplayed={7}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              activeClassName="active"
+              containerClassName="pagination"
+              subContainerClassName="pages pagination"
+            />
+          </div>
 
         </Col>
       </Row>

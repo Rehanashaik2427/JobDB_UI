@@ -79,7 +79,7 @@ const HrRegistrationForm = () => {
           setRegistrationSuccess(true);
     
          
-          navigate('/hr-RegSuccess'); 
+          navigate('/signup/hrSignup/registration-success-msg'); 
     
         }  catch (error) {
           if (error.message.includes("User already exists")) {

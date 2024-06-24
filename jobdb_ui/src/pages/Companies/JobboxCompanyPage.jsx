@@ -1,11 +1,9 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Form, FormControl, Pagination, Row } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 
+import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
-
 
 const JobboxCompanyPage = () => {
 
@@ -16,27 +14,12 @@ const JobboxCompanyPage = () => {
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
+  
 
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
 
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
-
 
 
   const fetchCompany = async () => {
@@ -65,24 +48,16 @@ const JobboxCompanyPage = () => {
       setCompanies(response.data.content);
       setTotalPages(response.data.totalPages);
 
-
     } catch (error) {
       console.log("No data Found" + error);
     }
     console.log("Search submitted:", search);
   };
 
-
-
-
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    fetchCompanyBySearch();
-  };
   const handleClick = (companyId) => {
     navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })
     alert('Button clicked!');
@@ -92,34 +67,19 @@ const JobboxCompanyPage = () => {
 
 
   return (
-    <div className="top-right-content">
-      <div className="candidate-search">
-        <Form onSubmit={handleSubmit} className="searchCompany w-45">
-          <Row className="align-items-center justify-content-center">
-
-            <Col xs={4}>
-              <FormControl
-                type='text'
-                name='search'
-
-                placeholder='Search Company'
-
+    <div>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+            <div className="search-bar" >
+              <input style={{ borderRadius: '6px', height: '35px' }}
+                type="text"
+                name="search"
+                placeholder="Search"
                 value={search}
                 onChange={handleSearchChange}
               />
-            </Col>
-            <Col xs={1}>
-
-              <Button type="submit" className="search-button w-100">
-                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'white' }} />
-
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </div>
-
-
+            </div>
+            </div>
+    
       <div className="companyJob mt-4">
         <h1>Companies that we have</h1>
         <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
@@ -129,15 +89,7 @@ const JobboxCompanyPage = () => {
                 <Card.Body>
                   <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                   <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                  {/* <Link
-                    to={{
-                      pathname: `/jobboxCompanyPage/eachCompanyPage/${company.companyId}`, // Adjusted pathname to include companyId as URL parameter
-                      state: { companyId: company.companyId }
-                    }}
-                    className='btn btn-primary'
-                  >
-                    View
-                  </Link> */}
+                 
                   <Button onClick={() => handleClick(company.companyId)}>
                     View
                   </Button>
@@ -150,23 +102,25 @@ const JobboxCompanyPage = () => {
             <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
           )}
         </div>
+        <div className="pagination-container">
+            <ReactPaginate
+              previousLabel={<i className="i-Previous" />}
+              nextLabel={<i className="i-Next1" />}
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={totalPages}
+              marginPagesDisplayed={7}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              activeClassName="active"
+              containerClassName="pagination"
+              subContainerClassName="pages pagination"
+            />
+          </div>
+      
 
-        <nav className="d-flex justify-content-center">
-          <Pagination style={{ color: "purple" }}>
-            <Pagination.Prev onClick={handlePreviousPage} disabled={page === 0} />
-            {[...Array(totalPages).keys()].map((pageNumber) => (
-              <Pagination.Item key={pageNumber} active={pageNumber === page} onClick={() => handlePageChange(pageNumber)}>
-                {pageNumber + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next onClick={handleNextPage} disabled={page === totalPages - 1} />
-          </Pagination>
-        </nav>
-
-
-
+</div>
       </div>
-    </div>
   );
 };
 

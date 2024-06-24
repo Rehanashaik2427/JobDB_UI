@@ -16,7 +16,7 @@ const Profile = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const [userData, setUserData] = useState();
 
-  
+
   const navigate = useNavigate();
 
   const getUser = async (userId) => {
@@ -36,7 +36,7 @@ const Profile = () => {
     navigate('/');
   };
 
- 
+
   const user = {
     userName: userName,
 
@@ -45,61 +45,51 @@ const Profile = () => {
 
   return (
     <div className='candidate-dashboard-container'>
-    <div className='left-side'>
-      <CandidateLeftSide user={user} />
+      <div className='left-side'>
+        <CandidateLeftSide user={user} />
+      </div>
+
+      <div className='rightside'>
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div className="profile-container">
+          {userData && (
+            <>
+              <div className="profile-item">
+                <span className="profile-label">Name:</span>
+                <span className="profile-value">{userData.userName}</span>
+              </div>
+              <div className="profile-item">
+                <span className="profile-label">Email:</span>
+                <span className="profile-value">{userData.userEmail}</span>
+              </div>
+              <div className="profile-item">
+                <span className="profile-label">PhoneNumber:</span>
+                <span className="profile-value">{userData.phone}</span>
+              </div>
+              {/* <button className="profile-button" onClick={handleEdit}>Edit</button> */}
+            </>
+          )}
+        </div>
+
+
+
+      </div>
     </div>
-
-    <div className='rightside'>
-     
-      <div className="d-flex justify-content-end">
-      <div className="candidate-search">
-        <div className="user col px-3">
-                <Dropdown>
-                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer ">
-                    <FontAwesomeIcon icon={faUser} id="user" className='icon align-item-end' style={{ color: 'black' }} />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu className="mt-3">
-                  
-
-                    <Dropdown.Item as={Link} to="/">
-                      <i className="i-Data-Settings me-1" /> Account settings
-                    </Dropdown.Item>
-
-                 
-
-                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                      <i className="i-Lock-2 me-1" /> Sign out
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-              </div>
-              </div>
-       <div className="profile-container">
-      {userData && (
-      <>
-      <div className="profile-item">
-        <span className="profile-label">Name:</span>
-        <span className="profile-value">{userData.userName}</span>
-      </div>
-      <div className="profile-item">
-        <span className="profile-label">Email:</span>
-        <span className="profile-value">{userData.userEmail}</span>
-      </div>
-      <div className="profile-item">
-        <span className="profile-label">PhoneNumber:</span>
-        <span className="profile-value">{userData.phone}</span>
-      </div>
-      {/* <button className="profile-button" onClick={handleEdit}>Edit</button> */}
-    </>
-  )}
-</div>
-
-
-     
-    </div>
-      </div>
 
   )
 }
