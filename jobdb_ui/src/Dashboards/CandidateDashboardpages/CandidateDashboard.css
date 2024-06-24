@@ -365,13 +365,14 @@ table, th, td ,tr{
 
 .companyJob {
   text-align: center;
-  margin-top: 20px;
 }
 
 .cards {
-  display: flex;
+  padding-right: 12px;
+  display: flex; 
   flex-wrap: wrap;
-  justify-content: center;
+  margin-left: 50px;
+  /* justify-content: center; */
  
 }
 
@@ -575,7 +576,8 @@ button.com:hover {
 
 .pagination {
   display: flex;
-  justify-content: center;
+  /* justify-content: center;
+  align-items: center; */
   list-style-type: none;
   padding: 0;
 }

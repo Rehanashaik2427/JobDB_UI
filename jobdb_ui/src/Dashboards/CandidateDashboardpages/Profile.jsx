@@ -2,7 +2,6 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import './CandidateDashboard.css';
 
@@ -45,16 +44,12 @@ const Profile = () => {
   };
 
   return (
-    <div fluid className="dashboard-container">
-      
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    <div className='candidate-dashboard-container'>
+    <div className='left-side'>
+      <CandidateLeftSide user={user} />
+    </div>
 
-     
-    
-      <div className='rightside'>
-      
+    <div className='rightside'>
      
       <div className="d-flex justify-content-end">
       <div className="candidate-search">

@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Button, Card, Col, Dropdown } from 'react-bootstrap';
+import { Button, Card, Dropdown } from 'react-bootstrap';
 import CandidateLeftSide from './CandidateLeftSide';
 
 const Resume = () => {
@@ -86,12 +86,12 @@ const Resume = () => {
   };
 
   return (
-    <div fluid className="dashboard-container">
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    <div className='candidate-dashboard-container'>
+    <div className='left-side'>
+      <CandidateLeftSide user={user} />
+    </div>
 
-      <div sm={9} className='right-side'>
+    <div className='rightside'>
       <div className="d-flex justify-content-end">
           <div className="candidate-search">
             <input type='text' placeholder='search' />
