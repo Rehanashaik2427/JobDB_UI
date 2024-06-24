@@ -85,7 +85,7 @@ const CandidatesCompanies = () => {
       <Col md={3} className="leftside">
         <CandidateLeftSide user={{ userName, userId }} />
       </Col>
-
+  
       <Col md={18} className="rightside">
         <div className="top-right-content">
       </div>

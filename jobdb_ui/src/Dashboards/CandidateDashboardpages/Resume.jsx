@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Button, Card, Col, Dropdown } from 'react-bootstrap';
+import { Button, Card, Col, Dropdown, Row } from 'react-bootstrap';
 import CandidateLeftSide from './CandidateLeftSide';
 
 const Resume = () => {
@@ -61,7 +61,7 @@ const Resume = () => {
 
   const [showSettings, setShowSettings] = useState(false);
 
- 
+
   const navigate = useNavigate();
   const toggleSettings = () => {
     navigate('/');
@@ -87,31 +87,32 @@ const Resume = () => {
 
   return (
     <div fluid className="dashboard-container">
+      <Row className='d-flex flex-direction-row'>
         <Col md={3} className="leftside">
           <CandidateLeftSide user={{ userName, userId }} />
         </Col>
 
-      <div sm={9} className='right-side'>
-      <div className="d-flex justify-content-end">
-          <div className="candidate-search">
-            <input type='text' placeholder='search' />
-            <Button variant="light" onClick={() => alert('Search clicked')}>
-              <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-            </Button>
-            <div className="user col px-3 header-part-right">
+        <div className='right-side'>
+          <div className="d-flex justify-content-end">
+            <div className="candidate-search">
+              <input type='text' placeholder='search' />
+              <Button variant="light" onClick={() => alert('Search clicked')}>
+                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
+              </Button>
+              <div className="user col px-3 header-part-right">
                 <Dropdown>
                   <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
                     <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="mt-3">
-                  
+
 
                     <Dropdown.Item as={Link} to="/">
                       <i className="i-Data-Settings me-1" /> Account settings
                     </Dropdown.Item>
 
-                 
+
 
                     <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
                       <i className="i-Lock-2 me-1" /> Sign out
@@ -119,10 +120,10 @@ const Resume = () => {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
+            </div>
           </div>
-        </div>
 
-       
+
 
           {showBriefSettings && (
             <div className="modal-summary">
@@ -165,9 +166,9 @@ const Resume = () => {
               }} >ADD NEW RESUME</Link>
             </div>
           </div>
-  </div>
-
-</div>
+        </div>
+      </Row>
+    </div>
   );
 };
 
