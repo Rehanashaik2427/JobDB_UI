@@ -9,7 +9,7 @@ const AllowingAccess = () => {
     { user: 'HR', accessTo: 'Posting Jobs', accessStatus: 'Allow' },
   ]);
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
           <div className='leftside'>
           <AdminleftSide />
         </div>

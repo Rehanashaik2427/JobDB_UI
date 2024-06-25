@@ -1,8 +1,7 @@
-import { faAccessibleIcon, faVaadin } from '@fortawesome/free-brands-svg-icons';
-import { faBuilding, faComment, faHome, faHouse, faPlusCircle, faUserAlt, faUserCheck, faUserLock } from '@fortawesome/free-solid-svg-icons';
+import { faAccessibleIcon } from '@fortawesome/free-brands-svg-icons';
+import { faBuilding, faComment, faHouse, faPlusCircle, faUserAlt, faUserCheck, faUserLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { FaBuilding, FaComments, FaHome, FaPlus, FaUniversalAccess, FaUser, FaUserCheck, FaUserLock } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 const AdminleftSide = () => {
@@ -10,7 +9,7 @@ const AdminleftSide = () => {
   return (
     <div className='leftside'>
       <nav id='logo'>
-        <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" />
+        <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
       </nav>
       <div className="admin-details">
         <nav>

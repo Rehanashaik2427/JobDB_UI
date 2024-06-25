@@ -84,7 +84,7 @@ const AdminAction = () => {
       <header className="admin-header">
         <h2 style={{color:'wheat'}}>Admin Dashboard</h2>
       </header>
-      <div className='admin-right-action'>
+      
       <main>
         {hrDetails.map(hr => (
           <div className="request-container" key={hr.userId}>
@@ -108,7 +108,7 @@ const AdminAction = () => {
       </main>
       </div>
     </div>
-    </div>
+    
   
   );
   

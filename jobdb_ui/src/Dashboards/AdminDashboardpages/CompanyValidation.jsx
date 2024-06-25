@@ -1,9 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import './AdminDashboard.css';
-import AdminleftSide from './AdminleftSide';
-import { Button, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
+import { FaCheckCircle } from 'react-icons/fa';
+import ReactPaginate from 'react-paginate';
+// import './AdminDashboard.css';
+import { BsXCircle } from 'react-icons/bs';
 
+import AdminleftSide from './AdminleftSide';
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
 const CompanyValidation = () => {
@@ -26,21 +29,7 @@ const CompanyValidation = () => {
     setSortOrder(order);
   };
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
 
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
 
   useEffect(() => {
     fetchCompanyData();
@@ -60,6 +49,9 @@ const CompanyValidation = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+  const handlePageClick = (data) => {
+    setPage(data.selected);
   };
 
   const approveCompany = async (companyId, companyName) => {
@@ -101,86 +93,76 @@ const CompanyValidation = () => {
   };
 
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
       <div className='leftside'>
         <AdminleftSide />
       </div>
 
       <div className="rightSide">
         <h2 style={{ textAlign: 'center' }}>Details of Company Validation</h2>
-        <div className='company-table'>
-          <Table hover className='text-center'>
-            <thead className="table-light">
-              <tr>
-                <th onClick={() => handleSort('companyName')}>
-                  Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th>Contact Number</th>
-                <th>Company Email</th>
-                <th>Industry</th>
-                <th onClick={() => handleSort('location')}>
-                  Location {sortedColumn === 'location' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th>Description</th>
-                <th onClick={() => handleSort('date')}>
-                  Submit Date {sortedColumn === 'date' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th>Status</th>
-                <th onClick={() => handleSort('actionDate')}>
-                  Action Date {sortedColumn === 'actionDate' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {companyData.map((company) => (
-                <tr key={company.companyId}>
-                  <td>{company.companyName}</td>
-                  <td>{company.contactNumber}</td>
-                  <td>{company.companyEmail}</td>
-                  <td>{company.industry}</td>
-                  <td>{company.location}</td>
-                  <td>{company.description}</td>
-                  <td>{company.date}</td>
-                  <td>{company.companyStatus}</td>
-                  <td>{company.actionDate}</td>
-                  <td>
-                    <Button className='approved' variant="success" onClick={() => approveCompany(company.companyId, company.companyName)}>
-                      Approved
-                    </Button>
-                    {' / '}
-                    <Button className='reject' variant="danger" onClick={() => rejectCompany(company.companyId, company.companyName)}>
-                      Reject
-                    </Button>
 
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-        <nav>
-          <ul className='pagination'>
-            <li>
-              <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>
-                Previous
-              </button>
-            </li>
-            {[...Array(totalPages).keys()].map((pageNumber) => (
-              <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                <button className='page-link' onClick={() => handlePageChange(pageNumber)}>
-                  {pageNumber + 1}
-                </button>
-              </li>
+        <Table hover className='text-center' style={{ marginLeft: '8px' }}>
+          <thead className="table-light">
+            <tr>
+              <th onClick={() => handleSort('companyName')}>
+                Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
+              <th>Contact Number</th>
+              <th>Company Email</th>
+              <th>Industry</th>
+              <th onClick={() => handleSort('location')}>
+                Location {sortedColumn === 'location' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
+              <th>Description</th>
+              <th onClick={() => handleSort('date')}>
+                Submit Date {sortedColumn === 'date' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
+              <th>Status</th>
+              <th onClick={() => handleSort('actionDate')}>
+                Action Date {sortedColumn === 'actionDate' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {companyData.map((company) => (
+              <tr key={company.companyId}>
+                <td>{company.companyName}</td>
+                <td>{company.contactNumber}</td>
+                <td>{company.companyEmail}</td>
+                <td>{company.industry}</td>
+                <td>{company.location}</td>
+                <td>{company.description}</td>
+                <td>{company.date}</td>
+                <td>{company.companyStatus}</td>
+                <td>{company.actionDate}</td>
+                <td>
+                  <FaCheckCircle className='approved' style={{ color: 'green', cursor: 'pointer' }} onClick={() => approveCompany(company.companyId, company.companyName)} />
+                  <BsXCircle className='icon-button reject' style={{ color: 'blue' }} onClick={() => rejectCompany(company.companyId, company.companyName)} />
+
+                </td>
+              </tr>
             ))}
-            <li>
-              <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>
-                Next
-              </button>
-            </li>
-          </ul>
-        </nav>
+          </tbody>
+        </Table>
+
+        <div className="pagination-container">
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
       </div>
+
     </div>
   );
 }

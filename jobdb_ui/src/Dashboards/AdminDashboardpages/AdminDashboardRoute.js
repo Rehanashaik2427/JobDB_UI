@@ -1,15 +1,15 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import AdminDashboard from './AdminDashboard'
-import UserValidation from './UserValidation'
+import AddCompanyDetails from './AddCompanyDetails'
 import AdminAction from './AdminAction'
-import CompanyValidation from './CompanyValidation'
+import AdminDashboard from './AdminDashboard'
+import AllowingAccess from './AllowingAccess'
 import BlockAccount from './BlockAccount'
 import CompanyDetailsByAdmin from './CompanyDetailsByAdmin'
-import Myprofile from './Myprofile'
+import CompanyValidation from './CompanyValidation'
 import Contacts from './Contacts'
-import AddCompanyDetails from './AddCompanyDetails'
-import AllowingAccess from './AllowingAccess'
+import Myprofile from './Myprofile'
+import UserValidation from './UserValidation'
 
 const AdminDashboardRoute = () => {
     return (

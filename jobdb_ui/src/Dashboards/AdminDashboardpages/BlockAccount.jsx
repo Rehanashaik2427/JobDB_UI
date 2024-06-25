@@ -3,7 +3,7 @@ import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
 const BlockAccount = () => {
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
           <div className='leftside'>
           <AdminleftSide />
         </div>

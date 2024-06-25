@@ -205,7 +205,7 @@ const ViewApplications = () => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
- 
+
   const navigate = useNavigate();
 
   return (
@@ -266,11 +266,11 @@ const ViewApplications = () => {
                           <td>{application.applicationStatus}</td>
                           <td>
                             <Link
-                             
-                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail, applicationId: application.applicationId ,userName:userName} }}
+
+                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail, applicationId: application.applicationId, userName: userName } }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, applicationId: application.applicationId , userName:userName } });
+                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, applicationId: application.applicationId, userName: userName } });
                               }}
                             >
                               <FontAwesomeIcon icon={faEye} style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }} />
@@ -295,8 +295,8 @@ const ViewApplications = () => {
                       breakLabel="..."
                       breakClassName="break-me"
                       pageCount={totalPages}
-                      marginPagesDisplayed={7}
-                      pageRangeDisplayed={5}
+                      marginPagesDisplayed={1}
+                      pageRangeDisplayed={2}
                       onPageChange={handlePageClick}
                       activeClassName="active"
                       containerClassName="pagination"

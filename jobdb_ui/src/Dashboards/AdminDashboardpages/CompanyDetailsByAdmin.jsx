@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { FaEdit, FaSave } from "react-icons/fa";
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
-import { Button } from 'react-bootstrap';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -62,7 +62,7 @@ const CompanyDetailsByAdmin = () => {
   };
 
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
       <div className='leftside'>
         <AdminleftSide />
       </div>

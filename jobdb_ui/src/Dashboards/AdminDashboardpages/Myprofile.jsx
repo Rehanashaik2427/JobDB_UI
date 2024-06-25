@@ -1,11 +1,11 @@
 import React from 'react';
+import { Table } from 'react-bootstrap';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
-import { Table } from 'react-bootstrap';
 
 const Myprofile = ({ userType }) => {
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
       <div className='leftside'>
         <AdminleftSide />
       </div>

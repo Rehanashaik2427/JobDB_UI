@@ -17,6 +17,7 @@ import CandiRegister from './Session/CandiRegister';
 import AdminRegister from './Session/AdminRegister';
 
 import AdminDashboardRoute from '../Dashboards/AdminDashboardpages/AdminDashboardRoute';
+import Contact from './Contact';
 
 
 
@@ -38,6 +39,7 @@ const PagesRoute = () => {
           <Route path='/jobdbcompanies' element={<JobboxCompanyPage />} />
           <Route path="/jobboxCompanyPage/eachCompanyPage" element={<EachCompanyPage />} />
           <Route path='/candidates' element={<CandiRegister />} />
+          <Route path='/contact' element={<Contact />} />
 
 
           <Route path='/hr-dashboard/*' element={<HrDashbaordRoute />} />
