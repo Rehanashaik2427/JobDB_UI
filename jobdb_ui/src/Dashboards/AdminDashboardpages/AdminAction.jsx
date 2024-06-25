@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-import AdminleftSide from './AdminleftSide';
+import React, { useEffect, useState } from 'react';
+import './AdminAction.css';
 import './AdminDashboard.css';
+import AdminleftSide from './AdminleftSide';
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
 const AdminAction = () => {
@@ -28,17 +28,17 @@ const AdminAction = () => {
   }, []);
 
   const currentTime = new Date().toLocaleDateString();
-  
-  const approveRequest = async (userEmail,userId) => {
+
+  const approveRequest = async (userEmail, userId) => {
     console.log('Request Approved');
-    const approved="Approved";
+    const approved = "Approved";
     try {
       const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${currentTime}&userStatus=${approved}`);
       console.log(res.data);
       const updatedMessages = { ...approvalMessages, [userId]: 'Approval successful' };
       setApprovalMessages(updatedMessages);
       fetchHRDetails();
-     
+
       // If needed, update the state or perform additional actions after successful approval
     } catch (error) {
       console.log('Error approving request:', error);
@@ -46,9 +46,9 @@ const AdminAction = () => {
     }
   };
 
-  const rejectRequest = async(userEmail,userId) => {
+  const rejectRequest = async (userEmail, userId) => {
     console.log('Request Rejected');
-    const rejected="Rejected";
+    const rejected = "Rejected";
     // Handle reject request logic here   
     try {
       const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${currentTime}&userStatus=${rejected}`);
@@ -58,7 +58,7 @@ const AdminAction = () => {
       setRejectMessages(updatedMessages);
       fetchHRDetails();
 
-     
+
       // If needed, update the state or perform additional actions after successful approval
     } catch (error) {
       console.log('Error approving request:', error);
@@ -66,50 +66,44 @@ const AdminAction = () => {
     }
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
 
   return (
-    <div className="body">
-       <div className='leftside'>
-          <AdminleftSide />
-        </div>
-        
-        <div className="rightSide">
-      <header className="admin-header">
-        <h2 style={{color:'wheat'}}>Admin Dashboard</h2>
-      </header>
-      <main>
-        {hrDetails.map(hr => (
-          <div className="request-container" key={hr.userId}>
-            <div className="hr-details">
-              <p>Name: {hr.userName} come to join as {hr.companyName} HR</p>
-              <p>Email: {hr.userEmail}</p>  
-              <h1>{hr.userStatus}</h1>
+    <div className="dashboard-container">
+      <div className='leftside'>
+        <AdminleftSide />
+      </div>
+
+      <div className="rightSide">
+
+        <header className="admin-header">
+          <h2 style={{ color: 'wheat' }}>Admin Dashboard</h2>
+        </header>
+        <main>
+          {hrDetails.map(hr => (
+            <div className="request-container" key={hr.userId}>
+              <div className="hr-details">
+                <p>Name: {hr.userName} come to join as {hr.companyName} HR</p>
+                <p>Email: {hr.userEmail}</p>
+                <h1>{hr.userStatus}</h1>
+              </div>
+              <div className="button-container">
+                <button className="approve-btn-adminAction" onClick={() => approveRequest(hr.userEmail, hr.userId)}>
+                  Approve
+                </button>
+                <button className="reject-btn-adminAction" onClick={() => rejectRequest(hr.userEmail)}>
+                  Reject
+                </button>
+              </div>
+              {approvalMessages[hr.userId] && <p className="approval-message">{approvalMessages[hr.userId]}</p>}
+              {rejectMessages[hr.userId] && <p className="reject-message">{rejectMessages[hr.userId]}</p>}
             </div>
-            <div className="button-container">
-              <button className="approve-btn-adminAction" onClick={() => approveRequest(hr.userEmail,hr.userId)}>
-                Approve
-              </button>
-              <button className="reject-btn-adminAction" onClick={() => rejectRequest(hr.userEmail)}>
-                Reject
-              </button>
-            </div>
-            {approvalMessages[hr.userId] && <p className="approval-message">{approvalMessages[hr.userId]}</p>}
-            {rejectMessages[hr.userId] && <p className="reject-message">{rejectMessages[hr.userId]}</p>}
-          </div>
-        ))}
-      </main>
+          ))}
+        </main>
+      </div>
     </div>
-    </div>
-  
+
   );
-  
+
 };
 
 export default AdminAction;

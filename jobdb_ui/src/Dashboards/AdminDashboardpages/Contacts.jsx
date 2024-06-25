@@ -1,10 +1,10 @@
 
-import React, { useEffect, useState } from 'react';
-
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
-import { Table } from 'react-bootstrap';
 const Contacts = () => {
 
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -30,21 +30,6 @@ const Contacts = () => {
     }
   };
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
 
   const handleSendMessage = async (message) => {
     console.log('Sending message to:', selectedEmail);
@@ -53,7 +38,7 @@ const Contacts = () => {
       // Send message using API
       // Use selectedEmail and message state variables
       const response = await axios.put(`${BASE_API_URL}/sendReplyMessages?message=${message}&replyTo=${selectedEmail}&contactId=${contactId}`);
-  
+
       // After sending the message, you can close the modal
       setShowModal(false);
       if (response)
@@ -69,7 +54,7 @@ const Contacts = () => {
   const openModal = (email, contactID) => {
     setSelectedEmail(email);
     setContactId(contactID);
-    console.log("mm",contactID);
+    console.log("mm", contactID);
     setShowModal(true);
 
   };
@@ -80,9 +65,11 @@ const Contacts = () => {
     setMessage('');
   };
 
-
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
       <div className='leftside'>
         <AdminleftSide />
       </div>
@@ -91,8 +78,8 @@ const Contacts = () => {
         <h2 style={{ textAlign: 'center' }}>Request from the Users</h2>
         <div className="help">
           <div className='contacts-table'>
-          <Table hover className='text-center'>
-          <thead className="table-light">
+            <Table hover className='text-center' style={{ marginLeft: '12px' }}>
+              <thead className="table-light">
                 <tr>
                   <th>User</th>
                   <th>Email</th>
@@ -136,21 +123,23 @@ const Contacts = () => {
             </div>
           )}
         </div>
-        <nav>
-          <ul className='pagination'>
-            <li>
-              <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-            </li>
-            {[...Array(totalPages).keys()].map((pageNumber) => (
-              <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-              </li>
-            ))}
-            <li>
-              <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-            </li>
-          </ul>
-        </nav>
+        <div className="pagination-container">
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
+
+
       </div>
     </div>
   )

@@ -200,8 +200,8 @@ const PostedJobs = () => {
               breakLabel="..."
               breakClassName="break-me"
               pageCount={totalPages}
-              marginPagesDisplayed={7}
-              pageRangeDisplayed={5}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={2}
               onPageChange={handlePageClick}
               activeClassName="active"
               containerClassName="pagination"

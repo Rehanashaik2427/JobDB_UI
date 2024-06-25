@@ -1,8 +1,8 @@
-import { faArrowLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Form, FormControl, Row } from 'react-bootstrap';
+import { Button, Card, Col } from 'react-bootstrap';
 
 import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
@@ -95,7 +95,7 @@ const JobboxCompanyPage = () => {
         </Button>
 
       </Col>
-      <div className="candidate-search ">
+      {/* <div className="candidate-search ">
         <Form onSubmit={handleSubmit} className="searchCompany w-45">
           <Row className=" d-flex  justify-content-space-around">
 
@@ -117,9 +117,9 @@ const JobboxCompanyPage = () => {
 
               </Button>
             </Col> */}
-          </Row>
+          {/* </Row>
         </Form>
-      </div>
+      </div> */} 
 
 
 

@@ -65,7 +65,7 @@ const CandidatesCompanies = () => {
     }
   }, [search, page, pageSize]);
 
-  
+
 
 
 
@@ -88,7 +88,7 @@ const CandidatesCompanies = () => {
   return (
     <div className='candidate-dashboard-container'>
       <div className='left-side'>
-      <CandidateLeftSide user={{ userName, userId }} />
+        <CandidateLeftSide user={{ userName, userId }} />
       </div>
       <div className='rightside'>
 
@@ -153,22 +153,22 @@ const CandidatesCompanies = () => {
             )}
           </div>
         </div>
-          <ReactPaginate
-            previousLabel={<i className="i-Previous" />}
-            nextLabel={<i className="i-Next1" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={totalPages}
-            marginPagesDisplayed={7}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            activeClassName="active"
-            containerClassName="pagination"
-            subContainerClassName="pages pagination"
-  />
+        <ReactPaginate
+          previousLabel={<i className="i-Previous" />}
+          nextLabel={<i className="i-Next1" />}
+          breakLabel="..."
+          breakClassName="break-me"
+          pageCount={totalPages}
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={2}
+          onPageChange={handlePageClick}
+          activeClassName="active"
+          containerClassName="pagination"
+          subContainerClassName="pages pagination"
+        />
+      </div>
     </div>
-  </div>
-    );
+  );
 };
 
 export default CandidatesCompanies;

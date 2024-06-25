@@ -32,7 +32,7 @@ const AdminDashboard = () => {
 };
 
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
      
 
         <div className='leftside'>

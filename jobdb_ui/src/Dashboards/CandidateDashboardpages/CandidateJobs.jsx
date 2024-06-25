@@ -252,7 +252,7 @@ const CandidateJobs = () => {
         {jobs.length > 0 && (
           <div>
             {/* <h2>Jobs For {userName}</h2> */}
-            <Table hover className='text-center'style={{marginLeft:'5px',marginRight:'12px'}}>
+            <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
               <thead className="table-light">
                 <tr>
                   <th scope='col' onClick={() => handleSort('jobTitle')}>
@@ -310,8 +310,8 @@ const CandidateJobs = () => {
                 breakLabel="..."
                 breakClassName="break-me"
                 pageCount={totalPages}
-                marginPagesDisplayed={7}
-                pageRangeDisplayed={5}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
                 onPageChange={handlePageClick}
                 activeClassName="active"
                 containerClassName="pagination"

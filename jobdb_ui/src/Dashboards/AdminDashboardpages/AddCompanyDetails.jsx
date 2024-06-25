@@ -1,20 +1,18 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
-import axios from 'axios';
-import { Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-import './AdminDashboard.css';
-import AdminleftSide from './AdminleftSide';
-import axios from 'axios';
+
+import ReactPaginate from 'react-paginate';
 
 const AddCompanyDetails = () => {
 
 
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const navigate = useNavigate();
- 
+
 
 
 
@@ -53,7 +51,7 @@ const AddCompanyDetails = () => {
       //   throw new Error('Failed to fetch company data');
       // }
 
-     
+
       setCompanyData(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -61,60 +59,61 @@ const AddCompanyDetails = () => {
     }
   };
 
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
+
+
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
       <div className='leftside'>
         <AdminleftSide />
       </div>
 
       <div className="rightSide">
         <h2>Add Company Details</h2>
-
-        <div className="addDetails">
-          <Table hover className='text-center'>
-            <thead className="table-light">
-              <tr>
-                <th>Company Name</th>
-                <th>Add Detail</th>
+        <Table hover className='text-center' style={{ marginLeft: '12px' }}>
+          <thead className="table-light">
+            <tr>
+              <th>Company Name</th>
+              <th>Add Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            {companyData.map((company) => (
+              <tr key={company.companyId}>
+                <td>{company.companyName}</td>
+                <td><Link to={{
+                  pathname: '/admin-dashboard/companyDetailsByAdmin',
+                  state: { companyName: company.companyName }
+                }} onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/admin-dashboard/companyDetailsByAdmin', { state: { companyName: company.companyName } });
+                }}>ADD</Link></td>
               </tr>
-            </thead>
-            <tbody>
-              {companyData.map((company) => (
-                <tr key={company.companyId}>
-                  <td>{company.companyName}</td>
-                  <td><Link to={{
-                    pathname: '/admin-dashboard/companyDetailsByAdmin',
-                    state: { companyName: company.companyName }
-                  }} onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/admin-dashboard/companyDetailsByAdmin', { state: { companyName: company.companyName } });
-                  }}>ADD</Link></td>
-                </tr>
 
-              ))}
-            </tbody>
-          </Table>
-
-
-        </div>
-        <nav>
-          <ul className='pagination'>
-            <li>
-              <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-            </li>
-            {[...Array(totalPages).keys()].map((pageNumber) => (
-              <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-              </li>
             ))}
-            <li>
-              <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-            </li>
-          </ul>
-        </nav>
+          </tbody>
+        </Table>
+
+
+        <div className="pagination-container">
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
       </div>
     </div>
-
   )
 }
 

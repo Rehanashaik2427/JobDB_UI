@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
-import { Table } from 'react-bootstrap';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -21,22 +22,6 @@ const UserValidation = () => {
     }
     setSortedColumn(column);
     setSortOrder(order);
-  };
-
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
   };
 
   useEffect(() => {
@@ -59,16 +44,20 @@ const UserValidation = () => {
     }
   };
 
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
+
   return (
-    <div className='body'>
+    <div className='dashboard-container'>
       <div className='leftside'>
         <AdminleftSide />
       </div>
       <div className="rightSide">
         <div className='user-table-list'>
           <h2>Users List</h2>
-          <Table hover className='text-center'>
-          <thead className="table-light">
+          <Table hover className='text-center' style={{ marginLeft: '12px' }}>
+            <thead className="table-light">
               <tr>
                 <th onClick={() => handleSort('userName')}>
                   User Name {sortedColumn === 'userName' && (sortOrder === 'asc' ? '▲' : '▼')}
@@ -100,21 +89,24 @@ const UserValidation = () => {
             </tbody>
           </Table>
         </div>
-        <nav>
-          <ul className='pagination'>
-            <li>
-              <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-            </li>
-            {[...Array(totalPages).keys()].map((pageNumber) => (
-              <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-              </li>
-            ))}
-            <li>
-              <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-            </li>
-          </ul>
-        </nav>
+        <div className="pagination-container">
+        <Breadcrumb routeSegments={[{ name: 'UI Kits', path: '/uikits' }, { name: 'Table' }]} />
+
+        <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
+
       </div>
     </div>
   );
