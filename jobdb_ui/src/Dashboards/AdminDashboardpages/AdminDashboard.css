@@ -14,7 +14,10 @@
     height: 100vh;
     width: 100vw;
     background-color: white;
-    overflow:scroll;
+  
+}
+.admin-right-action{
+  overflow: scroll;
 }
 .admin-details{
     height: 400px;
@@ -125,32 +128,7 @@ main {
 /* company validation */
 /* Allowing access */
 
-#user-table{
-  margin: 60px;
-  width: 90%
-}
-  .user-table {
-    border-collapse: collapse; /* Remove spacing between cells */
-    width: 100%;
-  }
-  
-  .user-table th,
-  .user-table td {
-    border: none; /* Remove table borders */
-    padding: 8px; /* Add padding to cells */
-  }
-  
-  .user-table th {
-    background-color:rgb(154, 184, 204); 
-  }
-  
-  .user-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9; 
-  }
-  
-  .user-table button{
-   margin-right: 5px; /* Add margin between buttons */
-  }
+
 
   /* block accounts */
 
@@ -265,41 +243,7 @@ company details by admin */
     justify-content: center;
   }
 
-  .company-table1 {
-    width: 90%;
-    border-collapse: collapse;
-     margin-right: 20px;
-    margin: 30px;
-    border: none;
-  }
-  
-  .company-table1 th, .company-table1 td {
-    border: none;
-    padding: 8px;
-  }
-  
-  .company-table1 th {
-    background-color: #f2f2f2;
-    text-align: left;
-  }
-  
-  .company-table1 button {
-    /* background-color: #4CAF50;  */
-    color: black; 
-    padding: 6px 10px;
-     border: none;
-     cursor: pointer; 
-  }
-  
-  .company-table1 button .approved {
-    background-color: rgb(96, 223, 96);
-    border: none;
-  }
 
-  .company-table1 button .reject {
-    background-color:rgb(218, 21, 21);
-    border: none;
-  }
 
 
 
@@ -368,8 +312,4 @@ company details by admin */
     color: #dc3545;
   }
   
-  .rightside {
-    flex: 2;
-    overflow: hidden; /* Prevent scrollbars */
-    padding: 20px; /* Adjust padding as needed */
-  }
+ 

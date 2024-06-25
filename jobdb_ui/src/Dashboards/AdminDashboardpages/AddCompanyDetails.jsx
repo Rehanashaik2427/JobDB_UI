@@ -4,10 +4,8 @@ import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-import './AdminDashboard.css';
-import AdminleftSide from './AdminleftSide';
-import axios from 'axios';
+
+
 
 const AddCompanyDetails = () => {
 
