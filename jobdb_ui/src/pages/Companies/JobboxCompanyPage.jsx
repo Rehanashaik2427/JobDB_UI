@@ -14,7 +14,7 @@ const JobboxCompanyPage = () => {
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
-  
+
 
 
   const handlePageClick = (data) => {
@@ -68,18 +68,18 @@ const JobboxCompanyPage = () => {
 
   return (
     <div>
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-            <div className="search-bar" >
-              <input style={{ borderRadius: '6px', height: '35px' }}
-                type="text"
-                name="search"
-                placeholder="Search"
-                value={search}
-                onChange={handleSearchChange}
-              />
-            </div>
-            </div>
-    
+      <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+        <div className="search-bar" >
+          <input style={{ borderRadius: '6px', height: '35px' }}
+            type="text"
+            name="search"
+            placeholder="Search"
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+
       <div className="companyJob mt-4">
         <h1>Companies that we have</h1>
         <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
@@ -89,7 +89,7 @@ const JobboxCompanyPage = () => {
                 <Card.Body>
                   <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                   <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                 
+
                   <Button onClick={() => handleClick(company.companyId)}>
                     View
                   </Button>
@@ -99,28 +99,28 @@ const JobboxCompanyPage = () => {
 
             ))
           ) : (
-            <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
+            <p>Company not found. Please <Link to='/findCompany/company-form'>fill company details</Link>.</p>
           )}
         </div>
         <div className="pagination-container">
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={7}
-              pageRangeDisplayed={5}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
-          </div>
-      
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={7}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
 
-</div>
+
       </div>
+    </div>
   );
 };
 

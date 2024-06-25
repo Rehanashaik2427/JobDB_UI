@@ -31,7 +31,6 @@ const CandidateJobs = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
-  const [showSettings, setShowSettings] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
   const [resumes, setResumes] = useState([]);
   const [hasUserApplied, setHasUserApplied] = useState({});
@@ -67,21 +66,6 @@ const CandidateJobs = () => {
     }
   }
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
 
   const toggleSettings = () => {
     navigate('/');

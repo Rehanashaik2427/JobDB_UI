@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -84,14 +84,13 @@ const ResumeAdd = () => {
   };
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
+    <div  className="dashboard-container">
+        <div className="leftside">
           <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+        </div>
 
-        <Col md={18} className="rightside">
-          <Col sm={9} className='resume-page' style={{ paddingLeft: '20px' }}>
+        <div  className="rightside">
+          <div className='resume-page' style={{ paddingLeft: '20px' }}>
             <h2>Add Resume</h2>
             <Form onSubmit={handleSubmit} className='resume-Add'>
               <Form.Group as={Row} className='select-type'>
@@ -147,11 +146,11 @@ const ResumeAdd = () => {
             </Form>
 
             {successMessage && <p>{successMessage}</p>}
-          </Col>
+          </div>
 
-        </Col>
-      </Row>
-    </Container>
+        </div>
+    </div>
+
   );
 };
 
