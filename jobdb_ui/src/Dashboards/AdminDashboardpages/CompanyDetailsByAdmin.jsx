@@ -112,11 +112,11 @@ const CompanyDetailsByAdmin = () => {
             </div>
             <div className='job-save-edit-buttons'>
               {editableCompanyDetails ? (
-                <Button type="button" onClick={handleSaveCompanyDetails}><FaSave />Save</Button>
+                <Button variant="primary" type="button" onClick={handleSaveCompanyDetails}><FaSave />Save</Button>
               ) : (
-                <Button type="button" onClick={handleEditCompanyDetails}><FaEdit />Edit</Button>
+                <Button variant="info" type="button" onClick={handleEditCompanyDetails}><FaEdit />Edit</Button>
               )}
-              <Button type="submit">Submit</Button>
+              <Button variant="success" type="submit">Submit</Button>
             </div>
           </form>
         </div>

@@ -78,7 +78,7 @@ const UserSignin = () => {
                         <Col md={6} className="text-center auth-cover">
                             <div className="pe-3 auth-right">
                                 <div className="auth-logo text-center mb-4">
-                                    <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="Gull" />
+                                    <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobdblogo" />
                                 </div>
                                 <SocialButtons routeUrl="/signup" googleHandler={() => alert("google")} facebookHandler={() => alert("facebook")} />
                             </div>

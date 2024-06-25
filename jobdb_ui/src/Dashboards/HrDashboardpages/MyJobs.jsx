@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
@@ -136,7 +137,7 @@ const MyJobs = () => {
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 
-        <Col md={18} className="rightside">
+        <Col md={20} className="rightside">
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar" >
               <input style={{ borderRadius: '6px', height: '35px' }}
@@ -183,13 +184,19 @@ const MyJobs = () => {
                       Job Title {sortedColumn === 'jobTitle' && sortOrder === 'asc' && '▲'}
                       {sortedColumn === 'jobTitle' && sortOrder === 'desc' && '▼'}
                     </th>
-                    <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && (sortOrder === ' ' ? '▲' : '▼')}</th>
-                    <th scope="col" onClick={() => handleSort('salary')}>Salary{sortedColumn === 'salary' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && sortOrder === 'asc' && '▲'}
+                    {sortedColumn === 'jobType' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && sortOrder === 'asc' && '▲'}
+                    {sortedColumn === 'postingDate' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && sortOrder === 'asc' && '▲'}
+                    {sortedColumn === 'skills' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && sortOrder === 'asc' && '▲'}
+                    {sortedColumn === 'numberOfPosition' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('salary')}>Salary{sortedColumn === 'salary' && sortOrder === 'asc' && '▲'}
+                    {sortedColumn === 'salary' && sortOrder === 'desc' && '▼'}</th>
 
-                    <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && sortOrder === 'asc' && '▲'}
+                    {sortedColumn === 'applicationDeadline' && sortOrder === 'desc' && '▼'}</th>
 
                     <th scope="col">Job Description</th>
                     <th scope="col">Action</th>
@@ -214,7 +221,9 @@ const MyJobs = () => {
                         </td>
                         <td>
                           <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } })}>
-                            <i className="nav-icon i-Pen-2 font-weight-bold" style={{ color: 'darkgreen' }} />
+                          <MdEdit
+                                  size={18}
+                                  className="text-success" />
                           </span>
                           <span className='delete cursor-pointer text-danger me-2' onClick={() => {
                             swal.fire({
@@ -236,7 +245,7 @@ const MyJobs = () => {
                               }
                             });
                           }}>
-                            <i className="nav-icon i-Close-Window font-weight-bold" style={{ color: 'darkred' }} />
+                            <MdDelete className="text-danger" size={18} />
                           </span>
 
                         </td>

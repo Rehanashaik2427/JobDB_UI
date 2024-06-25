@@ -8,13 +8,10 @@ const AdminleftSide = () => {
   const navigate = useNavigate();
   return (
     <div className='leftside'>
-      <nav id='logo'>
-        <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
-      </nav>
+      <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
       <div className="admin-details">
-        <nav>
           <h2>AdminName</h2>
-        </nav>
+        
         <Link
           to='/admin-dashboard'
           onClick={(e) => {

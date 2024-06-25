@@ -143,7 +143,8 @@ const Applications = () => {
                       Job Title {sortedColumn === 'jobTitle' && sortOrder === 'asc' && '▲'}
                       {sortedColumn === 'jobTitle' && sortOrder === 'desc' && '▼'}
                     </th>
-                    <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && sortOrder === 'asc' && '▲'}
+                    {sortedColumn === 'applicationDeadline' && sortOrder === 'desc' && '▼'}</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>

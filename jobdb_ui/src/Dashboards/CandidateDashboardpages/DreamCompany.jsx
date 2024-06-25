@@ -161,13 +161,11 @@ const DreamCompany = () => {
                     required
                   />
                 </Form.Group>
-                <Form.Group>
+                <br></br><Form.Group>
                   <Form.Label htmlFor="resume">Resume:</Form.Label>
-                  <Button onClick={handleApplyButtonClick}>Select Resume</Button>
+                  <Button variant='info' onClick={handleApplyButtonClick}>Select Resume</Button>
                 </Form.Group>
-                {/* <Form.Group>
-                  <Button type="submit" className="apply-button">Apply</Button>
-                </Form.Group> */}
+             
                 {showMessage && (
                   <Card className="success-message">
                   <Card.Body>
