@@ -14,15 +14,15 @@ function HrLeftSide({ user }) {
 
     return (
         <Navbar expand="lg" className="flex-column align-items-start" style={{ backgroundColor: 'rgb(209, 247, 247)', color: 'black' }}>
-            <Container fluid className="flex-column">
-                <Nav className="flex-column full-height align-items-start" style={{ color: 'black' }}>
-                    <Navbar.Brand>
-                        <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
-                    </Navbar.Brand>
-                    <Navbar.Text>
-                        <h2> Welcome {userName}</h2>
-                    </Navbar.Text>
+      <Container fluid className="flex-column">
+        <Nav className="flex-column full-height align-items-start" style={{ color: 'black' }}>
+          <Navbar.Brand>
+            <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
+          </Navbar.Brand>
 
+          <Navbar.Text>
+            <h2>Welcome {userName}</h2>
+          </Navbar.Text>
 
 
                     <Link

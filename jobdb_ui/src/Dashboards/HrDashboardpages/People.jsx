@@ -2,16 +2,15 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-
 import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
 
 const People = () => {
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
     const location = useLocation();
     const [filteredPeople, setFilteredPeople] = useState([]);
-    const [showSettings, setShowSettings] = useState(false);
     const [people, setPeople] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -26,23 +25,6 @@ const People = () => {
 
     const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
     const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-
-    const handlePreviousPage = () => {
-        if (page > 0) {
-            setPage(page - 1);
-        }
-    };
-
-    const handleNextPage = () => {
-        if (page < totalPages - 1) {
-            setPage(page + 1);
-        }
-    };
-
-    const handlePageChange = (pageNumber) => {
-        setPage(pageNumber);
-    };
-
 
     useEffect(() => {
         if (searchQuery) {
@@ -109,10 +91,9 @@ const People = () => {
         navigate('/');
     };
 
-    const user = {
-        userName: userName,
-        userEmail: userEmail,
-    };
+    const handlePageClick = (data) => {
+        setPage(data.selected);
+      };
 
     return (
         <Container fluid className="dashboard-container">
@@ -123,7 +104,7 @@ const People = () => {
 
                 <Col md={18} className="rightside">
                     <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-                 
+
                         <Dropdown className="ml-2">
                             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
                                 <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
@@ -172,22 +153,21 @@ const People = () => {
                             ))}
                         </tbody>
                     </Table>
-
-                    <nav>
-                        <ul className='pagination'>
-                            <li>
-                                <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                            </li>
-                            {[...Array(totalPages).keys()].map((pageNumber) => (
-                                <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                                    <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                                </li>
-                            ))}
-                            <li>
-                                <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                            </li>
-                        </ul>
-                    </nav>
+                    <div className="pagination-container">
+                        <ReactPaginate
+                            previousLabel={<i className="i-Previous" />}
+                            nextLabel={<i className="i-Next1" />}
+                            breakLabel="..."
+                            breakClassName="break-me"
+                            pageCount={totalPages}
+                            marginPagesDisplayed={7}
+                            pageRangeDisplayed={5}
+                            onPageChange={handlePageClick}
+                            activeClassName="active"
+                            containerClassName="pagination"
+                            subContainerClassName="pages pagination"
+                        />
+                    </div>
                 </Col>
             </Row>
         </Container>

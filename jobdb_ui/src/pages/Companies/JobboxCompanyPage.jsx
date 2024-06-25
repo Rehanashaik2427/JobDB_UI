@@ -2,10 +2,10 @@ import { faArrowLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Form, FormControl, Pagination, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, FormControl, Row } from 'react-bootstrap';
 
+import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
-
 
 const JobboxCompanyPage = () => {
 
@@ -16,21 +16,29 @@ const JobboxCompanyPage = () => {
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
+
+
+
+
+
+  const handlePageClick = (data) => {
+    setPage(data.selected);
   };
 
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
+
+  const fetchCompany = async () => {
+    const response = await axios.get(`${BASE_API_URL}/displayCompanies?page=${page}&size=${pageSize}`);
+
+
+    setCompanies(response.data.content);
+    setTotalPages(response.data.totalPages);
   };
 
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
+
+
+
+
+
 
 
 
@@ -45,11 +53,8 @@ const JobboxCompanyPage = () => {
   };
 
 
-  const fetchCompany = async () => {
-    const response = await axios.get(`${BASE_API_URL}/displayCompanies`, { params: { page: page, size: pageSize } });
-    setCompanies(response.data.content);
-    setTotalPages(response.data.totalPages);
-  };
+
+
 
   const fetchCompanyBySearch = async () => {
     try {
@@ -84,12 +89,12 @@ const JobboxCompanyPage = () => {
 
   return (
     <div className="top-right-content">
-       <Col xs={6}>
-       <Button onClick={handleBack} variant="secondary">
-            <FontAwesomeIcon icon={faArrowLeft} /> 
-          </Button>
+      <Col xs={6}>
+        <Button onClick={handleBack} variant="secondary">
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </Button>
 
-        </Col>
+      </Col>
       <div className="candidate-search ">
         <Form onSubmit={handleSubmit} className="searchCompany w-45">
           <Row className=" d-flex  justify-content-space-around">
@@ -117,16 +122,20 @@ const JobboxCompanyPage = () => {
       </div>
 
 
+
+
+
       <div className="companyJob mt-4">
-      <h1>Companies that we have</h1>
+        <h1>Companies that we have</h1>
         <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
           {companies.length > 0 ? (
-            
+
             companies.map((company) => (
               <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}>
                 <Card.Body>
                   <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                   <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+
                   <Button onClick={() => handleClick(company.companyId)}>
                     View
                   </Button>
@@ -136,28 +145,30 @@ const JobboxCompanyPage = () => {
 
             ))
           ) : (
-            
+
             <div>
               <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
-            <div className="p-3">
-            <div className="spinner-bubble spinner-bubble-primary m-5" />
+              <div className="p-3">
+                <div className="spinner-bubble spinner-bubble-primary m-5" />
+              </div>
             </div>
-          </div>
           )}
         </div>
-
-        <nav className="d-flex justify-content-center">
-          <Pagination style={{ color: "purple" }}>
-            <Pagination.Prev onClick={handlePreviousPage} disabled={page === 0} />
-            {[...Array(totalPages).keys()].map((pageNumber) => (
-              <Pagination.Item key={pageNumber} active={pageNumber === page} onClick={() => handlePageChange(pageNumber)}>
-                {pageNumber + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next onClick={handleNextPage} disabled={page === totalPages - 1} />
-          </Pagination>
-        </nav>
-
+        <div className="pagination-container">
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={7}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
 
 
       </div>

@@ -1,38 +1,47 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
-import "./JobAddSuccessful.css";
+// import "./JobAddSuccessful.css";
 const JobAddSuccessful = () => {
 
-  const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
   const { userName, userEmail } = location.state || {};
 
-
+  const navigate = useNavigate();
   console.log(userEmail);
 
-
-
-
   return (
-    <div className='hr-dashboard-container'>
-      <div className='hr-leftside'>
-        <HrLeftSide user={{userName,userEmail}}/>
-      </div>
-      <div className='hr-rightside'>
-        <div className='jobAddedSuccess'>
-          <h2>Job Successfully Added!</h2>
-          <p>Thank you {userName} for adding the job.</p>
-          <p>You can go back to the dashboard or add another job:</p>
-            <Link to={{ pathname:'/post-jobs',state: { userName, userEmail }}}>Go to Jobs</Link>
-          <br />
-          <Link to={{ pathname: '/addJob', state: { userName, userEmail } }}>Add Another Job</Link>
-        </div>
-      </div>
-
-    </div>
-
+    <Container fluid className="dashboard-container text-center">
+      <Row>
+        <Col md={3} className="leftside full-height">
+          <HrLeftSide user={{ userName, userEmail }} />
+        </Col>
+        <Col md={9} className="rightside">
+          <Card className='d-flex justify-content-center align-items-center' style={{margin:'80px',padding:'24px'}}>
+            <h2>Job Successfully Added!</h2>
+            <br></br>
+            <h4>Thank you <strong>{userName}</strong> for adding the job.</h4>
+            <h4>You can go back to the dashboard or add another job:</h4>
+         
+                <Link to="#" onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/hr-dashboard/my-jobs', { state: { userName, userEmail } });
+                }}>
+                  <Button>Go to Jobs</Button>
+                </Link>
+                <br></br>
+                <Link to="#" onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/hr-dashboard/my-jobs/addJob', { state: { userName, userEmail } });
+                }}>
+                  <Button>Add Job</Button>
+                </Link>
+      
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

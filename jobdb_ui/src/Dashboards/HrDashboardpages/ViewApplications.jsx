@@ -4,8 +4,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
+import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import './HrDashboard.css';
 import HrLeftSide from "./HrLeftSide";
 
 const ViewApplications = () => {
@@ -202,11 +202,10 @@ const ViewApplications = () => {
 
 
 
-
-  const user = {
-    userName: userName,
-    userEmail: userEmail,
+  const handlePageClick = (data) => {
+    setPage(data.selected);
   };
+ 
   const navigate = useNavigate();
 
   return (
@@ -267,10 +266,11 @@ const ViewApplications = () => {
                           <td>{application.applicationStatus}</td>
                           <td>
                             <Link
-                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail,userName: userName,  applicationId: application.applicationId } }}
+                             
+                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail, applicationId: application.applicationId ,userName:userName} }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, userName: userName, applicationId: application.applicationId } });
+                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, applicationId: application.applicationId , userName:userName } });
                               }}
                             >
                               <FontAwesomeIcon icon={faEye} style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }} />
@@ -288,21 +288,22 @@ const ViewApplications = () => {
                       ))}
                     </tbody>
                   </Table>
-                  <nav>
-                    <ul className='pagination'>
-                      <li>
-                        <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                      </li>
-                      {[...Array(totalPages).keys()].map((pageNumber) => (
-                        <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                          <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                        </li>
-                      ))}
-                      <li>
-                        <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                      </li>
-                    </ul>
-                  </nav>
+                  <div className="pagination-container">
+                    <ReactPaginate
+                      previousLabel={<i className="i-Previous" />}
+                      nextLabel={<i className="i-Next1" />}
+                      breakLabel="..."
+                      breakClassName="break-me"
+                      pageCount={totalPages}
+                      marginPagesDisplayed={7}
+                      pageRangeDisplayed={5}
+                      onPageChange={handlePageClick}
+                      activeClassName="active"
+                      containerClassName="pagination"
+                      subContainerClassName="pages pagination"
+                    />
+                  </div>
+
                 </div>
               </div>
             )}

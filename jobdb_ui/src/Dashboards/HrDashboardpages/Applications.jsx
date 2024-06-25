@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 
 const Applications = () => {
@@ -29,21 +29,7 @@ const Applications = () => {
     navigate('/');
   };
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
+ 
 
   useEffect(() => {
     if (search) {
@@ -95,7 +81,7 @@ const Applications = () => {
     }
     else
       fetchJobs()
-  }, [userEmail,search,page, pageSize]);
+  }, [userEmail, search, page, pageSize]);
 
 
   const handleSort = (column) => {
@@ -107,10 +93,11 @@ const Applications = () => {
     setSortOrder(order);
   };
 
-  const user = {
-    userName: userName,
-    userEmail: userEmail,
+
+  const handlePageClick = (data) => {
+    setPage(data.selected);
   };
+
 
   return (
 
@@ -198,23 +185,21 @@ const Applications = () => {
             </section>
           )}
 
-
-          <nav>
-            <ul className='pagination'>
-              <li>
-                <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-              </li>
-              {[...Array(totalPages).keys()].map((pageNumber) => (
-                <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                  <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                </li>
-              ))}
-              <li>
-                <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-              </li>
-            </ul>
-          </nav>
-
+          <div className="pagination-container">
+            <ReactPaginate
+              previousLabel={<i className="i-Previous" />}
+              nextLabel={<i className="i-Next1" />}
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={totalPages}
+              marginPagesDisplayed={7}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              activeClassName="active"
+              containerClassName="pagination"
+              subContainerClassName="pages pagination"
+            />
+          </div>
         </Col>
       </Row>
     </Container>

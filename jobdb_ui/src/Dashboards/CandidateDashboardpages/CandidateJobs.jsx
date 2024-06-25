@@ -1,15 +1,17 @@
 
-import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Modal, Popover, Row, Table } from 'react-bootstrap';
+import { Button, Modal, Popover, Table } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 // import './CandidateDashboard.css';
-import CandidateLeftSide from './CandidateLeftSide';
-import ResumeSelectionPopup from './ResumeSelectionPopup';
 
-import { Dropdown, Pagination } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
+import CandidateLeftSide from './CandidateLeftSide';
+
+import { Dropdown } from 'react-bootstrap';
+import ResumeSelectionPopup from './ResumeSelectionPopup';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -29,7 +31,6 @@ const CandidateJobs = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
-  const [showSettings, setShowSettings] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
   const [resumes, setResumes] = useState([]);
   const [hasUserApplied, setHasUserApplied] = useState({});
@@ -65,21 +66,6 @@ const CandidateJobs = () => {
     }
   }
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
 
   const toggleSettings = () => {
     navigate('/');
@@ -211,86 +197,69 @@ const CandidateJobs = () => {
 
 
 
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
+
 
   return (
-    <Container fluid className="dashboard-container">
-    <Row>
-      <Col md={3} className="leftside">
-        <CandidateLeftSide user={{ userName, userId }} />
-      </Col>
-
-   
+    <div className='candidate-dashboard-container'>
+      <div className='left-side'>
+        <CandidateLeftSide user={user} />
+      </div>
 
       <div className='rightside'>
-       
-      {showResumePopup && (
-        <Modal show={true} onHide={() => setShowResumePopup(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Select Resume</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <ResumeSelectionPopup
-              resumes={resumes}
-              onSelectResume={handleResumeSelect}
-              onClose={() => setShowResumePopup(false)}
+        {showResumePopup && (
+          <Modal show={true} onHide={() => setShowResumePopup(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Select Resume</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ResumeSelectionPopup
+                resumes={resumes}
+                onSelectResume={handleResumeSelect}
+                onClose={() => setShowResumePopup(false)}
+              />
+            </Modal.Body>
+          </Modal>
+        )}
+
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+          <div className="search-bar" >
+            <input style={{ borderRadius: '6px', height: '35px' }}
+              type="text"
+              name="search"
+              placeholder="Search"
+              value={search}
+              onChange={handleSearchChange}
             />
-          </Modal.Body>
-        </Modal>
-      )}
-
-        <div className="d-flex justify-content-end">
-          <div className="top-right-content">
-            <div className="candidate-search">
-              <form className="candidate-search1" onSubmit={handleSubmit}>
-                <input
-                  type='text'
-                  name='search'
-                  placeholder='Search'
-                  value={search}
-                  onChange={handleSearchChange}
-                />
-                <Button variant="light" onClick={() => alert('Search clicked')}>
-                  <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                </Button>
-              </form>
-              <div className="user col px-3 header-part-right">
-                <Dropdown>
-                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu className="mt-3">
-
-
-                    <Dropdown.Item as={Link} to="/">
-                      <i className="i-Data-Settings me-1" /> Account settings
-                    </Dropdown.Item>
-
-
-
-                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                      <i className="i-Lock-2 me-1" /> Sign out
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            </div>
           </div>
-
-
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
 
         {jobs.length > 0 && (
           <div>
-            <h2>Jobs For {userName}</h2>
-            <Table hover className='text-center'>
-                <thead className="table-light">
+            {/* <h2>Jobs For {userName}</h2> */}
+            <Table hover className='text-center'style={{marginLeft:'5px',marginRight:'12px'}}>
+              <thead className="table-light">
                 <tr>
                   <th scope='col' onClick={() => handleSort('jobTitle')}>
                     Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
                   </th>
-                  <th scope='col' >
-                    Company Name
+                  <th scope='col' onClick={() => handleSort('companyName')}>
+                    Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
                   </th>
                   <th scope='col' onClick={() => handleSort('applicationDeadline')}>
                     Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
@@ -309,10 +278,10 @@ const CandidateJobs = () => {
                     <td>{job.companyName}</td>
                     <td>{job.applicationDeadline}</td>
                     <td>{job.skills}</td>
-                    <td><button onClick={() => handleViewSummary(job.jobsummary)}>View Summary</button></td>
+                    <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>View Summary</Button></td>
                     <td>
                       {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
-                        <h4>Applied</h4>
+                        <p>Applied</p>
                       ) : (
                         <Button onClick={() => handleApplyButtonClick(job.jobId)}>Apply</Button>
                       )}
@@ -334,21 +303,21 @@ const CandidateJobs = () => {
               </div>
             )}
 
-            <nav>
-              <Pagination>
-                <Pagination.Prev onClick={handlePreviousPage} disabled={page === 0} />
-                {[...Array(totalPages).keys()].map((pageNumber) => (
-                  <Pagination.Item
-                    key={pageNumber}
-                    active={pageNumber === page}
-                    onClick={() => handlePageChange(pageNumber)}
-                  >
-                    {pageNumber + 1}
-                  </Pagination.Item>
-                ))}
-                <Pagination.Next onClick={handleNextPage} disabled={page === totalPages - 1} />
-              </Pagination>
-            </nav>
+            <div className="pagination-container">
+              <ReactPaginate
+                previousLabel={<i className="i-Previous" />}
+                nextLabel={<i className="i-Next1" />}
+                breakLabel="..."
+                breakClassName="break-me"
+                pageCount={totalPages}
+                marginPagesDisplayed={7}
+                pageRangeDisplayed={5}
+                onPageChange={handlePageClick}
+                activeClassName="active"
+                containerClassName="pagination"
+                subContainerClassName="pages pagination"
+              />
+            </div>
           </div>
         )}
 
@@ -367,19 +336,11 @@ const CandidateJobs = () => {
           </Link>
         </div>
 
-      </div>
 
-     
-      </Row>
-    </Container>
+
+      </div>
+    </div>
   );
 };
 
 export default CandidateJobs;
-
-
-
-
-
-
-

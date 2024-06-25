@@ -163,12 +163,12 @@ const DreamApplication =()=>{
 
   
     return (
-      <Container fluid className="hr-dashboard-container">
+      <Container fluid className="dashboard-container">
       <Row>
-        <Col md={3} className="hr-leftside">
+        <Col md={3} className="leftside">
           <HrLeftSide user={user} />
         </Col>
-        <div className='hr-rightside'>
+        <div className='rightside'>
           <div className="application-div">
             <div className="filter">
               <label htmlFor="status">Filter by Status:</label>

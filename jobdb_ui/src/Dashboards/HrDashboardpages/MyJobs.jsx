@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import swal from 'sweetalert2'; // Import SweetAlert2
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 
@@ -39,24 +41,6 @@ const MyJobs = () => {
     navigate('/');
   };
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
-
-
-
   useEffect(() => {
     if (search) {
       fetchJobBysearch();
@@ -64,9 +48,6 @@ const MyJobs = () => {
     else
       fetchJobs()
   }, [userEmail, search, page, pageSize]);
-
-
-
 
 
   const fetchJobs = async () => {
@@ -85,8 +66,6 @@ const MyJobs = () => {
       console.error('Error fetching HR data:', error);
     }
   }
-
-
 
   const handleSort = (column) => {
     let order = 'asc';
@@ -130,16 +109,15 @@ const MyJobs = () => {
       fetchJobs()
   }, [userEmail, page, pageSize, sortedColumn, sortOrder]);
 
-  const handleJobDescription = (summary) => {
-    setSelectedJobSummary(summary);
-    setShowJobDescription(true);
-  };
 
   const closeJobDescription = () => {
     setShowJobDescription(false);
     setSelectedJobSummary('');
   };
 
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
   const popover = (summary) => (
     <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
       <Popover.Body>
@@ -161,7 +139,7 @@ const MyJobs = () => {
         <Col md={18} className="rightside">
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar" >
-              <input style={{borderRadius:'6px',height:'35px'}}
+              <input style={{ borderRadius: '6px', height: '35px' }}
                 type="text"
                 name="search"
                 placeholder="Search"
@@ -209,7 +187,10 @@ const MyJobs = () => {
                     <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && (sortOrder === ' ' ? '▲' : '▼')}</th>
                     <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === ' ' ? '▲' : '▼')}</th>
                     <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('salary')}>Salary{sortedColumn === 'salary' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+
                     <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && (sortOrder === ' ' ? '▲' : '▼')}</th>
+
                     <th scope="col">Job Description</th>
                     <th scope="col">Action</th>
                   </tr>
@@ -224,6 +205,7 @@ const MyJobs = () => {
                         <td>{job.postingDate}</td>
                         <td>{job.skills}</td>
                         <td>{job.numberOfPosition}</td>
+                        <td>{job.salary}</td>
                         <td>{job.applicationDeadline}</td>
                         <td>
                           <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
@@ -234,7 +216,26 @@ const MyJobs = () => {
                           <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } })}>
                             <i className="nav-icon i-Pen-2 font-weight-bold" style={{ color: 'darkgreen' }} />
                           </span>
-                          <span className='delete cursor-pointer text-danger me-2' onClick={() => handleDelete(job.jobId)}>
+                          <span className='delete cursor-pointer text-danger me-2' onClick={() => {
+                            swal.fire({
+                              title: "Are you sure?",
+                              text: "You won't be able to revert this!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#3085d6",
+                              cancelButtonColor: "#d33",
+                              confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                handleDelete(job.jobId);
+                                swal.fire(
+                                  'Deleted!',
+                                  'Your job has been deleted.',
+                                  'success'
+                                )
+                              }
+                            });
+                          }}>
                             <i className="nav-icon i-Close-Window font-weight-bold" style={{ color: 'darkred' }} />
                           </span>
 
@@ -254,24 +255,25 @@ const MyJobs = () => {
             )}
 
           </div>
-          <nav>
-            <ul className='pagination'>
-              <li>
-                <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-              </li>
-              {[...Array(totalPages).keys()].map((pageNumber) => (
-                <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                  <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
-                </li>
-              ))}
-              <li>
-                <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-              </li>
-            </ul>
-          </nav>
+
+          <div className="pagination-container">
+            <ReactPaginate
+              previousLabel={<i className="i-Previous" />}
+              nextLabel={<i className="i-Next1" />}
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={totalPages}
+              marginPagesDisplayed={7}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              activeClassName="active"
+              containerClassName="pagination"
+              subContainerClassName="pages pagination"
+            />
+          </div>
 
 
-          <button className='add-job-button'>
+          <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>
             <Link
               to={{ pathname: '/hr-dashboard/my-jobs/addJob', state: { userName: userName, userEmail: userEmail } }}
               onClick={(e) => {
@@ -280,7 +282,8 @@ const MyJobs = () => {
               }}
             >
               Add Job
-            </Link>          </button>
+            </Link>
+          </Button>
         </Col>
       </Row>
     </Container>

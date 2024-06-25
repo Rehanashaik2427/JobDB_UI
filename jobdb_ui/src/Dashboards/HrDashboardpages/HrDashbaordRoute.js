@@ -6,6 +6,7 @@ import Applications from './Applications.jsx'
 import DreamApplication from './DreamApplications.jsx'
 import HrDashboard from './HrDashboard.jsx'
 import HrProfile from './HrProfile.jsx'
+import JobAddSuccessful from './JobAddSuccessful.jsx'
 import MyJobs from './MyJobs.jsx'
 import People from './People.jsx'
 import PostedJobs from './PostedJobs.jsx'
@@ -27,6 +28,7 @@ const HrDashbaordRoute = () => {
       <Route path="/hr-applications/view-applications" element={<ViewApplications />} />
       <Route path="/hr-applications/view-applications/applicationDetails" element={<ApplicationDetails />} />
       <Route path="/my-jobs/addJob" element={<AddJob />} />
+      <Route path="/my-jobs/addJob/jodAddSuccess" element={<JobAddSuccessful />} />
     
 
       <Route path="/my-jobs/update-job" element={<UpdateJob />} />

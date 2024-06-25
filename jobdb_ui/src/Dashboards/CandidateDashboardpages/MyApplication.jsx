@@ -1,14 +1,13 @@
 
-import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Dropdown, Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-
-import { Button, Dropdown } from 'react-bootstrap';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -237,6 +236,9 @@ const MyApplication = () => {
   const renderJobStatus = (applicationId) => {
     return jobStatuses[applicationId] || 'Loading...';
   };
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
 
   const user = {
     userName: userName,
@@ -247,47 +249,37 @@ const MyApplication = () => {
 
     <div className='candidate-dashboard-container'>
       <div className='left-side'>
-        <CandidateLeftSide user={{ userName: userName, userId: userId }} />
+        <CandidateLeftSide user={user} />
       </div>
-      <div className='right-side'>
-        {/* Header section */}
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2>My Applications</h2>
-          <div>
-            {/* Search input and button */}
-            <form className="candidate-search" onSubmit={fetchApplications}>
-              <input
-                type='text'
-                name='search'
-                placeholder='Search'
-                value={search}
-                onChange={handleSearchChange}
-              />
-              <Button variant="light" type="submit">
-                <FontAwesomeIcon icon={faSearch} style={{ color: 'skyblue' }} />
-              </Button>
-            </form>
 
-            {/* User dropdown */}
-            <Dropdown>
-              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <FontAwesomeIcon icon={faUser} className='icon' style={{ color: 'black' }} />
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu className="mt-3">
-                <Dropdown.Item as={Link} to="/">
-                  <i className="i-Data-Settings me-1" /> Account settings
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                  <i className="i-Lock-2 me-1" /> Sign out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+      <div className='rightside'>
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+          <div className="search-bar" >
+            <input style={{ borderRadius: '6px', height: '35px' }}
+              type="text"
+              name="search"
+              placeholder="Search"
+              value={search}
+              onChange={handleSearchChange}
+            />
           </div>
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
 
         {/* Applications table */}
-        <Table hover className='text-center'>
+        <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
           <thead className="table-light">
 
             <tr>
@@ -316,27 +308,21 @@ const MyApplication = () => {
         </Table>
 
         {/* Pagination */}
-        <nav>
-          <ul className='pagination'>
-            <li>
-              <Button className='page-button' onClick={() => handlePageChange(page - 1)} disabled={page === 0}>
-                Previous
-              </Button>
-            </li>
-            {[...Array(totalPages).keys()].map((pageNumber) => (
-              <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                <Button className='page-link' onClick={() => handlePageChange(pageNumber)}>
-                  {pageNumber + 1}
-                </Button>
-              </li>
-            ))}
-            <li>
-              <Button className='page-button' onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1}>
-                Next
-              </Button>
-            </li>
-          </ul>
-        </nav>
+        <div className="pagination-container">
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={7}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
       </div>
     </div>
   );

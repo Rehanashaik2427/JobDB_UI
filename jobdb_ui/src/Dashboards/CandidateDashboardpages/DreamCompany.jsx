@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Container, Form, Modal } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -127,13 +127,12 @@ const DreamCompany = () => {
     userId: userId,
   };
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    <div className='candidate-dashboard-container'>
+    <div className='left-side'>
+      <CandidateLeftSide user={user} />
+    </div>
 
-        <Col md={18} className="rightside">
+    <div className='rightside'>
           <Container>
             <div className="centered-content">
               {showResumePopup && (
@@ -166,14 +165,17 @@ const DreamCompany = () => {
                   <Form.Label htmlFor="resume">Resume:</Form.Label>
                   <Button onClick={handleApplyButtonClick}>Select Resume</Button>
                 </Form.Group>
-                <Form.Group>
+                {/* <Form.Group>
                   <Button type="submit" className="apply-button">Apply</Button>
-                </Form.Group>
+                </Form.Group> */}
                 {showMessage && (
-                  <div className="success-message">
-                    <h1>Congratulations</h1>
-                    <h3>You successfully applied to your Dream Company</h3>
-                    <h3>
+                  <Card className="success-message">
+                  <Card.Body>
+                    <Card.Title>Congratulations</Card.Title>
+                    <Card.Text>
+                      You successfully applied to your Dream Company
+                    </Card.Text>
+                    <Card.Text>
                       <Link to={{
                         pathname: '/candidate-dashboard',
                         state: { userName: userName, userId: userId }
@@ -181,15 +183,14 @@ const DreamCompany = () => {
                         e.preventDefault();
                         navigate('/candidate-dashboard', { state: { userName, userId } });
                       }}>Go back to dashboard</Link>
-                    </h3>
-                  </div>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
                 )}
               </Form>
             </div>
           </Container>
-        </Col>
-      </Row>
-    </Container>
+</div></div>
   );
 };
 

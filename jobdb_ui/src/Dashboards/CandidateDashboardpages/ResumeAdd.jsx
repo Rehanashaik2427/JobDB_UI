@@ -107,7 +107,7 @@ const navigate=useNavigate();
               <Form.Group as={Row} className='select-type'>
                 <Form.Label column sm={3}>Select Type:</Form.Label>
                 <Col sm={9}>
-                  <Form.Control as='select' value={fileType} onChange={handleFileTypeChange}>
+                  <Form.Control as='select' value={fileType} onChange={handleFileTypeChange} required>
                     <option value="file">File</option>
                     <option value="link">Link</option>
                     <option value="brief">Brief</option>
@@ -119,7 +119,7 @@ const navigate=useNavigate();
                 <Form.Group as={Row} className='select-file'>
                   <Form.Label column sm={3}>Select File:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} />
+                    <Form.Control type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} required />
                   </Col>
                 </Form.Group>
               )}
@@ -128,7 +128,7 @@ const navigate=useNavigate();
                 <Form.Group as={Row} className='select-link'>
                   <Form.Label column sm={3}>Enter Link:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control type='text' value={link} onChange={handleLinkChange} />
+                    <Form.Control type='text' value={link} onChange={handleLinkChange} required />
                   </Col>
                 </Form.Group>
               )}
@@ -137,7 +137,7 @@ const navigate=useNavigate();
                 <Form.Group as={Row} className='message-type'>
                   <Form.Label column sm={3}>Brief Resume:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control as='textarea' value={briefMessage} onChange={handleBriefMessageChange} />
+                    <Form.Control as='textarea' value={briefMessage} onChange={handleBriefMessageChange} required  />
                   </Col>
                 </Form.Group>
               )}
@@ -145,7 +145,7 @@ const navigate=useNavigate();
               <Form.Group as={Row} className='message-type' style={{ marginTop: '20px' }}>
                 <Form.Label column sm={3}>Resume Title:</Form.Label>
                 <Col sm={9}>
-                  <Form.Control as='textarea' value={message} onChange={handleMessageChange} />
+                  <Form.Control as='textarea' value={message} onChange={handleMessageChange} required/>
                 </Col>
               </Form.Group>
 
