@@ -125,6 +125,19 @@ const JobboxCompanyPage = () => {
 
 
 
+    <div>
+      <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+        <div className="search-bar" >
+          <input style={{ borderRadius: '6px', height: '35px' }}
+            type="text"
+            name="search"
+            placeholder="Search"
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+
       <div className="companyJob mt-4">
         <h1>Companies that we have</h1>
         <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
@@ -146,12 +159,9 @@ const JobboxCompanyPage = () => {
             ))
           ) : (
 
-            <div>
-              <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
-              <div className="p-3">
-                <div className="spinner-bubble spinner-bubble-primary m-5" />
-              </div>
-            </div>
+           
+            
+            <p>Company not found. Please <Link to='/findCompany/company-form'>fill company details</Link>.</p>
           )}
         </div>
         <div className="pagination-container">
@@ -172,6 +182,7 @@ const JobboxCompanyPage = () => {
 
 
       </div>
+    </div>
     </div>
   );
 };

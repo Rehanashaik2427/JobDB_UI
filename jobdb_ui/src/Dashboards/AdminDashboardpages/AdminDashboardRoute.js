@@ -28,6 +28,8 @@ const AdminDashboardRoute = () => {
         </Routes>
         </div>
     )
-}
 
-export default AdminDashboardRoute
+
+
+}
+export default AdminDashboardRoute;

@@ -4,12 +4,18 @@ import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import './AdminDashboard.css';
+import AdminleftSide from './AdminleftSide';
+import axios from 'axios';
 
 const AddCompanyDetails = () => {
 
 
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const navigate = useNavigate();
+ 
+
 
 
   const [companyData, setCompanyData] = useState([]);
@@ -39,6 +45,7 @@ const AddCompanyDetails = () => {
     fetchCompanyData();
   }, [page, pageSize]);
 
+
   const fetchCompanyData = async () => {
     try {
       const response = await axios.get(`${BASE_API_URL}/displayCompanies?page=${page}&size=${pageSize}`);
@@ -46,6 +53,7 @@ const AddCompanyDetails = () => {
       //   throw new Error('Failed to fetch company data');
       // }
 
+     
       setCompanyData(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -106,6 +114,7 @@ const AddCompanyDetails = () => {
         </nav>
       </div>
     </div>
+
   )
 }
 

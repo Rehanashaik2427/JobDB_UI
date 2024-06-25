@@ -9,7 +9,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ResumeAdd = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
-const navigate=useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
@@ -95,19 +95,19 @@ const navigate=useNavigate();
         </Col>
 
         <Col md={18} className="rightside">
-        <Col xs={6}>
-       <Button onClick={handleBack} variant="secondary">
-            <FontAwesomeIcon icon={faArrowLeft} /> 
-          </Button>
+          <Col xs={6}>
+            <Button onClick={handleBack} variant="secondary">
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Button>
 
-        </Col>
+          </Col>
           <Col sm={9} className='resume-page' style={{ paddingLeft: '20px' }}>
             <h2>Add Resume</h2>
             <Form onSubmit={handleSubmit} className='resume-Add'>
               <Form.Group as={Row} className='select-type'>
                 <Form.Label column sm={3}>Select Type:</Form.Label>
                 <Col sm={9}>
-                  <Form.Control as='select' value={fileType} onChange={handleFileTypeChange} required>
+                  <Form.Control as='select' value={fileType} onChange={handleFileTypeChange}>
                     <option value="file">File</option>
                     <option value="link">Link</option>
                     <option value="brief">Brief</option>
@@ -119,7 +119,7 @@ const navigate=useNavigate();
                 <Form.Group as={Row} className='select-file'>
                   <Form.Label column sm={3}>Select File:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} required />
+                    <Form.Control type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} />
                   </Col>
                 </Form.Group>
               )}
@@ -128,7 +128,7 @@ const navigate=useNavigate();
                 <Form.Group as={Row} className='select-link'>
                   <Form.Label column sm={3}>Enter Link:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control type='text' value={link} onChange={handleLinkChange} required />
+                    <Form.Control type='text' value={link} onChange={handleLinkChange} />
                   </Col>
                 </Form.Group>
               )}
@@ -137,7 +137,7 @@ const navigate=useNavigate();
                 <Form.Group as={Row} className='message-type'>
                   <Form.Label column sm={3}>Brief Resume:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control as='textarea' value={briefMessage} onChange={handleBriefMessageChange} required  />
+                    <Form.Control as='textarea' value={briefMessage} onChange={handleBriefMessageChange} />
                   </Col>
                 </Form.Group>
               )}
@@ -145,7 +145,7 @@ const navigate=useNavigate();
               <Form.Group as={Row} className='message-type' style={{ marginTop: '20px' }}>
                 <Form.Label column sm={3}>Resume Title:</Form.Label>
                 <Col sm={9}>
-                  <Form.Control as='textarea' value={message} onChange={handleMessageChange} required/>
+                  <Form.Control as='textarea' value={message} onChange={handleMessageChange} />
                 </Col>
               </Form.Group>
 

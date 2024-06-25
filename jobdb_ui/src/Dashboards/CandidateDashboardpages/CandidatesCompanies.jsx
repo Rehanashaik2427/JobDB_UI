@@ -7,6 +7,8 @@ import { Button, Card, Dropdown } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import swal from 'sweetalert2'; // Import SweetAlert2
+import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 
 const CandidatesCompanies = () => {
@@ -40,6 +42,14 @@ const CandidatesCompanies = () => {
   const fetchCompanyBySearch = async () => {
     try {
       const response = await axios.get(`${BASE_API_URL}/searchCompany`, { params: { search: search, page: page, size: pageSize } });
+
+      if (response.data.content.length === 0) {
+        swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Company not found!"
+        });
+      }
       setCompanies(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -155,11 +165,10 @@ const CandidatesCompanies = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
-          />
-        </div>
-
-      </div>
-  );
+  />
+    </div>
+  </div>
+    );
 };
 
 export default CandidatesCompanies;
