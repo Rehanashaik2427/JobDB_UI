@@ -2,6 +2,7 @@ import { faEnvelope, faMapMarkerAlt, faPhone } from '@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Contact = () => {
@@ -12,6 +13,7 @@ const Contact = () => {
     name: '',
     email: '',
     subject:'',
+    subject: '',
     message: '',
     agreeTerms: false, // New state for terms agreement
   });
@@ -29,6 +31,7 @@ const Contact = () => {
 
 
   
+
 
   const handleSubmit = async (e) => {
 
@@ -51,83 +54,101 @@ const Contact = () => {
     }
 
 
-    try {
-      await axios.post(BASE_API_URL+'/savemessage', formData); 
-      setIsMessageSent(true);
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
+  
     console.log('Form submitted:', formData);
     setFormData({
       name: '',
       email: '',
       message: '',
       subject:'',
+      subject: '',
       agreeTerms: false,
     });
     setIsMessageSent(true);
   };
  
+ 
+
   return (
-    <div className="contact-container">
-      <div className='contact'>
-        <div className='contact-details'>
-          <div className='connect'>
-            <h1>Contact Us</h1>
-            <p>We are here to assist you with any inquiries or questions you may have. Feel free to reach out to us via email at contact@jobportal.com or call us at +1 234 567 890. Our office is located at 123 Job Portal Street, City, Country. We look forward to hearing from you!</p>
-
-            <div className='contact-info'>
-              <div className='email'><FontAwesomeIcon icon={faEnvelope} /> Email: info@paisafund.com<br /></div>
-              <div className='mobile'><FontAwesomeIcon icon={faPhone} /> Phone: +1 234 567 890<br /></div>
-              <div className='address'><FontAwesomeIcon icon={faMapMarkerAlt} /> Address: 123 Job Portal Street, City, Country</div>
-            </div>
+    <Container className="contact-container my-4">
+      <Row>
+        <Col md={6}>
+          <h1>Contact Us</h1>
+          <p>
+            We are here to assist you with any inquiries or questions you may have. Feel free to reach out to us via email at info@paisafund.com or call us at +1 234 567 890. Our office is located at 123 Job Portal Street, City, Country. We look forward to hearing from you!
+          </p>
+          <div className="contact-info">
+            <p><FontAwesomeIcon icon={faEnvelope} /> Email: info@paisafund.com</p>
+            <p><FontAwesomeIcon icon={faPhone} /> Phone: +1 234 567 890</p>
+            <p><FontAwesomeIcon icon={faMapMarkerAlt} /> Address: 123 Job Portal Street, City, Country</p>
           </div>
-        </div>
-      </div>
-      <div className='contact-form'>
-        <h2>Send Us Message</h2>
-        {isMessageSent ? (
-          <div style={{ textAlign: 'center' }}>
-            <p>Your message has been sent successfully!</p>
-            <Link to="/">Go to Home Page</Link>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div className='contact-form-info'>
-              <label htmlFor="name">Name:</label>
-              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
-            </div>
-            <div className='contact-form-info'>
-              <label htmlFor="email">Email:</label>
-              <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-            </div>
-            <div className='contact-form-info'>
-              <label htmlFor="subject">Subject:</label>
-              <input type="subject" id="subject" name="subject" value={formData.subject} onChange={handleChange} required />
-            </div>
-
-            <div className='contact-form-info'>
-              <label htmlFor="message">Message:</label>
-              <textarea id="message" name="message" value={formData.message} onChange={handleChange} required></textarea>
-            </div>
-            <div className='contact-form-info'>
-              <label htmlFor="agreeTerms">
-                <input type="checkbox" id="agreeTerms" name="agreeTerms" checked={formData.agreeTerms} onChange={handleChange} required />
-                I agree to the <Link to="/terms-and-conditions">Terms and Conditions</Link>
-              </label>
-            </div>
-            <div className='send-msg'>
-              <button type="submit" >Send Message</button>
-            </div>
-          </form>
-        )}
-      </div>
-    </div>
+        </Col>
+        <Col md={6}>
+          <h2>Send Us a Message</h2>
+          {isMessageSent ? (
+            <Alert variant="success" className="text-center">
+              Your message has been sent successfully! <Link to="/">Go to Home Page</Link>
+            </Alert>
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="name">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="subject">
+                <Form.Label>Subject</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="message">
+                <Form.Label>Message</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="agreeTerms">
+                <Form.Check
+                  type="checkbox"
+                  name="agreeTerms"
+                  checked={formData.agreeTerms}
+                  onChange={handleChange}
+                  label={<span>I agree to the <Link to="/termsandconditions">Terms and Conditions</Link></span>}
+                  required
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Send Message
+              </Button>
+            </Form>
+          )}
+        </Col>
+      </Row>
+    </Container>
   );
 };
-
-  
-
-
-
 export default Contact;

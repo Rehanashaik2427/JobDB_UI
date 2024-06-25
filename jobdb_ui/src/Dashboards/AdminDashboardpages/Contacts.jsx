@@ -1,12 +1,11 @@
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Form, Modal, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
-const Contacts = () => {
 
+const Contacts = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const [contacts, setContacts] = useState([]);
   const [page, setPage] = useState(0);
@@ -16,6 +15,9 @@ const Contacts = () => {
   const [selectedEmail, setSelectedEmail] = useState('');
   const [message, setMessage] = useState('');
   const [contactId, setContactId] = useState();
+  const [contactmessage, setContactMessage] = useState('');
+
+
   useEffect(() => {
     fetchContacts();
   }, [page, pageSize]);
@@ -30,33 +32,24 @@ const Contacts = () => {
     }
   };
 
-
-  const handleSendMessage = async (message) => {
-    console.log('Sending message to:', selectedEmail);
-    console.log('Message:', message);
+  const handleSendMessage = async () => {
     try {
-      // Send message using API
-      // Use selectedEmail and message state variables
       const response = await axios.put(`${BASE_API_URL}/sendReplyMessages?message=${message}&replyTo=${selectedEmail}&contactId=${contactId}`);
-
-      // After sending the message, you can close the modal
       setShowModal(false);
-      if (response)
-        alert("Reply send successfully");
-      // Optionally, you can update the UI to indicate that the message has been sent
-
-      fetchContacts();
+      if (response.status === 200) {
+        alert("Reply sent successfully");
+        fetchContacts();
+      }
     } catch (error) {
       console.error('Error sending message:', error);
     }
   };
 
-  const openModal = (email, contactID) => {
+  const openModal = (email, contactID,contactmessage) => {
     setSelectedEmail(email);
     setContactId(contactID);
-    console.log("mm", contactID);
+    setContactMessage(contactmessage);
     setShowModal(true);
-
   };
 
   const closeModal = () => {
@@ -68,12 +61,12 @@ const Contacts = () => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
+
   return (
     <div className='dashboard-container'>
       <div className='leftside'>
         <AdminleftSide />
       </div>
-
       <div className="rightSide">
         <h2 style={{ textAlign: 'center' }}>Request from the Users</h2>
         <div className="help">
@@ -97,7 +90,7 @@ const Contacts = () => {
                     <td>{contact.message}</td>
                     <td>
                       {contact.replyMsg === null ? (
-                        <button onClick={() => openModal(contact.email, contact.contactID)}>Reply</button>
+                        <Button onClick={() => openModal(contact.email, contact.contactID,contact.message)}>Reply</Button>
                       ) : (
                         <h3>Replied</h3>
                       )}
@@ -107,21 +100,30 @@ const Contacts = () => {
               </tbody>
             </Table>
           </div>
-          {showModal && (
-            <div className="modal">
-              <div className="modal-content">
-                <span className="close" onClick={closeModal}>&times;</span>
-                <h2>Compose Message</h2>
-                <p>To: {selectedEmail}</p>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Write your message here..."
-                ></textarea>
-                <button onClick={() => handleSendMessage(message)}>Send</button>
-              </div>
-            </div>
-          )}
+          <Modal show={showModal} onHide={closeModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Compose Message</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>To: {selectedEmail}</p>
+              <p>Query:{contactmessage}</p>
+              <Form.Control
+                as="textarea"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Write your message here..."
+                rows={4}
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeModal}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleSendMessage}>
+                Send
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
         <div className="pagination-container">
           <ReactPaginate
@@ -138,11 +140,9 @@ const Contacts = () => {
             subContainerClassName="pages pagination"
           />
         </div>
-
-
       </div>
     </div>
   )
 }
 
-export default Contacts
+export default Contacts;

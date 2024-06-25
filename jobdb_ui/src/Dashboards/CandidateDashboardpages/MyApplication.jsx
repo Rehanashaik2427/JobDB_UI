@@ -9,13 +9,13 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 
+
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
   const applicationStatus = location.state?.applicationStatus;
-  const [showSettings, setShowSettings] = useState(false);
   const [applications, setApplications] = useState([]);
   const [search, setSearch] = useState('');
   const [resumeNames, setResumeNames] = useState({});
@@ -219,7 +219,7 @@ const MyApplication = () => {
   // Function to get job status for a specific job ID
   const getJobStatus = async (jobId) => {
     if (jobId === 0) {
-      return 'Job not availavle, HR not mapped';
+      return 'Job not availavle';
     }
     else {
       try {
@@ -271,6 +271,9 @@ const MyApplication = () => {
               <Dropdown.Item as={Link} to="/">
                 <i className="i-Data-Settings me-1" /> Account settings
               </Dropdown.Item>
+
+
+
               <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
                 <i className="i-Lock-2 me-1" /> Sign out
               </Dropdown.Item>
@@ -326,9 +329,8 @@ const MyApplication = () => {
       </div>
     </div>
   );
-};
+}
 
 export default MyApplication;
-
 
 

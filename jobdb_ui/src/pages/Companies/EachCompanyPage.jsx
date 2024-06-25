@@ -69,15 +69,17 @@ const EachCompanyPage = (props) => {
     }
   };
 
-  const navigateToHRRegister = () => {
-    if (company) {
-      navigate({ pathname: '/signup/hrSignup', state: { companyName: company.companyName } });
+  const navigateToHRRegister = (companyName) => {
+    console.log(companyName);
+    if (companyName) {
+      navigate({ pathname: '/signup/hrSignup', state: { companyName: companyName } });
     }
   };
 
-  const navigateToHRSignin = () => {
+  const navigateToHRSignin = ()  => {
+    
     if (company) {
-      navigate({ pathname: '/signin', state: { companyName: company.companyName } });
+      navigate('/signin');
     }
   };
   const handleBack = () => {
@@ -111,7 +113,11 @@ const EachCompanyPage = (props) => {
                 <div>
                   <h2>To View the Applications please</h2>
                   <div className="company-buttons">
-                    <Button onClick={navigateToHRRegister}>Claim as HR</Button>
+                  <Button onClick={() => navigate('/signup/hrSignup', { state: { companyName: company.companyName } })}>
+      Claim as HR
+    </Button>
+
+
                     <Button onClick={navigateToHRSignin}>Login</Button>
                   </div>
                 </div>

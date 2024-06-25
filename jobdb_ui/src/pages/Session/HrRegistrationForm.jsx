@@ -14,8 +14,9 @@ const HrRegistrationForm = () => {
   const [passwordCriteriaError, setPasswordCriteriaError] = useState(false);
   const navigate = useNavigate();
 
-  const location=useLocation();
-  const  companyName=location.state?.companyName;
+  const location = useLocation();
+  const { companyName } = location.state || {};
+  console.log(companyName);
 
   console.log(companyName," ")
   const validationSchema = yup.object().shape({
