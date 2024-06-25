@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaSave } from "react-icons/fa";
-import { useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
+import { Button } from 'react-bootstrap';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
-const CompanyDetailsByAdmin = ({ location }) => {
+const CompanyDetailsByAdmin = () => {
   const [editableCompanyDetails, setEditableCompanyDetails] = useState(false);
   const [companyDetails, setCompanyDetails] = useState({
     industry: '',
@@ -15,7 +16,9 @@ const CompanyDetailsByAdmin = ({ location }) => {
     description: ''
   });
 
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location=useLocation();
+
   const companyName = location.state?.companyName;
 
   // Fetch company details when component mounts
@@ -42,8 +45,8 @@ const CompanyDetailsByAdmin = ({ location }) => {
     try {
       await axios.put(`${BASE_API_URL}/updateCompanyByName?companyName=${companyName}`, companyDetails);
       alert('Company details updated successfully.');
-      history.push({
-        pathname: '/company-validation',
+      navigate({
+        pathname: 'admin-dashboard/company-validation',
       });
     } catch (error) {
       console.error('Error updating company details:', error);
@@ -72,52 +75,52 @@ const CompanyDetailsByAdmin = ({ location }) => {
             </div>
             <div className="company-admin-form-group">
               <label htmlFor="location">Location:</label>
-              <input 
-                type="text" 
-                id="location" 
-                name="location" 
-                placeholder="Enter company location" 
-                value={companyDetails.location} 
-                onChange={handleChange}  
-                disabled={!editableCompanyDetails} 
-                required 
+              <input
+                type="text"
+                id="location"
+                name="location"
+                placeholder="Enter company location"
+                value={companyDetails.location}
+                onChange={handleChange}
+                disabled={!editableCompanyDetails}
+                required
               />
             </div>
             <div className="company-admin-form-group">
               <label htmlFor="industry">Industry:</label>
-              <input 
-                type="text" 
-                id="industry" 
-                name="industry" 
-                placeholder="Industry Type" 
-                value={companyDetails.industry} 
-                onChange={handleChange} 
-                disabled={!editableCompanyDetails} 
-                required 
+              <input
+                type="text"
+                id="industry"
+                name="industry"
+                placeholder="Industry Type"
+                value={companyDetails.industry}
+                onChange={handleChange}
+                disabled={!editableCompanyDetails}
+                required
               />
             </div>
             <div className="company-admin-form-group">
               <label htmlFor="discription">Description:</label>
-              <textarea 
-                id="discription" 
-                name="discription" 
-                placeholder="Enter company description" 
-                value={companyDetails.discription} 
-                onChange={handleChange} 
-                disabled={!editableCompanyDetails} 
+              <textarea
+                id="discription"
+                name="discription"
+                placeholder="Enter company description"
+                value={companyDetails.discription}
+                onChange={handleChange}
+                disabled={!editableCompanyDetails}
               ></textarea>
             </div>
             <div className='job-save-edit-buttons'>
               {editableCompanyDetails ? (
-                <button type="button" onClick={handleSaveCompanyDetails}><FaSave />Save</button>
+                <Button type="button" onClick={handleSaveCompanyDetails}><FaSave />Save</Button>
               ) : (
-                <button type="button" onClick={handleEditCompanyDetails}><FaEdit />Edit</button>
+                <Button type="button" onClick={handleEditCompanyDetails}><FaEdit />Edit</Button>
               )}
-              <button type="submit">Submit</button>
-            </div>      
-   </form>
-    </div>
-    </div>
+              <Button type="submit">Submit</Button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

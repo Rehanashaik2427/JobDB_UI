@@ -1,13 +1,15 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ResumeAdd = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
-
+const navigate=useNavigate();
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
@@ -82,7 +84,9 @@ const ResumeAdd = () => {
     userName: userName,
     userId: userId,
   };
-
+  const handleBack = () => {
+    navigate('/candidate-dashboard/resume', { state: { userName, userId } }); // Navigate back to previous page
+  };
   return (
     <Container fluid className="dashboard-container">
       <Row>
@@ -91,6 +95,12 @@ const ResumeAdd = () => {
         </Col>
 
         <Col md={18} className="rightside">
+        <Col xs={6}>
+       <Button onClick={handleBack} variant="secondary">
+            <FontAwesomeIcon icon={faArrowLeft} /> 
+          </Button>
+
+        </Col>
           <Col sm={9} className='resume-page' style={{ paddingLeft: '20px' }}>
             <h2>Add Resume</h2>
             <Form onSubmit={handleSubmit} className='resume-Add'>

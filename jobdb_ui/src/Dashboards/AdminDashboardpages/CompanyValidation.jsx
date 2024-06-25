@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
+import { Button, Table } from 'react-bootstrap';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -108,8 +109,8 @@ const CompanyValidation = () => {
       <div className="rightSide">
         <h2 style={{ textAlign: 'center' }}>Details of Company Validation</h2>
         <div className='company-table'>
-          <table className='company-table1'>
-            <thead>
+          <Table hover className='text-center'>
+            <thead className="table-light">
               <tr>
                 <th onClick={() => handleSort('companyName')}>
                   Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
@@ -144,18 +145,19 @@ const CompanyValidation = () => {
                   <td>{company.companyStatus}</td>
                   <td>{company.actionDate}</td>
                   <td>
-                    <button className='approved' onClick={() => approveCompany(company.companyId, company.companyName)}>
+                    <Button className='approved' variant="success" onClick={() => approveCompany(company.companyId, company.companyName)}>
                       Approved
-                    </button>
-                    /
-                    <button className='reject' onClick={() => rejectCompany(company.companyId, company.companyName)}>
+                    </Button>
+                    {' / '}
+                    <Button className='reject' variant="danger" onClick={() => rejectCompany(company.companyId, company.companyName)}>
                       Reject
-                    </button>
+                    </Button>
+
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
         </div>
         <nav>
           <ul className='pagination'>

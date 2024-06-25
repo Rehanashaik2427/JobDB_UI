@@ -92,13 +92,6 @@ const CompamyPage = () => {
                 )}
                 <p>Total HRs Join: {countOfHR}</p>
                 <p>Total Jobs Posted By HRs: {countOfJobs}</p>
-                <div>
-                  <h2>To View the Applications please</h2>
-                  <div className="company-buttons">
-                    <button onClick={() => navigate({ pathname: '/hr-registeration', state: { companyName: company.companyName } })}>Claim as HR</button>
-                    <button onClick={() => navigate({ pathname: '/hr-signin', state: { companyName: company.companyName } })}>Login</button>
-                  </div>
-                </div>
               </div>
             ) : (
               <p>Loading company details...</p>

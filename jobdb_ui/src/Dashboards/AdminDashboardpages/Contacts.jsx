@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
+import { Table } from 'react-bootstrap';
 const Contacts = () => {
 
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -90,8 +91,8 @@ const Contacts = () => {
         <h2 style={{ textAlign: 'center' }}>Request from the Users</h2>
         <div className="help">
           <div className='contacts-table'>
-            <table id="user-table" className="user-table">
-              <thead>
+          <Table hover className='text-center'>
+          <thead className="table-light">
                 <tr>
                   <th>User</th>
                   <th>Email</th>
@@ -117,7 +118,7 @@ const Contacts = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </Table>
           </div>
           {showModal && (
             <div className="modal">

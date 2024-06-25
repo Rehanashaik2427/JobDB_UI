@@ -1,4 +1,4 @@
-import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -55,10 +55,6 @@ const MyJobs = () => {
     setPage(pageNumber);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission
-    // setPage(0);
-  };
 
 
   useEffect(() => {
@@ -163,48 +159,30 @@ const MyJobs = () => {
         </Col>
 
         <Col md={18} className="rightside">
-          <div className="d-flex justify-content-end ">
-            <div className="top-right-content">
-              <div className="candidate-search">
-                <form className="candidate-search1" onSubmit={handleSubmit}>
-                  <input
-                    type='text'
-                    name='search'
-                    placeholder='Search'
-                    value={search}
-                    onChange={handleSearchChange}
-                  />
-                  <Button variant="light" onClick={() => alert('Search clicked')}>
-                    <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-                  </Button>
-                </form>
-                <div className="user col px-3 header-part-right">
-                  <Dropdown>
-                    <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                      <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu className="mt-3">
-
-
-                      <Dropdown.Item as={Link} to="/">
-                        <i className="i-Data-Settings me-1" /> Account settings
-                      </Dropdown.Item>
-
-
-
-                      <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                        <i className="i-Lock-2 me-1" /> Sign out
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+            <div className="search-bar" >
+              <input style={{borderRadius:'6px',height:'35px'}}
+                type="text"
+                name="search"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearchChange}
+              />
             </div>
-
-
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
-
 
           {showJobDescription && (
             <div className="modal-summary">
@@ -216,7 +194,7 @@ const MyJobs = () => {
             </div>
           )}
           <h2 className='text-center'>Job posted by {userName}</h2>
-          
+
           <div className='job-list'>
             {jobs.length > 0 && (
 

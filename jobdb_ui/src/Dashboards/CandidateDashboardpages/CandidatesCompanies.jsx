@@ -19,17 +19,26 @@ const CandidatesCompanies = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
-  const [showSettings, setShowSettings] = useState(false);
 
+
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    fetchCompanyBySearch();
+  };
   const fetchCompany = async () => {
-    const response = await axios.get(`${BASE_API_URL}/displayCompanies`, { params: { page, size: pageSize } });
+    const response = await axios.get(`${BASE_API_URL}/displayCompanies`, { params: { page: page, size: pageSize } });
     setCompanies(response.data.content);
     setTotalPages(response.data.totalPages);
   };
 
   const fetchCompanyBySearch = async () => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/searchCompany`, { params: { search, page, size: pageSize } });
+      const response = await axios.get(`${BASE_API_URL}/searchCompany`, { params: { search: search, page: page, size: pageSize } });
       setCompanies(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -61,120 +70,117 @@ const CandidatesCompanies = () => {
     setPage(pageNumber);
   };
 
-  const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-  };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    fetchCompanyBySearch();
-  };
 
   const toggleSettings = () => {
     navigate('/');
   };
 
   const handleClick = (companyId) => {
-    navigate("/candidate-dashboard/companyPage", { state: { companyId: companyId,userName: userName, userId: userId } })
+    navigate("/candidate-dashboard/companyPage", { state: { companyId: companyId, userName: userName, userId: userId } })
     alert('Button clicked!');
   };
 
   return (
     <div fluid className="dashboard-container">
-    <div>
-      <Col md={3} className="leftside">
-        <CandidateLeftSide user={{ userName, userId }} />
-      </Col>
-  
-      <Col md={18} className="rightside">
-        <div className="top-right-content">
-      </div>
-      <div className='rightside'>
-      <div className="d-flex justify-content-end">
-          <div className="candidate-search">
-            <form className="candidate-search1" onSubmit={handleSubmit}>
-              <input
-                type='text'
-                name='search'
-                placeholder='Search'
-                value={search}
-                onChange={handleSearchChange}
-              />
-             <Button variant="light" onClick={() => alert('Search clicked')}>
-              <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
-            </Button>
-            </form>
-            <div className="user col px-3 header-part-right">
-                <Dropdown>
-                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
-                  </Dropdown.Toggle>
+      <div>
+        <Col md={3} className="leftside">
+          <CandidateLeftSide user={{ userName, userId }} />
+        </Col>
 
-                  <Dropdown.Menu className="mt-3">
-                  
-
-                    <Dropdown.Item as={Link} to="/">
-                      <i className="i-Data-Settings me-1" /> Account settings
-                    </Dropdown.Item>
-
-                 
-
-                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                      <i className="i-Lock-2 me-1" /> Sign out
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
+        <Col md={18} className="rightside">
+          <div className="top-right-content">
           </div>
-          </div>
-          <div className="companyJob">
-            <h1>Companies that we have</h1>
-            <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
-          {companies.length > 0 ? (
-            companies.map((company) => (
-              <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}>
-                <Card.Body>
-                  <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                  <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-        
-                  <Button onClick={() => handleClick(company.companyId)}>
-                    View
+          <div className='rightside'>
+            <div className="d-flex justify-content-end">
+              <div className="candidate-search">
+                <form className="candidate-search1" onSubmit={handleSubmit}>
+                  <input
+                    type='text'
+                    name='search'
+                    placeholder='Search'
+                    value={search}
+                    onChange={handleSearchChange}
+                  />
+                  <Button variant="light" onClick={() => alert('Search clicked')}>
+                    <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'skyblue' }} />
                   </Button>
-                </Card.Body>
-              </Card>
+                </form>
+                <div className="user col px-3 header-part-right">
+                  <Dropdown>
+                    <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                      <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className="mt-3">
 
 
-            ))
-          ) : (
-            <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
-          )}
-        </div>
+                      <Dropdown.Item as={Link} to="/">
+                        <i className="i-Data-Settings me-1" /> Account settings
+                      </Dropdown.Item>
 
-            <nav>
-              <ul className='pagination'>
-                <li>
-                  <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-                </li>
-                {[...Array(totalPages).keys()].map((pageNumber) => (
-                  <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
-                    <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
+
+
+                      <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                        <i className="i-Lock-2 me-1" /> Sign out
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
+            </div>
+            <div className="companyJob">
+              <h1>Companies that we have</h1>
+              <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
+                {companies.length > 0 ? (
+                  companies.map((company) => (
+                    <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}>
+                      <Card.Body>
+                        <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                        <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+
+                        <Button onClick={() => handleClick(company.companyId)}>
+                          View
+                        </Button>
+                      </Card.Body>
+                    </Card>
+
+
+                  ))
+                ) : (
+                  <div>
+                    <div className="p-3">
+                      <span className="spinner-glow spinner-glow-primary me-5" />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <nav>
+                <ul className='pagination'>
+                  <li>
+                    <button className='page-button' onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
                   </li>
-                ))}
-                <li>
-                  <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
-                </li>
-              </ul>
-            </nav>
-          </div>
+                  {[...Array(totalPages).keys()].map((pageNumber) => (
+                    <li key={pageNumber} className={pageNumber === page ? 'active' : ''}>
+                      <button className='page-link' onClick={() => handlePageChange(pageNumber)}>{pageNumber + 1}</button>
+                    </li>
+                  ))}
+                  <li>
+                    <button className='page-button' onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
 
-         
-        </div>
+
+          </div>
         </Col>
       </div>
     </div>
 
-       
-   
+
+
   );
 };
 

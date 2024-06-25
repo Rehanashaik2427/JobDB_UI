@@ -267,10 +267,10 @@ const ViewApplications = () => {
                           <td>{application.applicationStatus}</td>
                           <td>
                             <Link
-                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail, applicationId: application.applicationId } }}
+                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail,userName: userName,  applicationId: application.applicationId } }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, applicationId: application.applicationId } });
+                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, userName: userName, applicationId: application.applicationId } });
                               }}
                             >
                               <FontAwesomeIcon icon={faEye} style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }} />

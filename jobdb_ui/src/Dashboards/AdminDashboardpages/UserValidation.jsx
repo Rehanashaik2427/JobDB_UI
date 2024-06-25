@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
+import { Table } from 'react-bootstrap';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -66,8 +67,8 @@ const UserValidation = () => {
       <div className="rightSide">
         <div className='user-table-list'>
           <h2>Users List</h2>
-          <table id="user-table" className="user-table">
-            <thead>
+          <Table hover className='text-center'>
+          <thead className="table-light">
               <tr>
                 <th onClick={() => handleSort('userName')}>
                   User Name {sortedColumn === 'userName' && (sortOrder === 'asc' ? '▲' : '▼')}
@@ -97,7 +98,7 @@ const UserValidation = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
         </div>
         <nav>
           <ul className='pagination'>

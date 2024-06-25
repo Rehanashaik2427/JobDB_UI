@@ -1,4 +1,4 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -32,70 +32,67 @@ const JobboxCompanyPage = () => {
     setPage(pageNumber);
   };
 
-  const handlePageClick = (data) => {
-    setPage(data.selected);
-  };
-
-
-
-
-  const fetchCompany = async () => {
-    const response = await axios.get(`${BASE_API_URL}/displayCompanies?page=${page}&size=${pageSize}`);
-
-
-    setCompanies(response.data.content);
-    setTotalPages(response.data.totalPages);
-  };
-
-
-
-
-  // useEffect hook to fetch jobs when the component mounts
-  useEffect(() => {
-    if (search) {
-      fetchCompanyBySearch();
-    }
-    fetchCompany();
-  }, [search, page, pageSize]);
-
-
-  const fetchCompanyBySearch = async () => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/searchCompany?search=${search}?page=${page}&size=${pageSize}`);
-      setCompanies(response.data.content);
-      setTotalPages(response.data.totalPages);
-
-
-    } catch (error) {
-      console.log("No data Found" + error);
-    }
-    console.log("Search submitted:", search);
-  };
-
-
 
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
+    fetchCompanyBySearch();
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     fetchCompanyBySearch();
   };
-  const handleClick = (companyId) => {
-    navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })
-    alert('Button clicked!');
+
+
+  const fetchCompany = async () => {
+    const response = await axios.get(`${BASE_API_URL}/displayCompanies`, { params: { page: page, size: pageSize } });
+    setCompanies(response.data.content);
+    setTotalPages(response.data.totalPages);
   };
 
+  const fetchCompanyBySearch = async () => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/searchCompany`, { params: { search: search, page: page, size: pageSize } });
+      setCompanies(response.data.content);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.log("No data found: " + error);
+    }
+  };
+
+  useEffect(() => {
+    if (search) {
+      fetchCompanyBySearch();
+    } else {
+      fetchCompany();
+    }
+  }, [search, page, pageSize]);
+
+
+
+
+  const handleClick = (companyId) => {
+    navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })
+    // alert('Button clicked!');
+  };
+  const handleBack = () => {
+    navigate("/"); // Navigate back to previous page
+  };
 
 
 
   return (
     <div className="top-right-content">
-      <div className="candidate-search">
+       <Col xs={6}>
+       <Button onClick={handleBack} variant="secondary">
+            <FontAwesomeIcon icon={faArrowLeft} /> 
+          </Button>
+
+        </Col>
+      <div className="candidate-search ">
         <Form onSubmit={handleSubmit} className="searchCompany w-45">
-          <Row className="align-items-center justify-content-center">
+          <Row className=" d-flex  justify-content-space-around">
 
             <Col xs={4}>
               <FormControl
@@ -108,36 +105,28 @@ const JobboxCompanyPage = () => {
                 onChange={handleSearchChange}
               />
             </Col>
-            <Col xs={1}>
+            {/* <Col xs={1}>
 
               <Button type="submit" className="search-button w-100">
                 <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'white' }} />
 
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </Form>
       </div>
 
 
       <div className="companyJob mt-4">
-        <h1>Companies that we have</h1>
+      <h1>Companies that we have</h1>
         <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
           {companies.length > 0 ? (
+            
             companies.map((company) => (
               <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}>
                 <Card.Body>
                   <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                   <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                  {/* <Link
-                    to={{
-                      pathname: `/jobboxCompanyPage/eachCompanyPage/${company.companyId}`, // Adjusted pathname to include companyId as URL parameter
-                      state: { companyId: company.companyId }
-                    }}
-                    className='btn btn-primary'
-                  >
-                    View
-                  </Link> */}
                   <Button onClick={() => handleClick(company.companyId)}>
                     View
                   </Button>
@@ -147,7 +136,13 @@ const JobboxCompanyPage = () => {
 
             ))
           ) : (
-            <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
+            
+            <div>
+              <p>Company not found. Please <Link to='/companies'>fill company details</Link>.</p>
+            <div className="p-3">
+            <div className="spinner-bubble spinner-bubble-primary m-5" />
+            </div>
+          </div>
           )}
         </div>
 

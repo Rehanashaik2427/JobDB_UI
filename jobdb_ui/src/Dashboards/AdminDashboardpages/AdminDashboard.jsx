@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
 
 const AdminDashboard = () => {
   const [validatedCompaniesCount, setValidatedCompaniesCount] = useState(0);
   const[validatedHrCount, setValidatedHrCount] = useState(0);
-
+  const navigate = useNavigate();
   useEffect(() => {
       fetchValidatedCompaniesCount();
       fetchValidatedHrCount();
@@ -70,7 +70,10 @@ const AdminDashboard = () => {
       <div className="applyforValidation">
         <h4>Check for processing User validation!!</h4>
         <p>
-            <Link to="/admin-action">Check</Link>
+            <Link to="/admin-dashboard/admin-action"   onClick={(e) => {
+                            e.preventDefault();
+                            navigate('/admin-dashboard/admin-action');
+                        }}>Check</Link>
         </p>
       </div>
     </div>

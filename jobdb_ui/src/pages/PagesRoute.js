@@ -14,6 +14,9 @@ import UserRoute from './Session/UserRoute';
 import UserSignin from './Session/UserSignin';
 import EachCompanyPage from './Companies/EachCompanyPage';
 import CandiRegister from './Session/CandiRegister';
+import AdminRegister from './Session/AdminRegister';
+
+import AdminDashboardRoute from '../Dashboards/AdminDashboardpages/AdminDashboardRoute';
 
 
 
@@ -39,7 +42,8 @@ const PagesRoute = () => {
 
           <Route path='/hr-dashboard/*' element={<HrDashbaordRoute />} />
           <Route path='/candidate-dashboard/*' element={< CandidateDashbaordRoute />} />
-
+          <Route path='/admin-register/*' element={<AdminRegister />} />
+          <Route path='/admin-dashboard/*' element={<AdminDashboardRoute />} />
 
 
         </Routes>

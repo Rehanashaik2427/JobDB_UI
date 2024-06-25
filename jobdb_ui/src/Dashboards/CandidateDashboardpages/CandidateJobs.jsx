@@ -3,9 +3,9 @@ import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Popover } from 'react-bootstrap';
+import { Button, Col, Container, Modal, Popover, Row, Table } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './CandidateDashboard.css';
+// import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
 
@@ -213,11 +213,13 @@ const CandidateJobs = () => {
 
 
   return (
-    
-    <div className='candidate-dashboard-container'>
-      <div className='left-side'>
-        <CandidateLeftSide user={user} />
-      </div>
+    <Container fluid className="dashboard-container">
+    <Row>
+      <Col md={3} className="leftside">
+        <CandidateLeftSide user={{ userName, userId }} />
+      </Col>
+
+   
 
       <div className='rightside'>
        
@@ -281,23 +283,23 @@ const CandidateJobs = () => {
         {jobs.length > 0 && (
           <div>
             <h2>Jobs For {userName}</h2>
-            <table className='jobs-table'>
-              <thead>
+            <Table hover className='text-center'>
+                <thead className="table-light">
                 <tr>
-                  <th onClick={() => handleSort('jobTitle')}>
+                  <th scope='col' onClick={() => handleSort('jobTitle')}>
                     Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
                   </th>
-                  <th >
+                  <th scope='col' >
                     Company Name
                   </th>
-                  <th onClick={() => handleSort('applicationDeadline')}>
+                  <th scope='col' onClick={() => handleSort('applicationDeadline')}>
                     Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
                   </th>
-                  <th onClick={() => handleSort('skills')}>
+                  <th scope='col' onClick={() => handleSort('skills')}>
                     Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
                   </th>
-                  <th>Job Summary</th>
-                  <th>Actions</th>
+                  <th scope='col'>Job Summary</th>
+                  <th scope='col'>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -318,7 +320,7 @@ const CandidateJobs = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </Table>
 
             {selectedJobSummary && (
               <div className="modal-summary">
@@ -366,7 +368,10 @@ const CandidateJobs = () => {
         </div>
 
       </div>
-    </div>
+
+     
+      </Row>
+    </Container>
   );
 };
 

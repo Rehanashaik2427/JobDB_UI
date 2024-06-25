@@ -42,30 +42,21 @@ const HrProfile = () => {
 
         <Col md={18} className="rightside">
 
-          <div className="d-flex justify-content-end">
-            <div className="candidate-search">
-              <div className="user col px-3">
-                <Dropdown>
-                  <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                    <FontAwesomeIcon icon={faUser} id="user" className='icon' style={{ color: 'black' }} />
-                  </Dropdown.Toggle>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
-                  <Dropdown.Menu className="mt-3">
-
-
-                    <Dropdown.Item as={Link} to="/">
-                      <i className="i-Data-Settings me-1" /> Account settings
-                    </Dropdown.Item>
-
-
-
-                    <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                      <i className="i-Lock-2 me-1" /> Sign out
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            </div>
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
           <div>
             <div className="profile-container">
