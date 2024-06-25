@@ -7,16 +7,18 @@ import HrDashbaordRoute from '../Dashboards/HrDashboardpages/HrDashbaordRoute';
 
 import About from './About';
 import CompanRoute from './Companies/CompanRoute';
+import EachCompanyPage from './Companies/EachCompanyPage';
 import JobboxCompanyPage from './Companies/JobboxCompanyPage';
 import Home from './Home';
+import AdminRegister from './Session/AdminRegister';
+import CandiRegister from './Session/CandiRegister';
 import ForgetPassword from './Session/ForgetPassword';
 import UserRoute from './Session/UserRoute';
 import UserSignin from './Session/UserSignin';
-import EachCompanyPage from './Companies/EachCompanyPage';
-import CandiRegister from './Session/CandiRegister';
-import AdminRegister from './Session/AdminRegister';
 
 import AdminDashboardRoute from '../Dashboards/AdminDashboardpages/AdminDashboardRoute';
+import Contact from './Contact';
+import TermsAndConditions from './TermsAndConditions';
 
 
 
@@ -30,6 +32,8 @@ const PagesRoute = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/aboutus" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/termsandconditions" element={<TermsAndConditions />} />
           <Route path='/userRoute/*' element={<UserRoute />} />
           <Route path="/signup/*" element={<UserRoute />} />
           <Route path="/findcompany/*" element={<CompanRoute />} />
