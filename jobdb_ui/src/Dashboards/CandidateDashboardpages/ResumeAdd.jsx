@@ -88,13 +88,13 @@ const ResumeAdd = () => {
     navigate('/candidate-dashboard/resume', { state: { userName, userId } }); // Navigate back to previous page
   };
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    <div className='candidate-dashboard-container'>
+      <div className='left-side'>
+        <CandidateLeftSide user={user} />
+      </div>
 
-        <Col md={18} className="rightside">
+      <div className='rightside'>
+  
           <Col xs={6}>
             <Button onClick={handleBack} variant="secondary">
               <FontAwesomeIcon icon={faArrowLeft} />
@@ -159,9 +159,11 @@ const ResumeAdd = () => {
             {successMessage && <p>{successMessage}</p>}
           </Col>
 
-        </Col>
-      </Row>
-    </Container>
+       </div>
+       
+       </div>
+       
+       
   );
 };
 
