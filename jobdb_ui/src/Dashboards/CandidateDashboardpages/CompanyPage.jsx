@@ -71,35 +71,33 @@ const CompamyPage = () => {
   }, [companyId]);
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={3} className="leftside">
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+    <div className='candidate-dashboard-container'>
+      <div className='left-side'>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
 
-        <Col md={18} className="rightside">
-          <div className="companyPage">
-            {company ? (
-              <div>
-                <h2>Company Name: {company.companyName}</h2>
-                <p>{company.description}</p>
-                <p>{company.jobboxEmail}</p>
-                <p>Total Applications: {countOfApplications}</p>
-                {countOfHR > 0 ? (
-                  <p>HR mapped = Yes</p>
-                ) : (
-                  <p>HR mapped = No</p>
-                )}
-                <p>Total HRs Join: {countOfHR}</p>
-                <p>Total Jobs Posted By HRs: {countOfJobs}</p>
-              </div>
-            ) : (
-              <p>Loading company details...</p>
-            )}
-          </div>
-        </Col>
-      </Row>
-    </Container>
+      <div className='rightside'>
+        <div className="companyPage">
+          {company ? (
+            <div>
+              <h2>Company Name: {company.companyName}</h2>
+              <p>{company.description}</p>
+              <p>{company.jobboxEmail}</p>
+              <p>Total Applications: {countOfApplications}</p>
+              {countOfHR > 0 ? (
+                <p>HR mapped = Yes</p>
+              ) : (
+                <p>HR mapped = No</p>
+              )}
+              <p>Total HRs Join: {countOfHR}</p>
+              <p>Total Jobs Posted By HRs: {countOfJobs}</p>
+            </div>
+          ) : (
+            <p>Loading company details...</p>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

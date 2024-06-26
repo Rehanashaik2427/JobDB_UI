@@ -75,7 +75,6 @@ const CandidatesCompanies = () => {
 
   const handleClick = (companyId) => {
     navigate("/candidate-dashboard/companyPage", { state: { companyId: companyId, userName: userName, userId: userId } })
-    alert('Button clicked!');
   };
 
   const handlePageClick = (data) => {

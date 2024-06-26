@@ -17,21 +17,12 @@ const DreamApplication = () => {
   const [fileNames, setfileNames] = useState({});
 
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const applicationsPerPage = 5;
-  const indexOfLastApplication = currentPage * applicationsPerPage;
-  const indexOfFirstApplication = indexOfLastApplication - applicationsPerPage;
-  // const currentApplications = applications.slice(indexOfFirstApplication, indexOfLastApplication);
-  // const nPage = Math.ceil(applications.length / applicationsPerPage);
-  // const numbers = [...Array(nPage + 1).keys()].slice(1);
 
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(5);
 
-  function changeCurrentPage(id) {
-    setCurrentPage(id);
-  }
+
 
   const fetchResumeTypes = async (applications) => {
     const types = {};
