@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Table } from 'react-bootstrap';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
 
@@ -10,36 +11,35 @@ const AllowingAccess = () => {
   ]);
   return (
     <div className='dashboard-container'>
-          <div className='leftside'>
-          <AdminleftSide />
-        </div>
+      <div className='leftside'>
+        <AdminleftSide />
+      </div>
 
-    <div className="rightSide">
-      <div>
-        <h2 style={{textAlign:'center'}}>Access Dashboard</h2>
-        <div className="access-table">
-        <table id="user-table" className="user-table">
-    
-    <tr >
-      <th >User</th>
-      <th >Access To</th>
-      <th >Access Status</th>
-    </tr>
+      <div className="rightSide">
+        <div>
+          <h2 style={{ textAlign: 'center' }}>Access Dashboard</h2>
 
-
-    {accessData.map((data, index) => (
-      <tr key={index} >
-        <td >{data.user}</td>
-        <td >{data.accessTo}</td>
-        <td >{data.accessStatus}</td>
-      </tr>
-    ))}
-
-</table>
+            <Table hover className='text-center'style={{ marginLeft: '12px' }}>
+              <thead className="table-light">
+                <tr >
+                  <th >User</th>
+                  <th >Access To</th>
+                  <th >Access Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {accessData.map((data, index) => (
+                  <tr key={index} >
+                    <td >{data.user}</td>
+                    <td >{data.accessTo}</td>
+                    <td >{data.accessStatus}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         </div>
       </div>
-    </div>
-</div>
   )
 }
 

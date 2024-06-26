@@ -12,8 +12,8 @@ const Myprofile = ({ userType }) => {
 
       <div className='rightside'>
         <div className='admin-profile'>
-          <Table hover className='text-center'>
-            <thead className="table-light">
+          <Table hover className='text-center'style={{ marginLeft: '8px' }}>
+            <thead className="table-light" >
               <tr>
                 <th>Company Name</th>
                 <th>Company Type</th>

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-import AdminleftSide from './AdminleftSide';
 import './AdminDashboard.css';
+import AdminleftSide from './AdminleftSide';
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
 const AdminAction = () => {
@@ -66,21 +66,15 @@ const AdminAction = () => {
     }
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
 
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
 
   return (
-    <div className="body">
-       <div className='leftside'>
+    <div className='dashboard-container'>
+          <div className='leftside'>
           <AdminleftSide />
         </div>
-        
-        <div className="rightSide">
+
+    <div className="rightSide">
       <header className="admin-header">
         <h2 style={{color:'wheat'}}>Admin Dashboard</h2>
       </header>
