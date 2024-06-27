@@ -176,7 +176,7 @@ const MyJobs = () => {
 
           <div className='job-list'>
             {jobs.length > 0 && (
-
+<div><div>
               <Table hover className='text-center'>
                 <thead className="table-light">
                   <tr>
@@ -254,18 +254,8 @@ const MyJobs = () => {
                   ))}
                 </tbody>
               </Table>
-
-            )}
-
-            {jobs.length === 0 && (
-              <section className='not-yet'>
-                <h2>You have not posted any jobs yet. Post Now</h2>
-              </section>
-            )}
-
-          </div>
-
-          <div className="pagination-container">
+              </div>
+              <div className="pagination-container">
             <ReactPaginate
               previousLabel={<i className="i-Previous" />}
               nextLabel={<i className="i-Next1" />}
@@ -280,6 +270,18 @@ const MyJobs = () => {
               subContainerClassName="pages pagination"
             />
           </div>
+              </div>
+            )}
+
+            {jobs.length === 0 && (
+              <section className='not-yet'>
+                <h2>You have not posted any jobs yet. Post Now</h2>
+              </section>
+            )}
+
+          </div>
+
+        
 
 
           <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>

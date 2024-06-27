@@ -77,9 +77,10 @@ const DreamApplication = () => {
   const handleSelect = async (filterStatus) => {
     try {
       const jobId = 0;
-      const response = await axios.get(`${BASE_API_URL}/getFilterDreamApplicationsByCompany?jobId=${jobId}&filterStatus=${filterStatus}&userEmail=${userEmail}`);
-      console.log(response.data);
-      setApplications(response.data);
+      const response = await axios.get(`${BASE_API_URL}/getFilterDreamApplicationsByCompany?jobId=${jobId}&filterStatus=${filterStatus}&userEmail=${userEmail}&page=${page}&size=${pageSize}`);
+      console.log(response.data.content);
+      setApplications(response.data.content);
+      setTotalPages(response.data.totalPages)
     } catch (error) {
       console.log(error);
     }

@@ -119,7 +119,8 @@ const People = () => {
                             </Dropdown.Menu>
                         </Dropdown>
                     </div>
-
+                    {people.length > 0 && (
+                        <div><div>
 
                     <Table hover className='text-center'>
                         <thead className="table-light">
@@ -153,6 +154,7 @@ const People = () => {
                             ))}
                         </tbody>
                     </Table>
+                    </div>
                     <div className="pagination-container">
                         <ReactPaginate
                             previousLabel={<i className="i-Previous" />}
@@ -168,6 +170,8 @@ const People = () => {
                             subContainerClassName="pages pagination"
                         />
                     </div>
+                    </div>
+                )}
                 </Col>
             </Row>
         </Container>

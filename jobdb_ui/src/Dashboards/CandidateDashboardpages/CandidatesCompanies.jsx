@@ -146,13 +146,7 @@ const CandidatesCompanies = () => {
                     </Card>
                   ))}
                 </div>
-              </>
-            ) : (
-              <h4 className='text-center'>Company not found .!!</h4>
-            )}
-          </div>
-        </div>
-        <ReactPaginate
+                <ReactPaginate
           previousLabel={<i className="i-Previous" />}
           nextLabel={<i className="i-Next1" />}
           breakLabel="..."
@@ -165,6 +159,13 @@ const CandidatesCompanies = () => {
           containerClassName="pagination"
           subContainerClassName="pages pagination"
         />
+              </>
+            ) : (
+              <h4 className='text-center'>Company not found .!!</h4>
+            )}
+          </div>
+        </div>
+      
       </div>
     </div>
   );
