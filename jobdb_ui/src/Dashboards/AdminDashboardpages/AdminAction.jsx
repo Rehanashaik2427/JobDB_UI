@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+
+import { Breadcrumb, Button, Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import swal from 'sweetalert2';
 import AdminleftSide from './AdminleftSide';
-import './AdminDashboard.css';
-import ReactPaginate from 'react-paginate';
-import { Breadcrumb, Button, Table } from 'react-bootstrap';
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
 const AdminAction = () => {
   const [hrDetails, setHRDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [approvalMessages, setApprovalMessages] = useState({});
-  const [rejectMessages, setRejectMessages] = useState({});
+
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
@@ -71,7 +70,6 @@ const AdminAction = () => {
   const rejectRequest = async (userEmail, userId) => {
     console.log('Request Rejected');
     const rejected = "Rejected";
-    // Handle reject request logic here   
     try {
       const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${currentTime}&userStatus=${rejected}`);
       console.log(res.data);
@@ -95,12 +93,9 @@ const AdminAction = () => {
       });
     }
   };
-
-
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
 
   return (
     <div className="dashboard-container">
