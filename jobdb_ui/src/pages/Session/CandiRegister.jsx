@@ -221,6 +221,9 @@ const CandiRegister = () => {
                         </Col>
                     </Row>
                 </Card>
+
+
+                
             </div>
         </div>
     );
