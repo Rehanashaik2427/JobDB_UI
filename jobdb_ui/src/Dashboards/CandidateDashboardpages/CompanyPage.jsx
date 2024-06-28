@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import './CandidateDashboard.css';
 import CandidateLeftSide from "./CandidateLeftSide";
@@ -71,7 +70,7 @@ const CompamyPage = () => {
   }, [companyId]);
 
   return (
-    <div className='candidate-dashboard-container'>
+    <div className='dashboard-container'>
       <div className='left-side'>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>

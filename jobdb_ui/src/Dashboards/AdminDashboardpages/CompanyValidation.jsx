@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { FaCheckCircle } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
+import swal from 'sweetalert2';
+
 // import './AdminDashboard.css';
 import { BsXCircle } from 'react-icons/bs';
 
@@ -65,11 +67,25 @@ const CompanyValidation = () => {
           companyStatus: approved,
         },
       });
-      console.log(res.data);
-      setApprovalMessages((prev) => ({ ...prev, [companyId]: 'Approval successful' }));
-      fetchCompanyData();
+      if (res.data) {
+        await swal.fire({
+          icon: "success",
+          title: "Approval Successful!",
+          text: "The request has been approved."
+        });
+        fetchCompanyData();
+        console.log(res.data);
+
+      } else {
+        throw new Error('Approval failed');
+      }
     } catch (error) {
       console.log('Error approving request:', error);
+      await swal.fire({
+        icon: "error",
+        title: "Approval Failed",
+        text: "Failed to approve the request. Please try again later."
+      });
     }
   };
 
@@ -84,11 +100,25 @@ const CompanyValidation = () => {
           companyStatus: reject,
         },
       });
+      if (res.data) {
+        await swal.fire({
+          icon: "success",
+          title: "Rejection Successful!",
+          text: "The request has been rejected."
+        });
+        fetchCompanyData();
+      } else {
+        throw new Error('Rejection failed');
+      }
       console.log(res.data);
-      setRejectMessages((prev) => ({ ...prev, [companyId]: 'Rejected Company' }));
-      fetchCompanyData();
+
     } catch (error) {
       console.log('Error rejecting request:', error);
+      await swal.fire({
+        icon: "error",
+        title: "Rejection Failed",
+        text: "Failed to reject the request. Please try again later."
+      });
     }
   };
 
@@ -107,7 +137,7 @@ const CompanyValidation = () => {
               <th onClick={() => handleSort('companyName')}>
                 Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
               </th>
-              <th>Contact Number</th>
+              {/* <th>Contact Number</th>
               <th>Company Email</th>
               <th>Industry</th>
               <th onClick={() => handleSort('location')}>
@@ -117,10 +147,10 @@ const CompanyValidation = () => {
               <th onClick={() => handleSort('date')}>
                 Submit Date {sortedColumn === 'date' && (sortOrder === 'asc' ? '▲' : '▼')}
               </th>
-              <th>Status</th>
-              <th onClick={() => handleSort('actionDate')}>
+              <th>Status</th> */}
+              {/* <th onClick={() => handleSort('actionDate')}>
                 Action Date {sortedColumn === 'actionDate' && (sortOrder === 'asc' ? '▲' : '▼')}
-              </th>
+              </th> */}
               <th>Actions</th>
             </tr>
           </thead>
@@ -128,14 +158,14 @@ const CompanyValidation = () => {
             {companyData.map((company) => (
               <tr key={company.companyId}>
                 <td>{company.companyName}</td>
-                <td>{company.contactNumber}</td>
+                {/* <td>{company.contactNumber}</td>
                 <td>{company.companyEmail}</td>
                 <td>{company.industry}</td>
                 <td>{company.location}</td>
                 <td>{company.description}</td>
                 <td>{company.date}</td>
                 <td>{company.companyStatus}</td>
-                <td>{company.actionDate}</td>
+                <td>{company.actionDate}</td> */}
                 <td>
                   <FaCheckCircle className='approved' style={{ color: 'green', cursor: 'pointer' }} onClick={() => approveCompany(company.companyId, company.companyName)} />
                   <BsXCircle className='icon-button reject' style={{ color: 'blue' }} onClick={() => rejectCompany(company.companyId, company.companyName)} />

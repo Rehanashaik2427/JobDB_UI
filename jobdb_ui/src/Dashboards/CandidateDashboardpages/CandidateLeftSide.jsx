@@ -1,11 +1,9 @@
-import { faBuilding, faFile, faFileLines, faHouse, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBuilding, faFile, faFileLines, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { RxDashboard } from 'react-icons/rx';
 import { Link, useNavigate } from 'react-router-dom';
-
-
 
 function CandidateLeftSide({ user }) {
   const { userName, userId } = user;

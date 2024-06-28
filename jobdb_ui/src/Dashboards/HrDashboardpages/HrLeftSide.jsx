@@ -1,4 +1,4 @@
-import { faAddressCard, faBriefcase, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faBriefcase, faEnvelope, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Container from 'react-bootstrap/Container';
@@ -12,13 +12,13 @@ const HrLeftSide = ({ user }) => {
     const navigate = useNavigate();
 
     const navLinks = [
-        { to: '/hr-dashboard', label: 'Dashboard', icon: <RxDashboard size={'30'} />, iconColor: '#007bff' },
-        { to: '/hr-dashboard/my-jobs', label: 'My Jobs', icon: <FontAwesomeIcon icon={faBriefcase} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
-        { to: '/hr-dashboard/hr-applications', label: 'Applicants', icon: <FontAwesomeIcon icon={faAddressCard} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
-        { to: '/hr-dashboard/posted-jobs', label: 'All Jobs', icon: <FontAwesomeIcon icon={faBriefcase} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
-        { to: '/hr-dashboard/people', label: 'People', icon: <FontAwesomeIcon icon={faUsers} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
-        { to: '/hr-dashboard/profile', label: 'Profile', icon: <FontAwesomeIcon icon={faUser} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
-        { to: '/contact', label: 'Contact us' }
+        { to: '/hr-dashboard', label: 'Dashboard', icon: <RxDashboard size={30} /> },
+        { to: '/hr-dashboard/my-jobs', label: 'My Jobs', icon: <FontAwesomeIcon icon={faBriefcase} style={{ fontSize: '1.7rem' }} /> },
+        { to: '/hr-dashboard/hr-applications', label: 'Applicants', icon: <FontAwesomeIcon icon={faAddressCard} style={{ fontSize: '1.7rem' }} /> },
+        { to: '/hr-dashboard/posted-jobs', label: 'All Jobs', icon: <FontAwesomeIcon icon={faBriefcase} style={{ fontSize: '1.7rem' }} /> },
+        { to: '/hr-dashboard/people', label: 'People', icon: <FontAwesomeIcon icon={faUsers} style={{ fontSize: '1.7rem' }} /> },
+        { to: '/hr-dashboard/profile', label: 'Profile', icon: <FontAwesomeIcon icon={faUser} style={{ fontSize: '1.7rem' }} /> },
+        { to: '/contact', label: 'Contact', icon: <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: '1.7rem' }} /> }
     ];
 
     return (
@@ -35,7 +35,7 @@ const HrLeftSide = ({ user }) => {
                 <Navbar.Text>
                     <h2 style={{ color: 'black' }}>{userName}</h2>
                 </Navbar.Text>
-                <div className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
+                <div className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>             
                     <Nav className="flex-column full-height align-items-start">
                         {navLinks.map((link, index) => (
                             <React.Fragment key={index}>
@@ -58,7 +58,8 @@ const HrLeftSide = ({ user }) => {
                                         e.currentTarget.style.color = 'black';
                                     }}
                                 >
-                                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                                    
+                                    <div style={{ display: 'flex', alignItems: 'center' ,flexDirection: 'column' }}>
                                         {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
                                         {link.label}
                                     </div>

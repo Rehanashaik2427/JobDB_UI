@@ -177,49 +177,51 @@ const MyJobs = () => {
           <div className='job-list'>
             {jobs.length > 0 && (
               <div><div>
-                <Table hover className='text-center'>
-                  <thead className="table-light">
-                    <tr>
-                      <th scope="col" onClick={() => handleSort('jobTitle')}>
-                        Job Title {sortedColumn === 'jobTitle' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'jobTitle' && sortOrder === 'desc' && '▼'}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'jobType' && sortOrder === 'desc' && '▼'}</th>
-                      <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'postingDate' && sortOrder === 'desc' && '▼'}</th>
-                      <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'skills' && sortOrder === 'desc' && '▼'}</th>
-                      <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'numberOfPosition' && sortOrder === 'desc' && '▼'}</th>
-                      <th scope="col" onClick={() => handleSort('salary')}>Salary{sortedColumn === 'salary' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'salary' && sortOrder === 'desc' && '▼'}</th>
+               
+              <Table hover className='text-center'>
+                <thead className="table-light">
+                  <tr>
+                    <th scope="col" onClick={() => handleSort('jobTitle')}>
+                      Job Title {sortedColumn === 'jobTitle' && sortOrder === 'asc' && '▲'}
+                      {sortedColumn === 'jobTitle' && sortOrder === 'desc' && '▼'}
+                    </th>
+                    <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && sortOrder === 'asc' && '▲'}
+                      {sortedColumn === 'jobType' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && sortOrder === 'asc' && '▲'}
+                      {sortedColumn === 'postingDate' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && sortOrder === 'asc' && '▲'}
+                      {sortedColumn === 'skills' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && sortOrder === 'asc' && '▲'}
+                      {sortedColumn === 'numberOfPosition' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('salary')}>Salary{sortedColumn === 'salary' && sortOrder === 'asc' && '▲'}
+                      {sortedColumn === 'salary' && sortOrder === 'desc' && '▼'}</th>
 
-                      <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'applicationDeadline' && sortOrder === 'desc' && '▼'}</th>
+                    <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && sortOrder === 'asc' && '▲'}
+                      {sortedColumn === 'applicationDeadline' && sortOrder === 'desc' && '▼'}</th>
 
-                      <th scope="col">Job Description</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* {currentJobs.map(job => ( */}
-                    {jobs.map(job => (
-                      job.jobId && (
-                        <tr key={job.id}>
-                          <td>{job.jobTitle}</td>
-                          <td>{job.jobType}</td>
-                          <td>{job.postingDate}</td>
-                          <td>{job.skills}</td>
-                          <td>{job.numberOfPosition}</td>
-                          <td>{job.salary}</td>
-                          <td>{job.applicationDeadline}</td>
-                          <td>
-                            <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                              <Button variant="secondary" className='description btn-rounded' >Description</Button>
-                            </OverlayTrigger>
-                          </td>
-                          <td>
+                    <th scope="col">Job Description</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* {currentJobs.map(job => ( */}
+                  {jobs.map(job => (
+                    job.jobId && (
+                      <tr key={job.id}>
+                        <td>{job.jobTitle}</td>
+                        <td>{job.jobType}</td>
+                        <td>{job.postingDate}</td>
+                        <td>{job.skills}</td>
+                        <td>{job.numberOfPosition}</td>
+                        <td>{job.salary}</td>
+                        <td>{job.applicationDeadline}</td>
+                        <td>
+                          <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                            <Button variant="secondary" className='description btn-rounded' >Description</Button>
+                          </OverlayTrigger>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } })}>
                               <MdEdit
                                 size={18}
@@ -247,14 +249,15 @@ const MyJobs = () => {
                             }}>
                               <MdDelete className="text-danger" size={18} />
                             </span>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  ))}
+                </tbody>
+              </Table>
 
-                          </td>
-                        </tr>
-                      )
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
+              </div>     
                 <div className="pagination-container">
                   <ReactPaginate
                     previousLabel={<i className="i-Previous" />}

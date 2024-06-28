@@ -15,6 +15,7 @@ const AdminDashboard = () => {
   const [hrCount, setHrCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
+  
   const navigate = useNavigate();
 
   const fetchCounts = async () => {
@@ -58,37 +59,29 @@ const AdminDashboard = () => {
     }
   };
 
- 
- const connectWebSocket = () => {
-  const socket = new SockJS('http://localhost:8082/ws');
-  const stompClient = Stomp.over(socket);
+  const connectWebSocket = () => {
+    const socket = new SockJS('http://localhost:8082/ws');
+    const stompClient = Stomp.over(socket);
 
-  stompClient.connect({}, () => {
-    stompClient.subscribe('/topic/notifications', (message) => {
-      const notification = message.body;
+    stompClient.connect({}, () => {
+      stompClient.subscribe('/topic/notifications', (message) => {
+        const notification = message.body;
 
-      // Use a Set to track unique notifications
-      setNotifications((prevNotifications) => {
-        const updatedNotifications = new Set([...prevNotifications, notification]);
-        return Array.from(updatedNotifications); // Convert Set back to an array
+        // Use a Set to track unique notifications
+        setNotifications((prevNotifications) => {
+          const updatedNotifications = new Set([...prevNotifications, notification]);
+          return Array.from(updatedNotifications); // Convert Set back to an array
+        });
       });
     });
-  });
 
-  return () => {
-    if (stompClient) {
-      stompClient.disconnect();
-    }
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
   };
-};
 
-const toogleHr = () =>{
-
-} 
-  const toogleCompany = () =>{
-
-  } 
-  
   const toggleFullScreen = () => {
     if (document.fullscreenEnabled) {
       if (!document.fullscreenElement) document.documentElement.requestFullscreen();
@@ -99,6 +92,11 @@ const toogleHr = () =>{
   const toggleSettings = () => {
     navigate('/');
   };
+
+  
+
+
+  
 
   return (
     <div className='dashboard-container'>
@@ -112,7 +110,7 @@ const toogleHr = () =>{
             datafullscreen="true"
             onClick={toggleFullScreen}
             className="i-Full-Screen header-icon d-none d-lg-inline-block"
-            style={{ fontSize: '20px' ,marginRight:'12px'}}
+            style={{ fontSize: '20px', marginRight: '12px' }}
           />
 
           <Dropdown className="ml-2">
@@ -128,6 +126,7 @@ const toogleHr = () =>{
                 {hrCount} new HRs
               </Dropdown.Item>
               <Dropdown.Item as={Link} to="/admin-dashboard/company-validation"> {companyCount} new companies</Dropdown.Item>
+
               
             </Dropdown.Menu>
           </Dropdown>

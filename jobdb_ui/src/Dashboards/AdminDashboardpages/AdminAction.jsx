@@ -112,7 +112,6 @@ const AdminAction = () => {
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -121,7 +120,6 @@ const AdminAction = () => {
               <tr key={hr.userId}>
                 <td>{hr.userName} ({hr.companyName} HR)</td>
                 <td>{hr.userEmail}</td>
-                <td>{hr.userStatus}</td>
                 <td>
                   <Button key='success' variant='success' className="m-1 text-capitalize" onClick={() => approveRequest(hr.userEmail, hr.userId)}>
                     Approve

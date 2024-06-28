@@ -24,7 +24,7 @@ const Payment = () => {
   };
 
   return (
-    <div className='candidate-dashboard-container'>
+    <div className='dashboard-container'>
       <div className='left-side'>
         <CandidateLeftSide user={user} />
       </div>
