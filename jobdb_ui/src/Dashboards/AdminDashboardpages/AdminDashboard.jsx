@@ -13,11 +13,14 @@ const AdminDashboard = () => {
   const [validatedCompaniesCount, setValidatedCompaniesCount] = useState(0);
   const [validatedHrCount, setValidatedHrCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
+  const [hrCount, setHrCount] = useState(0);
+  const [companyCount, setCompanyCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchValidatedCompaniesCount();
     fetchValidatedHrCount();
+    fetchCounts();
     connectWebSocket();
   }, []);
 
@@ -39,37 +42,29 @@ const AdminDashboard = () => {
     }
   };
 
- 
- const connectWebSocket = () => {
-  const socket = new SockJS('http://localhost:8082/ws');
-  const stompClient = Stomp.over(socket);
+  const connectWebSocket = () => {
+    const socket = new SockJS('http://localhost:8082/ws');
+    const stompClient = Stomp.over(socket);
 
-  stompClient.connect({}, () => {
-    stompClient.subscribe('/topic/notifications', (message) => {
-      const notification = message.body;
+    stompClient.connect({}, () => {
+      stompClient.subscribe('/topic/notifications', (message) => {
+        const notification = message.body;
 
-      // Use a Set to track unique notifications
-      setNotifications((prevNotifications) => {
-        const updatedNotifications = new Set([...prevNotifications, notification]);
-        return Array.from(updatedNotifications); // Convert Set back to an array
+        // Use a Set to track unique notifications
+        setNotifications((prevNotifications) => {
+          const updatedNotifications = new Set([...prevNotifications, notification]);
+          return Array.from(updatedNotifications); // Convert Set back to an array
+        });
       });
     });
-  });
 
-  return () => {
-    if (stompClient) {
-      stompClient.disconnect();
-    }
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
   };
-};
 
-const toogleHr = () =>{
-
-} 
-  const toogleCompany = () =>{
-
-  } 
-  
   const toggleFullScreen = () => {
     if (document.fullscreenEnabled) {
       if (!document.fullscreenElement) document.documentElement.requestFullscreen();
@@ -80,6 +75,21 @@ const toogleHr = () =>{
   const toggleSettings = () => {
     navigate('/');
   };
+
+  const fetchCounts = async () => {
+    try {
+      const hrResponse = await axios.get('http://localhost:8082/api/jobbox/countofHrs');
+      setHrCount(hrResponse.data); // Update hrCount state with fetched HR count
+
+      const companiesResponse = await axios.get('http://localhost:8082/api/jobbox/countOfCompanies');
+      setCompanyCount(companiesResponse.data); // Update companyCount state with fetched company count
+    } catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  };
+
+  const totalNotifications = hrCount + companyCount;
+  
 
   return (
     <div className='dashboard-container'>
@@ -93,22 +103,23 @@ const toogleHr = () =>{
             datafullscreen="true"
             onClick={toggleFullScreen}
             className="i-Full-Screen header-icon d-none d-lg-inline-block"
-            style={{ fontSize: '20px' ,marginRight:'12px'}}
+            style={{ fontSize: '20px', marginRight: '12px' }}
           />
 
-          <Dropdown  className="ml-2">
+          <Dropdown className="ml-2">
             <Dropdown.Toggle
               as="div"
               id="dropdownNotification"
               className="badge-top-container toggle-hidden ml-2">
-              <span className="badge bg-primary cursor-pointer">{notifications.length}</span>
-              <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }}/>
+              <span className="badge bg-primary cursor-pointer">{totalNotifications}</span>
+              <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/admin-dashboard/admin-action" onClick={toogleHr}>count of hr</Dropdown.Item>
-                  
-                  <Dropdown.Item as={Link} to="/company-validation" onClick={toogleCompany}>count of company</Dropdown.Item>
-
+              <Dropdown.Item as={Link} to="/admin-dashboard/admin-action">
+                {hrCount} new HRs
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/admin-dashboard/company-validation"> {companyCount} company</Dropdown.Item>
+              
             </Dropdown.Menu>
           </Dropdown>
 

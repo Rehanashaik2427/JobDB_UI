@@ -1,8 +1,8 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faEnvelope, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import HrLeftSide from './HrLeftSide';
 
@@ -86,10 +86,12 @@ const HrDashboard = () => {
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={3} className="leftside full-height">
+        <Col md={2} className="leftside full-height">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-        <Col md={9} className="rightside">
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
           <Row className="d-flex justify-content-end">
             <Col md={1}>
               <div className="user col px-3 header-part-right" style={{ marginTop: '10px' }}>
@@ -110,25 +112,61 @@ const HrDashboard = () => {
             </Col>
           </Row>
           <Container className="my-dashboard-container">
-            <Row className="dashboard d-flex mt-4">
-              <h3 className='status-info text-center'>Company status</h3>
-              <Col xs={3} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '200px', maxWidth: '200px', marginLeft: '20px' }}>
-                <h4>Jobs</h4>
-                <Link to="/hr-dashboard/posted-jobs" onClick={(e) => { e.preventDefault(); navigate('/hr-dashboard/posted-jobs', { state: { userName: userName, userEmail: userEmail } }) }} className="nav-link">
-                  <h4> {countOfJobs} posted by us</h4>
-                </Link>
-              </Col>
-              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '200px', maxWidth: '200px' }}>
-                <h4>Total Applicants  {countOfApplications}</h4>
-              </Col>
-              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '200px', maxWidth: '200px' }}>
-                <h4>Shortlisted Candidates  {countOfShortlistedCandiCompany}</h4>
-              </Col>
-              <Col xs={6} md={4} className=" d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '200px', maxWidth: '200px' }}>
-                <Link to="/hr-dashboard/dream-applications" onClick={(e) => { e.preventDefault(); navigate('/hr-dashboard/dream-applications', { state: { userName: userName, userEmail: userEmail } }) }} className="nav-link">
-                  <h4>Dream Applications</h4>
-                </Link>
-              </Col>
+            <Row className="dashboard d-flex mt-4 justify-content-center">
+              <h3 className='status-info text-center w-100 bg-light'>Company status</h3>
+
+              <Card className="mb-4" style={{ maxWidth: '200px', margin: '10px' }}>
+                <Card.Body className="pb-0">
+                  <Col className="d-flex flex-column justify-content-center align-items-center">
+                    <h4>
+                      <FontAwesomeIcon icon={faBriefcase} className="me-2 text-primary mb-0 text-24 fw-semibold" />
+                      Total Jobs
+                    </h4>
+                    <Link to="/hr-dashboard/posted-jobs" onClick={(e) => { e.preventDefault(); navigate('/hr-dashboard/posted-jobs', { state: { userName: userName, userEmail: userEmail } }) }} className="nav-link">
+                      <Card.Title className="mb-3 "><h4 className='text-primary'>{countOfJobs}</h4></Card.Title>
+                    </Link>
+                  </Col>
+                </Card.Body>
+              </Card>
+
+              <Card className="mb-4" style={{ maxWidth: '200px', margin: '10px' }}>
+                <Card.Body className="pb-0">
+                  <Col className="d-flex flex-column justify-content-center align-items-center">
+                    <h4>
+                      <FontAwesomeIcon icon={faUser} className="me-2 text-primary mb-0 text-24 fw-semibold" />
+                      Applicants
+                    </h4>
+                    <Card.Title className="mb-3 "><h4 className='text-primary'>{countOfApplications}</h4></Card.Title>
+                  </Col>
+                </Card.Body>
+              </Card>
+
+              <Card className="mb-4" style={{ maxWidth: '200px', margin: '10px' }}>
+                <Card.Body className="pb-0">
+                  <Col className="d-flex flex-column justify-content-center align-items-center">
+                    <h4>
+                      <FontAwesomeIcon icon={faStar} className="me-2 text-primary mb-0 text-24 fw-semibold" />
+                      Shortlisted Candidates
+                    </h4>
+                    <Card.Title className="mb-3 "><h4 className='text-primary'>{countOfShortlistedCandiCompany}</h4></Card.Title>
+                  </Col>
+                </Card.Body>
+              </Card>
+
+              <Card className="mb-4" style={{ maxWidth: '200px', margin: '10px' }}>
+                <Card.Body className="pb-0">
+                  <Col className="d-flex flex-column justify-content-center align-items-center">
+                    <h4>
+                      <FontAwesomeIcon icon={faEnvelope} className="me-2 text-primary mb-0 text-24 fw-semibold" />
+                      Candidate
+                    </h4>
+                    <Link to="/hr-dashboard/dream-applications" onClick={(e) => { e.preventDefault(); navigate('/hr-dashboard/dream-applications', { state: { userName: userName, userEmail: userEmail } }) }} className="nav-link">
+                    <Card.Title className="mb-3 "><h4 className='text-primary'>Dream Applications</h4></Card.Title>
+                    </Link>
+                  </Col>
+                </Card.Body>
+              </Card>
+
             </Row>
           </Container>
         </Col>

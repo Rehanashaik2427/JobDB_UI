@@ -105,7 +105,8 @@ const CandiRegister = () => {
                         </Col>
                         <Col md={6}>
                             <div className="p-4">
-                                <h1 className="mb-3 text-18">Candidate Registration</h1>
+                                <h1 className="mb-3 text-18">Registration Form</h1>
+                                <p>(<span style={{color:'red'}}>*</span> indicates mandatory fields)</p>
                                 <Formik
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
@@ -116,7 +117,12 @@ const CandiRegister = () => {
                                             <TextField
                                                 type="text"
                                                 name="userName"
-                                                label="Your name"
+                                                label={
+                                                    <>
+                                                      Your name <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                  }
+                                                  required
                                                 onBlur={handleBlur}
                                                 value={values.userName}
                                                 onChange={handleChange}
@@ -126,7 +132,12 @@ const CandiRegister = () => {
                                             <TextField
                                                 type="email"
                                                 name="userEmail"
-                                                label="Email address"
+                                                label={
+                                                    <>
+                                                      Email <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                  }
+                                                  required   
                                                 onBlur={handleBlur}
                                                 value={values.userEmail}
                                                 onChange={handleChange}
@@ -146,23 +157,16 @@ const CandiRegister = () => {
                                                 required
                                                 fullWidth
                                             />
-                                            <TextField
-                                                type="date"
-                                                id="appliedDate"
-                                                name="appliedDate"
-                                                label="Date"
-                                                value={values.appliedDate}
-                                                onChange={handleChange}
-                                                helperText={errors.appliedDate}
-                                                error={errors.appliedDate && touched.appliedDate}
-                                                required
-                                                fullWidth
-                                            />
-
+                                          
                                             <TextField
                                                 type="password"
                                                 name="password"
-                                                label="Password"
+                                                label={
+                                                    <>
+                                                      Password <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                  }
+                                                  required
                                                 onBlur={handleBlur}
                                                 value={values.password}
                                                 onChange={handleChange}
@@ -174,12 +178,16 @@ const CandiRegister = () => {
                                                 type="password"
                                                 id="confirmPassword"
                                                 name="confirmPassword"
-                                                label="Confirm Password"
+                                                label={
+                                                    <>
+                                                        Confirm password <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                  }
+                                                  required    
                                                 value={values.confirmPassword}
                                                 onChange={handleChange}
                                                 helperText={errors.confirmPassword}
                                                 error={errors.confirmPassword && touched.confirmPassword}
-                                                required
                                                 fullWidth
                                             />
 

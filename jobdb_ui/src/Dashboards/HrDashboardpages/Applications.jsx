@@ -103,7 +103,7 @@ const Applications = () => {
 
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={3} className="leftside">
+        <Col md={2} className="leftside">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 

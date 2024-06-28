@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+
 const AdminleftSide = () => {
   const navigate = useNavigate();
   return (
-    <div className='leftside'>
+    <div className='leftside' >
       <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
       <div className="admin-details">
           <h2>AdminName</h2>

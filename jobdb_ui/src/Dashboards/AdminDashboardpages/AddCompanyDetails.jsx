@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
-import ReactPaginate from 'react-paginate';
 
 const AddCompanyDetails = () => {
 
@@ -20,21 +20,15 @@ const AddCompanyDetails = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
-
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortOrder, setSortOrder] = useState('asc');
+  const handleSort = (column) => {
+    let order = 'asc';
+    if (sortedColumn === column) {
+      order = sortOrder === 'asc' ? 'desc' : 'asc';
     }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
+    setSortedColumn(column);
+    setSortOrder(order);
   };
 
 
@@ -45,12 +39,7 @@ const AddCompanyDetails = () => {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/displayCompanies?page=${page}&size=${pageSize}`);
-      // if (!response.ok) {
-      //   throw new Error('Failed to fetch company data');
-      // }
-
-
+      const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
       setCompanyData(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -75,6 +64,20 @@ const AddCompanyDetails = () => {
           <thead className="table-light">
             <tr>
               <th>Company Name</th>
+              <th>Contact Number</th>
+              <th>Company Email</th>
+              <th>Industry</th>
+              <th onClick={() => handleSort('location')}>
+                Location {sortedColumn === 'location' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
+              <th>Description</th>
+              <th onClick={() => handleSort('date')}>
+                Submit Date {sortedColumn === 'date' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
+              <th>Status</th>
+              <th onClick={() => handleSort('actionDate')}>
+                Action Date {sortedColumn === 'actionDate' && (sortOrder === 'asc' ? '▲' : '▼')}
+              </th>
               <th>Add Detail</th>
             </tr>
           </thead>
@@ -82,6 +85,14 @@ const AddCompanyDetails = () => {
             {companyData.map((company) => (
               <tr key={company.companyId}>
                 <td>{company.companyName}</td>
+                <td>{company.contactNumber}</td>
+                <td>{company.jobboxEmail}</td>
+                <td>{company.industry}</td>
+                <td>{company.location}</td>
+                <td>{company.discription}</td>
+                <td>{company.date}</td>
+                <td>{company.companyStatus}</td>
+                <td>{company.actionDate}</td>
                 <td><Link to={{
                   pathname: '/admin-dashboard/companyDetailsByAdmin',
                   state: { companyName: company.companyName }

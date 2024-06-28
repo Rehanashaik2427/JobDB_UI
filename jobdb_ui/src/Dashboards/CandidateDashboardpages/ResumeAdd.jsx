@@ -1,11 +1,11 @@
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ResumeAdd = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -88,7 +88,7 @@ const ResumeAdd = () => {
     navigate('/candidate-dashboard/resume', { state: { userName, userId } }); // Navigate back to previous page
   };
   return (
-    <div className='candidate-dashboard-container'>
+    <div className='dashboard-container'>
       <div className='left-side'>
         <CandidateLeftSide user={user} />
       </div>

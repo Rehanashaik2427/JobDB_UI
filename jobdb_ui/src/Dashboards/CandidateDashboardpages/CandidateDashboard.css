@@ -1,11 +1,11 @@
-.candidate-dashboard-container{
-    display: flex;
-    flex-direction:row;
+.dashboard-container{
+    height: 100%; /* Ensure the column takes full height */
+    overflow: hidden; /* Disable scrolling */
 }
 .left-side{
     height: 100vh;
     width: 300px;
-    background-color: rgb(209, 247, 247);
+    /* background-color: rgb(209, 247, 247); */
 }
 .rightside{
     height: 100vh;
@@ -1007,11 +1007,6 @@ button.com:hover {
 
 .rightside {
   flex: 1; /* Take the remaining space */
-  overflow: auto; /* Enable scrolling for the right side only */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+  height: 100%; /* Ensure the column takes full height */
+  overflow: hidden; /* Disable scrolling */
 }
-
-.rightside::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for webkit browsers */
-}
-

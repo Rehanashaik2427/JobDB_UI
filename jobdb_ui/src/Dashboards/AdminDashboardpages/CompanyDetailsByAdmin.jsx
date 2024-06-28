@@ -46,7 +46,7 @@ const CompanyDetailsByAdmin = () => {
       await axios.put(`${BASE_API_URL}/updateCompanyByName?companyName=${companyName}`, companyDetails);
       alert('Company details updated successfully.');
       navigate({
-        pathname: 'admin-dashboard/company-validation',
+        pathname: '/admin-dashboard/add-company-details',
       });
     } catch (error) {
       console.error('Error updating company details:', error);
