@@ -86,7 +86,7 @@ const HrDashboard = () => {
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={3} className="leftside full-height">
+        <Col md={2} className="leftside full-height">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
         <Col md={9} className="rightside">

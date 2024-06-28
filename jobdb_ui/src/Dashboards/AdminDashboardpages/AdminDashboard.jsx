@@ -1,6 +1,3 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
@@ -8,18 +5,40 @@ import { Link, useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Stomp } from '@stomp/stompjs';
 
 const AdminDashboard = () => {
   const [validatedCompaniesCount, setValidatedCompaniesCount] = useState(0);
   const [validatedHrCount, setValidatedHrCount] = useState(0);
+  const [hrCount, setHrCount] = useState(0);
+  const [companyCount, setCompanyCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchCounts = async () => {
+    try {
+      const hrResponse = await axios.get('http://localhost:8082/api/jobbox/countofHrs');
+      setHrCount(hrResponse.data); // Update hrCount state with fetched HR count
+
+      const companiesResponse = await axios.get('http://localhost:8082/api/jobbox/countOfCompanies');
+      setCompanyCount(companiesResponse.data); // Update companyCount state with fetched company count
+    } catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  };
+
+  const totalNotifications = hrCount + companyCount;
+
+
+ useEffect(() => {
     fetchValidatedCompaniesCount();
     fetchValidatedHrCount();
+    fetchCounts();
     connectWebSocket();
   }, []);
+
 
   const fetchValidatedCompaniesCount = async () => {
     try {
@@ -96,21 +115,23 @@ const toogleHr = () =>{
             style={{ fontSize: '20px' ,marginRight:'12px'}}
           />
 
-          <Dropdown  className="ml-2">
+          <Dropdown className="ml-2">
             <Dropdown.Toggle
               as="div"
               id="dropdownNotification"
               className="badge-top-container toggle-hidden ml-2">
-              <span className="badge bg-primary cursor-pointer">{notifications.length}</span>
-              <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }}/>
+              <span className="badge bg-primary cursor-pointer">{totalNotifications}</span>
+              <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/admin-dashboard/admin-action" onClick={toogleHr}>count of hr</Dropdown.Item>
-                  
-                  <Dropdown.Item as={Link} to="/company-validation" onClick={toogleCompany}>count of company</Dropdown.Item>
-
+              <Dropdown.Item as={Link} to="/admin-dashboard/admin-action">
+                {hrCount} new HRs
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/admin-dashboard/company-validation"> {companyCount} new companies</Dropdown.Item>
+              
             </Dropdown.Menu>
           </Dropdown>
+
 
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">

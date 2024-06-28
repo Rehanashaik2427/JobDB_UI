@@ -93,12 +93,12 @@ const People = () => {
 
     const handlePageClick = (data) => {
         setPage(data.selected);
-      };
+    };
 
     return (
         <Container fluid className="dashboard-container">
             <Row>
-                <Col md={3} className="leftside">
+                <Col md={2} className="leftside">
                     <HrLeftSide user={{ userName, userEmail }} />
                 </Col>
 
@@ -122,56 +122,56 @@ const People = () => {
                     {people.length > 0 && (
                         <div><div>
 
-                    <Table hover className='text-center'>
-                        <thead className="table-light">
-                            <tr>
-                                <th scope="col" onClick={() => handleSort('userId')}>
-                                    HR ID {sortedColumn === 'userId' && (sortOrder === 'asc' ? '▲' : '▼')}
-                                </th>
-                                <th scope="col" onClick={() => handleSort('userName')}>
-                                    HR Name {sortedColumn === 'userName' && (
-                                        sortOrder === 'asc' ? '▲' : '▼'
-                                    )}
-                                </th>
-                                <th scope="col" onClick={() => handleSort('userEmail')}>
-                                    Email {sortedColumn === 'userEmail' && (
-                                        sortOrder === 'asc' ? '▲' : '▼'
-                                    )}
-                                </th>
-                                <th scope="col">Company Name </th>
-                                <th scope="col">PhoneNumber</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {people.map(person => (
-                                <tr key={person.userId}>
-                                    <td>{person.userId}</td>
-                                    <td>{person.userName}</td>
-                                    <td>{person.userEmail}</td>
-                                    <td>{person.companyName}</td>
-                                    <td>{person.phone}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                    </div>
-                    <div className="pagination-container">
-                        <ReactPaginate
-                            previousLabel={<i className="i-Previous" />}
-                            nextLabel={<i className="i-Next1" />}
-                            breakLabel="..."
-                            breakClassName="break-me"
-                            pageCount={totalPages}
-                            marginPagesDisplayed={7}
-                            pageRangeDisplayed={5}
-                            onPageChange={handlePageClick}
-                            activeClassName="active"
-                            containerClassName="pagination"
-                            subContainerClassName="pages pagination"
-                        />
-                    </div>
-                    </div>
-                )}
+                            <Table hover className='text-center'>
+                                <thead className="table-light">
+                                    <tr>
+                                        <th scope="col" onClick={() => handleSort('userId')}>
+                                            HR ID {sortedColumn === 'userId' && (sortOrder === 'asc' ? '▲' : '▼')}
+                                        </th>
+                                        <th scope="col" onClick={() => handleSort('userName')}>
+                                            HR Name {sortedColumn === 'userName' && (
+                                                sortOrder === 'asc' ? '▲' : '▼'
+                                            )}
+                                        </th>
+                                        <th scope="col" onClick={() => handleSort('userEmail')}>
+                                            Email {sortedColumn === 'userEmail' && (
+                                                sortOrder === 'asc' ? '▲' : '▼'
+                                            )}
+                                        </th>
+                                        <th scope="col">Company Name </th>
+                                        <th scope="col">PhoneNumber</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {people.map(person => (
+                                        <tr key={person.userId}>
+                                            <td>{person.userId}</td>
+                                            <td>{person.userName}</td>
+                                            <td>{person.userEmail}</td>
+                                            <td>{person.companyName}</td>
+                                            <td>{person.phone}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </div>
+                            <div className="pagination-container">
+                                <ReactPaginate
+                                    previousLabel={<i className="i-Previous" />}
+                                    nextLabel={<i className="i-Next1" />}
+                                    breakLabel="..."
+                                    breakClassName="break-me"
+                                    pageCount={totalPages}
+                                    marginPagesDisplayed={7}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={handlePageClick}
+                                    activeClassName="active"
+                                    containerClassName="pagination"
+                                    subContainerClassName="pages pagination"
+                                />
+                            </div>
+                        </div>
+                    )}
                 </Col>
             </Row>
         </Container>

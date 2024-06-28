@@ -147,25 +147,25 @@ const CandidatesCompanies = () => {
                   ))}
                 </div>
                 <ReactPaginate
-          previousLabel={<i className="i-Previous" />}
-          nextLabel={<i className="i-Next1" />}
-          breakLabel="..."
-          breakClassName="break-me"
-          pageCount={totalPages}
-          marginPagesDisplayed={1}
-          pageRangeDisplayed={2}
-          onPageChange={handlePageClick}
-          activeClassName="active"
-          containerClassName="pagination"
-          subContainerClassName="pages pagination"
-        />
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
               </>
             ) : (
               <h4 className='text-center'>Company not found .!!</h4>
             )}
           </div>
         </div>
-      
+
       </div>
     </div>
   );

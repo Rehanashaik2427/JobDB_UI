@@ -133,7 +133,7 @@ const MyJobs = () => {
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={3} className="leftside">
+        <Col md={2} className="leftside">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 
@@ -176,100 +176,100 @@ const MyJobs = () => {
 
           <div className='job-list'>
             {jobs.length > 0 && (
-<div><div>
-              <Table hover className='text-center'>
-                <thead className="table-light">
-                  <tr>
-                    <th scope="col" onClick={() => handleSort('jobTitle')}>
-                      Job Title {sortedColumn === 'jobTitle' && sortOrder === 'asc' && '▲'}
-                      {sortedColumn === 'jobTitle' && sortOrder === 'desc' && '▼'}
-                    </th>
-                    <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && sortOrder === 'asc' && '▲'}
-                    {sortedColumn === 'jobType' && sortOrder === 'desc' && '▼'}</th>
-                    <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && sortOrder === 'asc' && '▲'}
-                    {sortedColumn === 'postingDate' && sortOrder === 'desc' && '▼'}</th>
-                    <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && sortOrder === 'asc' && '▲'}
-                    {sortedColumn === 'skills' && sortOrder === 'desc' && '▼'}</th>
-                    <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && sortOrder === 'asc' && '▲'}
-                    {sortedColumn === 'numberOfPosition' && sortOrder === 'desc' && '▼'}</th>
-                    <th scope="col" onClick={() => handleSort('salary')}>Salary{sortedColumn === 'salary' && sortOrder === 'asc' && '▲'}
-                    {sortedColumn === 'salary' && sortOrder === 'desc' && '▼'}</th>
+              <div><div>
+                <Table hover className='text-center'>
+                  <thead className="table-light">
+                    <tr>
+                      <th scope="col" onClick={() => handleSort('jobTitle')}>
+                        Job Title {sortedColumn === 'jobTitle' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'jobTitle' && sortOrder === 'desc' && '▼'}
+                      </th>
+                      <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'jobType' && sortOrder === 'desc' && '▼'}</th>
+                      <th scope="col" onClick={() => handleSort('postingDate')}> PostingDate {sortedColumn === 'postingDate' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'postingDate' && sortOrder === 'desc' && '▼'}</th>
+                      <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'skills' && sortOrder === 'desc' && '▼'}</th>
+                      <th scope="col" onClick={() => handleSort('numberOfPosition')}>No of Position{sortedColumn === 'numberOfPosition' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'numberOfPosition' && sortOrder === 'desc' && '▼'}</th>
+                      <th scope="col" onClick={() => handleSort('salary')}>Salary{sortedColumn === 'salary' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'salary' && sortOrder === 'desc' && '▼'}</th>
 
-                    <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && sortOrder === 'asc' && '▲'}
-                    {sortedColumn === 'applicationDeadline' && sortOrder === 'desc' && '▼'}</th>
+                      <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application DeadLine{sortedColumn === 'applicationDeadline' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'applicationDeadline' && sortOrder === 'desc' && '▼'}</th>
 
-                    <th scope="col">Job Description</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* {currentJobs.map(job => ( */}
-                  {jobs.map(job => (
-                    job.jobId && (
-                      <tr key={job.id}>
-                        <td>{job.jobTitle}</td>
-                        <td>{job.jobType}</td>
-                        <td>{job.postingDate}</td>
-                        <td>{job.skills}</td>
-                        <td>{job.numberOfPosition}</td>
-                        <td>{job.salary}</td>
-                        <td>{job.applicationDeadline}</td>
-                        <td>
-                          <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                            <Button variant="secondary" className='description btn-rounded' >Description</Button>
-                          </OverlayTrigger>
-                        </td>
-                        <td>
-                          <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } })}>
-                          <MdEdit
-                                  size={18}
-                                  className="text-success" />
-                          </span>
-                          <span className='delete cursor-pointer text-danger me-2' onClick={() => {
-                            swal.fire({
-                              title: "Are you sure?",
-                              text: "You won't be able to revert this!",
-                              icon: "warning",
-                              showCancelButton: true,
-                              confirmButtonColor: "#3085d6",
-                              cancelButtonColor: "#d33",
-                              confirmButtonText: "Yes, delete it!"
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                handleDelete(job.jobId);
-                                swal.fire(
-                                  'Deleted!',
-                                  'Your job has been deleted.',
-                                  'success'
-                                )
-                              }
-                            });
-                          }}>
-                            <MdDelete className="text-danger" size={18} />
-                          </span>
+                      <th scope="col">Job Description</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* {currentJobs.map(job => ( */}
+                    {jobs.map(job => (
+                      job.jobId && (
+                        <tr key={job.id}>
+                          <td>{job.jobTitle}</td>
+                          <td>{job.jobType}</td>
+                          <td>{job.postingDate}</td>
+                          <td>{job.skills}</td>
+                          <td>{job.numberOfPosition}</td>
+                          <td>{job.salary}</td>
+                          <td>{job.applicationDeadline}</td>
+                          <td>
+                            <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                              <Button variant="secondary" className='description btn-rounded' >Description</Button>
+                            </OverlayTrigger>
+                          </td>
+                          <td>
+                            <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } })}>
+                              <MdEdit
+                                size={18}
+                                className="text-success" />
+                            </span>
+                            <span className='delete cursor-pointer text-danger me-2' onClick={() => {
+                              swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  handleDelete(job.jobId);
+                                  swal.fire(
+                                    'Deleted!',
+                                    'Your job has been deleted.',
+                                    'success'
+                                  )
+                                }
+                              });
+                            }}>
+                              <MdDelete className="text-danger" size={18} />
+                            </span>
 
-                        </td>
-                      </tr>
-                    )
-                  ))}
-                </tbody>
-              </Table>
+                          </td>
+                        </tr>
+                      )
+                    ))}
+                  </tbody>
+                </Table>
               </div>
-              <div className="pagination-container">
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
-          </div>
+                <div className="pagination-container">
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
               </div>
             )}
 
@@ -281,7 +281,7 @@ const MyJobs = () => {
 
           </div>
 
-        
+
 
 
           <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>

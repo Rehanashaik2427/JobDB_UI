@@ -2,6 +2,7 @@ import { faBuilding, faFile, faFileLines, faHouse, faLayerGroup, faMoneyCheckDol
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
+import { RxDashboard } from 'react-icons/rx';
 import { Link, useNavigate } from 'react-router-dom';
 
 
@@ -10,106 +11,69 @@ function CandidateLeftSide({ user }) {
   const { userName, userId } = user;
   const navigate = useNavigate();
 
-  return (
-    <Navbar expand="lg" className="flex-column align-items-start" style={{ backgroundColor: 'rgb(209, 247, 247)', color: 'black' }}>
-      <Container fluid className="flex-column">
-        <Nav className="flex-column full-height align-items-start" style={{ color: 'black' }}>
-          <Navbar.Brand>
-            <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
-          </Navbar.Brand>
+  const navLinks = [
+    { to: '/candidate-dashboard', label: 'Dashboard', icon: <RxDashboard size={'30'} />, iconColor: '#007bff' },
+    { to: '/candidate-dashboard/candidate-jobs', label: 'Jobs', icon: <FontAwesomeIcon icon={faLayerGroup} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
+    { to: '/candidate-dashboard/candidate-companies', label: 'Companies', icon: <FontAwesomeIcon icon={faBuilding} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
+    { to: '/candidate-dashboard/my-application', label: 'My Application', icon: <FontAwesomeIcon icon={faFileLines} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
+    { to: '/candidate-dashboard/resume', label: 'Resume', icon: <FontAwesomeIcon icon={faFile} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
+    { to: '/candidate-dashboard/profile', label: 'Profile', icon: <FontAwesomeIcon icon={faUser} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
+    { to: '/candidate-dashboard/payment', label: 'Payment', icon: <FontAwesomeIcon icon={faMoneyCheckDollar} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
+    { to: '/contact', label: 'Contact us' }
+];
 
-          <Navbar.Text>
-            <h2>Welcome {userName}</h2>
-          </Navbar.Text>
-
-          <Link
-            to="/candidate-dashboard"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard', { state: { userName, userId } });
-            }}
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            <FontAwesomeIcon icon={faHouse} /> Dashboard
-          </Link>
-
-          <Link
-            to="/candidate-dashboard/candidate-jobs"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/candidate-jobs', { state: { userName, userId } });
-            }}
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            <FontAwesomeIcon icon={faLayerGroup} /> Jobs     
-          </Link>
-
-          <Link
-            to="/candidate-dashboard/candidate-companies"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
-            }}
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            <FontAwesomeIcon icon={faBuilding} /> Companies
-          </Link>
-
-          <Link
-            to="/candidate-dashboard/my-application"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/my-application', { state: { userName, userId } });
-            }}
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            <FontAwesomeIcon icon={faFileLines} /> My Application
-          </Link>
-
-          <Link
-            to="/candidate-dashboard/resume"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/resume', { state: { userName, userId } });
-            }}
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            <FontAwesomeIcon icon={faFile} /> My Resume
-          </Link>
-
-          <Link
-            to="/candidate-dashboard/profile"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/profile', { state: { userName, userId } });
-            }}
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            <FontAwesomeIcon icon={faUser} /> My Profile
-          </Link>
-
-          <Link
-            to="/candidate-dashboard/payment"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/payment', { state: { userName, userId } });
-            }}
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            <FontAwesomeIcon icon={faMoneyCheckDollar} /> Payments/Credits
-          </Link>
-
-          <Link
-            to="/contact"
-            style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-          >
-            Contact us
-          </Link>
-
-        </Nav>
-      </Container>
+return (
+    <Navbar expand="lg" className="flex-column align-items-start" style={{ height: '100vh', backgroundColor: 'white' }}>
+        <Container fluid className="flex-column">
+            <Navbar.Brand>
+                <img
+                    style={{ backgroundColor: 'white' }}
+                    src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png"
+                    alt="jobboxlogo"
+                    className='auth-logo'
+                />
+            </Navbar.Brand>
+            <Navbar.Text>
+                <h2 style={{ color: 'black' }}>{userName}</h2>
+            </Navbar.Text>
+            <div className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
+                <Nav className="flex-column full-height align-items-start">
+                    {navLinks.map((link, index) => (
+                        <React.Fragment key={index}>
+                            <Link
+                                to={{ pathname: link.to, state: { userName, userId } }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    navigate(link.to, { state: { userName, userId } });
+                                }}
+                                className="nav-link d-flex align-items-center"
+                                style={{
+                                    fontSize: '1.1rem',
+                                    transition: 'color 0.3s',
+                                    color: 'black',
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.color = 'purple';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.color = 'black';
+                                }}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                                    {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
+                                    {link.label}
+                                </div>
+                            </Link>
+                            <hr style={{ width: '100%', borderColor: 'black' }} />
+                        </React.Fragment>
+                    ))}
+                </Nav>
+            </div>
+        </Container>
     </Navbar>
-  );
-}
+
+
+);
+};
 
 export default CandidateLeftSide;

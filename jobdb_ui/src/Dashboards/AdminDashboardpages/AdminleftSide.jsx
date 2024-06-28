@@ -11,9 +11,9 @@ const AdminleftSide = () => {
       <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
       <div className="admin-details">
           <h2>AdminName</h2>
-        
+          <div className="nav-box">
         <Link
-          to='/admin-dashboard'
+          to='/admin-dashboard' className='nav-link'
           onClick={(e) => {
             e.preventDefault();
             navigate('/admin-dashboard');
@@ -21,8 +21,10 @@ const AdminleftSide = () => {
           style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}>
           <FontAwesomeIcon icon={faHouse} /> Dashboard
         </Link>
+        </div>
+        <div className="nav-box">
         <Link
-          to='/admin-dashboard/user-validation'
+          to='/admin-dashboard/user-validation' className='nav-link'
           onClick={(e) => {
             e.preventDefault();
             navigate('/admin-dashboard/user-validation');
@@ -30,22 +32,24 @@ const AdminleftSide = () => {
           style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
         >
           <FontAwesomeIcon icon={faUserCheck} /> User Validation
-        </Link>
+        </Link></div>
 
+
+        <div className="nav-box">
         <Link to="/admin-dashboard/company-validation" onClick={(e) => {
           e.preventDefault();
           navigate('/admin-dashboard/company-validation');
         }}
           style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}>
-          <FontAwesomeIcon icon={faBuilding} /> Validation Company</Link>
+          <FontAwesomeIcon icon={faBuilding} /> Validation Company</Link></div>
 
-
+          <div className="nav-box">
         <Link to="/allowing-access" onClick={(e) => {
           e.preventDefault();
           navigate('/admin-dashboard/allowing-access');
         }}
           style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}>
-          <FontAwesomeIcon icon={faAccessibleIcon} /> Acess</Link>
+          <FontAwesomeIcon icon={faAccessibleIcon} /> Acess</Link></div>
 
         <Link to="/admin-dashboard/block-account" onClick={(e) => {
           e.preventDefault();
@@ -84,7 +88,7 @@ const AdminleftSide = () => {
           navigate('/');
         }}
           style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}>
-          <FontAwesomeIcon icon={faHouse} /> Home</Link>
+          <FontAwesomeIcon icon={faHouse} /> Home </Link>
 
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SocialButtons from './sessions/SocialButtons';
@@ -12,6 +12,7 @@ const CandiRegister = () => {
     const [passwordMatchError, setPasswordMatchError] = useState(false);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [passwordCriteriaError, setPasswordCriteriaError] = useState(false);
+    const [updateUserMessage, setUpdateUserMessage] = useState(false);
     const navigate = useNavigate();
 
     const validationSchema = yup.object().shape({
@@ -66,22 +67,40 @@ const CandiRegister = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to register candidate');
-            }
-            setRegistrationSuccess(true);
+                setEmailExistsError(true);
+            }else{
+                setRegistrationSuccess(true);
 
             navigate('/signup/candiSignup/registration-success-msg'); // Ensure this matches the route
+            }
+            
 
         } catch (error) {
             if (error.message.includes("User already exists")) {
-                setEmailExistsError(true);
+           
                 navigate('/signup/candiSignup/registration-success-msg/user-signin',{ state: initialValues.userRole })
             } else {
                 console.error('Error registering candidate:', error);
             }
         }
     };
+const updateUserData=async(values)=>{
+     try{
+        const response = await fetch('http://localhost:8082/api/jobbox/updateUserData', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+    });
+    if(!response.ok)
+        setErrorMessage(true)
+    else
+    navigate('/signup/candiSignup/registration-success-msg');
 
+} catch{
+        alert("data not update")
+    }
+    
+}
     return (
         <div className="auth-layout-wrap">
             <div className="auth-content">
@@ -193,7 +212,11 @@ const CandiRegister = () => {
                                             )}
 
                                             {emailExistsError && (
+                                                <>
                                                 <p className="error-message">Email already exists. Please <Link to='/signup/candiSignup/registration-success-msg/user-signin'>click here for login</Link></p>
+                                                <p>OR</p>
+                                                <p > Update Your Data <Button onClick={() => updateUserData(values)}> Update </Button> </p>
+                                                </>
                                             )}
 
                                             {errorMessage && <div className="text-danger">{errorMessage}</div>}
