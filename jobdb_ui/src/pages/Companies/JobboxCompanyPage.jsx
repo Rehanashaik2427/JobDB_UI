@@ -27,20 +27,10 @@ const JobboxCompanyPage = () => {
 
 
   const fetchCompany = async () => {
-    const response = await axios.get(`${BASE_API_URL}/displayCompanies?page=${page}&size=${pageSize}`);
-
-
+    const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
     setCompanies(response.data.content);
     setTotalPages(response.data.totalPages);
   };
-
-
-
-
-
-
-
-
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -95,35 +85,6 @@ const JobboxCompanyPage = () => {
         </Button>
 
       </Col>
-      {/* <div className="candidate-search ">
-        <Form onSubmit={handleSubmit} className="searchCompany w-45">
-          <Row className=" d-flex  justify-content-space-around">
-
-            <Col xs={4}>
-              <FormControl
-                type='text'
-                name='search'
-
-                placeholder='Search Company'
-
-                value={search}
-                onChange={handleSearchChange}
-              />
-            </Col>
-            {/* <Col xs={1}>
-
-              <Button type="submit" className="search-button w-100">
-                <FontAwesomeIcon icon={faSearch} className='button' style={{ color: 'white' }} />
-
-              </Button>
-            </Col> */}
-          {/* </Row>
-        </Form>
-      </div> */} 
-
-
-
-
 
     <div>
       <div className="d-flex justify-content-end align-items-center mb-3 mt-12">

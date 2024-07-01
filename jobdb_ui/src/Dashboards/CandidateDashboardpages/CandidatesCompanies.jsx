@@ -6,8 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Dropdown } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
-import swal from 'sweetalert2'; // Import SweetAlert2
+import swal from 'sweetalert2';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 
@@ -23,8 +22,6 @@ const CandidatesCompanies = () => {
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
 
-
-
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
@@ -33,8 +30,9 @@ const CandidatesCompanies = () => {
     event.preventDefault();
     fetchCompanyBySearch();
   };
+
   const fetchCompany = async () => {
-    const response = await axios.get(`${BASE_API_URL}/displayCompanies`, { params: { page: page, size: pageSize } });
+    const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
     setCompanies(response.data.content);
     setTotalPages(response.data.totalPages);
   };
@@ -42,7 +40,6 @@ const CandidatesCompanies = () => {
   const fetchCompanyBySearch = async () => {
     try {
       const response = await axios.get(`${BASE_API_URL}/searchCompany`, { params: { search: search, page: page, size: pageSize } });
-
       if (response.data.content.length === 0) {
         swal.fire({
           icon: "error",
@@ -53,7 +50,7 @@ const CandidatesCompanies = () => {
       setCompanies(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.log("No data found: " + error);
+      console.log("Error searching companies:", error);
     }
   };
 
@@ -65,24 +62,17 @@ const CandidatesCompanies = () => {
     }
   }, [search, page, pageSize]);
 
-
-
-
-
   const toggleSettings = () => {
     navigate('/');
   };
 
   const handleClick = (companyId) => {
-    navigate("/candidate-dashboard/companyPage", { state: { companyId: companyId, userName: userName, userId: userId } })
+    navigate("/candidate-dashboard/companyPage", { state: { companyId: companyId, userName: userName, userId: userId } });
   };
 
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
-
-
 
   return (
     <div className='dashboard-container'>
@@ -94,6 +84,7 @@ const CandidatesCompanies = () => {
           <div className="search-bar">
             <input
               style={{ borderRadius: '6px', height: '35px' }}
+
               type="text"
               name="search"
               placeholder="Search"
@@ -158,11 +149,11 @@ const CandidatesCompanies = () => {
                 </div>
               </>
             )}
+         </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+        </div>
+        );
 };
 
-export default CandidatesCompanies;
+        export default CandidatesCompanies;

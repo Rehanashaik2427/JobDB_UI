@@ -18,11 +18,21 @@ const CandiRegister = () => {
     const [enterOtpValue, setEnterOtpValue] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpError, setOtpError] = useState(false);
+    const [otp, setOtp] = useState('');
+    const [enteredOtp, setEnteredOtp] = useState('');
+    const [isOtpVerified, setIsOtpVerified] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+    const [updateUserMessage, setUpdateUserMessage] = useState(false);
     const navigate = useNavigate();
 
+    // Validation schema for Formik
     const validationSchema = yup.object().shape({
         userName: yup.string().required("Name is required"),
         userEmail: yup.string().email("Invalid email").required("Email is required"),
+        userEmail: yup.string().email("Invalid email").required("Email is required"),   
         password: yup
             .string()
             .min(8, "Password must be 8 characters long")
@@ -34,6 +44,7 @@ const CandiRegister = () => {
         agreeToEmailValidation: yup.bool().oneOf([true], "You must agree to validate your email"),
     });
 
+    // Function to validate password criteria
     const validatePassword = (values) => {
         const { password, confirmPassword } = values;
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,12}$/;
@@ -47,6 +58,7 @@ const CandiRegister = () => {
         return true;
     };
 
+    // Initial form values
     const initialValues = {
         userName: "",
         userEmail: "",
@@ -58,6 +70,7 @@ const CandiRegister = () => {
         agreeToEmailValidation: false,
     };
 
+    // Handle form submission
     const handleSubmit = async (values, { setSubmitting }) => {
         if (!validatePassword(values)) {
             setSubmitting(false);
@@ -68,6 +81,32 @@ const CandiRegister = () => {
             const response = await axios.post('http://localhost:8082/api/jobbox/saveUser', values);
 
             if (!response.data || response.data === "undefined" || response.data === "") {
+         
+                setEmailExistsError(true);
+                setSubmitting(false);
+                return;
+            }
+
+
+            setRegistrationSuccess(true);
+            navigate('/signup/candiSignup/registration-success-msg');
+        } catch (error) {
+            console.error('Error registering candidate:', error);
+        }
+    };
+
+
+
+    // Handle OTP generation
+    const handleGenerateOTP = async (values) => {
+        try {
+            const otpResponse = await fetch(`http://localhost:8082/api/jobbox/sendOTP?userEmail=${values.userEmail}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (!otpResponse.ok) {
+                throw new Error('Failed to send OTP');
                 setEmailExistsError(true);
                 setSubmitting(false);
                 return;
@@ -76,6 +115,7 @@ const CandiRegister = () => {
             setRegistrationSuccess(true);
             navigate('/signup/candiSignup/registration-success-msg');
 
+        
         } catch (error) {
             console.error('Error registering candidate:', error);
             setSubmitting(false);
@@ -115,6 +155,21 @@ const CandiRegister = () => {
         } else {
             setOtpVerified(false);
             setErrorMessage('Invalid OTP. Please try again.');
+            console.error('Error generating OTP:', error);
+            setErrorMessage('Email already exists please login into your account');
+        }
+    };
+
+    // Handle OTP verification
+    const handleVerifyOTP = () => {
+        if (otp == enteredOtp) {
+            setOtpError(false);
+            setIsOtpVerified(true); // Set OTP verification status to true if OTP matches
+            setShowSuccessMessage(true);
+            setOtpSent(false); // Remove OTP verification section
+        } else {
+            setOtpError(true);
+            setIsOtpVerified(false); // Set OTP verification status to false if OTP does not match
         }
     };
 
@@ -123,6 +178,7 @@ const CandiRegister = () => {
             <div className="auth-content">
                 <Card className="o-hidden">
                     <Row>
+                        {/* Left Section */}
                         <Col md={6} className="text-center auth-cover">
                             <div className="ps-3 auth-right">
                                 <div className="auth-logo text-center mt-4">
@@ -138,11 +194,13 @@ const CandiRegister = () => {
                                 </div>
                             </div>
                         </Col>
+                        {/* Right Section */}
                         <Col md={6}>
                             <div className="p-4">
                                 <h1 className="mb-3 text-18">Registration Form</h1>
                                 <p>(<span style={{ color: 'red' }}>*</span> indicates mandatory fields)</p>
 
+                                {/* Formik form */}
                                 <Formik
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
@@ -150,6 +208,7 @@ const CandiRegister = () => {
                                 >
                                     {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
                                         <form onSubmit={handleSubmit}>
+                                            {/* Text fields */}
                                             <TextField
                                                 type="text"
                                                 name="userName"
@@ -158,6 +217,7 @@ const CandiRegister = () => {
                                                         Your name <span style={{ color: 'red' }}>*</span>
                                                     </>
                                                 }
+                                            
                                                 required
                                                 onBlur={handleBlur}
                                                 value={values.userName}
@@ -181,10 +241,8 @@ const CandiRegister = () => {
                                                 helperText={errors.userEmail}
                                                 error={errors.userEmail && touched.userEmail}
                                             />
-
                                             <TextField
                                                 type="tel"
-                                                id="phone"
                                                 name="phone"
                                                 label="Phone Number"
                                                 value={values.phone}
@@ -193,6 +251,7 @@ const CandiRegister = () => {
                                                 error={errors.phone && touched.phone}
                                                 fullWidth
                                             />
+                                
 
                                             <TextField
                                                 type="password"
@@ -209,7 +268,6 @@ const CandiRegister = () => {
                                                 helperText={errors.password}
                                                 error={errors.password && touched.password}
                                             />
-
                                             <TextField
                                                 type="password"
                                                 name="confirmPassword" // Corrected field name here
@@ -246,14 +304,14 @@ const CandiRegister = () => {
                                                 )}
                                             </div>
 
+                                       
+                                            {/* Error messages */}
                                             {passwordMatchError && (
                                                 <p className="error-message">Password and confirm password do not match</p>
                                             )}
-
                                             {passwordCriteriaError && (
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
-
                                             {emailExistsError && (
                                                 <div>
                                                     <p className="error-message">
@@ -273,9 +331,41 @@ const CandiRegister = () => {
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
                                             </button>
+=======
+                                            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+                                            {/* Buttons */}
+                                            <div className="d-flex justify-content-between align-items-center mt-4">
+                                                {!otpSent ? (
+                                                    <button
+                                                        className="btn btn-primary"
+                                                        type="button"
+                                                        onClick={() => handleGenerateOTP(values)}
+                                                        disabled={isSubmitting}
+                                                    >
+                                                        Generate OTP
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        className="btn btn-primary"
+                                                        type="button"
+                                                        onClick={handleVerifyOTP}
+                                                        disabled={isSubmitting}
+                                                    >
+                                                        Verify OTP
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className="btn btn-success"
+                                                    type="submit"
+                                                    disabled={isSubmitting || !isOtpVerified}
+                                                >
+                                                    Register
+                                                </button>
+                                            </div>
                                         </form>
                                     )}
                                 </Formik>
+
                             </div>
                         </Col>
                     </Row>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import SocialButtons from './sessions/SocialButtons';
 
@@ -108,38 +108,75 @@ const ForgetPassword = () => {
                                         <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                     )}
                                     {stage === 'email' && (
-                                        <form onSubmit={handleEmailSubmit}>
-                                            <label htmlFor="email">Enter your email:</label>
-                                            <input type="email" id="email" value={userEmail} onChange={(e) => setEmail(e.target.value)} required />
-                                            <br /><br />
-                                            <button type="submit">Submit</button>
-                                        </form>
+                                        <Form onSubmit={handleEmailSubmit}>
+                                            <Form.Group className="mb-3" controlId="email">
+                                                <Form.Label>Enter your email:</Form.Label>
+                                                <Form.Control
+                                                    type="email"
+                                                    value={userEmail}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    required
+                                                />
+                                            </Form.Group>
+
+                                            <Button variant="primary" type="submit">
+                                                Submit
+                                            </Button>
+                                        </Form>
                                     )}
 
                                     {stage === 'otp' && (
-                                        <form onSubmit={handleOtpSubmit}>
-                                            <label htmlFor="otp">Enter OTP:</label>
-                                            <input type="number" id="otp" value={otpEnter} onChange={(e) => setOtpEnter(e.target.value)} required />
-                                            <br /><br />
-                                            <button type="submit">Submit</button>
-                                            {errorMessage && <div className="error-message">{errorMessage}</div>}
-                                        </form>
+                                        <Form onSubmit={handleOtpSubmit}>
+                                            <Form.Group className="mb-3" controlId="otp">
+                                                <Form.Label>Enter OTP:</Form.Label>
+                                                <Form.Control
+                                                    type="number"
+                                                    value={otpEnter}
+                                                    onChange={(e) => setOtpEnter(e.target.value)}
+                                                    required
+                                                />
+                                            </Form.Group>
+
+                                            <Button variant="primary" type="submit">
+                                                Submit
+                                            </Button>
+
+                                            {errorMessage && <div className="error-message mt-2">{errorMessage}</div>}
+                                        </Form>
                                     )}
 
                                     {stage === 'resetPassword' && (
-                                        <form onSubmit={handlePasswordReset}>
-                                            <label htmlFor="newPassword">New Password:</label>
-                                            <input type="password" id="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                                            <br /><br />
-                                            <label htmlFor="confirmPassword">Confirm Password:</label>
-                                            <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                                            <br /><br />
-                                            <button type="submit">Reset Password</button>
-                                            <br /><br />
-                                            {successMessage && <div className="success-message">{successMessage}
-                                                <Link to='/signup/candiSignup/registration-success-msg/user-signin'>login</Link>
-                                            </div>}
-                                        </form>
+                                        <Form onSubmit={handlePasswordReset}>
+                                            <Form.Group className="mb-3" controlId="newPassword">
+                                                <Form.Label>New Password:</Form.Label>
+                                                <Form.Control
+                                                    type="password"
+                                                    value={newPassword}
+                                                    onChange={(e) => setNewPassword(e.target.value)}
+                                                    required
+                                                />
+                                            </Form.Group>
+
+                                            <Form.Group className="mb-3" controlId="confirmPassword">
+                                                <Form.Label>Confirm Password:</Form.Label>
+                                                <Form.Control
+                                                    type="password"
+                                                    value={confirmPassword}
+                                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                                    required
+                                                />
+                                            </Form.Group>
+
+                                            <Button variant="primary" type="submit">
+                                                Reset Password
+                                            </Button>
+
+                                            {successMessage && (
+                                                <div className="success-message mt-2">
+                                                    {successMessage} <Link to='/signup/candiSignup/registration-success-msg/user-signin'>Login</Link>
+                                                </div>
+                                            )}
+                                        </Form>
                                     )}
                                 </div>
                             </div>

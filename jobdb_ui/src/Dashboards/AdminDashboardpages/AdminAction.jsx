@@ -98,14 +98,14 @@ const AdminAction = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className='leftside'>
+    <div className='dashboard-container'>
+      <div className='left-side'>
         <AdminleftSide />
       </div>
 
-      <div className="rightSide">
+      <div className="rightside">
         <header className="admin-header">
-          <h2 style={{ color: 'wheat' }}>Admin Dashboard</h2>
+          <h2 style={{ color: 'wheat' }}>User Validation</h2>
         </header>
         <Table hover className='text-center' style={{ marginLeft: '12px' }}>
           <thead className="table-light">

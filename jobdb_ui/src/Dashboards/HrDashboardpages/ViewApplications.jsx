@@ -215,7 +215,7 @@ const ViewApplications = () => {
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={2} className="leftside">
+        <Col md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 

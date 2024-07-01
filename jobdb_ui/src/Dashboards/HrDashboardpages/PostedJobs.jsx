@@ -126,10 +126,10 @@ const PostedJobs = () => {
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={2} className="leftside full-height">
+        <Col md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-        <Col md={9} className="rightside">
+        <Col md={20} className="rightside">
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar" >
               <input style={{ borderRadius: '6px', height: '35px' }}
