@@ -124,11 +124,11 @@ const CompanyValidation = () => {
 
   return (
     <div className='dashboard-container'>
-      <div className='leftside'>
-        <AdminleftSide />
-      </div>
+    <div className='left-side'>
+      <AdminleftSide />
+    </div>
 
-      <div className="rightSide">
+    <div className="rightside">
         <h2 style={{ textAlign: 'center' }}>Details of Company Validation</h2>
 
         <Table hover className='text-center' style={{ marginLeft: '8px' }}>

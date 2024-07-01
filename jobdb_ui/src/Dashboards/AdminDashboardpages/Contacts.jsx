@@ -64,10 +64,11 @@ const Contacts = () => {
 
   return (
     <div className='dashboard-container'>
-      <div className='leftside'>
+      <div className='left-side'>
         <AdminleftSide />
       </div>
-      <div className="rightSide">
+
+      <div className="rightside">
         <h2 style={{ textAlign: 'center' }}>Request from the Users</h2>
         <div className="help">
           <div className='contacts-table'>

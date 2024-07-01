@@ -4,11 +4,11 @@ import AdminleftSide from './AdminleftSide';
 const BlockAccount = () => {
   return (
     <div className='dashboard-container'>
-          <div className='leftside'>
-          <AdminleftSide />
-        </div>
+    <div className='left-side'>
+      <AdminleftSide />
+    </div>
 
-    <div className="rightSide">
+    <div className="rightside">
       <h2>Blocked Accounts</h2>
 
       <div className="blockedAccount">

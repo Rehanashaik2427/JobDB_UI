@@ -1,15 +1,20 @@
 import { faAddressCard, faBriefcase, faEnvelope, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { RxDashboard } from 'react-icons/rx';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const HrLeftSide = ({ user }) => {
     const { userName, userEmail } = user;
     const navigate = useNavigate();
+    const location = useLocation();
+    const scrollRef = useRef(null);
+    const savedScrollPosition = useRef(0);
+
+    const [activeLink, setActiveLink] = useState(location.pathname);
 
     const navLinks = [
         { to: '/hr-dashboard', label: 'Dashboard', icon: <RxDashboard size={30} /> },
@@ -20,6 +25,20 @@ const HrLeftSide = ({ user }) => {
         { to: '/hr-dashboard/profile', label: 'Profile', icon: <FontAwesomeIcon icon={faUser} style={{ fontSize: '1.7rem' }} /> },
         { to: '/contact', label: 'Contact', icon: <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: '1.7rem' }} /> }
     ];
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = savedScrollPosition.current;
+        }
+    }, [location]);
+
+    const handleLinkClick = (to) => {
+        if (scrollRef.current) {
+            savedScrollPosition.current = scrollRef.current.scrollTop;
+        }
+        setActiveLink(to);
+        navigate(to, { state: { userName, userEmail } });
+    };
 
     return (
         <Navbar expand="lg" className="flex-column align-items-start" style={{ height: '100vh', backgroundColor: 'white' }}>
@@ -35,30 +54,34 @@ const HrLeftSide = ({ user }) => {
                 <Navbar.Text>
                     <h2 style={{ color: 'black' }}>{userName}</h2>
                 </Navbar.Text>
-                <div className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px',color:'gray' }}>
+                <div ref={scrollRef} className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
                     <Nav className="flex-column full-height align-items-start">
                         {navLinks.map((link, index) => (
                             <React.Fragment key={index}>
                                 <Link
-                                    to={{ pathname: link.to, state: { userName, userEmail } }}
+                                    to={link.to}
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        navigate(link.to, { state: { userName, userEmail } });
+                                        handleLinkClick(link.to);
                                     }}
-                                    className="nav-link d-flex align-items-center"
+                                    className={`nav-link d-flex align-items-center ${activeLink === link.to ? 'active' : ''}`}
                                     style={{
                                         fontSize: '1.1rem',
                                         transition: 'color 0.3s',
-                                        color: 'black',
+                                        color: activeLink === link.to ? 'purple' : 'black',
                                     }}
                                     onMouseEnter={(e) => {
-                                        e.currentTarget.style.color = 'purple';
+                                        if (activeLink !== link.to) {
+                                            e.currentTarget.style.color = 'purple';
+                                        }
                                     }}
                                     onMouseLeave={(e) => {
-                                        e.currentTarget.style.color = 'black';
+                                        if (activeLink !== link.to) {
+                                            e.currentTarget.style.color = 'black';
+                                        }
                                     }}
                                 >
-                                    <div style={{ display: 'flex', alignItems: 'center' ,flexDirection: 'column' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                                         {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
                                         {link.label}
                                     </div>

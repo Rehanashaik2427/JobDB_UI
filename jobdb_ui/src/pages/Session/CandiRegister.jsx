@@ -12,13 +12,19 @@ const CandiRegister = () => {
     const [passwordMatchError, setPasswordMatchError] = useState(false);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [passwordCriteriaError, setPasswordCriteriaError] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpError, setOtpError] = useState(false);
+    const [otp, setOtp] = useState('');
+    const [enteredOtp, setEnteredOtp] = useState('');
+    const [isOtpVerified, setIsOtpVerified] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
     const navigate = useNavigate();
 
+    // Validation schema for Formik
     const validationSchema = yup.object().shape({
         userName: yup.string().required("Name is required"),
         userEmail: yup.string().email("Invalid email").required("Email is required"),
-        phone: yup.string().required("Phone Number is required"),
-        appliedDate: yup.date().required("Date is required"),
         password: yup
             .string()
             .min(8, "Password must be 8 characters long")
@@ -29,6 +35,7 @@ const CandiRegister = () => {
             .oneOf([yup.ref("password")], "Passwords must match")
     });
 
+    // Function to validate password criteria
     const validatePassword = (values) => {
         const { password, confirmPassword } = values;
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,12}$/;
@@ -42,6 +49,7 @@ const CandiRegister = () => {
         return true;
     };
 
+    // Initial form values
     const initialValues = {
         userName: "",
         userEmail: "",
@@ -52,6 +60,7 @@ const CandiRegister = () => {
         confirmPassword: ""
     };
 
+    // Handle form submission
     const handleSubmit = async (values, { setSubmitting }) => {
         if (!validatePassword(values)) {
             setSubmitting(false);
@@ -65,20 +74,56 @@ const CandiRegister = () => {
                 body: JSON.stringify(values),
             });
 
+            if (response.status === 409) {
+                setEmailExistsError(true);
+                setSubmitting(false);
+                return;
+            }
+
             if (!response.ok) {
                 throw new Error('Failed to register candidate');
             }
+
             setRegistrationSuccess(true);
-
-            navigate('/signup/candiSignup/registration-success-msg'); // Ensure this matches the route
-
+            navigate('/signup/candiSignup/registration-success-msg');
         } catch (error) {
-            if (error.message.includes("User already exists")) {
-                setEmailExistsError(true);
-                navigate('/signup/candiSignup/registration-success-msg/user-signin',{ state: initialValues.userRole })
-            } else {
-                console.error('Error registering candidate:', error);
+            console.error('Error registering candidate:', error);
+        }
+    };
+
+
+
+    // Handle OTP generation
+    const handleGenerateOTP = async (values) => {
+        try {
+            const otpResponse = await fetch(`http://localhost:8082/api/jobbox/sendOTP?userEmail=${values.userEmail}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (!otpResponse.ok) {
+                throw new Error('Failed to send OTP');
             }
+
+            const otpData = await otpResponse.json();
+            setOtp(otpData); // Set the OTP state
+            setOtpSent(true);
+        } catch (error) {
+            console.error('Error generating OTP:', error);
+            setErrorMessage('Email already exists please login into your account');
+        }
+    };
+
+    // Handle OTP verification
+    const handleVerifyOTP = () => {
+        if (otp == enteredOtp) {
+            setOtpError(false);
+            setIsOtpVerified(true); // Set OTP verification status to true if OTP matches
+            setShowSuccessMessage(true);
+            setOtpSent(false); // Remove OTP verification section
+        } else {
+            setOtpError(true);
+            setIsOtpVerified(false); // Set OTP verification status to false if OTP does not match
         }
     };
 
@@ -87,12 +132,12 @@ const CandiRegister = () => {
             <div className="auth-content">
                 <Card className="o-hidden">
                     <Row>
+                        {/* Left Section */}
                         <Col md={6} className="text-center auth-cover">
                             <div className="ps-3 auth-right">
                                 <div className="auth-logo text-center mt-4">
                                     <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="JobDB" />
                                 </div>
-
                                 <div className="w-100 h-100 justify-content-center d-flex flex-column">
                                     <SocialButtons
                                         isLogin
@@ -103,10 +148,12 @@ const CandiRegister = () => {
                                 </div>
                             </div>
                         </Col>
+                        {/* Right Section */}
                         <Col md={6}>
                             <div className="p-4">
                                 <h1 className="mb-3 text-18">Registration Form</h1>
-                                <p>(<span style={{color:'red'}}>*</span> indicates mandatory fields)</p>
+                                <p>(<span style={{ color: 'red' }}>*</span> indicates mandatory fields)</p>
+                                {/* Formik form */}
                                 <Formik
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
@@ -114,15 +161,12 @@ const CandiRegister = () => {
                                 >
                                     {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
                                         <form onSubmit={handleSubmit}>
+                                            {/* Text fields */}
                                             <TextField
                                                 type="text"
                                                 name="userName"
-                                                label={
-                                                    <>
-                                                      Your name <span style={{ color: 'red' }}>*</span>
-                                                    </>
-                                                  }
-                                                  required
+                                                label="Your name *"
+                                                required
                                                 onBlur={handleBlur}
                                                 value={values.userName}
                                                 onChange={handleChange}
@@ -132,98 +176,112 @@ const CandiRegister = () => {
                                             <TextField
                                                 type="email"
                                                 name="userEmail"
-                                                label={
-                                                    <>
-                                                      Email <span style={{ color: 'red' }}>*</span>
-                                                    </>
-                                                  }
-                                                  required   
+                                                label="Email *"
+                                                required
                                                 onBlur={handleBlur}
                                                 value={values.userEmail}
                                                 onChange={handleChange}
                                                 helperText={errors.userEmail}
                                                 error={errors.userEmail && touched.userEmail}
                                             />
-
                                             <TextField
                                                 type="tel"
-                                                id="phone"
                                                 name="phone"
                                                 label="Phone Number"
                                                 value={values.phone}
                                                 onChange={handleChange}
                                                 helperText={errors.phone}
                                                 error={errors.phone && touched.phone}
-                                                required
                                                 fullWidth
                                             />
-                                          
                                             <TextField
                                                 type="password"
                                                 name="password"
-                                                label={
-                                                    <>
-                                                      Password <span style={{ color: 'red' }}>*</span>
-                                                    </>
-                                                  }
-                                                  required
+                                                label="Password *"
+                                                required
                                                 onBlur={handleBlur}
                                                 value={values.password}
                                                 onChange={handleChange}
                                                 helperText={errors.password}
                                                 error={errors.password && touched.password}
                                             />
-
                                             <TextField
                                                 type="password"
-                                                id="confirmPassword"
                                                 name="confirmPassword"
-                                                label={
-                                                    <>
-                                                        Confirm password <span style={{ color: 'red' }}>*</span>
-                                                    </>
-                                                  }
-                                                  required    
+                                                label="Confirm password *"
+                                                required
                                                 value={values.confirmPassword}
                                                 onChange={handleChange}
                                                 helperText={errors.confirmPassword}
                                                 error={errors.confirmPassword && touched.confirmPassword}
                                                 fullWidth
                                             />
-
-                                            {/* Display error messages */}
+                                            {/* OTP Field */}
+                                            {otpSent && (
+                                                <TextField
+                                                    type="number"
+                                                    name="otp"
+                                                    label="Enter OTP"
+                                                    required
+                                                    onBlur={handleBlur}
+                                                    value={enteredOtp}
+                                                    onChange={(e) => setEnteredOtp(e.target.value)}
+                                                    helperText={otpError ? 'Invalid OTP' : ''}
+                                                    error={otpError}
+                                                />
+                                            )}
+                                            {showSuccessMessage && (
+                                                <p className="success-message">Successfully verified!</p>
+                                            )}
+                                            {/* Error messages */}
                                             {passwordMatchError && (
                                                 <p className="error-message">Password and confirm password do not match</p>
                                             )}
-
                                             {passwordCriteriaError && (
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
-
                                             {emailExistsError && (
                                                 <p className="error-message">Email already exists. Please <Link to='/signup/candiSignup/registration-success-msg/user-signin'>click here for login</Link></p>
                                             )}
 
-                                            {errorMessage && <div className="text-danger">{errorMessage}</div>}
-
-                                            {/* Submit button */}
-                                            <button
-                                                type="submit"
-                                                className="btn btn-primary w-100 my-1 btn-rounded mt-3"
-                                                disabled={isSubmitting}
-                                            >
-                                                {isSubmitting ? "Signing Up..." : "Sign Up"}
-                                            </button>
+                                            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+                                            {/* Buttons */}
+                                            <div className="d-flex justify-content-between align-items-center mt-4">
+                                                {!otpSent ? (
+                                                    <button
+                                                        className="btn btn-primary"
+                                                        type="button"
+                                                        onClick={() => handleGenerateOTP(values)}
+                                                        disabled={isSubmitting}
+                                                    >
+                                                        Generate OTP
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        className="btn btn-primary"
+                                                        type="button"
+                                                        onClick={handleVerifyOTP}
+                                                        disabled={isSubmitting}
+                                                    >
+                                                        Verify OTP
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className="btn btn-success"
+                                                    type="submit"
+                                                    disabled={isSubmitting || !isOtpVerified}
+                                                >
+                                                    Register
+                                                </button>
+                                            </div>
                                         </form>
                                     )}
                                 </Formik>
+
                             </div>
                         </Col>
                     </Row>
                 </Card>
-
-
-                
             </div>
         </div>
     );

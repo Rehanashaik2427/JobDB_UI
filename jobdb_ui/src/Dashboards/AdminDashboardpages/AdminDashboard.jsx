@@ -93,11 +93,11 @@ const AdminDashboard = () => {
 
   return (
     <div className='dashboard-container'>
-      <div className='leftside'>
+      <div className='left-side'>
         <AdminleftSide />
       </div>
 
-      <div className="rightSide">
+      <div className="rightside">
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
           <i
             datafullscreen="true"

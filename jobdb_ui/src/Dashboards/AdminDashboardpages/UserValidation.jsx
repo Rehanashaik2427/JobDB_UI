@@ -50,10 +50,11 @@ const UserValidation = () => {
 
   return (
     <div className='dashboard-container'>
-      <div className='leftside'>
+      <div className='left-side'>
         <AdminleftSide />
       </div>
-      <div className="rightSide">
+
+      <div className="rightside">
         <div className='user-table-list'>
           <h2>Users List</h2>
           <Table hover className='text-center' style={{ marginLeft: '12px' }}>

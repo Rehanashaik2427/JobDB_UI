@@ -11,11 +11,11 @@ const AllowingAccess = () => {
   ]);
   return (
     <div className='dashboard-container'>
-      <div className='leftside'>
+      <div className='left-side'>
         <AdminleftSide />
       </div>
 
-      <div className="rightSide">
+      <div className="rightside">
         <div>
           <h2 style={{ textAlign: 'center' }}>Access Dashboard</h2>
 

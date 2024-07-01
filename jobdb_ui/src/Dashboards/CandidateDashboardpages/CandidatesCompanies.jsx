@@ -34,7 +34,7 @@ const CandidatesCompanies = () => {
     fetchCompanyBySearch();
   };
   const fetchCompany = async () => {
-    const response = await axios.get(`${BASE_API_URL}/displayCompanies`, { params: { page: page, size: pageSize } });
+    const response = await axios.get(`${BASE_API_URL}/comapniesList`, { params: { page: page, size: pageSize } });
     setCompanies(response.data.content);
     setTotalPages(response.data.totalPages);
   };
@@ -117,38 +117,28 @@ const CandidatesCompanies = () => {
         </div>
         <div className="companyJob">
           {/* <h1>Companies that we have</h1> */}
-          <div className="cards">
+          <div className="cards d-flex flex-wrap justify-content-around" style={{ minHeight: 'fit-content', minWidth: '1000px',marginLeft:'2px' }}>
             {companies.length > 0 ? (
-              <>
-                <div className="row">
-                  {companies.slice(0, 3).map((company) => (
-                    <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '300px' }}>
-                      <Card.Body>
-                        <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                        <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                        <Button onClick={() => handleClick(company.companyId)}>
-                          View
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-                <div className="row d-flex flex-wrap">
-                  {companies.slice(3, 6).map((company) => (
-                    <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '300px', flex: '1 0 300px', margin: '10px' }}>
-                      <Card.Body>
-                        <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                        <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                        <Button onClick={() => handleClick(company.companyId)}>
-                          View
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-              </>
+
+              companies.map((company) => (
+                <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}>
+                  <Card.Body>
+                    <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                    <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+
+                    <Button onClick={() => handleClick(company.companyId)}>
+                      View
+                    </Button>
+                  </Card.Body>
+                </Card>
+
+
+              ))
             ) : (
-              <h4 className='text-center'>Company not found .!!</h4>
+
+
+
+              <p>Company not found. Please <Link to='/findCompany/company-form'>fill company details</Link>.</p>
             )}
           </div>
         </div>

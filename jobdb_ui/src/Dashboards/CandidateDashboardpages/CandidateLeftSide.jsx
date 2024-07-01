@@ -1,4 +1,4 @@
-import { faBuilding, faFile, faFileLines, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBuilding, faEnvelope, faFile, faFileLines, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
@@ -17,7 +17,7 @@ function CandidateLeftSide({ user }) {
     { to: '/candidate-dashboard/resume', label: 'Resume', icon: <FontAwesomeIcon icon={faFile} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
     { to: '/candidate-dashboard/profile', label: 'Profile', icon: <FontAwesomeIcon icon={faUser} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
     { to: '/candidate-dashboard/payment', label: 'Payment', icon: <FontAwesomeIcon icon={faMoneyCheckDollar} style={{ fontSize: '1.5rem' }} />, iconColor: '#007bff' },
-    { to: '/contact', label: 'Contact us' }
+    { to: '/contact', label: 'Contact', icon: <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: '1.7rem' }} /> }
 ];
 
 return (
