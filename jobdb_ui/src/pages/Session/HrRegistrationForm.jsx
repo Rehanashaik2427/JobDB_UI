@@ -116,7 +116,21 @@ const HrRegistrationForm = () => {
             setErrorMessage('Invalid OTP. Please try again.');
         }
     };
+    const updateUserData = async (values) => {
+        try {
+            const response = await axios.put('http://localhost:8082/api/jobbox/updateUserData', values);
 
+            if (response.data) {
+                navigate('/signup/candiSignup/registration-success-msg');
+            } else {
+                setErrorMessage(true);
+                return;
+            }
+        } catch (error) {
+            console.error('Error updating user data:', error);
+            alert("Data not updated");
+        }
+    };
     return (
         <div className="auth-layout-wrap">
             <div className="auth-content">
@@ -150,57 +164,121 @@ const HrRegistrationForm = () => {
                                     validationSchema={validationSchema}
                                     onSubmit={handleSubmit}
                                 >
-                                    {({ errors, touched, isSubmitting, handleSubmit }) => (
-                                        <Form onSubmit={handleSubmit}>
+                                  {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+                                        <form onSubmit={handleSubmit}>
                                             {/* Text fields */}
                                             <TextField
                                                 type="text"
                                                 name="userName"
-                                                label="Your name *"
+                                                label={
+                                                    <>
+                                                        Your name <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                }
+                                            
                                                 required
+                                                onBlur={handleBlur}
+                                                value={values.userName}
+                                                onChange={handleChange}
+                                                helperText={errors.userName}
+                                                error={errors.userName && touched.userName}
                                             />
+
                                             <TextField
                                                 type="email"
                                                 name="userEmail"
-                                                label="Your Email *"
+                                                label={
+                                                    <>
+                                                        Your Email <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                }
                                                 required
+                                                onBlur={handleBlur}
+                                                value={values.userEmail}
+                                                onChange={handleChange}
+                                                helperText={errors.userEmail}
+                                                error={errors.userEmail && touched.userEmail}
                                             />
                                             <TextField
                                                 type="tel"
                                                 name="phone"
                                                 label="Phone Number"
+                                                value={values.phone}
+                                                onChange={handleChange}
+                                                helperText={errors.phone}
+                                                error={errors.phone && touched.phone}
+                                                fullWidth
                                             />
+                                
+
                                             <TextField
                                                 type="password"
                                                 name="password"
-                                                label="Password *"
+                                                label={
+                                                    <>
+                                                        Password <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                }
                                                 required
+                                                onBlur={handleBlur}
+                                                value={values.password}
+                                                onChange={handleChange}
+                                                helperText={errors.password}
+                                                error={errors.password && touched.password}
                                             />
                                             <TextField
                                                 type="password"
-                                                name="confirmPassword"
-                                                label="Confirm Password *"
+                                                name="confirmPassword" // Corrected field name here
+                                                label={
+                                                    <>
+                                                        Confirm Password <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                }
                                                 required
+                                                value={values.confirmPassword}
+                                                onChange={handleChange}
+                                                helperText={errors.confirmPassword}
+                                                error={errors.confirmPassword && touched.confirmPassword}
+                                                fullWidth
                                             />
 
-                                            {/* Agreement checkbox */}
                                             <div className="form-check">
                                                 <Field
                                                     type="checkbox"
                                                     name="agreeToEmailValidation"
                                                     id="agreeToEmailValidation"
                                                     className="form-check-input"
+                                                    checked={values.agreeToEmailValidation}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        sendOTP(values.userEmail);
+                                                    }}
                                                 />
                                                 <label htmlFor="agreeToEmailValidation" className="form-check-label">
                                                     I agree to validate my email
                                                 </label>
-                                                {errors.agreeToEmailValidation && touched.agreeToEmailValidation && (
+                                                {errors.agreeToEmailValidation && (
                                                     <p className="error-message">{errors.agreeToEmailValidation}</p>
                                                 )}
                                             </div>
 
-                                            {/* Error messages */}
-                                            {errorMessage && <p className="error-message">{errorMessage}</p>}
+                                       
+                                           
+                                            {passwordCriteriaError && (
+                                                <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
+                                            )}
+                                            {emailExistsError && (
+                                                <div>
+                                                    <p className="error-message">
+                                                        Email already exists. Please <Link to='/signup/candiSignup/registration-success-msg/user-signin'>click here for login</Link>
+                                                    </p>
+                                                    <p>OR</p>
+                                                    <Button onClick={() => updateUserData(values)}>Update Your Data</Button>
+                                                </div>
+                                            )}
+
+                                            {errorMessage && <div className="text-danger">{errorMessage}</div>}
+
                                             {emailExistsError && (
                                                 <div>
                                                     <p className="error-message">
@@ -218,7 +296,7 @@ const HrRegistrationForm = () => {
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
                                             </Button>
-                                        </Form>
+                                        </form>
                                     )}
                                 </Formik>
 

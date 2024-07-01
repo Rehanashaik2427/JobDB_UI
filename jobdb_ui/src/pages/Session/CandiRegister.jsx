@@ -98,29 +98,7 @@ const CandiRegister = () => {
 
 
     // Handle OTP generation
-    const handleGenerateOTP = async (values) => {
-        try {
-            const otpResponse = await fetch(`http://localhost:8082/api/jobbox/sendOTP?userEmail=${values.userEmail}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (!otpResponse.ok) {
-                throw new Error('Failed to send OTP');
-                setEmailExistsError(true);
-                setSubmitting(false);
-                return;
-            }
-
-            setRegistrationSuccess(true);
-            navigate('/signup/candiSignup/registration-success-msg');
-
-        
-        } catch (error) {
-            console.error('Error registering candidate:', error);
-            setSubmitting(false);
-        }
-    };
+   
 
     const updateUserData = async (values) => {
         try {
@@ -155,23 +133,12 @@ const CandiRegister = () => {
         } else {
             setOtpVerified(false);
             setErrorMessage('Invalid OTP. Please try again.');
-            console.error('Error generating OTP:', error);
+            console.error('Error generating OTP:');
             setErrorMessage('Email already exists please login into your account');
         }
     };
 
-    // Handle OTP verification
-    const handleVerifyOTP = () => {
-        if (otp == enteredOtp) {
-            setOtpError(false);
-            setIsOtpVerified(true); // Set OTP verification status to true if OTP matches
-            setShowSuccessMessage(true);
-            setOtpSent(false); // Remove OTP verification section
-        } else {
-            setOtpError(true);
-            setIsOtpVerified(false); // Set OTP verification status to false if OTP does not match
-        }
-    };
+   
 
     return (
         <div className="auth-layout-wrap">
@@ -331,37 +298,7 @@ const CandiRegister = () => {
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
                                             </button>
-=======
-                                            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-                                            {/* Buttons */}
-                                            <div className="d-flex justify-content-between align-items-center mt-4">
-                                                {!otpSent ? (
-                                                    <button
-                                                        className="btn btn-primary"
-                                                        type="button"
-                                                        onClick={() => handleGenerateOTP(values)}
-                                                        disabled={isSubmitting}
-                                                    >
-                                                        Generate OTP
-                                                    </button>
-                                                ) : (
-                                                    <button
-                                                        className="btn btn-primary"
-                                                        type="button"
-                                                        onClick={handleVerifyOTP}
-                                                        disabled={isSubmitting}
-                                                    >
-                                                        Verify OTP
-                                                    </button>
-                                                )}
-                                                <button
-                                                    className="btn btn-success"
-                                                    type="submit"
-                                                    disabled={isSubmitting || !isOtpVerified}
-                                                >
-                                                    Register
-                                                </button>
-                                            </div>
+
                                         </form>
                                     )}
                                 </Formik>
