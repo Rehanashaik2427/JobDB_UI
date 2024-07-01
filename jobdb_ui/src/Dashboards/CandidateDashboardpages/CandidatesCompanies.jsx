@@ -32,13 +32,9 @@ const CandidatesCompanies = () => {
   };
 
   const fetchCompany = async () => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/companiesList`, { params: { page: page, size: pageSize } });
-      setCompanies(response.data.content);
-      setTotalPages(response.data.totalPages);
-    } catch (error) {
-      console.log("Error fetching companies:", error);
-    }
+    const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
+    setCompanies(response.data.content);
+    setTotalPages(response.data.totalPages);
   };
 
   const fetchCompanyBySearch = async () => {

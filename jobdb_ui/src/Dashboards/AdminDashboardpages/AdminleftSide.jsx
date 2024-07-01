@@ -2,6 +2,7 @@ import { faAccessibleIcon } from '@fortawesome/free-brands-svg-icons';
 import { faBuilding, faComment, faHouse, faPlusCircle, faUserAlt, faUserCheck, faUserLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import { RxDashboard } from 'react-icons/rx';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -21,29 +22,54 @@ function AdminLeftSide() {
   ];
 
   return (
-    <div className='leftside'>
-      <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobboxlogo" className='auth-logo' />
-      <div className="admin-details">
-        <h2>AdminName</h2>
-        <div className="nav-box">
-          {navLinks.map((link, index) => (
-            <Link
-              key={index}
-              to={link.to}
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(link.to);
-              }}
-              className='nav-link'
-              style={{ color: 'black', textDecoration: 'none', fontSize: '1.2rem', marginBottom: '10px' }}
-            >
-              {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
-              {link.label}
-            </Link>
-          ))}
+    <Navbar expand="lg" className="flex-column align-items-start" style={{ height: '100vh', backgroundColor: 'white' }}>
+      <Container fluid className="flex-column">
+        <Navbar.Brand>
+          <img
+            style={{ backgroundColor: 'white' }}
+            src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png"
+            alt="jobboxlogo"
+            className='auth-logo'
+          />
+        </Navbar.Brand>
+        <Navbar.Text>
+          <h2 style={{ color: 'black' }}>AdminName</h2>
+        </Navbar.Text>
+        <div className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
+          <Nav className="flex-column full-height align-items-start">
+            {navLinks.map((link, index) => (
+              <React.Fragment key={index}>
+                <Link
+                  to={link.to}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(link.to);
+                  }}
+                  className="nav-link d-flex align-items-center"
+                  style={{
+                    fontSize: '1.1rem',
+                    transition: 'color 0.3s',
+                    color: 'black',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'purple';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'black';
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                    {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
+                    {link.label}
+                  </div>
+                </Link>
+                <hr style={{ width: '100%', borderColor: 'black' }} />
+              </React.Fragment>
+            ))}
+          </Nav>
         </div>
-      </div>
-    </div>
+      </Container>
+    </Navbar>
   );
 }
 
