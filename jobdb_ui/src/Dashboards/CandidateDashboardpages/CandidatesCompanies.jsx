@@ -90,10 +90,10 @@ const CandidatesCompanies = () => {
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
       <div className='rightside'>
-
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-          <div className="search-bar" >
-            <input style={{ borderRadius: '6px', height: '35px' }}
+          <div className="search-bar">
+            <input
+              style={{ borderRadius: '6px', height: '35px' }}
               type="text"
               name="search"
               placeholder="Search"
@@ -115,33 +115,22 @@ const CandidatesCompanies = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
+
         <div className="companyJob">
-          {/* <h1>Companies that we have</h1> */}
-          <div className="cards">
+          <div className="cards d-flex flex-wrap justify-content-around" >
             {companies.length > 0 ? (
               <>
                 <div className="row">
-                  {companies.slice(0, 3).map((company) => (
-                    <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '300px' }}>
+                  {companies.map((company) => (
+                    <Card
+                      className="company-card-job"
+                      key={company.companyId}
+                      style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}
+                    >
                       <Card.Body>
                         <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                         <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                        <Button onClick={() => handleClick(company.companyId)}>
-                          View
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-                <div className="row d-flex flex-wrap">
-                  {companies.slice(3, 6).map((company) => (
-                    <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '300px', flex: '1 0 300px', margin: '10px' }}>
-                      <Card.Body>
-                        <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                        <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                        <Button onClick={() => handleClick(company.companyId)}>
-                          View
-                        </Button>
+                        <Button onClick={() => handleClick(company.companyId)}>View</Button>
                       </Card.Body>
                     </Card>
                   ))}
@@ -161,11 +150,16 @@ const CandidatesCompanies = () => {
                 />
               </>
             ) : (
-              <h4 className='text-center'>Company not found .!!</h4>
+              <>
+                <div className="d-flex justify-content-center flex-direction-row">
+                  <div className="spinner-bubble spinner-bubble-primary m-5" />
+                  <span >Loading...</span>
+
+                </div>
+              </>
             )}
           </div>
         </div>
-
       </div>
     </div>
   );

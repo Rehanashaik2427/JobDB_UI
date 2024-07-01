@@ -24,10 +24,8 @@ const Applications = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-
-  const toggleSettings = () => {
-    navigate('/');
-  };
+  const [loading, setLoading] = useState(true);
+ 
 
 
 
@@ -42,6 +40,7 @@ const Applications = () => {
 
 
   const fetchJobs = async () => {
+    setLoading(true);
     try {
       const params = {
         userEmail: userEmail,
@@ -53,6 +52,7 @@ const Applications = () => {
       const response = await axios.get(`${BASE_API_URL}/jobsPostedByHrEmail`, { params });
       setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching HR data:', error);
     }
@@ -62,12 +62,14 @@ const Applications = () => {
     setSearch(e.target.value);
   }
   const fetchJobBysearch = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${BASE_API_URL}/searchJobsByHR`, {
         params: { search, userEmail, page, pageSize }
       });
       setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
+      setLoading(false);
       console.log(response.data);
     } catch (error) {
       console.log("Error searching:", error);
@@ -102,41 +104,49 @@ const Applications = () => {
   return (
 
     <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className="leftside">
-          <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
+    <Row>
+      <Col md={2} className="leftside">
+        <HrLeftSide user={{ userName, userEmail }} />
+      </Col>
 
-        <Col md={18} className="rightside">
-
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-            <div className="search-bar" >
-              <input style={{ borderRadius: '6px', height: '35px' }}
-                type="text"
-                name="search"
-                placeholder="Search"
-                value={search}
-                onChange={handleSearchChange}
-              />
-            </div>
-            <Dropdown className="ml-2">
-              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="mt-3">
-                <Dropdown.Item as={Link} to="/">
-                  <i className="i-Data-Settings me-1" /> Account settings
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                  <i className="i-Lock-2 me-1" /> Sign out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+      <Col md={10} className="rightside">
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+          <div className="search-bar">
+            <input
+              style={{ borderRadius: '6px', height: '35px' }}
+              type="text"
+              name="search"
+              placeholder="Search"
+              value={search}
+              onChange={handleSearchChange}
+            />
           </div>
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={() => navigate('/')}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
 
-          <div className='job-list'>
-            {jobs.length > 0 && (
-              <Table hover className='text-center'>
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center">
+            <div className="spinner-bubble spinner-bubble-primary m-5" />
+            <span>Loading...</span>
+          </div>
+        ) : jobs.length > 0 ? (
+          <>
+            <h2 className='text-center'>Jobs posted by {userName}</h2>
+
+            <div className='job-list'>
+            <Table hover className='text-center'>
                 <thead className="table-light">
                   <tr>
                     <th scope="col" onClick={() => handleSort('jobTitle')}>
@@ -173,38 +183,32 @@ const Applications = () => {
                 </tbody>
               </Table>
 
+              <div className="pagination-container">
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <section>
+            <h2>You have not posted any jobs yet. Post Now</h2>
+          </section>
+        )}
 
-
-            )}
-
-
-          </div>
-
-          {jobs.length === 0 && (
-            <section className='not-yet'>
-              <h2>You have not posted any jobs yet. Post Now</h2>
-            </section>
-          )}
-
-          <div className="pagination-container">
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
-          </div>
-        </Col>
-      </Row>
-    </Container>
-
+      </Col>
+    </Row>
+  </Container>
 
   );
 }

@@ -1,10 +1,11 @@
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import React, { useState } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SocialButtons from './sessions/SocialButtons';
 import TextField from './sessions/TextField';
+import axios from 'axios';
 
 const CandiRegister = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -12,12 +13,16 @@ const CandiRegister = () => {
     const [passwordMatchError, setPasswordMatchError] = useState(false);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
     const [passwordCriteriaError, setPasswordCriteriaError] = useState(false);
-    const [updateUserMessage, setUpdateUserMessage] = useState(false);
+    const [showOTPModal, setShowOTPModal] = useState(false);
+    const [otpValue, setOtpValue] = useState('');
+    const [enterOtpValue, setEnterOtpValue] = useState('');
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [isSubmitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
 
     const validationSchema = yup.object().shape({
         userName: yup.string().required("Name is required"),
-        userEmail: yup.string().email("Invalid email").required("Email is required"),   
+        userEmail: yup.string().email("Invalid email").required("Email is required"),
         password: yup
             .string()
             .min(8, "Password must be 8 characters long")
@@ -25,7 +30,8 @@ const CandiRegister = () => {
         confirmPassword: yup
             .string()
             .required("Repeat Password is required")
-            .oneOf([yup.ref("password")], "Passwords must match")
+            .oneOf([yup.ref("password")], "Passwords must match"),
+        agreeToEmailValidation: yup.bool().oneOf([true], "You must agree to validate your email"),
     });
 
     const validatePassword = (values) => {
@@ -48,7 +54,8 @@ const CandiRegister = () => {
         appliedDate: "",
         password: "",
         userRole: 'Candidate',
-        confirmPassword: ""
+        confirmPassword: "", // Corrected the field name here
+        agreeToEmailValidation: false,
     };
 
     const handleSubmit = async (values, { setSubmitting }) => {
@@ -58,47 +65,59 @@ const CandiRegister = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8082/api/jobbox/saveUser', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(values),
-            });
+            const response = await axios.post('http://localhost:8082/api/jobbox/saveUser', values);
 
-            if (!response.ok) {
+            if (!response.data || response.data === "undefined" || response.data === "") {
                 setEmailExistsError(true);
-            }else{
-                setRegistrationSuccess(true);
-
-            navigate('/signup/candiSignup/registration-success-msg'); // Ensure this matches the route
+                setSubmitting(false);
+                return;
             }
-            
+
+            setRegistrationSuccess(true);
+            navigate('/signup/candiSignup/registration-success-msg');
 
         } catch (error) {
-            if (error.message.includes("User already exists")) {
-           
-                navigate('/signup/candiSignup/registration-success-msg/user-signin',{ state: initialValues.userRole })
-            } else {
-                console.error('Error registering candidate:', error);
-            }
+            console.error('Error registering candidate:', error);
+            setSubmitting(false);
         }
     };
-const updateUserData=async(values)=>{
-     try{
-        const response = await fetch('http://localhost:8082/api/jobbox/updateUserData', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-    });
-    if(!response.ok)
-        setErrorMessage(true)
-    else
-    navigate('/signup/candiSignup/registration-success-msg');
 
-} catch{
-        alert("data not update")
-    }
-    
-}
+    const updateUserData = async (values) => {
+        try {
+            const response = await axios.put('http://localhost:8082/api/jobbox/updateUserData', values);
+
+            if (response.data) {
+                navigate('/signup/candiSignup/registration-success-msg');
+            } else {
+                setErrorMessage(true);
+                return;
+            }
+        } catch (error) {
+            console.error('Error updating user data:', error);
+            alert("Data not updated");
+        }
+    };
+
+    const sendOTP = async (email) => {
+        try {
+            const response = await axios.get(`http://localhost:8082/api/jobbox/validateUserEmail?userEmail=${email}`);
+            setOtpValue(response.data);
+            setShowOTPModal(true);
+        } catch (error) {
+            console.error('Error sending OTP:', error);
+        }
+    };
+
+    const handleOTPVerification = () => {
+        if (otpValue == enterOtpValue) {
+            setOtpVerified(true);
+            setShowOTPModal(false);
+        } else {
+            setOtpVerified(false);
+            setErrorMessage('Invalid OTP. Please try again.');
+        }
+    };
+
     return (
         <div className="auth-layout-wrap">
             <div className="auth-content">
@@ -109,7 +128,6 @@ const updateUserData=async(values)=>{
                                 <div className="auth-logo text-center mt-4">
                                     <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="JobDB" />
                                 </div>
-
                                 <div className="w-100 h-100 justify-content-center d-flex flex-column">
                                     <SocialButtons
                                         isLogin
@@ -123,7 +141,8 @@ const updateUserData=async(values)=>{
                         <Col md={6}>
                             <div className="p-4">
                                 <h1 className="mb-3 text-18">Registration Form</h1>
-                                <p>(<span style={{color:'red'}}>*</span> indicates mandatory fields)</p>
+                                <p>(<span style={{ color: 'red' }}>*</span> indicates mandatory fields)</p>
+
                                 <Formik
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
@@ -136,25 +155,26 @@ const updateUserData=async(values)=>{
                                                 name="userName"
                                                 label={
                                                     <>
-                                                      Your name <span style={{ color: 'red' }}>*</span>
+                                                        Your name <span style={{ color: 'red' }}>*</span>
                                                     </>
-                                                  }
-                                                  required
+                                                }
+                                                required
                                                 onBlur={handleBlur}
                                                 value={values.userName}
                                                 onChange={handleChange}
                                                 helperText={errors.userName}
                                                 error={errors.userName && touched.userName}
                                             />
+
                                             <TextField
                                                 type="email"
                                                 name="userEmail"
                                                 label={
                                                     <>
-                                                      Email <span style={{ color: 'red' }}>*</span>
+                                                        Your Email <span style={{ color: 'red' }}>*</span>
                                                     </>
-                                                  }
-                                                  required   
+                                                }
+                                                required
                                                 onBlur={handleBlur}
                                                 value={values.userEmail}
                                                 onChange={handleChange}
@@ -171,7 +191,6 @@ const updateUserData=async(values)=>{
                                                 onChange={handleChange}
                                                 helperText={errors.phone}
                                                 error={errors.phone && touched.phone}
-                                               
                                                 fullWidth
                                             />
 
@@ -180,10 +199,10 @@ const updateUserData=async(values)=>{
                                                 name="password"
                                                 label={
                                                     <>
-                                                      Password <span style={{ color: 'red' }}>*</span>
+                                                        Password <span style={{ color: 'red' }}>*</span>
                                                     </>
-                                                  }
-                                                  required
+                                                }
+                                                required
                                                 onBlur={handleBlur}
                                                 value={values.password}
                                                 onChange={handleChange}
@@ -193,14 +212,13 @@ const updateUserData=async(values)=>{
 
                                             <TextField
                                                 type="password"
-                                                id="confirmPassword"
-                                                name="confirmPassword"
+                                                name="confirmPassword" // Corrected field name here
                                                 label={
                                                     <>
-                                                        Confirm password <span style={{ color: 'red' }}>*</span>
+                                                        Confirm Password <span style={{ color: 'red' }}>*</span>
                                                     </>
-                                                  }
-                                                  required    
+                                                }
+                                                required
                                                 value={values.confirmPassword}
                                                 onChange={handleChange}
                                                 helperText={errors.confirmPassword}
@@ -208,7 +226,26 @@ const updateUserData=async(values)=>{
                                                 fullWidth
                                             />
 
-                                            {/* Display error messages */}
+                                            <div className="form-check">
+                                                <Field
+                                                    type="checkbox"
+                                                    name="agreeToEmailValidation"
+                                                    id="agreeToEmailValidation"
+                                                    className="form-check-input"
+                                                    checked={values.agreeToEmailValidation}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        sendOTP(values.userEmail);
+                                                    }}
+                                                />
+                                                <label htmlFor="agreeToEmailValidation" className="form-check-label">
+                                                    I agree to validate my email
+                                                </label>
+                                                {errors.agreeToEmailValidation && (
+                                                    <p className="error-message">{errors.agreeToEmailValidation}</p>
+                                                )}
+                                            </div>
+
                                             {passwordMatchError && (
                                                 <p className="error-message">Password and confirm password do not match</p>
                                             )}
@@ -218,20 +255,21 @@ const updateUserData=async(values)=>{
                                             )}
 
                                             {emailExistsError && (
-                                                <>
-                                                <p className="error-message">Email already exists. Please <Link to='/signup/candiSignup/registration-success-msg/user-signin'>click here for login</Link></p>
-                                                <p>OR</p>
-                                                <p > Update Your Data <Button onClick={() => updateUserData(values)}> Update </Button> </p>
-                                                </>
+                                                <div>
+                                                    <p className="error-message">
+                                                        Email already exists. Please <Link to='/signup/candiSignup/registration-success-msg/user-signin'>click here for login</Link>
+                                                    </p>
+                                                    <p>OR</p>
+                                                    <Button onClick={() => updateUserData(values)}>Update Your Data</Button>
+                                                </div>
                                             )}
 
                                             {errorMessage && <div className="text-danger">{errorMessage}</div>}
 
-                                            {/* Submit button */}
                                             <button
                                                 type="submit"
                                                 className="btn btn-primary w-100 my-1 btn-rounded mt-3"
-                                                disabled={isSubmitting}
+                                                disabled={!otpVerified || isSubmitting || emailExistsError}
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
                                             </button>
@@ -242,10 +280,30 @@ const updateUserData=async(values)=>{
                         </Col>
                     </Row>
                 </Card>
-
-
-                
             </div>
+
+            <Modal show={showOTPModal} onHide={() => setShowOTPModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Enter OTP</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <TextField
+                        type="text"
+                        label="Enter OTP received in email"
+                        value={enterOtpValue}
+                        onChange={(e) => setEnterOtpValue(e.target.value)}
+                    />
+                    {errorMessage && <p className="error-message">{errorMessage}</p>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowOTPModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleOTPVerification}>
+                        Verify OTP
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
