@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SocialButtons from './sessions/SocialButtons';
@@ -19,12 +19,14 @@ const CandiRegister = () => {
     const [isOtpVerified, setIsOtpVerified] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+    const [updateUserMessage, setUpdateUserMessage] = useState(false);
     const navigate = useNavigate();
 
     // Validation schema for Formik
     const validationSchema = yup.object().shape({
         userName: yup.string().required("Name is required"),
         userEmail: yup.string().email("Invalid email").required("Email is required"),
+        userEmail: yup.string().email("Invalid email").required("Email is required"),   
         password: yup
             .string()
             .min(8, "Password must be 8 characters long")
@@ -103,11 +105,15 @@ const CandiRegister = () => {
 
             if (!otpResponse.ok) {
                 throw new Error('Failed to send OTP');
-            }
+                setEmailExistsError(true);
+            }else{
+                setRegistrationSuccess(true);
 
-            const otpData = await otpResponse.json();
-            setOtp(otpData); // Set the OTP state
-            setOtpSent(true);
+            navigate('/signup/candiSignup/registration-success-msg'); // Ensure this matches the route
+            }
+            
+
+        
         } catch (error) {
             console.error('Error generating OTP:', error);
             setErrorMessage('Email already exists please login into your account');
@@ -126,7 +132,23 @@ const CandiRegister = () => {
             setIsOtpVerified(false); // Set OTP verification status to false if OTP does not match
         }
     };
+const updateUserData=async(values)=>{
+     try{
+        const response = await fetch('http://localhost:8082/api/jobbox/updateUserData', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+    });
+    if(!response.ok)
+        setErrorMessage(true)
+    else
+    navigate('/signup/candiSignup/registration-success-msg');
 
+} catch{
+        alert("data not update")
+    }
+    
+}
     return (
         <div className="auth-layout-wrap">
             <div className="auth-content">
@@ -194,6 +216,8 @@ const CandiRegister = () => {
                                                 error={errors.phone && touched.phone}
                                                 fullWidth
                                             />
+                                
+
                                             <TextField
                                                 type="password"
                                                 name="password"
@@ -241,7 +265,11 @@ const CandiRegister = () => {
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
                                             {emailExistsError && (
+                                                <>
                                                 <p className="error-message">Email already exists. Please <Link to='/signup/candiSignup/registration-success-msg/user-signin'>click here for login</Link></p>
+                                                <p>OR</p>
+                                                <p > Update Your Data <Button onClick={() => updateUserData(values)}> Update </Button> </p>
+                                                </>
                                             )}
 
                                             {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}

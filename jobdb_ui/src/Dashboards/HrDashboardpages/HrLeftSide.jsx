@@ -54,7 +54,7 @@ const HrLeftSide = ({ user }) => {
                 <Navbar.Text>
                     <h2 style={{ color: 'black' }}>{userName}</h2>
                 </Navbar.Text>
-                <div ref={scrollRef} className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
+                <div className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px',color:'gray' }}>
                     <Nav className="flex-column full-height align-items-start">
                         {navLinks.map((link, index) => (
                             <React.Fragment key={index}>
@@ -81,7 +81,7 @@ const HrLeftSide = ({ user }) => {
                                         }
                                     }}
                                 >
-                                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' ,flexDirection: 'column' }}>
                                         {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
                                         {link.label}
                                     </div>
@@ -93,7 +93,11 @@ const HrLeftSide = ({ user }) => {
                 </div>
             </Container>
         </Navbar>
+
+
     );
 };
 
 export default HrLeftSide;
+
+

@@ -176,7 +176,8 @@ const MyJobs = () => {
 
           <div className='job-list'>
             {jobs.length > 0 && (
-
+              <div><div>
+               
               <Table hover className='text-center'>
                 <thead className="table-light">
                   <tr>
@@ -256,6 +257,23 @@ const MyJobs = () => {
                 </tbody>
               </Table>
 
+              </div>     
+                <div className="pagination-container">
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
+              </div>
             )}
 
             {jobs.length === 0 && (
@@ -266,21 +284,7 @@ const MyJobs = () => {
 
           </div>
 
-          <div className="pagination-container">
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
-          </div>
+
 
 
           <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>

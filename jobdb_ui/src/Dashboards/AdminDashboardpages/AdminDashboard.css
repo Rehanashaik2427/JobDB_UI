@@ -4,12 +4,32 @@
 }
 .leftside{
     height: 100vh;
-    width: 300px;
-
+    width: 150px;
+    background-color: rgba(224, 247, 209, 0.432);
 }
 .leftside section link{
     text-decoration-color: rgb(16, 15, 15);
 }
+
+
+.nav-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .nav-link {   
+    color: black;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  
+  .nav-link:hover {
+    /* Example hover effect */
+    color: blue;
+  }
 .rightSide{
     height: 100vh;
     width: 100vw;

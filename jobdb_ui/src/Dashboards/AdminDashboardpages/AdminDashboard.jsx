@@ -1,6 +1,3 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
@@ -8,21 +5,41 @@ import { Link, useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Stomp } from '@stomp/stompjs';
 
 const AdminDashboard = () => {
   const [validatedCompaniesCount, setValidatedCompaniesCount] = useState(0);
   const [validatedHrCount, setValidatedHrCount] = useState(0);
-  const [notifications, setNotifications] = useState([]);
   const [hrCount, setHrCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchCounts = async () => {
+    try {
+      const hrResponse = await axios.get('http://localhost:8082/api/jobbox/countofHrs');
+      setHrCount(hrResponse.data); // Update hrCount state with fetched HR count
+
+      const companiesResponse = await axios.get('http://localhost:8082/api/jobbox/countOfCompanies');
+      setCompanyCount(companiesResponse.data); // Update companyCount state with fetched company count
+    } catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  };
+
+  const totalNotifications = hrCount + companyCount;
+
+
+ useEffect(() => {
     fetchValidatedCompaniesCount();
     fetchValidatedHrCount();
     fetchCounts();
     connectWebSocket();
   }, []);
+
 
   const fetchValidatedCompaniesCount = async () => {
     try {
@@ -76,19 +93,9 @@ const AdminDashboard = () => {
     navigate('/');
   };
 
-  const fetchCounts = async () => {
-    try {
-      const hrResponse = await axios.get('http://localhost:8082/api/jobbox/countofHrs');
-      setHrCount(hrResponse.data); // Update hrCount state with fetched HR count
+  
 
-      const companiesResponse = await axios.get('http://localhost:8082/api/jobbox/countOfCompanies');
-      setCompanyCount(companiesResponse.data); // Update companyCount state with fetched company count
-    } catch (error) {
-      console.error('Error fetching counts:', error);
-    }
-  };
 
-  const totalNotifications = hrCount + companyCount;
   
 
   return (
@@ -118,10 +125,12 @@ const AdminDashboard = () => {
               <Dropdown.Item as={Link} to="/admin-dashboard/admin-action">
                 {hrCount} new HRs
               </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/admin-dashboard/company-validation"> {companyCount} company</Dropdown.Item>
+              <Dropdown.Item as={Link} to="/admin-dashboard/company-validation"> {companyCount} new companies</Dropdown.Item>
+
               
             </Dropdown.Menu>
           </Dropdown>
+
 
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">

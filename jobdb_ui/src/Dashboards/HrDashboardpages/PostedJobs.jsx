@@ -156,59 +156,63 @@ const PostedJobs = () => {
           </div>
 
           <div className="jobs_list">
+            {jobs.length > 0 && (
+              <div><div>
+                <Table hover className='text-center'>
+                  <thead className="table-light">
+                    <tr>
+                      <th scope="col" onClick={() => handleSort('hrName')}>Hr Name{sortedColumn === 'hrName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col">Company Name</th>
+                      <th scope="col" onClick={() => handleSort('jobTitle')}>Job Title{sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col" onClick={() => handleSort('numberOfPosition')}>Vacancy{sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application Deadline{sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {jobs.map(job => (
+                      <tr key={job.id}>
+                        <td>{job.userName}</td>
+                        <td>{job.companyName}</td>
+                        <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
+                        <td>{job.jobType}</td>
+                        <td>{job.skills}</td>
+                        <td>{job.numberOfPosition}</td>
+                        <td>{job.applicationDeadline}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+                {selectedJobSummary && (
+                  <div className="modal-summary">
+                    <div className="modal-content-summary">
+                      <span className="close" onClick={handleCloseModal}>&times;</span>
+                      <h2>Job Summary</h2>
+                      <p>{selectedJobSummary}</p>
+                    </div>
+                  </div>
+                )}
 
-            <Table hover className='text-center'>
-              <thead className="table-light">
-                <tr>
-                  <th scope="col" onClick={() => handleSort('hrName')}>Hr Name{sortedColumn === 'hrName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                  <th scope="col">Company Name</th>
-                  <th scope="col" onClick={() => handleSort('jobTitle')}>Job Title{sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                  <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                  <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                  <th scope="col" onClick={() => handleSort('numberOfPosition')}>Vacancy{sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                  <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application Deadline{sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobs.map(job => (
-                  <tr key={job.id}>
-                    <td>{job.userName}</td>
-                    <td>{job.companyName}</td>
-                    <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
-                    <td>{job.jobType}</td>
-                    <td>{job.skills}</td>
-                    <td>{job.numberOfPosition}</td>
-                    <td>{job.applicationDeadline}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-            {selectedJobSummary && (
-              <div className="modal-summary">
-                <div className="modal-content-summary">
-                  <span className="close" onClick={handleCloseModal}>&times;</span>
-                  <h2>Job Summary</h2>
-                  <p>{selectedJobSummary}</p>
+                <div className="pagination-container">
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
                 </div>
               </div>
             )}
           </div>
-          <div className="pagination-container">
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
-          </div>
-
         </Col>
       </Row>
     </Container>

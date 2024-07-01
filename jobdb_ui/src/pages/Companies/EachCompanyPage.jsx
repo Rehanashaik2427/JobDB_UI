@@ -69,15 +69,10 @@ const EachCompanyPage = (props) => {
     }
   };
 
-  const navigateToHRRegister = (companyName) => {
-    console.log(companyName);
-    if (companyName) {
-      navigate({ pathname: '/signup/hrSignup', state: { companyName: companyName } });
-    }
-  };
 
-  const navigateToHRSignin = ()  => {
-    
+
+  const navigateToHRSignin = () => {
+
     if (company) {
       navigate('/signin');
     }
@@ -88,12 +83,12 @@ const EachCompanyPage = (props) => {
 
   return (
     <Container>
-        <Col xs={6}>
-       <Button onClick={handleBack} variant="secondary">
-            <FontAwesomeIcon icon={faArrowLeft} /> 
-          </Button>
+      <Col xs={6}>
+        <Button onClick={handleBack} variant="secondary">
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </Button>
 
-        </Col>
+      </Col>
       <Row className="justify-content-center">
         <Col md={8}>
           <div className="companyPage">
@@ -113,9 +108,9 @@ const EachCompanyPage = (props) => {
                 <div>
                   <h2>To View the Applications please</h2>
                   <div className="company-buttons">
-                  <Button onClick={() => navigate('/signup/hrSignup', { state: { companyName: company.companyName } })}>
-      Claim as HR
-    </Button>
+                    <Button onClick={() => navigate('/signup/hrSignup', { state: { companyName: company.companyName } })}>
+                      Claim as HR
+                    </Button>
 
 
                     <Button onClick={navigateToHRSignin}>Login</Button>

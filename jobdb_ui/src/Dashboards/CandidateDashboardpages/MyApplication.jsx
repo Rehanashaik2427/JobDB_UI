@@ -280,57 +280,64 @@ const MyApplication = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
+        <div>
+          {applications.length > 0 ? (
+            <>
+              {/* Applications table */}
+              <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
+                <thead className="table-light">
 
-        {/* Applications table */}
-        <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
-          <thead className="table-light">
+                  <tr>
+                    <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col">Resume Profile</th>
+                    <th scope="col">Job Status</th>
+                    <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                      Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {applications.map(application => (
+                    <tr key={application.id}>
+                      <td>{application.companyName}</td>
+                      <td>{application.jobRole}</td>
+                      <td>{application.appliedOn}</td>
+                      <td>{resumeNames[application.resumeId]}</td>
+                      <td>{renderJobStatus(application.applicationId)}</td>
+                      <td>{application.applicationStatus}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
 
-            <tr>
-              <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-              <th scope="col" onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-              <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-              <th scope="col">Resume Profile</th>
-              <th scope="col">Job Status</th>
-              <th scope="col" onClick={() => handleSort('applicationStatus')}>
-                Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {applications.map(application => (
-              <tr key={application.id}>
-                <td>{application.companyName}</td>
-                <td>{application.jobRole}</td>
-                <td>{application.appliedOn}</td>
-                <td>{resumeNames[application.resumeId]}</td>
-                <td>{renderJobStatus(application.applicationId)}</td>
-                <td>{application.applicationStatus}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-
-        {/* Pagination */}
-        <div className="pagination-container">
-          <ReactPaginate
-            previousLabel={<i className="i-Previous" />}
-            nextLabel={<i className="i-Next1" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={totalPages}
-            marginPagesDisplayed={1}
-            pageRangeDisplayed={2}
-            onPageChange={handlePageClick}
-            activeClassName="active"
-            containerClassName="pagination"
-            subContainerClassName="pages pagination"
-          />
+              {/* Pagination */}
+              <div className="pagination-container">
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+               </div>
+              </>
+              ) : (
+              <h4 className='text-center'>No Application .!!</h4>
+            )}
+           
+           </div>
         </div>
       </div>
-    </div>
-  );
+      );
 }
-
 export default MyApplication;
 
 

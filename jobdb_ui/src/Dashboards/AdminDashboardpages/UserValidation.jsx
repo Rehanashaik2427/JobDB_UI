@@ -91,9 +91,9 @@ const UserValidation = () => {
           </Table>
         </div>
         <div className="pagination-container">
-        <Breadcrumb routeSegments={[{ name: 'UI Kits', path: '/uikits' }, { name: 'Table' }]} />
+          <Breadcrumb routeSegments={[{ name: 'UI Kits', path: '/uikits' }, { name: 'Table' }]} />
 
-        <ReactPaginate
+          <ReactPaginate
             previousLabel={<i className="i-Previous" />}
             nextLabel={<i className="i-Next1" />}
             breakLabel="..."
