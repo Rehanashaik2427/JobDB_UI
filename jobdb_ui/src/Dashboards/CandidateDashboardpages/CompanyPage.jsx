@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import './CandidateDashboard.css';
 import CandidateLeftSide from "./CandidateLeftSide";
+import { Col, Container, Row } from "react-bootstrap";
 
 const CompamyPage = () => {
 
@@ -69,13 +70,20 @@ const CompamyPage = () => {
     fetchCountOfJobsByCompany();
   }, [companyId]);
 
+  const user = {
+    userName: userName,
+    userId: userId,
+  };
   return (
-    <div className='dashboard-container'>
-      <div className='left-side'>
-        <CandidateLeftSide user={{ userName, userId }} />
-      </div>
+ <Container fluid className='dashboard-container'>
+      <Row>
+        <Col md={2} className="left-side">
+          <CandidateLeftSide user={user} />
+        </Col>
 
-      <div className='rightside'>
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
         <div className="companyPage">
           {company ? (
             <div>
@@ -95,8 +103,9 @@ const CompamyPage = () => {
             <p>Loading company details...</p>
           )}
         </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

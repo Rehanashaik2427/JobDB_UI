@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import './CandidateDashboard.css';
 
-import { Dropdown } from 'react-bootstrap';
+import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import CandidateLeftSide from './CandidateLeftSide';
 
 
@@ -44,12 +44,15 @@ const Profile = () => {
   };
 
   return (
-    <div className='dashboard-container'>
-      <div className='left-side'>
+    <Container fluid className='dashboard-container'>
+    <Row>
+      <Col md={2} className="left-side">
         <CandidateLeftSide user={user} />
-      </div>
+      </Col>
 
-      <div className='rightside'>
+      <Col md={18} className="rightside" style={{
+        overflow: 'hidden'
+      }}>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
           <Dropdown className="ml-2">
@@ -88,8 +91,9 @@ const Profile = () => {
 
 
 
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
 
   )
 }

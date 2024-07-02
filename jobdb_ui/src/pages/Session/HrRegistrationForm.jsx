@@ -1,11 +1,11 @@
-import { Field, Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Field, Form, Formik } from 'formik';
 import * as yup from 'yup';
+import axios from 'axios';
 import SocialButtons from './sessions/SocialButtons';
 import TextField from './sessions/TextField';
-import axios from 'axios';
 
 const HrRegistrationForm = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -17,6 +17,7 @@ const HrRegistrationForm = () => {
     const [enterOtpValue, setEnterOtpValue] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
+    const [disableFormFields, setDisableFormFields] = useState(false); // State to manage form field disablement
     const navigate = useNavigate();
     const location = useLocation();
     const { companyName } = location.state || {};
@@ -69,7 +70,7 @@ const HrRegistrationForm = () => {
     // Function to handle form submission
     const handleSubmit = async (values, { setSubmitting }) => {
         setSubmitting(true);
-        
+
         if (!validatePassword(values)) {
             setSubmitting(false);
             return;
@@ -78,8 +79,10 @@ const HrRegistrationForm = () => {
         try {
             const response = await axios.post('http://localhost:8082/api/jobbox/saveUser', values);
 
-            if (response.data === "User already exists") {
+            if (!response.data || response.data === "undefined" || response.data === "") {
                 setEmailExistsError(true);
+                setSubmitting(false);
+                return;
             } else {
                 setRegistrationSuccess(true);
                 navigate('/signup/hrSignup/registration-success-msg');
@@ -107,7 +110,7 @@ const HrRegistrationForm = () => {
 
     // Function to handle OTP verification
     const handleOTPVerification = () => {
-        if (otpValue === enterOtpValue) {
+        if (otpValue == enterOtpValue) {
             setOtpVerified(true);
             setShowOTPModal(false);
             // Proceed to submit form data after OTP verification
@@ -116,6 +119,8 @@ const HrRegistrationForm = () => {
             setErrorMessage('Invalid OTP. Please try again.');
         }
     };
+
+    // Function to update user data (in case of email already exists)
     const updateUserData = async (values) => {
         try {
             const response = await axios.put('http://localhost:8082/api/jobbox/updateUserData', values);
@@ -131,6 +136,7 @@ const HrRegistrationForm = () => {
             alert("Data not updated");
         }
     };
+
     return (
         <div className="auth-layout-wrap">
             <div className="auth-content">
@@ -155,7 +161,7 @@ const HrRegistrationForm = () => {
                         {/* Right Section */}
                         <Col md={6}>
                             <div className="p-4">
-                                <h1 className="mb-3 text-18">Registration Form</h1>
+                                <h1 className="mb-3 text-18">HR Registration Form</h1>
                                 <p>(<span style={{ color: 'red' }}>*</span> indicates mandatory fields)</p>
 
                                 {/* Formik form */}
@@ -164,8 +170,8 @@ const HrRegistrationForm = () => {
                                     validationSchema={validationSchema}
                                     onSubmit={handleSubmit}
                                 >
-                                  {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-                                        <form onSubmit={handleSubmit}>
+                                    {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+                                        <Form onSubmit={handleSubmit}>
                                             {/* Text fields */}
                                             <TextField
                                                 type="text"
@@ -175,13 +181,13 @@ const HrRegistrationForm = () => {
                                                         Your name <span style={{ color: 'red' }}>*</span>
                                                     </>
                                                 }
-                                            
                                                 required
                                                 onBlur={handleBlur}
                                                 value={values.userName}
                                                 onChange={handleChange}
                                                 helperText={errors.userName}
                                                 error={errors.userName && touched.userName}
+                                                disabled={disableFormFields}
                                             />
 
                                             <TextField
@@ -198,7 +204,9 @@ const HrRegistrationForm = () => {
                                                 onChange={handleChange}
                                                 helperText={errors.userEmail}
                                                 error={errors.userEmail && touched.userEmail}
+                                                disabled={disableFormFields}
                                             />
+
                                             <TextField
                                                 type="tel"
                                                 name="phone"
@@ -208,8 +216,8 @@ const HrRegistrationForm = () => {
                                                 helperText={errors.phone}
                                                 error={errors.phone && touched.phone}
                                                 fullWidth
+                                                disabled={disableFormFields}
                                             />
-                                
 
                                             <TextField
                                                 type="password"
@@ -225,10 +233,12 @@ const HrRegistrationForm = () => {
                                                 onChange={handleChange}
                                                 helperText={errors.password}
                                                 error={errors.password && touched.password}
+                                                disabled={disableFormFields}
                                             />
+
                                             <TextField
                                                 type="password"
-                                                name="confirmPassword" // Corrected field name here
+                                                name="confirmPassword"
                                                 label={
                                                     <>
                                                         Confirm Password <span style={{ color: 'red' }}>*</span>
@@ -240,6 +250,7 @@ const HrRegistrationForm = () => {
                                                 helperText={errors.confirmPassword}
                                                 error={errors.confirmPassword && touched.confirmPassword}
                                                 fullWidth
+                                                disabled={disableFormFields}
                                             />
 
                                             <div className="form-check">
@@ -251,7 +262,8 @@ const HrRegistrationForm = () => {
                                                     checked={values.agreeToEmailValidation}
                                                     onChange={(e) => {
                                                         handleChange(e);
-                                                        sendOTP(values.userEmail);
+                                                        setDisableFormFields(e.target.checked); // Set disable state based on checkbox
+                                                        sendOTP(values.userEmail); // Trigger OTP sending
                                                     }}
                                                 />
                                                 <label htmlFor="agreeToEmailValidation" className="form-check-label">
@@ -262,8 +274,6 @@ const HrRegistrationForm = () => {
                                                 )}
                                             </div>
 
-                                       
-                                           
                                             {passwordCriteriaError && (
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
@@ -279,15 +289,6 @@ const HrRegistrationForm = () => {
 
                                             {errorMessage && <div className="text-danger">{errorMessage}</div>}
 
-                                            {emailExistsError && (
-                                                <div>
-                                                    <p className="error-message">
-                                                        Email already exists. Please <Link to='/signup/candiSignup/registration-success-msg/user-signin'>click here for login</Link>
-                                                    </p>
-                                                    <Button onClick={() => updateUserData(values)}>Update Your Data</Button>
-                                                </div>
-                                            )}
-
                                             {/* Submit button */}
                                             <Button
                                                 type="submit"
@@ -296,7 +297,7 @@ const HrRegistrationForm = () => {
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
                                             </Button>
-                                        </form>
+                                        </Form>
                                     )}
                                 </Formik>
 

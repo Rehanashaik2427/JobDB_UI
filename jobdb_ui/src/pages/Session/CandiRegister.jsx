@@ -1,6 +1,6 @@
 import { Formik, Field } from 'formik';
 import React, { useState } from 'react';
-import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SocialButtons from './sessions/SocialButtons';
@@ -18,21 +18,18 @@ const CandiRegister = () => {
     const [enterOtpValue, setEnterOtpValue] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
-    const [otpSent, setOtpSent] = useState(false);
-    const [otpError, setOtpError] = useState(false);
-    const [otp, setOtp] = useState('');
-    const [enteredOtp, setEnteredOtp] = useState('');
-    const [isOtpVerified, setIsOtpVerified] = useState(false);
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-    const [updateUserMessage, setUpdateUserMessage] = useState(false);
+
+
+    const [disableFormFields, setDisableFormFields] = useState(false); // State to manage form field disablement
+
     const navigate = useNavigate();
 
     // Validation schema for Formik
     const validationSchema = yup.object().shape({
         userName: yup.string().required("Name is required"),
         userEmail: yup.string().email("Invalid email").required("Email is required"),
-        userEmail: yup.string().email("Invalid email").required("Email is required"),   
+        userEmail: yup.string().email("Invalid email").required("Email is required"),
         password: yup
             .string()
             .min(8, "Password must be 8 characters long")
@@ -81,7 +78,7 @@ const CandiRegister = () => {
             const response = await axios.post('http://localhost:8082/api/jobbox/saveUser', values);
 
             if (!response.data || response.data === "undefined" || response.data === "") {
-         
+
                 setEmailExistsError(true);
                 setSubmitting(false);
                 return;
@@ -98,7 +95,7 @@ const CandiRegister = () => {
 
 
     // Handle OTP generation
-   
+
 
     const updateUserData = async (values) => {
         try {
@@ -138,7 +135,7 @@ const CandiRegister = () => {
         }
     };
 
-   
+
 
     return (
         <div className="auth-layout-wrap">
@@ -153,7 +150,7 @@ const CandiRegister = () => {
                                 </div>
                                 <div className="w-100 h-100 justify-content-center d-flex flex-column">
                                     <SocialButtons
-                                        isLogin
+                                        isLogin={false} // Set isLogin to false for registration
                                         routeUrl="/signup/candiSignup/registration-success-msg/user-signin"
                                         googleHandler={() => alert("google")}
                                         facebookHandler={() => alert("facebook")}
@@ -164,7 +161,7 @@ const CandiRegister = () => {
                         {/* Right Section */}
                         <Col md={6}>
                             <div className="p-4">
-                                <h1 className="mb-3 text-18">Registration Form</h1>
+                                <h1 className="mb-3 text-18">Candidate Registration Form</h1>
                                 <p>(<span style={{ color: 'red' }}>*</span> indicates mandatory fields)</p>
 
                                 {/* Formik form */}
@@ -174,7 +171,7 @@ const CandiRegister = () => {
                                     onSubmit={handleSubmit}
                                 >
                                     {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-                                        <form onSubmit={handleSubmit}>
+                                        <Form onSubmit={handleSubmit}>
                                             {/* Text fields */}
                                             <TextField
                                                 type="text"
@@ -184,13 +181,13 @@ const CandiRegister = () => {
                                                         Your name <span style={{ color: 'red' }}>*</span>
                                                     </>
                                                 }
-                                            
                                                 required
                                                 onBlur={handleBlur}
                                                 value={values.userName}
                                                 onChange={handleChange}
                                                 helperText={errors.userName}
                                                 error={errors.userName && touched.userName}
+                                                disabled={disableFormFields}
                                             />
 
                                             <TextField
@@ -207,7 +204,9 @@ const CandiRegister = () => {
                                                 onChange={handleChange}
                                                 helperText={errors.userEmail}
                                                 error={errors.userEmail && touched.userEmail}
+                                                disabled={disableFormFields}
                                             />
+
                                             <TextField
                                                 type="tel"
                                                 name="phone"
@@ -217,8 +216,8 @@ const CandiRegister = () => {
                                                 helperText={errors.phone}
                                                 error={errors.phone && touched.phone}
                                                 fullWidth
+                                                disabled={disableFormFields}
                                             />
-                                
 
                                             <TextField
                                                 type="password"
@@ -234,10 +233,12 @@ const CandiRegister = () => {
                                                 onChange={handleChange}
                                                 helperText={errors.password}
                                                 error={errors.password && touched.password}
+                                                disabled={disableFormFields}
                                             />
+
                                             <TextField
                                                 type="password"
-                                                name="confirmPassword" // Corrected field name here
+                                                name="confirmPassword"
                                                 label={
                                                     <>
                                                         Confirm Password <span style={{ color: 'red' }}>*</span>
@@ -245,10 +246,13 @@ const CandiRegister = () => {
                                                 }
                                                 required
                                                 value={values.confirmPassword}
-                                                onChange={handleChange}
+                                                onChange={
+                                                    handleChange
+                                                }
                                                 helperText={errors.confirmPassword}
                                                 error={errors.confirmPassword && touched.confirmPassword}
                                                 fullWidth
+                                                disabled={disableFormFields}
                                             />
 
                                             <div className="form-check">
@@ -260,7 +264,10 @@ const CandiRegister = () => {
                                                     checked={values.agreeToEmailValidation}
                                                     onChange={(e) => {
                                                         handleChange(e);
-                                                        sendOTP(values.userEmail);
+                                                        setDisableFormFields(e.target.checked); // Set disable state based on checkbox
+                                                        if(e.target.checked){
+                                                        sendOTP(values.userEmail); }// Trigger OTP sending}
+                                                        
                                                     }}
                                                 />
                                                 <label htmlFor="agreeToEmailValidation" className="form-check-label">
@@ -271,11 +278,6 @@ const CandiRegister = () => {
                                                 )}
                                             </div>
 
-                                       
-                                            {/* Error messages */}
-                                            {passwordMatchError && (
-                                                <p className="error-message">Password and confirm password do not match</p>
-                                            )}
                                             {passwordCriteriaError && (
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
@@ -291,46 +293,46 @@ const CandiRegister = () => {
 
                                             {errorMessage && <div className="text-danger">{errorMessage}</div>}
 
-                                            <button
+                                            {/* Submit button */}
+                                            <Button
                                                 type="submit"
                                                 className="btn btn-primary w-100 my-1 btn-rounded mt-3"
                                                 disabled={!otpVerified || isSubmitting || emailExistsError}
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
-                                            </button>
-
-                                        </form>
+                                            </Button>
+                                        </Form>
                                     )}
                                 </Formik>
 
+                                {/* Modal for OTP verification */}
+                                <Modal show={showOTPModal} onHide={() => setShowOTPModal(false)}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Enter OTP</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <TextField
+                                            type="text"
+                                            label="Enter OTP received in email"
+                                            value={enterOtpValue}
+                                            onChange={(e) => setEnterOtpValue(e.target.value)}
+                                        />
+                                        {errorMessage && <p className="error-message">{errorMessage}</p>}
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={() => setShowOTPModal(false)}>
+                                            Cancel
+                                        </Button>
+                                        <Button variant="primary" onClick={handleOTPVerification}>
+                                            Verify OTP
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
                             </div>
                         </Col>
                     </Row>
                 </Card>
             </div>
-
-            <Modal show={showOTPModal} onHide={() => setShowOTPModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Enter OTP</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <TextField
-                        type="text"
-                        label="Enter OTP received in email"
-                        value={enterOtpValue}
-                        onChange={(e) => setEnterOtpValue(e.target.value)}
-                    />
-                    {errorMessage && <p className="error-message">{errorMessage}</p>}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowOTPModal(false)}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={handleOTPVerification}>
-                        Verify OTP
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </div>
     );
 };

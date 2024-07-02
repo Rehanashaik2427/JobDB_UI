@@ -2,7 +2,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Dropdown } from 'react-bootstrap';
+import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
@@ -105,12 +105,15 @@ const Resume = () => {
   return (
 
 
-    <div className='dashboard-container'>
-      <div className='left-side'>
+    <Container fluid className='dashboard-container'>
+    <Row>
+      <Col md={2} className="left-side">
         <CandidateLeftSide user={user} />
-      </div>
+      </Col>
 
-      <div className='rightside'>
+      <Col md={18} className="rightside" style={{
+        overflow: 'hidden'
+      }}>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
        
             
@@ -175,9 +178,9 @@ const Resume = () => {
             }} >ADD NEW RESUME</Link>
           </div>
         </div>
-      </div>
-
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

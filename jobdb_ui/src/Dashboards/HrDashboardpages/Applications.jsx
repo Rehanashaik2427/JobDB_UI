@@ -108,12 +108,10 @@ const Applications = () => {
         <Col md={2} className="leftside">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-        <Row>
-          <Col md={2} className="left-side">
-            <HrLeftSide user={{ userName, userEmail }} />
-          </Col>
-
-          <Col md={10} className="rightside">
+        
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
             <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
               <div className="search-bar">
                 <input
@@ -211,7 +209,7 @@ const Applications = () => {
             )}
 
           </Col>
-        </Row>
+        
         </Row>
     </Container>
 

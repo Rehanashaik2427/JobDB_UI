@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-import { Button, Card, Dropdown } from 'react-bootstrap';
+import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
@@ -26,10 +26,6 @@ const CandidatesCompanies = () => {
     setSearch(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    fetchCompanyBySearch();
-  };
 
   const fetchCompany = async () => {
     const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
@@ -73,87 +69,95 @@ const CandidatesCompanies = () => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
+  const user = {
+    userName: userName,
+    userId: userId,
+  };
   return (
-    <div className='dashboard-container'>
-      <div className='left-side'>
-        <CandidateLeftSide user={{ userName, userId }} />
-      </div>
-      <div className='rightside'>
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-          <div className="search-bar">
-            <input
-              style={{ borderRadius: '6px', height: '35px' }}
+    <Container fluid className='dashboard-container'>
+      <Row>
+        <Col md={2} className="left-side">
+          <CandidateLeftSide user={user} />
+        </Col>
 
-              type="text"
-              name="search"
-              placeholder="Search"
-              value={search}
-              onChange={handleSearchChange}
-            />
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+            <div className="search-bar">
+              <input
+                style={{ borderRadius: '6px', height: '35px' }}
+
+                type="text"
+                name="search"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearchChange}
+              />
+            </div>
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
-          <Dropdown className="ml-2">
-            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="mt-3">
-              <Dropdown.Item as={Link} to="/">
-                <i className="i-Data-Settings me-1" /> Account settings
-              </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                <i className="i-Lock-2 me-1" /> Sign out
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
 
-        <div className="companyJob">
-          <div className="cards d-flex flex-wrap justify-content-around" >
-            {companies.length > 0 ? (
-              <>
-                <div className="row">
-                  {companies.map((company) => (
-                    <Card
-                      className="company-card-job"
-                      key={company.companyId}
-                      style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}
-                    >
-                      <Card.Body>
-                        <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                        <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                        <Button onClick={() => handleClick(company.companyId)}>View</Button>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-                <ReactPaginate
-                  previousLabel={<i className="i-Previous" />}
-                  nextLabel={<i className="i-Next1" />}
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={totalPages}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  onPageChange={handlePageClick}
-                  activeClassName="active"
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                />
-              </>
-            ) : (
-              <>
-                <div className="d-flex justify-content-center flex-direction-row">
-                  <div className="spinner-bubble spinner-bubble-primary m-5" />
-                  <span >Loading...</span>
+          <div className="companyJob">
+            <div className="cards d-flex flex-wrap justify-content-around" >
+              {companies.length > 0 ? (
+                <>
+                  <div className="row">
+                    {companies.map((company) => (
+                      <Card
+                        className="company-card-job"
+                        key={company.companyId}
+                        style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}
+                      >
+                        <Card.Body>
+                          <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                          <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+                          <Button onClick={() => handleClick(company.companyId)}>View</Button>
+                        </Card.Body>
+                      </Card>
+                    ))}
+                  </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="d-flex justify-content-center flex-direction-row">
+                    <div className="spinner-bubble spinner-bubble-primary m-5" />
+                    <span >Loading...</span>
 
-                </div>
-              </>
-            )}
-         </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-        </div>
-        );
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
-        export default CandidatesCompanies;
+export default CandidatesCompanies;

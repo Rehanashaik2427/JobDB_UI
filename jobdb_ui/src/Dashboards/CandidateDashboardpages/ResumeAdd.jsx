@@ -2,7 +2,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -88,12 +88,15 @@ const ResumeAdd = () => {
     navigate('/candidate-dashboard/resume', { state: { userName, userId } }); // Navigate back to previous page
   };
   return (
-    <div className='dashboard-container'>
-      <div className='left-side'>
-        <CandidateLeftSide user={user} />
-      </div>
+    <Container fluid className='dashboard-container'>
+      <Row>
+        <Col md={2} className="left-side">
+          <CandidateLeftSide user={user} />
+        </Col>
 
-      <div className='rightside'>
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
   
           <Col xs={6}>
             <Button onClick={handleBack} variant="secondary">
@@ -159,10 +162,9 @@ const ResumeAdd = () => {
             {successMessage && <p>{successMessage}</p>}
           </Col>
 
-       </div>
-       
-       </div>
-       
+          </Col>
+      </Row>
+    </Container>
        
   );
 };

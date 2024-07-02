@@ -3,7 +3,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Table } from 'react-bootstrap';
+import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
@@ -78,7 +78,7 @@ const MyApplication = () => {
   };
 
   // Update fetchApplicationsByStatus function to include the search term
-  const fetchApplicationsByStatus = async () => {
+  const fetchApplicationsByStatus = async (applicationStatus) => {
     try {
       const params = {
         searchStatus: applicationStatus,
@@ -98,7 +98,7 @@ const MyApplication = () => {
     }
   };
 
-  const fetchApplicationBySearch = async () => {
+  const fetchApplicationBySearch = async (search) => {
     try {
       const params = {
         searchStatus: search,
@@ -121,11 +121,12 @@ const MyApplication = () => {
 
   // Call the appropriate fetch function based on the existence of searchStatus
   useEffect(() => {
-    if (applicationStatus) {
-      fetchApplicationsByStatus(applicationStatus);
-
-    } else if (search) {
+    if (search) {
       fetchApplicationBySearch(search);
+
+    } else if (applicationStatus) {
+     
+      fetchApplicationsByStatus(applicationStatus);
 
     } else {
       fetchApplications();
@@ -247,12 +248,15 @@ const MyApplication = () => {
 
   return (
 
-    <div className='dashboard-container'>
-      <div className='left-side'>
-        <CandidateLeftSide user={user} />
-      </div>
+    <Container fluid className='dashboard-container'>
+      <Row>
+        <Col md={2} className="left-side">
+          <CandidateLeftSide user={user} />
+        </Col>
 
-      <div className='rightside'>
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
           <div className="search-bar" >
             <input style={{ borderRadius: '6px', height: '35px' }}
@@ -334,8 +338,9 @@ const MyApplication = () => {
             )}
            
            </div>
-        </div>
-      </div>
+           </Col>
+      </Row>
+    </Container>
       );
 }
 export default MyApplication;
