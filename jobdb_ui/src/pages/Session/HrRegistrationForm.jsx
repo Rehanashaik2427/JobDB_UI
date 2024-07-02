@@ -196,10 +196,7 @@ const HrRegistrationForm = () => {
                                                 fullWidth
                                             />
                                             {/* Display error messages */}
-                                            {passwordMatchError && (
-                                                <p className="error-message">Password and confirm password do not match</p>
-                                            )}
-
+                                           
                                             {passwordCriteriaError && (
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
