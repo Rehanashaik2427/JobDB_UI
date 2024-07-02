@@ -1,7 +1,7 @@
 import { faCreditCard, faGlobe, faPaperclip, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -24,12 +24,15 @@ const Payment = () => {
   };
 
   return (
-    <div className='dashboard-container'>
-      <div className='left-side'>
+    <Container fluid className='dashboard-container'>
+    <Row>
+      <Col md={2} className="left-side">
         <CandidateLeftSide user={user} />
-      </div>
+      </Col>
 
-      <div className='rightside'>
+      <Col md={18} className="rightside" style={{
+        overflow: 'hidden'
+      }}>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
           <Dropdown className="ml-2">
@@ -63,8 +66,9 @@ const Payment = () => {
             {/* Add payment history details here */}
           </div>
         </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
 
   );
 }

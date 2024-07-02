@@ -33,6 +33,7 @@ const CandidateDashboard = () => {
 
 
       setUserName(response.data.userName);
+      localStorage.setItem(`userName_${userId}`, response.data.userName); // Store userName with user-specific key
 
 
       setUserData(response.data);
@@ -44,11 +45,17 @@ const CandidateDashboard = () => {
   };
 
   useEffect(() => {
+    if (!userName && userId) {
+      fetchUserData(userId);
+    }
 
-    fetchUserData(userId);
-
+  }, [userId, userName]);
+  useEffect(() => {
+    const storedUserName = localStorage.getItem(`userName_${userId}`);
+    if (storedUserName) {
+      setUserName(storedUserName);
+    }
   }, [userId]);
-
 
 
   const [countOfCompanies, setCountOfCompanies] = useState(null);
@@ -195,15 +202,17 @@ const CandidateDashboard = () => {
     userId: userId,
   };
 
-
-
+  
   return (
-    <div className='dashboard-container'>
-      <div className='left-side'>
+    <Container fluid className='dashboard-container'>
+      <Row>
+      <Col md={2} className="left-side">
         <CandidateLeftSide user={user} />
-      </div>
+      </Col>
 
-      <div className='rightside'>
+      <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
 
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
           <i
@@ -215,7 +224,7 @@ const CandidateDashboard = () => {
 
 
 
-          <Dropdown className="ml-2">
+<Dropdown className="ml-2">
             <Dropdown.Toggle
               as="div"
               id="dropdownNotification"
@@ -241,6 +250,7 @@ const CandidateDashboard = () => {
               </Dropdown.Menu>
             ) : null}
           </Dropdown>
+
 
 
 
@@ -331,8 +341,9 @@ const CandidateDashboard = () => {
             </Col>
           </Row>
         </Container>
-      </div>
-    </div>
+      </Col>
+      </Row>
+    </Container>
 
   );
 };

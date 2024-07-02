@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Container, Form, Modal } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -127,12 +127,15 @@ const DreamCompany = () => {
     userId: userId,
   };
   return (
-    <div className='dashboard-container'>
-    <div className='left-side'>
-      <CandidateLeftSide user={user} />
-    </div>
+    <Container fluid className='dashboard-container'>
+      <Row>
+        <Col md={2} className="left-side">
+          <CandidateLeftSide user={user} />
+        </Col>
 
-    <div className='rightside'>
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
           <Container>
             <div className="centered-content">
               {showResumePopup && (
@@ -165,30 +168,32 @@ const DreamCompany = () => {
                   <Form.Label htmlFor="resume">Resume:</Form.Label>
                   <Button variant='info' onClick={handleApplyButtonClick}>Select Resume</Button>
                 </Form.Group>
-             
+
                 {showMessage && (
                   <Card className="success-message">
-                  <Card.Body>
-                    <Card.Title>Congratulations</Card.Title>
-                    <Card.Text>
-                      You successfully applied to your Dream Company
-                    </Card.Text>
-                    <Card.Text>
-                      <Link to={{
-                        pathname: '/candidate-dashboard',
-                        state: { userName: userName, userId: userId }
-                      }} onClick={(e) => {
-                        e.preventDefault();
-                        navigate('/candidate-dashboard', { state: { userName, userId } });
-                      }}>Go back to dashboard</Link>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
+                    <Card.Body>
+                      <Card.Title>Congratulations</Card.Title>
+                      <Card.Text>
+                        You successfully applied to your Dream Company
+                      </Card.Text>
+                      <Card.Text>
+                        <Link to={{
+                          pathname: '/candidate-dashboard',
+                          state: { userName: userName, userId: userId }
+                        }} onClick={(e) => {
+                          e.preventDefault();
+                          navigate('/candidate-dashboard', { state: { userName, userId } });
+                        }}>Go back to dashboard</Link>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
                 )}
               </Form>
             </div>
           </Container>
-</div></div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

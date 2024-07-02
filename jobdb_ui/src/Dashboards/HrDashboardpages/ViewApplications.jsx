@@ -27,7 +27,7 @@ const ViewApplications = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-
+  const [loading, setLoading] = useState(true);
 
   const handlePreviousPage = () => {
     if (page > 0) {
@@ -54,6 +54,7 @@ const ViewApplications = () => {
   };
 
   const handleSelect = async (filterStatus) => {
+    setLoading(true);
     try {
       const response = await axios.get(`${BASE_API_URL}/getFilterApplicationsByJobIdWithpagination?jobId=${jobId}&filterStatus=${filterStatus}&page=${page}&size=${pageSize}`);
       console.log(response.data);
@@ -63,12 +64,14 @@ const ViewApplications = () => {
       setApplications(response.data.content || []);
       fetchResumeTypes(response.data.content || []);
       setTotalPages(response.data.totalPages);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   const fetchApplications = async () => {
+    setLoading(true);
     try {
       const params = {
         jobId: jobId,
@@ -82,6 +85,7 @@ const ViewApplications = () => {
       setApplications(response.data.content || []);
       fetchResumeTypes(response.data.content || []);
       setTotalPages(response.data.totalPages);
+      setLoading(false);
     } catch (error) {
       console.log('Error fetching applications:', error);
     }
@@ -235,12 +239,17 @@ const ViewApplications = () => {
                 </div>
               </div>
             )}
-            {applications.length === 0 ? (
-              <section class='not-yet'>
-                <h2>Sorry, you haven't received any applications yet.</h2>
-              </section>
-            ) : (
-              <div>
+            <div>
+              {loading ? (
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="spinner-bubble spinner-bubble-primary m-5" />
+                  <span>Loading...</span>
+                </div>
+              ) : applications.length === 0 ? (
+                <section>
+                  <h2>Sorry, you haven't received any applications yet.</h2>
+                </section>
+              ) : (
                 <div>
                   <Table hover className='text-center'>
                     <thead className="table-light">
@@ -249,15 +258,19 @@ const ViewApplications = () => {
                         <th scope="col">Candidate Name</th>
                         <th scope="col">Candidate Email</th>
                         <th scope="col">Resume ID</th>
-                        <th scope="col" onClick={() => handleSort('appliedOn')}>Date{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                        <th scope="col" onClick={() => handleSort('applicationStatus')}>Application Status{sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col" onClick={() => handleSort('appliedOn')}>
+                          Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                          Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
                         <th scope="col">View Details</th>
                         <th scope="col">Application Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {applications.map(application => (
-                        <tr key={application.id}>
+                      {applications.map((application) => (
+                        <tr key={application.applicationId}>
                           <td>{application.jobRole}</td>
                           <td>{candidateName[application.candidateId]}</td>
                           <td>{candidateEmail[application.candidateId]}</td>
@@ -266,14 +279,21 @@ const ViewApplications = () => {
                           <td>{application.applicationStatus}</td>
                           <td>
                             <Link
-
-                              to={{ pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails', state: { userEmail: userEmail, applicationId: application.applicationId, userName: userName } }}
+                              to={{
+                                pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
+                                state: { userEmail, applicationId: application.applicationId, userName },
+                              }}
                               onClick={(e) => {
                                 e.preventDefault();
-                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', { state: { userEmail: userEmail, applicationId: application.applicationId, userName: userName } });
+                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
+                                  state: { userEmail, applicationId: application.applicationId, userName },
+                                });
                               }}
                             >
-                              <FontAwesomeIcon icon={faEye} style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }} />
+                              <FontAwesomeIcon
+                                icon={faEye}
+                                style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }}
+                              />
                             </Link>
                           </td>
                           <td>
@@ -288,6 +308,7 @@ const ViewApplications = () => {
                       ))}
                     </tbody>
                   </Table>
+
                   <div className="pagination-container">
                     <ReactPaginate
                       previousLabel={<i className="i-Previous" />}
@@ -303,11 +324,9 @@ const ViewApplications = () => {
                       subContainerClassName="pages pagination"
                     />
                   </div>
-
                 </div>
-              </div>
-            )}
-
+              )}
+            </div>
           </div>
         </Col>
       </Row>

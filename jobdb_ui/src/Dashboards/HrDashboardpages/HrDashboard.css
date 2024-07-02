@@ -41,11 +41,10 @@ label {
 /* HrDashboard.css */
 
 
-.leftside {
+.left-side{
   height: 100vh;
-  width: 300px;
+  width: 200px;
 }
-
 .rightside {
   height: 100vh;
   width: 100vw;

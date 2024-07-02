@@ -20,10 +20,16 @@ const HrDashboard = () => {
 
   useEffect(() => {
     if (userEmail) {
-      fetchUserData(userEmail);
       fetchCounts(userEmail);
     }
   }, [userEmail]);
+
+  useEffect(() => {
+    if (!userName && userEmail) {
+      fetchUserData(userEmail);
+    }
+  }, [userEmail,userName]);
+
 
   useEffect(() => {
     const storedUserName = localStorage.getItem(`userName_${userEmail}`);
@@ -38,6 +44,7 @@ const HrDashboard = () => {
         params: { userEmail: userEmail }
       });
       setUserData(response.data);
+
       setUserName(response.data.userName);
       localStorage.setItem(`userName_${userEmail}`, response.data.userName); // Store userName with user-specific key
 

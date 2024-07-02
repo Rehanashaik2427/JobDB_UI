@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import HrLeftSide from './HrLeftSide';
 
@@ -23,21 +23,7 @@ const PostedJobs = () => {
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
+  
 
   const fetchJobs = async (userEmail) => {
     try {
@@ -88,8 +74,9 @@ const PostedJobs = () => {
       fetchJobs(userEmail);
   }, [userEmail, search, page, pageSize, sortedColumn, sortOrder]);
 
-  const [showSettings, setShowSettings] = useState(false);
 
+  const [showJobDescription, setShowJobDescription] = useState(false);
+ 
 
   const navigate = useNavigate();
   const toggleSettings = () => {
@@ -120,7 +107,20 @@ const PostedJobs = () => {
     setPage(data.selected);
   };
 
-
+  const closeJobDescription = () => {
+    setShowJobDescription(false);
+    setSelectedJobSummary('');
+  };
+  const popover = (summary) => (
+    <Popover id="popover-basic" style={{ left: '80%', transform: 'translateX(-50%)', width: '400px' }}>
+      <Popover.Body>
+        {summary}
+        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
+      
+        </span>
+      </Popover.Body>
+    </Popover>
+  );
 
 
   return (
@@ -167,6 +167,7 @@ const PostedJobs = () => {
                       <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
                       <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
                       <th scope="col" onClick={() => handleSort('numberOfPosition')}>Vacancy{sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col">Job Description</th>
                       <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application Deadline{sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
                     </tr>
                   </thead>
@@ -179,6 +180,11 @@ const PostedJobs = () => {
                         <td>{job.jobType}</td>
                         <td>{job.skills}</td>
                         <td>{job.numberOfPosition}</td>
+                        <td>
+                            <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                              <Button variant="secondary" className='description btn-rounded' >Description</Button>
+                            </OverlayTrigger>
+                          </td>
                         <td>{job.applicationDeadline}</td>
                       </tr>
                     ))}
