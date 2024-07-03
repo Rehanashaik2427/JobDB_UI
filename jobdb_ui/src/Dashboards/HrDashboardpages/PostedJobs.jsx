@@ -69,10 +69,10 @@ const PostedJobs = () => {
   useEffect(() => {
     if (search) {
       fetchJobBysearch();
+    } else {
+      fetchJobs();
     }
-    else
-      fetchJobs(userEmail);
-  }, [userEmail, search, page, pageSize, sortedColumn, sortOrder]);
+  }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
 
   const [showJobDescription, setShowJobDescription] = useState(false);

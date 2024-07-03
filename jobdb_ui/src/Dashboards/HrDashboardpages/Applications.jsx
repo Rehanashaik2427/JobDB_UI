@@ -77,13 +77,7 @@ const Applications = () => {
     }
 
   }
-  useEffect(() => {
-    if (search) {
-      fetchJobBysearch();
-    }
-    else
-      fetchJobs()
-  }, [userEmail, search, page, pageSize]);
+
 
 
   const handleSort = (column) => {
