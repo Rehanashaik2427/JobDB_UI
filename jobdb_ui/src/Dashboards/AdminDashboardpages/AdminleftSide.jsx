@@ -32,6 +32,7 @@ function AdminLeftSide() {
             className='auth-logo'
           />
         </Navbar.Brand>
+        
         <Navbar.Text>
           <h2 style={{ color: 'black' }}>AdminName</h2>
         </Navbar.Text>
