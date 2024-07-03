@@ -1,12 +1,10 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import swal from 'sweetalert2'; // Import SweetAlert2
+import swal from 'sweetalert2';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 
@@ -131,53 +129,82 @@ const MyJobs = () => {
       </Popover.Body>
     </Popover>
   );
+  const convertToUpperCase = (str) => {
+    return String(str).toUpperCase();
+  };
 
+  const getInitials = (name) => {
+    if (!name) return ''; // Handle case where name is undefined
+    const nameParts = name.split(' ');
+    if (nameParts.length > 1) {
+      return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
+    } else {
+      return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
+    }
+  };
+  const initials = getInitials(userName);
   return (
     <Container fluid className="dashboard-container">
       <Row>
         <Col md={2} className="leftside">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-        
+
         <Col md={18} className="rightside" style={{
           overflow: 'hidden'
         }}>
-            <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-              <div className="search-bar">
-                <input
-                  style={{ borderRadius: '6px', height: '35px' }}
-                  type="text"
-                  name="search"
-                  placeholder="Search"
-                  value={search}
-                  onChange={handleSearchChange}
-                />
-              </div>
-              <Dropdown className="ml-2">
-                <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                  <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="mt-3">
-                  <Dropdown.Item as={Link} to="/">
-                    <i className="i-Data-Settings me-1" /> Account settings
-                  </Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/" onClick={() => navigate('/')}>
-                    <i className="i-Lock-2 me-1" /> Sign out
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+            <div className="search-bar">
+              <input
+                style={{ borderRadius: '6px', height: '35px' }}
+                type="text"
+                name="search"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearchChange}
+              />
             </div>
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <div
+                  className="initials-placeholder"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {initials}
+                </div>
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={() => navigate('/')}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
 
-            {loading ? (
-              <div className="d-flex justify-content-center align-items-center">
-                <div className="spinner-bubble spinner-bubble-primary m-5" />
-                <span>Loading...</span>
-              </div>
-            ) : jobs.length > 0 ? (
-              <>
-                <h2 className='text-center'>Jobs posted by {userName}</h2>
+          {loading ? (
+            <div className="d-flex justify-content-center align-items-center">
+              <div className="spinner-bubble spinner-bubble-primary m-5" />
+              <span>Loading...</span>
+            </div>
+          ) : jobs.length > 0 ? (
+            <>
+              <h2 className='text-center'>Jobs posted by {userName}</h2>
 
-                <div className='job-list'>
+              <div>
+                <div>
                   <Table hover className='text-center'>
                     <thead className="table-light">
                       <tr>
@@ -249,46 +276,46 @@ const MyJobs = () => {
                       ))}
                     </tbody>
                   </Table>
-
-                  <div className="pagination-container">
-                    <ReactPaginate
-                      previousLabel={<i className="i-Previous" />}
-                      nextLabel={<i className="i-Next1" />}
-                      breakLabel="..."
-                      breakClassName="break-me"
-                      pageCount={totalPages}
-                      marginPagesDisplayed={1}
-                      pageRangeDisplayed={2}
-                      onPageChange={handlePageClick}
-                      activeClassName="active"
-                      containerClassName="pagination"
-                      subContainerClassName="pages pagination"
-                    />
-                  </div>
                 </div>
-              </>
-            ) : (
-              <section>
-                <h2>You have not posted any jobs yet. Post Now</h2>
-              </section>
-            )}
 
-            {/* Only show the Add Job button when not loading and there are jobs */}
-            {!loading && jobs.length >= 0 && (
-              <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>
-                <Link
-                  to={{ pathname: '/hr-dashboard/my-jobs/addJob', state: { userName, userEmail } }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/hr-dashboard/my-jobs/addJob', { state: { userName, userEmail } });
-                  }}
-                >
-                  Add Job
-                </Link>
-              </Button>
-            )}
-          </Col>
-        
+              </div>
+            </>
+          ) : (
+            <section>
+              <h2>You have not posted any jobs yet. Post Now</h2>
+            </section>
+          )}
+
+          <div className="pagination-container">
+            <ReactPaginate
+              previousLabel={<i className="i-Previous" />}
+              nextLabel={<i className="i-Next1" />}
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={totalPages}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={2}
+              onPageChange={handlePageClick}
+              activeClassName="active"
+              containerClassName="pagination"
+              subContainerClassName="pages pagination"
+            />
+          </div>
+          {!loading && jobs.length >= 0 && (
+            <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>
+              <Link
+                to={{ pathname: '/hr-dashboard/my-jobs/addJob', state: { userName, userEmail } }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/hr-dashboard/my-jobs/addJob', { state: { userName, userEmail } });
+                }}
+              >
+                Add Job
+              </Link>
+            </Button>
+          )}
+        </Col>
+
       </Row>
     </Container>
 

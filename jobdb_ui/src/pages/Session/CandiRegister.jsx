@@ -1,11 +1,11 @@
-import { Formik, Field } from 'formik';
+import axios from 'axios';
+import { Field, Formik } from 'formik';
 import React, { useState } from 'react';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SocialButtons from './sessions/SocialButtons';
 import TextField from './sessions/TextField';
-import axios from 'axios';
 
 const CandiRegister = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -131,7 +131,7 @@ const CandiRegister = () => {
             setOtpVerified(false);
             setErrorMessage('Invalid OTP. Please try again.');
             console.error('Error generating OTP:');
-            setErrorMessage('Email already exists please login into your account');
+         
         }
     };
 

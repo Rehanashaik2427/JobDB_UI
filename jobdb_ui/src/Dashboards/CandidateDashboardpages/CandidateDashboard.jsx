@@ -1,5 +1,3 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Dropdown, Row } from 'react-bootstrap';
@@ -18,8 +16,7 @@ const CandidateDashboard = () => {
   const [userData, setUserData] = useState();
   const [userName, setUserName] = useState();
 
-  console.log(userName);
-  console.log(userData);
+
 
   const fetchUserData = async (userId) => {
     try {
@@ -202,146 +199,176 @@ const CandidateDashboard = () => {
     userId: userId,
   };
 
-  
+  const convertToUpperCase = (str) => {
+    return String(str).toUpperCase();
+  };
+
+  const getInitials = (name) => {
+    if (!name) return ''; // Handle case where name is undefined
+    const nameParts = name.split(' ');
+    if (nameParts.length > 1) {
+      return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
+    } else {
+      return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
+    }
+  };
+
+  const initials = getInitials(user.userName);
   return (
     <Container fluid className='dashboard-container'>
       <Row>
-      <Col md={2} className="left-side">
-        <CandidateLeftSide user={user} />
-      </Col>
+        <Col md={2} className="left-side">
+          <CandidateLeftSide user={user} />
+        </Col>
 
-      <Col md={18} className="rightside" style={{
+        <Col md={18} className="rightside" style={{
           overflow: 'hidden'
         }}>
 
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
-          <i
-            datafullscreen="true"
-            onClick={toggleFullScreen}
-            className="i-Full-Screen header-icon d-none d-lg-inline-block"
-            style={{ fontSize: '20px', marginRight: '12px' }}
-          />
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
+            <i
+              datafullscreen="true"
+              onClick={toggleFullScreen}
+              className="i-Full-Screen header-icon d-none d-lg-inline-block"
+              style={{ fontSize: '20px', marginRight: '12px' }}
+            />
 
 
 
-<Dropdown className="ml-2">
-            <Dropdown.Toggle
-              as="div"
-              id="dropdownNotification"
-              className="badge-top-container toggle-hidden ml-2"
-            >
-              <span className="badge bg-primary cursor-pointer">
-                {countOfUnreadNotification}
-              </span>
-              <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
-            </Dropdown.Toggle>
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle
+                as="div"
+                id="dropdownNotification"
+                className="badge-top-container toggle-hidden ml-2"
+              >
+                <span className="badge bg-primary cursor-pointer">
+                  {countOfUnreadNotification}
+                </span>
+                <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
+              </Dropdown.Toggle>
 
-            {countOfUnreadNotification > 0 ? (
-              <Dropdown.Menu>
-                {unreadNotifications.length === 0 ? (
-                  <Dropdown.Item>No new notifications</Dropdown.Item>
-                ) : (
-                  unreadNotifications.map((notification, index) => (
-                    <Dropdown.Item key={index} onClick={() => markNotificationAsRead(notification.id)} style={{ fontWeight: notification.read ? 'normal' : 'bold' }}>
-                      {notification.message} 
-                    </Dropdown.Item>
-                  ))
-                )}
+              {countOfUnreadNotification > 0 ? (
+                <Dropdown.Menu>
+                  {unreadNotifications.length === 0 ? (
+                    <Dropdown.Item>No new notifications</Dropdown.Item>
+                  ) : (
+                    unreadNotifications.map((notification, index) => (
+                      <Dropdown.Item key={index} onClick={() => markNotificationAsRead(notification.id)} style={{ fontWeight: notification.read ? 'normal' : 'bold' }}>
+                        {notification.message}
+                      </Dropdown.Item>
+                    ))
+                  )}
+                </Dropdown.Menu>
+              ) : null}
+            </Dropdown>
+
+
+
+
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <div
+                  className="initials-placeholder"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {initials}
+                </div>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
               </Dropdown.Menu>
-            ) : null}
-          </Dropdown>
+            </Dropdown>
+          </div>
 
 
 
+          <Container className="my-dashboard-container ">
+            <h3 className='status-info' style={{ marginTop: '10px' }}>My application status</h3>
+            <Row className="dashboard d-flex mt-4">
+              <Col xs={3} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px', marginLeft: '20px' }}>
+                <Link
+                  to={{
+                    pathname: '/candidate-companies',
+                    state: { userName: userName, userId: userId }
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
+                  }}
+                >
+                  <h5>Applied to</h5>
+                  <h4>{countOfCompanies !== null ? countOfCompanies : 'Loading...'}</h4>
+                  <h5>companies</h5>
+                </Link>
+              </Col>
+              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
+                <Link
+                  to={{
+                    pathname: '/resume',
+                    state: { userName: userName, userId: userId }
+                  }} onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/candidate-dashboard/resume', { state: { userName, userId } });
+                  }}
+                >
+                  <h4>{countOfResume !== null ? countOfResume : 'Loading...'}</h4>
+                  <h5>resumes</h5>
+                </Link>
+              </Col>
+              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
+                <h1>250</h1>
+                <h4>resume views</h4>
+              </Col>
 
-          <Dropdown className="ml-2">
-            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="mt-3">
-              <Dropdown.Item as={Link} to="/">
-                <i className="i-Data-Settings me-1" /> Account settings
-              </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                <i className="i-Lock-2 me-1" /> Sign out
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
+                <Link
+                  to={{
+                    pathname: '/candidate-dashboard/my-application',
+                    state: { userName: userName, userId: userId, applicationStatus: "Shortlisted" }
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/candidate-dashboard/my-application', { state: { userName, userId, applicationStatus: "Shortlisted" } });
+                  }}
+                >
+                  <h4>{countOfshortlistedApplications !== null ? countOfshortlistedApplications : 'Loading...'}</h4>
+                  <h4>shortlist</h4>
+                </Link>
+              </Col>
+              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px', textAlign: 'center', marginRight: '20px' }}>
+                <Link
+                  to={{
+                    pathname: '/candidate-companies',
+                    state: { userName: userName, userId: userId }
+                  }} onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
+                  }}
+                >
+                  <h4 className='text-align-center'>{countOfTotalCompanies !== null ? countOfTotalCompanies : 'Loading...'}</h4>
+                  <h5 className='text-align-center'>companies</h5>
+                </Link>
 
-
-
-        <Container className="my-dashboard-container ">
-          <h3 className='status-info' style={{ marginTop: '10px' }}>My application status</h3>
-          <Row className="dashboard d-flex mt-4">
-            <Col xs={3} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px', marginLeft: '20px' }}>
-              <Link
-                to={{
-                  pathname: '/candidate-companies',
-                  state: { userName: userName, userId: userId }
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
-                }}
-              >
-                <h5>Applied to</h5>
-                <h4>{countOfCompanies !== null ? countOfCompanies : 'Loading...'}</h4>
-                <h5>companies</h5>
-              </Link>
-            </Col>
-            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
-              <Link
-                to={{
-                  pathname: '/resume',
-                  state: { userName: userName, userId: userId }
-                }} onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/candidate-dashboard/resume', { state: { userName, userId } });
-                }}
-              >
-                <h4>{countOfResume !== null ? countOfResume : 'Loading...'}</h4>
-                <h5>resumes</h5>
-              </Link>
-            </Col>
-            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
-              <h1>250</h1>
-              <h4>resume views</h4>
-            </Col>
-
-            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
-              <Link
-                to={{
-                  pathname: '/candidate-dashboard/my-application',
-                  state: { userName: userName, userId: userId, applicationStatus: "Shortlisted" }
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/candidate-dashboard/my-application', { state: { userName, userId,applicationStatus: "Shortlisted"  } });
-                }}
-              >
-                <h4>{countOfshortlistedApplications !== null ? countOfshortlistedApplications : 'Loading...'}</h4>
-                <h4>shortlist</h4>
-              </Link>
-            </Col>
-            <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px', textAlign: 'center', marginRight: '20px' }}>
-              <Link
-                to={{
-                  pathname: '/candidate-companies',
-                  state: { userName: userName, userId: userId }
-                }} onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
-                }}
-              >
-                <h4 className='text-align-center'>{countOfTotalCompanies !== null ? countOfTotalCompanies : 'Loading...'}</h4>
-                <h5 className='text-align-center'>companies</h5>
-              </Link>
-
-            </Col>
-          </Row>
-        </Container>
-      </Col>
+              </Col>
+            </Row>
+          </Container>
+        </Col>
       </Row>
     </Container>
 

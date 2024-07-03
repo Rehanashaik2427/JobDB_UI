@@ -1,5 +1,3 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
@@ -101,83 +99,112 @@ const Resume = () => {
 
     userId: userId,
   };
+  const convertToUpperCase = (str) => {
+    return String(str).toUpperCase();
+  };
 
+  const getInitials = (name) => {
+    if (!name) return ''; // Handle case where name is undefined
+    const nameParts = name.split(' ');
+    if (nameParts.length > 1) {
+      return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
+    } else {
+      return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
+    }
+  };
+
+  const initials = getInitials(userName);
   return (
 
 
     <Container fluid className='dashboard-container'>
-    <Row>
-      <Col md={2} className="left-side">
-        <CandidateLeftSide user={user} />
-      </Col>
+      <Row>
+        <Col md={2} className="left-side">
+          <CandidateLeftSide user={user} />
+        </Col>
 
-      <Col md={18} className="rightside" style={{
-        overflow: 'hidden'
-      }}>
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-       
-            
-
-
-          <Dropdown className="ml-2">
-            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="mt-3">
-              <Dropdown.Item as={Link} to="/">
-                <i className="i-Data-Settings me-1" /> Account settings
-              </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                <i className="i-Lock-2 me-1" /> Sign out
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+        <Col md={18} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
 
 
-        {showBriefSettings && (
-          <div className="modal-summary">
-            <div className="modal-content-summary">
-              <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
-              {showMessage}
+
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <div
+                  className="initials-placeholder"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {initials}
+                </div>
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+
+
+
+          {showBriefSettings && (
+            <div className="modal-summary">
+              <div className="modal-content-summary">
+                <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
+                {showMessage}
+              </div>
+            </div>
+
+          )}
+
+          <div>
+            <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
+
+            <div className='resume-div d-flex flex-wrap'>
+              {resumes.map((resume, index) => (
+                <Card className='resume-card' key={index}>
+                  <Card.Body>
+                    <Card.Title>Resume : {index + 1}</Card.Title>
+                    <Card.Text>{resume.message}</Card.Text>
+
+                    {resume.fileType === 'file' && (
+                      <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
+                    )}
+                    {resume.fileType === 'link' && (
+                      <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
+                    )}
+                    {resume.fileType === 'brief' && (
+                      <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
+                    )}
+
+                    <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+            <div className='adding-resumes' style={{ marginTop: '50px' }}>
+              <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
+                e.preventDefault();
+                navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
+              }} >ADD NEW RESUME</Link>
             </div>
           </div>
-       
-        )}
-
-        <div>
-          <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
-
-          <div className='resume-div d-flex flex-wrap'>
-            {resumes.map((resume, index) => (
-              <Card className='resume-card' key={index}>
-                <Card.Body>
-                  <Card.Title>Resume : {index + 1}</Card.Title>
-                  <Card.Text>{resume.message}</Card.Text>
-
-                  {resume.fileType === 'file' && (
-                    <Button variant="primary" size="sm" className='download' onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
-                  )}
-                  {resume.fileType === 'link' && (
-                    <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
-                  )}
-                  {resume.fileType === 'brief' && (
-                    <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
-                  )}
-
-                  <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
-          <div className='adding-resumes' style={{ marginTop: '50px' }}>
-            <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
-            }} >ADD NEW RESUME</Link>
-          </div>
-        </div>
         </Col>
       </Row>
     </Container>

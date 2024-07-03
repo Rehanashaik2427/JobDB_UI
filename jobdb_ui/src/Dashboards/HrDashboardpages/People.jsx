@@ -1,5 +1,3 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
@@ -94,7 +92,19 @@ const People = () => {
     const handlePageClick = (data) => {
         setPage(data.selected);
     };
+    const convertToUpperCase = (str) => {
+        return String(str).toUpperCase();
+    };
+    const getInitials = (name) => {
+        const nameParts = name.split(' ');
+        if (nameParts.length > 1) {
+            return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
+        } else {
+            return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
+        }
+    };
 
+    const initials = getInitials(userName);
     return (
         <Container fluid className="dashboard-container">
             <Row>
@@ -107,7 +117,22 @@ const People = () => {
 
                         <Dropdown className="ml-2">
                             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                                <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+                                <div
+                                    className="initials-placeholder"
+                                    style={{
+                                        width: '30px',
+                                        height: '30px',
+                                        borderRadius: '50%',
+                                        backgroundColor: 'grey',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    {initials}
+                                </div>
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="mt-3">
                                 <Dropdown.Item as={Link} to="/">

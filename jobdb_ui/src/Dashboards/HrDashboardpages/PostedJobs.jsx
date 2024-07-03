@@ -1,11 +1,8 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-
 import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
 
 const PostedJobs = () => {
@@ -23,7 +20,7 @@ const PostedJobs = () => {
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
 
-  
+
 
   const fetchJobs = async (userEmail) => {
     try {
@@ -76,7 +73,7 @@ const PostedJobs = () => {
 
 
   const [showJobDescription, setShowJobDescription] = useState(false);
- 
+
 
   const navigate = useNavigate();
   const toggleSettings = () => {
@@ -97,10 +94,7 @@ const PostedJobs = () => {
     setSelectedJobSummary(null);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission
-    fetchJobBysearch();
-  };
+
 
 
   const handlePageClick = (data) => {
@@ -112,17 +106,29 @@ const PostedJobs = () => {
     setSelectedJobSummary('');
   };
   const popover = (summary) => (
-    <Popover id="popover-basic" style={{ left: '80%', transform: 'translateX(-50%)', width: '400px' }}>
+    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
       <Popover.Body>
         {summary}
         <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
-      
+
         </span>
       </Popover.Body>
     </Popover>
   );
 
+  const convertToUpperCase = (str) => {
+    return String(str).toUpperCase();
+  };
+  const getInitials = (name) => {
+    const nameParts = name.split(' ');
+    if (nameParts.length > 1) {
+      return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
+    } else {
+      return convertToUpperCase(nameParts[0][0]+nameParts[0][1]);
+    }
+  };
 
+  const initials = getInitials(userName);
   return (
     <Container fluid className="dashboard-container">
       <Row>
@@ -142,7 +148,22 @@ const PostedJobs = () => {
             </div>
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+                <div
+                  className="initials-placeholder"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {initials}
+                </div>
               </Dropdown.Toggle>
               <Dropdown.Menu className="mt-3">
                 <Dropdown.Item as={Link} to="/">
@@ -157,40 +178,41 @@ const PostedJobs = () => {
 
           <div className="jobs_list">
             {jobs.length > 0 && (
-              <div><div>
-                <Table hover className='text-center'>
-                  <thead className="table-light">
-                    <tr>
-                      <th scope="col" onClick={() => handleSort('hrName')}>Hr Name{sortedColumn === 'hrName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col">Company Name</th>
-                      <th scope="col" onClick={() => handleSort('jobTitle')}>Job Title{sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col" onClick={() => handleSort('numberOfPosition')}>Vacancy{sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col">Job Description</th>
-                      <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application Deadline{sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {jobs.map(job => (
-                      <tr key={job.id}>
-                        <td>{job.userName}</td>
-                        <td>{job.companyName}</td>
-                        <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
-                        <td>{job.jobType}</td>
-                        <td>{job.skills}</td>
-                        <td>{job.numberOfPosition}</td>
-                        <td>
+              <div>
+                <div>
+                  <Table hover className='text-center'>
+                    <thead className="table-light">
+                      <tr>
+                        <th scope="col" onClick={() => handleSort('hrName')}>Hr Name{sortedColumn === 'hrName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col">Company Name</th>
+                        <th scope="col" onClick={() => handleSort('jobTitle')}>Job Title{sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col" onClick={() => handleSort('numberOfPosition')}>Vacancy{sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                        <th scope="col">Job Description</th>
+                        <th scope="col" onClick={() => handleSort('applicationDeadline')}>Application Deadline{sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {jobs.map(job => (
+                        <tr key={job.id}>
+                          <td>{job.userName}</td>
+                          <td>{job.companyName}</td>
+                          <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
+                          <td>{job.jobType}</td>
+                          <td>{job.skills}</td>
+                          <td>{job.numberOfPosition}</td>
+                          <td>
                             <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
                               <Button variant="secondary" className='description btn-rounded' >Description</Button>
                             </OverlayTrigger>
                           </td>
-                        <td>{job.applicationDeadline}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
+                          <td>{job.applicationDeadline}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
                 {selectedJobSummary && (
                   <div className="modal-summary">
                     <div className="modal-content-summary">

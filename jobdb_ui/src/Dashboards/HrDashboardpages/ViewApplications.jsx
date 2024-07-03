@@ -309,7 +309,10 @@ const ViewApplications = () => {
                     </tbody>
                   </Table>
 
-                  <div className="pagination-container">
+             
+                </div>
+              )}
+                   <div className="pagination-container">
                     <ReactPaginate
                       previousLabel={<i className="i-Previous" />}
                       nextLabel={<i className="i-Next1" />}
@@ -324,8 +327,6 @@ const ViewApplications = () => {
                       subContainerClassName="pages pagination"
                     />
                   </div>
-                </div>
-              )}
             </div>
           </div>
         </Col>
