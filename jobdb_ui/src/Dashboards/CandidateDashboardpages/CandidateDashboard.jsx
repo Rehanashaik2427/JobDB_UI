@@ -154,13 +154,55 @@ const CandidateDashboard = () => {
       else document.exitFullscreen();
     }
   };
+  const [countOfUnreadNotification, setCountOfUnreadNotification] = useState(0);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
+
+  const fetchTotalUnreadNotification = async (userId) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/getUnreadNotifications`, {
+        params: {
+          userId: userId
+        }
+      });
+
+      console.log(response.data);
+      setCountOfUnreadNotification(response.data.count);
+      setUnreadNotifications(response.data.notifications);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      setCountOfUnreadNotification(0);
+      setUnreadNotifications([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchTotalUnreadNotification(userId);
+  }, [userId]);
+
+
+
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      await axios.post(`${BASE_API_URL}/markNotificationsAsRead`, null, {
+        params: { userId: userId, notificationId: notificationId }
+      });
+      // Update state to reflect the notification as read
+      const updatedNotifications = unreadNotifications.map(notification =>
+        notification.id === notificationId ? { ...notification, read: true } : notification
+      );
+      setUnreadNotifications(updatedNotifications);
+      setCountOfUnreadNotification(prevCount => prevCount - 1); // Decrease unread count
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
 
   const user = {
     userName: userName,
     userId: userId,
   };
 
-
+  
   return (
     <Container fluid className='dashboard-container'>
       <Row>
@@ -180,26 +222,37 @@ const CandidateDashboard = () => {
             style={{ fontSize: '20px', marginRight: '12px' }}
           />
 
-          <Dropdown className="ml-2">
 
+
+<Dropdown className="ml-2">
             <Dropdown.Toggle
               as="div"
               id="dropdownNotification"
-              className="badge-top-container toggle-hidden ml-2">
-              <span className="badge bg-primary cursor-pointer"></span>
+              className="badge-top-container toggle-hidden ml-2"
+            >
+              <span className="badge bg-primary cursor-pointer">
+                {countOfUnreadNotification}
+              </span>
               <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
             </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={() => {
-                const applicationStatus = "Shortlisted";
-                navigate('/candidate-dashboard/my-application', {
-                  state: { userName, userId, applicationStatus }
-                });
-              }}>
-                My Applications
-              </Dropdown.Item>
-            </Dropdown.Menu>
+
+            {countOfUnreadNotification > 0 ? (
+              <Dropdown.Menu>
+                {unreadNotifications.length === 0 ? (
+                  <Dropdown.Item>No new notifications</Dropdown.Item>
+                ) : (
+                  unreadNotifications.map((notification, index) => (
+                    <Dropdown.Item key={index} onClick={() => markNotificationAsRead(notification.id)} style={{ fontWeight: notification.read ? 'normal' : 'bold' }}>
+                      {notification.message} 
+                    </Dropdown.Item>
+                  ))
+                )}
+              </Dropdown.Menu>
+            ) : null}
           </Dropdown>
+
+
+
 
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">

@@ -1,9 +1,9 @@
+import axios from 'axios';
+import { Field, Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Field, Form, Formik } from 'formik';
 import * as yup from 'yup';
-import axios from 'axios';
 import SocialButtons from './sessions/SocialButtons';
 import TextField from './sessions/TextField';
 
@@ -16,7 +16,6 @@ const HrRegistrationForm = () => {
     const [otpValue, setOtpValue] = useState('');
     const [enterOtpValue, setEnterOtpValue] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
-    const [isSubmitting, setSubmitting] = useState(false);
     const [disableFormFields, setDisableFormFields] = useState(false); // State to manage form field disablement
     const navigate = useNavigate();
     const location = useLocation();
@@ -252,7 +251,8 @@ const HrRegistrationForm = () => {
                                                 fullWidth
                                                 disabled={disableFormFields}
                                             />
-
+                                            {/* Display error messages */}
+                                           
                                             <div className="form-check">
                                                 <Field
                                                     type="checkbox"

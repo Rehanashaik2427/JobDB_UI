@@ -63,7 +63,7 @@ const CompanyDetailsByAdmin = () => {
 
   return (
     <div className='dashboard-container'>
-      <div className='leftside'>
+      <div className='left-side'>
         <AdminleftSide />
       </div>
       <div className='rightside'>
