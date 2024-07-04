@@ -1,14 +1,14 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import swal from 'sweetalert2'; // Import SweetAlert2
+import swal from 'sweetalert2';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const MyJobs = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -124,7 +124,20 @@ const MyJobs = () => {
       </Popover.Body>
     </Popover>
   );
+  const convertToUpperCase = (str) => {
+    return String(str).toUpperCase();
+  };
 
+  const getInitials = (name) => {
+    if (!name) return ''; // Handle case where name is undefined
+    const nameParts = name.split(' ');
+    if (nameParts.length > 1) {
+      return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
+    } else {
+      return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
+    }
+  };
+  const initials = getInitials(userName);
   return (
     <Container fluid className="dashboard-container">
       <Row>
@@ -148,7 +161,23 @@ const MyJobs = () => {
             </div>
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+
+                <div
+                  className="initials-placeholder"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {initials}
+                </div>
               </Dropdown.Toggle>
               <Dropdown.Menu className="mt-3">
                 <Dropdown.Item as={Link} to="/">
@@ -170,94 +199,82 @@ const MyJobs = () => {
             <>
               <h2 className='text-center'>Jobs posted by {userName}</h2>
 
-              <div className='job-list'>
-                <Table hover className='text-center'>
-                  <thead className="table-light">
-                    <tr>
-                      <th scope="col" onClick={() => handleSort('jobTitle')}>
-                        Job Title {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('jobType')}>
-                        Job Type {sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('postingDate')}>
-                        Posting Date {sortedColumn === 'postingDate' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('skills')}>
-                        Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('numberOfPosition')}>
-                        No of Position {sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('salary')}>
-                        Salary {sortedColumn === 'salary' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('applicationDeadline')}>
-                        Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col">Job Description</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {jobs.map((job) => (
-                      <tr key={job.jobId}>
-                        <td>{job.jobTitle}</td>
-                        <td>{job.jobType}</td>
-                        <td>{job.postingDate}</td>
-                        <td>{job.skills}</td>
-                        <td>{job.numberOfPosition}</td>
-                        <td>{job.salary}</td>
-                        <td>{job.applicationDeadline}</td>
-                        <td>
-                          <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                            <Button variant="secondary" className='description btn-rounded' >Description</Button>
-                          </OverlayTrigger>
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId } })}>
-                              <MdEdit size={18} className="text-success" />
-                            </span>
-                            <span className='delete cursor-pointer text-danger me-2' onClick={() => {
-                              swal.fire({
-                                title: "Are you sure?",
-                                text: "You won't be able to revert this!",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#3085d6",
-                                cancelButtonColor: "#d33",
-                                confirmButtonText: "Yes, delete it!"
-                              }).then((result) => {
-                                if (result.isConfirmed) {
-                                  handleDelete(job.jobId);
-                                }
-                              });
-                            }}>
-                              <MdDelete className="text-danger" size={18} />
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
 
-                <div className="pagination-container">
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
+              <div>
+                <div>
+                  <Table hover className='text-center'>
+                    <thead className="table-light">
+                      <tr>
+                        <th scope="col" onClick={() => handleSort('jobTitle')}>
+                          Job Title {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col" onClick={() => handleSort('jobType')}>
+                          Job Type {sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col" onClick={() => handleSort('postingDate')}>
+                          Posting Date {sortedColumn === 'postingDate' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col" onClick={() => handleSort('skills')}>
+                          Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col" onClick={() => handleSort('numberOfPosition')}>
+                          No of Position {sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col" onClick={() => handleSort('salary')}>
+                          Salary {sortedColumn === 'salary' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col" onClick={() => handleSort('applicationDeadline')}>
+                          Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        <th scope="col">Job Description</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {jobs.map((job) => (
+                        <tr key={job.jobId}>
+                          <td>{job.jobTitle}</td>
+                          <td>{job.jobType}</td>
+                          <td>{job.postingDate}</td>
+                          <td>{job.skills}</td>
+                          <td>{job.numberOfPosition}</td>
+                          <td>{job.salary}</td>
+                          <td>{job.applicationDeadline}</td>
+                          <td>
+                            <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                              <Button variant="secondary" className='description btn-rounded' >Description</Button>
+                            </OverlayTrigger>
+                          </td>
+                          <td>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId } })}>
+                                <MdEdit size={18} className="text-success" />
+                              </span>
+                              <span className='delete cursor-pointer text-danger me-2' onClick={() => {
+                                swal.fire({
+                                  title: "Are you sure?",
+                                  text: "You won't be able to revert this!",
+                                  icon: "warning",
+                                  showCancelButton: true,
+                                  confirmButtonColor: "#3085d6",
+                                  cancelButtonColor: "#d33",
+                                  confirmButtonText: "Yes, delete it!"
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    handleDelete(job.jobId);
+                                  }
+                                });
+                              }}>
+                                <MdDelete className="text-danger" size={18} />
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
                 </div>
+
               </div>
             </>
           ) : (
@@ -266,7 +283,21 @@ const MyJobs = () => {
             </section>
           )}
 
-          {/* Only show the Add Job button when not loading and there are jobs */}
+          <div className="pagination-container">
+            <ReactPaginate
+              previousLabel={<i className="i-Previous" />}
+              nextLabel={<i className="i-Next1" />}
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={totalPages}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={2}
+              onPageChange={handlePageClick}
+              activeClassName="active"
+              containerClassName="pagination"
+              subContainerClassName="pages pagination"
+            />
+          </div>
           {!loading && jobs.length >= 0 && (
             <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>
               <Link

@@ -585,37 +585,6 @@ section {
 }
 
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-  padding: 0;
-}
-
-.page-item {
-  margin: 0 5px;
-}
-
-.page-link {
-  display: block;
-  padding: 8px 12px;
-  color: #333;
-  text-decoration: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.page-link:hover {
-  background-color: #f0f0f0;
-}
-
-.page-item.active .page-link {
-  background-color: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
-
 
 .pagination {
   display: flex;
@@ -624,30 +593,10 @@ section {
   padding: 0;
 }
 
-.page-item {
-  margin: 0 5px;
-}
 
-.page-link {
-  display: block;
-  padding: 8px 12px;
-  color: #333;
-  text-decoration: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-}
 
-.page-link:hover {
-  background-color: #f0f0f0;
-}
 
-.page-item.active .page-link {
-  background-color: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
+
 
 .dots {
   display: block;

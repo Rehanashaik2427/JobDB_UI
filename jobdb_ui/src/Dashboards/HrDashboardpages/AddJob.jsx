@@ -71,9 +71,11 @@ const AddJob = () => {
         <Col md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-
+      
         <Col md={18} className="rightside">
-          <Card style={{marginTop:'30px'}}>
+        <h3 className='text-center'>Post Job</h3>
+          <Card style={{marginTop:'10px'}}>
+          
             <Form onSubmit={handleSubmit}>
               <Card.Body>
                 <Row style={{marginBottom:'24px'}}>
