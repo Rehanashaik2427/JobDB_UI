@@ -96,6 +96,8 @@ const Profile = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
+        <h4>Personal details:</h4>
+        <div>
         <div className="profile-container">
           {userData && (
             <>
@@ -111,12 +113,14 @@ const Profile = () => {
                 <span className="profile-label">PhoneNumber:</span>
                 <span className="profile-value">{userData.phone}</span>
               </div>
-              {/* <button className="profile-button" onClick={handleEdit}>Edit</button> */}
             </>
           )}
         </div>
-
-
+        {/* <h4>Education Details:</h4>
+        <div className="profile-container"></div>
+        <h4>Additional Details:</h4>
+        <div className="profile-container"></div> */}
+        </div>
 
         </Col>
       </Row>
