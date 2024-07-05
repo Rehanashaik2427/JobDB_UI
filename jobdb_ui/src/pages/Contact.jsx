@@ -13,7 +13,6 @@ const Contact = () => {
     name: '',
     email: '',
     subject:'',
-    subject: '',
     message: '',
     agreeTerms: false, // New state for terms agreement
   });
@@ -44,7 +43,7 @@ const Contact = () => {
 
     try {
       // Send the form data to the backend API
-      const response = await axios.post(`${BASE_API_URL}/send-message`, formData);
+      const response = await axios.post(`${BASE_API_URL}/savemessage`, formData);
       if (response.status === 200) {
         setIsMessageSent(true);
         alert("Mail sent")
@@ -60,7 +59,6 @@ const Contact = () => {
       name: '',
       email: '',
       message: '',
-      subject:'',
       subject: '',
       agreeTerms: false,
     });

@@ -6,7 +6,7 @@ import ReactPaginate from 'react-paginate';
 import swal from 'sweetalert2';
 
 // import './AdminDashboard.css';
-import { BsXCircle } from 'react-icons/bs';
+import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
 
 import AdminleftSide from './AdminleftSide';
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -124,58 +124,45 @@ const CompanyValidation = () => {
 
   return (
     <div className='dashboard-container'>
-    <div className='left-side'>
-      <AdminleftSide />
-    </div>
+      <div className='left-side'>
+        <AdminleftSide />
+      </div>
 
-    <div className="rightside">
-        <h2 style={{ textAlign: 'center' }}>Details of Company Validation</h2>
+      <div className="rightside ">
+       
+        {companyData.length > 0 ? (
+          <>
+           <h2 style={{ textAlign: 'center' }}>Details of Company Validation</h2>
+            <Table hover className='text-center' style={{ marginLeft: '8px' }}>
+              <thead className="table-light">
+                <tr>
+                  <th onClick={() => handleSort('companyName')}>
+                    Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {companyData.map((company) => (
+                  <tr key={company.companyId}>
+                    <td>{company.companyName}</td>
+                    <td>
 
-        <Table hover className='text-center' style={{ marginLeft: '8px' }}>
-          <thead className="table-light">
-            <tr>
-              <th onClick={() => handleSort('companyName')}>
-                Company Name {sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
-              </th>
-              {/* <th>Contact Number</th>
-              <th>Company Email</th>
-              <th>Industry</th>
-              <th onClick={() => handleSort('location')}>
-                Location {sortedColumn === 'location' && (sortOrder === 'asc' ? '▲' : '▼')}
-              </th>
-              <th>Description</th>
-              <th onClick={() => handleSort('date')}>
-                Submit Date {sortedColumn === 'date' && (sortOrder === 'asc' ? '▲' : '▼')}
-              </th>
-              <th>Status</th> */}
-              {/* <th onClick={() => handleSort('actionDate')}>
-                Action Date {sortedColumn === 'actionDate' && (sortOrder === 'asc' ? '▲' : '▼')}
-              </th> */}
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {companyData.map((company) => (
-              <tr key={company.companyId}>
-                <td>{company.companyName}</td>
-                {/* <td>{company.contactNumber}</td>
-                <td>{company.companyEmail}</td>
-                <td>{company.industry}</td>
-                <td>{company.location}</td>
-                <td>{company.description}</td>
-                <td>{company.date}</td>
-                <td>{company.companyStatus}</td>
-                <td>{company.actionDate}</td> */}
-                <td>
-                  <FaCheckCircle className='approved' style={{ color: 'green', cursor: 'pointer' }} onClick={() => approveCompany(company.companyId, company.companyName)} />
-                  <BsXCircle className='icon-button reject' style={{ color: 'blue' }} onClick={() => rejectCompany(company.companyId, company.companyName)} />
-
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-
+                      <span className="icon-button select" onClick={() => approveCompany(company.companyId, company.companyName)}>
+                        <BsCheckCircle />
+                      </span>
+                      <span className="icon-button reject" onClick={() => rejectCompany(company.companyId, company.companyName)}>
+                        <BsXCircle />
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            </>
+        ): (
+          <h4 className='text-center'>Loading.. .!!</h4>
+        )}
         <div className="pagination-container">
           <ReactPaginate
             previousLabel={<i className="i-Previous" />}

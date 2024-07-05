@@ -263,7 +263,8 @@ const HrRegistrationForm = () => {
                                                     onChange={(e) => {
                                                         handleChange(e);
                                                         setDisableFormFields(e.target.checked); // Set disable state based on checkbox
-                                                        sendOTP(values.userEmail); // Trigger OTP sending
+                                                        if(e.target.checked){
+                                                            sendOTP(values.userEmail); }// // Trigger OTP sending
                                                     }}
                                                 />
                                                 <label htmlFor="agreeToEmailValidation" className="form-check-label">

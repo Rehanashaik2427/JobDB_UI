@@ -55,7 +55,9 @@ const UserValidation = () => {
       </div>
 
       <div className="rightside">
+      {userData.length > 0 ? (
         <div className='user-table-list'>
+      
           <h2>Users List</h2>
           <Table hover className='text-center' style={{ marginLeft: '12px' }}>
             <thead className="table-light">
@@ -89,7 +91,11 @@ const UserValidation = () => {
               ))}
             </tbody>
           </Table>
+           
         </div>
+         ): (
+          <h4 className='text-center'>Loading.. .!!</h4>
+        )}
         <div className="pagination-container">
           <Breadcrumb routeSegments={[{ name: 'UI Kits', path: '/uikits' }, { name: 'Table' }]} />
 

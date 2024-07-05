@@ -22,7 +22,7 @@ const PostedJobs = () => {
 
 
 
-  const fetchJobs = async (userEmail) => {
+  const fetchJobs = async () => {
     try {
       const params = {
         userEmail: userEmail,
@@ -66,10 +66,10 @@ const PostedJobs = () => {
   useEffect(() => {
     if (search) {
       fetchJobBysearch();
+    } else {
+      fetchJobs();
     }
-    else
-      fetchJobs(userEmail);
-  }, [userEmail, search, page, pageSize, sortedColumn, sortOrder]);
+  }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
 
   const [showJobDescription, setShowJobDescription] = useState(false);
@@ -213,16 +213,7 @@ const PostedJobs = () => {
                     </tbody>
                   </Table>
                 </div>
-                {selectedJobSummary && (
-                  <div className="modal-summary">
-                    <div className="modal-content-summary">
-                      <span className="close" onClick={handleCloseModal}>&times;</span>
-                      <h2>Job Summary</h2>
-                      <p>{selectedJobSummary}</p>
-                    </div>
-                  </div>
-                )}
-
+               
                 <div className="pagination-container">
                   <ReactPaginate
                     previousLabel={<i className="i-Previous" />}

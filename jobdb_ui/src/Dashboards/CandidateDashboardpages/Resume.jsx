@@ -176,7 +176,7 @@ const Resume = () => {
           <div>
             <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
 
-            <div className='resume-div d-flex flex-wrap'>
+            <div className=' d-flex flex-wrap justify-content-space-between'>
               {resumes.map((resume, index) => (
                 <Card className='resume-card' key={index}>
                   <Card.Body>

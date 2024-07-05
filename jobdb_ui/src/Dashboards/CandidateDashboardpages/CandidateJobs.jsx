@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Modal, Popover, Row, Table } from 'react-bootstrap';
+import { Button, Col, Container, Modal, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 // import './CandidateDashboard.css';
 
@@ -152,10 +152,6 @@ const CandidateJobs = () => {
     console.log("Search submitted:", search);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    fetchJobBySearch();
-  };
 
   const handleSort = (column) => {
     let order = 'asc';
@@ -166,10 +162,7 @@ const CandidateJobs = () => {
     setSortOrder(order);
   };
 
-  const handleViewSummary = (summary) => {
-    setSelectedJobSummary(summary);
-    setShowModalSummary(true);
-  };
+
 
   const handleCloseModalSummary = () => {
     setSelectedJobSummary(null);
@@ -306,7 +299,11 @@ const CandidateJobs = () => {
                       <td>{job.companyName}</td>
                       <td>{job.applicationDeadline}</td>
                       <td>{job.skills}</td>
-                      <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>View Summary</Button></td>
+                      <td>
+                        <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                          <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
+                        </OverlayTrigger>
+                      </td>
                       <td>
                         {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
                           <p>Applied</p>
@@ -318,18 +315,6 @@ const CandidateJobs = () => {
                   ))}
                 </tbody>
               </Table>
-
-              {selectedJobSummary && (
-                <div className="modal-summary">
-                  <div className="modal-content-summary">
-                    <span className="close" onClick={handleCloseModalSummary}>&times;</span>
-                    <div className="job-summary">
-                      <h3>Job Summary</h3>
-                      <p>{selectedJobSummary}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
 
               <div className="pagination-container">
                 <ReactPaginate

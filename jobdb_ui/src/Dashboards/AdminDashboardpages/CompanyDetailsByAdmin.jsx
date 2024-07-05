@@ -102,10 +102,10 @@ const CompanyDetailsByAdmin = () => {
             <div className="company-admin-form-group">
               <label htmlFor="discription">Description:</label>
               <textarea
-                id="discription"
-                name="discription"
+                id="description"
+                name="description"
                 placeholder="Enter company description"
-                value={companyDetails.discription}
+                value={companyDetails.description}
                 onChange={handleChange}
                 disabled={!editableCompanyDetails}
               ></textarea>

@@ -59,6 +59,8 @@ const AddCompanyDetails = () => {
       </div>
 
       <div className="rightSide">
+      {companyData.length > 0 ? (
+        <>
         <h2>Add Company Details</h2>
         <Table hover className='text-center' style={{ marginLeft: '12px' }}>
           <thead className="table-light">
@@ -89,7 +91,7 @@ const AddCompanyDetails = () => {
                 <td>{company.jobboxEmail}</td>
                 <td>{company.industry}</td>
                 <td>{company.location}</td>
-                <td>{company.discription}</td>
+                <td>{company.description}</td>               
                 <td>{company.date}</td>
                 <td>{company.companyStatus}</td>
                 <td>{company.actionDate}</td>
@@ -105,8 +107,10 @@ const AddCompanyDetails = () => {
             ))}
           </tbody>
         </Table>
-
-
+        </>
+      ): (
+          <h4 className='text-center'>Loading.. .!!</h4>
+        )}
         <div className="pagination-container">
           <ReactPaginate
             previousLabel={<i className="i-Previous" />}

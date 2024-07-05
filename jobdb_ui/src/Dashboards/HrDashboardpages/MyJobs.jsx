@@ -7,6 +7,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const MyJobs = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -24,7 +26,7 @@ const MyJobs = () => {
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
 
@@ -36,15 +38,11 @@ const MyJobs = () => {
     setSearch(event.target.value);
   };
 
+  const handlePageClick = (data) => {
+    setPage(data.selected); // Update the page state with the new selected page index
+  };
 
 
-  useEffect(() => {
-    if (search) {
-      fetchJobBysearch();
-    }
-    else
-      fetchJobs()
-  }, [userEmail, search, page, pageSize]);
 
 
   const fetchJobs = async () => {
@@ -105,10 +103,10 @@ const MyJobs = () => {
   useEffect(() => {
     if (search) {
       fetchJobBysearch();
+    } else {
+      fetchJobs();
     }
-    else
-      fetchJobs()
-  }, [userEmail, page, pageSize, sortedColumn, sortOrder]);
+  }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
 
   const closeJobDescription = () => {
@@ -116,9 +114,6 @@ const MyJobs = () => {
     setSelectedJobSummary('');
   };
 
-  const handlePageClick = (data) => {
-    setPage(data.selected);
-  };
   const popover = (summary) => (
     <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
       <Popover.Body>
@@ -166,6 +161,7 @@ const MyJobs = () => {
             </div>
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+
                 <div
                   className="initials-placeholder"
                   style={{
@@ -202,6 +198,7 @@ const MyJobs = () => {
           ) : jobs.length > 0 ? (
             <>
               <h2 className='text-center'>Jobs posted by {userName}</h2>
+
 
               <div>
                 <div>

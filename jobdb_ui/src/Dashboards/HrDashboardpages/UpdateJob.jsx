@@ -88,7 +88,8 @@ const UpdateJob = () => {
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
         <Col md={18} className="rightside">
-          <Card style={{ marginTop: '20px' }}>
+        <h3 className='text-center'>Update Job</h3>
+          <Card style={{ marginTop: '10px' }}>
             <Form onSubmit={handleSubmit}>
               <Card.Body>
                 <Row style={{ marginBottom: '24px' }}>
