@@ -27,6 +27,7 @@ const ResumeAdd = () => {
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
+
   const handleBriefMessageChange = (event) => {
     setBriefMessage(event.target.value);
   };
@@ -37,6 +38,16 @@ const ResumeAdd = () => {
 
   const handleLinkChange = (event) => {
     setLink(event.target.value);
+  };
+
+  const handleTextFileChange = (event) => {
+    setFile(event.target.files[0]);
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const text = event.target.result;
+      setBriefMessage(text); // Update briefMessage with the text content
+    };
+    reader.readAsText(event.target.files[0]); // Read the uploaded text file as plain text
   };
 
   const handleSubmit = async (event) => {
@@ -52,31 +63,44 @@ const ResumeAdd = () => {
       formData.append('link', link);
     } else if (fileType === 'brief') {
       formData.append('briefMessage', briefMessage);
-    }
 
-    try {
-      const response = await axios.post(BASE_API_URL + '/uploadResume', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      console.log('File uploaded successfully:', response.data);
-      if (response) {
-      };
-
-      console.log('File uploaded successfully:', response.data);
-      if (response.status === 200) {
-        setSuccessMessage('Resume uploaded successfully!');
-
+      if (file && file.type === 'text/plain') {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const text = event.target.result;
+          formData.set('briefMessage', text); // Set the text content to formData directly
+          console.log("Brief message from text   " + text)
+          // Append other data to formData here if needed
+          axios.post(BASE_API_URL + '/uploadResume', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+            .then(response => {
+              console.log('File uploaded successfully:', response.data);
+              setSuccessMessage('Resume uploaded successfully!');
+            })
+            .catch(error => {
+              console.error('Error uploading Resume:', error);
+              setSuccessMessage('File upload failed');
+            });
+        };
+        reader.readAsText(file); // Read the uploaded text file as plain text
       } else {
-
-        console.error('Resume upload failed');
-
-        setSuccessMessage('File upload failed');
-
+        axios.post(BASE_API_URL + '/uploadResume', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then(response => {
+            console.log('File uploaded successfully:', response.data);
+            setSuccessMessage('Resume uploaded successfully!');
+          })
+          .catch(error => {
+            console.error('Error uploading Resume:', error);
+            setSuccessMessage('File upload failed');
+          });
       }
-    } catch (error) {
-      console.error('Error uploading Resume:', error);
     }
   };
 
@@ -84,9 +108,11 @@ const ResumeAdd = () => {
     userName: userName,
     userId: userId,
   };
+
   const handleBack = () => {
     navigate('/candidate-dashboard/resume', { state: { userName, userId } }); // Navigate back to previous page
   };
+
   return (
     <Container fluid className='dashboard-container'>
       <Row>
@@ -94,16 +120,14 @@ const ResumeAdd = () => {
           <CandidateLeftSide user={user} />
         </Col>
 
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
-  
+        <Col md={18} className="rightside" style={{ overflow: 'hidden' }}>
+
           <Col xs={6}>
             <Button onClick={handleBack} variant="secondary">
               <FontAwesomeIcon icon={faArrowLeft} />
             </Button>
-
           </Col>
+
           <Col sm={9} className='resume-page' style={{ paddingLeft: '20px' }}>
             <h2>Add Resume</h2>
             <Form onSubmit={handleSubmit} className='resume-Add'>
@@ -137,13 +161,34 @@ const ResumeAdd = () => {
               )}
 
               {fileType === 'brief' && (
-                <Form.Group as={Row} className='message-type'>
-                  <Form.Label column sm={3}>Brief Resume:</Form.Label>
-                  <Col sm={9}>
-                    <Form.Control as='textarea' value={briefMessage} onChange={handleBriefMessageChange} />
-                  </Col>
-                </Form.Group>
+                <React.Fragment>
+                  <Form.Group as={Row} className='message-type'>
+                    <Form.Label column sm={3}>Brief Resume:</Form.Label>
+                    <Col sm={9}>
+                      <Form.Control
+                        as='textarea'
+                        placeholder='Write or upload a .txt file'
+                        value={briefMessage}
+                        onChange={handleBriefMessageChange}
+                        disabled={!!file} // Disable textarea if file is selected
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className='select-file'>
+                    <Form.Label column sm={3}>Upload Text File:</Form.Label>
+                    <Col sm={9}>
+                      <Form.Control
+                        type='file'
+                        accept='.txt'
+                        onChange={handleTextFileChange}
+                        disabled={!!briefMessage} // Disable file input if briefMessage is entered
+                      />
+                    </Col>
+                  </Form.Group>
+                </React.Fragment>
               )}
+
 
               <Form.Group as={Row} className='message-type' style={{ marginTop: '20px' }}>
                 <Form.Label column sm={3}>Resume Title:</Form.Label>
@@ -162,10 +207,9 @@ const ResumeAdd = () => {
             {successMessage && <p>{successMessage}</p>}
           </Col>
 
-          </Col>
+        </Col>
       </Row>
     </Container>
-       
   );
 };
 

@@ -140,48 +140,50 @@ const CandidatesCompanies = () => {
           </div>
 
           <div className="companyJob">
-            <div className="cards d-flex flex-wrap justify-content-around" >
-              {companies.length > 0 ? (
-                <>
-                  <div className="row">
-                    {companies.map((company) => (
-                      <Card
-                        className="company-card-job"
-                        key={company.companyId}
-                        style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}
-                      >
-                        <Card.Body>
-                          <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                          <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                          <Button onClick={() => handleClick(company.companyId)}>View</Button>
-                        </Card.Body>
-                      </Card>
-                    ))}
-                  </div>
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={2}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
-                </>
-              ) : (
-                <>
-                  <div className="d-flex justify-content-center flex-direction-row">
-                    <div className="spinner-bubble spinner-bubble-primary m-5" />
-                    <span >Loading...</span>
 
-                  </div>
-                </>
-              )}
-            </div>
+            {companies.length > 0 ? (
+              <div className="row">
+                <div className="cards d-flex flex-wrap justify-content-around" >
+
+                  {companies.map((company) => (
+                    <Card
+                      className="company-card-job"
+                      key={company.companyId}
+                      style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}
+                    >
+                      <Card.Body>
+                        <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                        <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+                        <Button onClick={() => handleClick(company.companyId)}>View</Button>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </div>
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+
+              </div>
+            ) : (
+              <>
+                <div className="d-flex justify-content-center flex-direction-row">
+                  <div className="spinner-bubble spinner-bubble-primary m-5" />
+                  <span >Loading...</span>
+
+                </div>
+              </>
+            )}
+
           </div>
         </Col>
       </Row>

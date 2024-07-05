@@ -152,10 +152,6 @@ const CandidateJobs = () => {
     console.log("Search submitted:", search);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    fetchJobBySearch();
-  };
 
   const handleSort = (column) => {
     let order = 'asc';
@@ -166,10 +162,7 @@ const CandidateJobs = () => {
     setSortOrder(order);
   };
 
-  const handleViewSummary = (summary) => {
-    setSelectedJobSummary(summary);
-    setShowModalSummary(true);
-  };
+
 
   const handleCloseModalSummary = () => {
     setSelectedJobSummary(null);
@@ -307,9 +300,9 @@ const CandidateJobs = () => {
                       <td>{job.applicationDeadline}</td>
                       <td>{job.skills}</td>
                       <td>
-                      <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                            <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
-                          </OverlayTrigger>
+                        <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                          <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
+                        </OverlayTrigger>
                       </td>
                       <td>
                         {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
