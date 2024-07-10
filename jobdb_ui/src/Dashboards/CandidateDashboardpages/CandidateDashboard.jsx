@@ -51,6 +51,9 @@ const CandidateDashboard = () => {
   const [countOfCompanies, setCountOfCompanies] = useState(null);
   const [countOfTotalCompanies, setCountOfTotalCompanies] = useState(null);
   const [countOfshortlistedApplications, setCountOfshortlistedApplications] = useState(null);
+  const [countOfUnreadNotification, setCountOfUnreadNotification] = useState(0);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [applicationsData, setApplicationsData] = useState([]);
 
   useEffect(() => {
     fetchData(userId);
@@ -87,9 +90,20 @@ const CandidateDashboard = () => {
       console.log(shortlist.data);
       setCountOfshortlistedApplications(shortlist.data);
 
+
+      const notification = await axios.get(`${BASE_API_URL}/getUnreadNotifications`, {
+        params: {
+          userId: userId
+        }
+      });
+      console.log(notification.data);
+      setCountOfUnreadNotification(notification.data.count);
+      setUnreadNotifications(notification.data.notifications);
     } catch (error) {
       console.error('Error fetching Data:', error);
       setCountOfCompanies(null);
+      setCountOfUnreadNotification(0);
+      setUnreadNotifications([]);
     }
   };
 
@@ -104,31 +118,8 @@ const CandidateDashboard = () => {
       else document.exitFullscreen();
     }
   };
-  const [countOfUnreadNotification, setCountOfUnreadNotification] = useState(0);
-  const [unreadNotifications, setUnreadNotifications] = useState([]);
-  const [applicationsData, setApplicationsData] = useState([]);
 
-  const fetchTotalUnreadNotification = async (userId) => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/getUnreadNotifications`, {
-        params: {
-          userId: userId
-        }
-      });
 
-      console.log(response.data);
-      setCountOfUnreadNotification(response.data.count);
-      setUnreadNotifications(response.data.notifications);
-    } catch (error) {
-      console.error('Error fetching notifications:', error);
-      setCountOfUnreadNotification(0);
-      setUnreadNotifications([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchTotalUnreadNotification(userId);
-  }, [userId]);
 
 
 
@@ -195,6 +186,15 @@ const CandidateDashboard = () => {
     xaxis: {
       type: 'datetime',
       categories: applicationsData.map(data => new Date(data.date).toISOString()),
+    },  yaxis: {
+      min: 0,
+      max: 50,
+      tickAmount: 10,
+      labels: {
+        formatter: function (val) {
+          return parseInt(val, 10);
+        }
+      }
     },
     series: [{
       name: 'Applications',
