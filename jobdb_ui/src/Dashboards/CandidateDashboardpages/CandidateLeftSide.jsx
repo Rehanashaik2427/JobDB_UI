@@ -1,8 +1,8 @@
+import { faBuilding, faEnvelope, faFile, faFileLines, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { RxDashboard } from 'react-icons/rx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faEnvelope, faFile, faFileLines, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function CandidateLeftSide({ user }) {

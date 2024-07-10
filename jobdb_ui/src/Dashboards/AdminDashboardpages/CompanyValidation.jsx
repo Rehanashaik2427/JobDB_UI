@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { FaCheckCircle } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import swal from 'sweetalert2';
 
@@ -55,7 +54,13 @@ const CompanyValidation = () => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
+  const appliedOn = new Date(); // Get current date and time
+  const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
+  const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
+  const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
+  
+  const formattedDate = `${year}-${month}-${day}`;
+  console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
   const approveCompany = async (companyId, companyName) => {
     console.log('Request Approved');
     try {
@@ -63,7 +68,7 @@ const CompanyValidation = () => {
       const res = await axios.put(`${BASE_API_URL}/updateApproveCompany`, null, {
         params: {
           companyName,
-          actionDate: new Date().toLocaleDateString(),
+          actionDate:formattedDate,
           companyStatus: approved,
         },
       });
@@ -96,7 +101,7 @@ const CompanyValidation = () => {
       const res = await axios.put(`${BASE_API_URL}/updateApproveCompany`, null, {
         params: {
           companyName,
-          actionDate: new Date().toLocaleDateString(),
+          actionDate: formattedDate,
           companyStatus: reject,
         },
       });

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import CandidateLeftSide from './CandidateLeftSide';
 import Chart from 'react-apexcharts';
+import CandidateLeftSide from './CandidateLeftSide';
 
 const CandidateDashboard = () => {
   const location = useLocation();
@@ -196,11 +196,22 @@ const CandidateDashboard = () => {
       type: 'datetime',
       categories: applicationsData.map(data => new Date(data.date).toISOString()),
     },
+    yaxis: {
+      min: 0,
+      max: 50,
+      tickAmount: 10,
+      labels: {
+        formatter: function (val) {
+          return parseInt(val, 10);
+        }
+      }
+    },
     series: [{
       name: 'Applications',
       data: applicationsData.map(data => data.count),
     }],
   };
+  
 
 
   return (
