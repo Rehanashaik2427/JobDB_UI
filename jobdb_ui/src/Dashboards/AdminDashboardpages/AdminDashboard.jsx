@@ -1,41 +1,40 @@
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Dropdown, Row } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import AdminleftSide from './AdminleftSide';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Bar } from 'react-chartjs-2';
+import { Link, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
+import AdminleftSide from './AdminleftSide';
 
 const AdminDashboard = () => {
   const [validatedCompaniesCount, setValidatedCompaniesCount] = useState(0);
   const [validatedHrCount, setValidatedHrCount] = useState(0);
   const [hrCount, setHrCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
-  const [userData, setUserData] = useState({
+  const [combinedData, setCombinedData] = useState({
     labels: [],
-    datasets: [{
-      label: 'User %',
-      backgroundColor: 'skyblue',
-      borderColor: 'black',
-      borderWidth: 1,
-      hoverBackgroundColor: 'skyblue',
-      hoverBorderColor: 'black',
-      data: []
-    }]
-  });
-  const [companyData, setCompanyData] = useState({
-    labels: [],
-    datasets: [{
-      label: 'Company %',
-      backgroundColor: 'skyblue',
-      borderColor: 'black',
-      borderWidth: 1,
-      hoverBackgroundColor: 'skyblue',
-      hoverBorderColor: 'black',
-      data: []
-    }]
+    datasets: [
+      {
+        label: 'User %',
+        backgroundColor: 'skyblue',
+        borderColor: 'black',
+        borderWidth: 1,
+        hoverBackgroundColor: 'skyblue',
+        hoverBorderColor: 'black',
+        data: []
+      },
+      {
+        label: 'Company %',
+        backgroundColor: 'lightgreen',
+        borderColor: 'black',
+        borderWidth: 1,
+        hoverBackgroundColor: 'lightgreen',
+        hoverBorderColor: 'black',
+        data: []
+      }
+    ]
   });
   const navigate = useNavigate();
 
@@ -64,26 +63,33 @@ const AdminDashboard = () => {
 
       const userResponse = await axios.get('http://localhost:8082/api/jobbox/countValidateUsersByMonth');
       const userDataFromApi = allMonths.map((month, index) => userResponse.data[index + 1] || 0);
-      setUserData(prevState => ({
-        ...prevState,
-        labels: allMonths,
-        datasets: [{
-          ...prevState.datasets[0],
-          data: userDataFromApi
-        }]
-      }));
 
       const companyResponse = await axios.get('http://localhost:8082/api/jobbox/countValidateCompaniesByMonth');
       const companyDataFromApi = allMonths.map((month, index) => companyResponse.data[index + 1] || 0);
-      setCompanyData(prevState => ({
-        ...prevState,
-        labels: allMonths,
-        datasets: [{
-          ...prevState.datasets[0],
-          data: companyDataFromApi
-        }]
-      }));
 
+      setCombinedData({
+        labels: allMonths,
+        datasets: [
+          {
+            label: 'User %',
+            backgroundColor: 'skyblue',
+            borderColor: 'black',
+            borderWidth: 1,
+            hoverBackgroundColor: 'skyblue',
+            hoverBorderColor: 'black',
+            data: userDataFromApi
+          },
+          {
+            label: 'Company %',
+            backgroundColor: 'lightgreen',
+            borderColor: 'black',
+            borderWidth: 1,
+            hoverBackgroundColor: 'lightgreen',
+            hoverBorderColor: 'black',
+            data: companyDataFromApi
+          }
+        ]
+      });
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -181,50 +187,14 @@ const AdminDashboard = () => {
 
         <div className="d-flex flex-column" style={{ height: '100%', width: '100%' }}>
           <Row className="mx-0">
-            <Col md={6} className="mt-2">
-              <Card className="shadow-sm rounded-4">
+            <Col md={6} className="offset-md-3 mt-4">
+              <Card className="shadow-sm rounded-4" >
                 <Card.Header className="bg-light text-center">
-                  <Card.Title as="h5">Monthly User Validation</Card.Title>
+                  <Card.Title as="h5">Monthly Validation</Card.Title>
                 </Card.Header>
                 <Card.Body>
                   <Bar
-                    data={userData}
-                    options={{
-                      responsive: true,
-                      scales: {
-                        x: {
-                          beginAtZero: true,
-                          ticks: {
-                            color: '#888',
-                            font: {
-                              size: 12
-                            }
-                          }
-                        },
-                        y: {
-                          beginAtZero: true,
-                          ticks: {
-                            color: '#888',
-                            font: {
-                              size: 12
-                            },
-                            stepSize: 10
-                          }
-                        }
-                      }
-                    }}
-                  />
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} className="mt-2">
-              <Card className="shadow-sm rounded-4">
-                <Card.Header className="bg-light text-center">
-                  <Card.Title as="h5">Monthly Company Validation</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Bar
-                    data={companyData}
+                    data={combinedData}
                     options={{
                       responsive: true,
                       scales: {
