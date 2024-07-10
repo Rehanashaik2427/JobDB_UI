@@ -1,85 +1,92 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Card, Col, Dropdown, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import SockJS from 'sockjs-client';
-import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Stomp } from '@stomp/stompjs';
+import { Bar } from 'react-chartjs-2';
+import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const [validatedCompaniesCount, setValidatedCompaniesCount] = useState(0);
   const [validatedHrCount, setValidatedHrCount] = useState(0);
   const [hrCount, setHrCount] = useState(0);
   const [companyCount, setCompanyCount] = useState(0);
-  const [notifications, setNotifications] = useState([]);
-  
+  const [userData, setUserData] = useState({
+    labels: [],
+    datasets: [{
+      label: 'User %',
+      backgroundColor: 'skyblue',
+      borderColor: 'black',
+      borderWidth: 1,
+      hoverBackgroundColor: 'skyblue',
+      hoverBorderColor: 'black',
+      data: []
+    }]
+  });
+  const [companyData, setCompanyData] = useState({
+    labels: [],
+    datasets: [{
+      label: 'Company %',
+      backgroundColor: 'skyblue',
+      borderColor: 'black',
+      borderWidth: 1,
+      hoverBackgroundColor: 'skyblue',
+      hoverBorderColor: 'black',
+      data: []
+    }]
+  });
   const navigate = useNavigate();
 
-  const fetchCounts = async () => {
-    try {
-      const hrResponse = await axios.get('http://localhost:8082/api/jobbox/countofHrs');
-      setHrCount(hrResponse.data); // Update hrCount state with fetched HR count
-
-      const companiesResponse = await axios.get('http://localhost:8082/api/jobbox/countOfCompanies');
-      setCompanyCount(companiesResponse.data); // Update companyCount state with fetched company count
-    } catch (error) {
-      console.error('Error fetching counts:', error);
-    }
-  };
-
-  const totalNotifications = hrCount + companyCount;
-
-
- useEffect(() => {
-    fetchValidatedCompaniesCount();
-    fetchValidatedHrCount();
-    fetchCounts();
-    connectWebSocket();
+  useEffect(() => {
+    fetchData();
   }, []);
 
-
-  const fetchValidatedCompaniesCount = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8082/api/jobbox/countValidatedCompanies');
-      setValidatedCompaniesCount(response.data);
+      const hrResponse = await axios.get('http://localhost:8082/api/jobbox/countofHrs');
+      setHrCount(hrResponse.data);
+
+      const companiesResponse = await axios.get('http://localhost:8082/api/jobbox/countOfCompanies');
+      setCompanyCount(companiesResponse.data);
+
+      const validatedCompaniesResponse = await axios.get('http://localhost:8082/api/jobbox/countValidatedCompanies');
+      setValidatedCompaniesCount(validatedCompaniesResponse.data);
+
+      const validatedHrResponse = await axios.get('http://localhost:8082/api/jobbox/countValidatedUsers');
+      setValidatedHrCount(validatedHrResponse.data);
+
+      const allMonths = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+
+      const userResponse = await axios.get('http://localhost:8082/api/jobbox/countValidateUsersByMonth');
+      const userDataFromApi = allMonths.map((month, index) => userResponse.data[index + 1] || 0);
+      setUserData(prevState => ({
+        ...prevState,
+        labels: allMonths,
+        datasets: [{
+          ...prevState.datasets[0],
+          data: userDataFromApi
+        }]
+      }));
+
+      const companyResponse = await axios.get('http://localhost:8082/api/jobbox/countValidateCompaniesByMonth');
+      const companyDataFromApi = allMonths.map((month, index) => companyResponse.data[index + 1] || 0);
+      setCompanyData(prevState => ({
+        ...prevState,
+        labels: allMonths,
+        datasets: [{
+          ...prevState.datasets[0],
+          data: companyDataFromApi
+        }]
+      }));
+
     } catch (error) {
-      console.error('Error fetching count:', error);
+      console.error('Error fetching data:', error);
     }
-  };
-
-  const fetchValidatedHrCount = async () => {
-    try {
-      const response = await axios.get('http://localhost:8082/api/jobbox/countValidatedUsers');
-      setValidatedHrCount(response.data);
-    } catch (error) {
-      console.error('Error fetching count:', error);
-    }
-  };
-
-  const connectWebSocket = () => {
-    const socket = new SockJS('http://localhost:8082/ws');
-    const stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, () => {
-      stompClient.subscribe('/topic/notifications', (message) => {
-        const notification = message.body;
-
-        // Use a Set to track unique notifications
-        setNotifications((prevNotifications) => {
-          const updatedNotifications = new Set([...prevNotifications, notification]);
-          return Array.from(updatedNotifications); // Convert Set back to an array
-        });
-      });
-    });
-
-    return () => {
-      if (stompClient) {
-        stompClient.disconnect();
-      }
-    };
   };
 
   const toggleFullScreen = () => {
@@ -92,11 +99,6 @@ const AdminDashboard = () => {
   const toggleSettings = () => {
     navigate('/');
   };
-
-  
-
-
-  
 
   return (
     <div className='dashboard-container'>
@@ -118,19 +120,18 @@ const AdminDashboard = () => {
               as="div"
               id="dropdownNotification"
               className="badge-top-container toggle-hidden ml-2">
-              <span className="badge bg-primary cursor-pointer">{totalNotifications}</span>
+              <span className="badge bg-primary cursor-pointer">{hrCount + companyCount}</span>
               <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item as={Link} to="/admin-dashboard/admin-action">
                 {hrCount} new HRs
               </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/admin-dashboard/company-validation"> {companyCount} new companies</Dropdown.Item>
-
-              
+              <Dropdown.Item as={Link} to="/admin-dashboard/company-validation">
+                {companyCount} new companies
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-
 
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
@@ -150,25 +151,24 @@ const AdminDashboard = () => {
         <div className="adminDashboard">
           <span>
             <h2>{validatedCompaniesCount}</h2>
-            company validated
+            companies validated
           </span>
           <span>
             <h2>{validatedHrCount}</h2>
-            HR validated
+            HRs validated
           </span>
           <span>
-            <h3>Allowing access to HR</h3>
-            <h3>for Job Posting</h3>
+            <h3>Allowing access to HRs for Job Posting</h3>
           </span>
           <span>
-            <h3>Allowing access to Candidate</h3>
-            <h3>for Applying Jobs</h3>
+            <h3>Allowing access to Candidates for Applying Jobs</h3>
           </span>
           <span>
             <h2>200+</h2>
-            HR Blocked
+            HRs Blocked
           </span>
         </div>
+
         <div className="applyforValidation">
           <h4>Check for processing User validation!!</h4>
           <p>
@@ -178,9 +178,87 @@ const AdminDashboard = () => {
             }}>Check</Link>
           </p>
         </div>
+
+        <div className="d-flex flex-column" style={{ height: '100%', width: '100%' }}>
+          <Row className="mx-0">
+            <Col md={6} className="mt-2">
+              <Card className="shadow-sm rounded-4">
+                <Card.Header className="bg-light text-center">
+                  <Card.Title as="h5">Monthly User Validation</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                  <Bar
+                    data={userData}
+                    options={{
+                      responsive: true,
+                      scales: {
+                        x: {
+                          beginAtZero: true,
+                          ticks: {
+                            color: '#888',
+                            font: {
+                              size: 12
+                            }
+                          }
+                        },
+                        y: {
+                          beginAtZero: true,
+                          ticks: {
+                            color: '#888',
+                            font: {
+                              size: 12
+                            },
+                            stepSize: 10
+                          }
+                        }
+                      }
+                    }}
+                  />
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} className="mt-2">
+              <Card className="shadow-sm rounded-4">
+                <Card.Header className="bg-light text-center">
+                  <Card.Title as="h5">Monthly Company Validation</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                  <Bar
+                    data={companyData}
+                    options={{
+                      responsive: true,
+                      scales: {
+                        x: {
+                          beginAtZero: true,
+                          ticks: {
+                            color: '#888',
+                            font: {
+                              size: 12
+                            }
+                          }
+                        },
+                        y: {
+                          beginAtZero: true,
+                          ticks: {
+                            color: '#888',
+                            font: {
+                              size: 12
+                            },
+                            stepSize: 10
+                          }
+                        }
+                      }
+                    }}
+                  />
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+
       </div>
     </div>
   );
-}
+};
 
 export default AdminDashboard;

@@ -37,14 +37,20 @@ const AdminAction = () => {
     fetchHRDetails();
   }, [page, pageSize]);
 
-  const currentTime = new Date().toLocaleDateString();
+  const appliedOn = new Date(); // Get current date and time
+const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
+const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
+const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
+
+const formattedDate = `${year}-${month}-${day}`;
+console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
 
   const approveRequest = async (userEmail, userId) => {
     console.log('Request Approved');
     const approved = "Approved";
 
     try {
-      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${currentTime}&userStatus=${approved}`);
+      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${formattedDate}&userStatus=${approved}`);
       console.log(res.data);
       console.log(res.data);
       if (res.data) {
@@ -71,7 +77,7 @@ const AdminAction = () => {
     console.log('Request Rejected');
     const rejected = "Rejected";
     try {
-      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${currentTime}&userStatus=${rejected}`);
+      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${formattedDate}&userStatus=${rejected}`);
       console.log(res.data);
 
       if (res.data) {

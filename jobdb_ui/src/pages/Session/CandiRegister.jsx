@@ -54,13 +54,20 @@ const CandiRegister = () => {
 
         return true;
     };
-
+    const appliedOn = new Date(); // Get current date and time
+    const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
+    const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
+    const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
+    
+    const formattedDate = `${year}-${month}-${day}`;
+    console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
+    
     // Initial form values
     const initialValues = {
         userName: "",
         userEmail: "",
         phone: "",
-        appliedDate: "",
+        appliedDate:formattedDate,
         password: "",
         userRole: 'Candidate',
         confirmPassword: "", // Corrected the field name here

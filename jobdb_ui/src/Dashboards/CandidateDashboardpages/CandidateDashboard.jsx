@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import CandidateLeftSide from './CandidateLeftSide';
+import Chart from 'react-apexcharts';
 
 const CandidateDashboard = () => {
   const location = useLocation();
@@ -16,8 +17,6 @@ const CandidateDashboard = () => {
   const [userData, setUserData] = useState();
   const [userName, setUserName] = useState();
 
-
-
   const fetchUserData = async (userId) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/getUserName`, {
@@ -25,16 +24,10 @@ const CandidateDashboard = () => {
           userId: userId
         }
       });
-
       console.log(response.data);
-
-
       setUserName(response.data.userName);
       localStorage.setItem(`userName_${userId}`, response.data.userName); // Store userName with user-specific key
-
-
       setUserData(response.data);
-
     } catch (error) {
 
       setUserData(null);
@@ -54,92 +47,52 @@ const CandidateDashboard = () => {
     }
   }, [userId]);
 
-
-  const [countOfCompanies, setCountOfCompanies] = useState(null);
-  const fetchApplicationsCompanies = async (userId) => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/getCountOfAppliedCompany`, {
-        params: {
-          userId: userId
-        }
-      });
-
-      console.log(response.data);
-      setCountOfCompanies(response.data);
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-      setCountOfCompanies(null);
-    }
-  };
-  useEffect(() => {
-
-    fetchApplicationsCompanies(userId);
-
-  }, [userId]);
-
   const [countOfResume, setCountOfResumes] = useState(null);
-  const fetchCountResumes = async (userId) => {
+  const [countOfCompanies, setCountOfCompanies] = useState(null);
+  const [countOfTotalCompanies, setCountOfTotalCompanies] = useState(null);
+  const [countOfshortlistedApplications, setCountOfshortlistedApplications] = useState(null);
+
+  useEffect(() => {
+    fetchData(userId);
+  }, [userId]);
+
+
+  const fetchData = async (userId) => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/getCountOfResumes`, {
+      const countCompanies = await axios.get(`${BASE_API_URL}/getCountOfAppliedCompany`, {
         params: {
           userId: userId
         }
       });
+      console.log(countCompanies.data);
+      setCountOfCompanies(countCompanies.data);
 
-      console.log(response.data);
-      setCountOfResumes(response.data);
+      const countResumes = await axios.get(`${BASE_API_URL}/getCountOfResumes`, {
+        params: {
+          userId: userId
+        }
+      });
+      console.log(countResumes.data);
+      setCountOfResumes(countResumes.data);
+
+      const totalCompanies = await axios.get(`${BASE_API_URL}/getCountOfTotalCompany`);
+      console.log(totalCompanies.data);
+      setCountOfTotalCompanies(totalCompanies.data);
+
+      const shortlist = await axios.get(`${BASE_API_URL}/getCountOfTotalShortlistedApplication`, {
+        params: {
+          userId: userId
+        }
+      });
+      console.log(shortlist.data);
+      setCountOfshortlistedApplications(shortlist.data);
+
     } catch (error) {
-      console.error('Error fetching applications:', error);
+      console.error('Error fetching Data:', error);
       setCountOfCompanies(null);
     }
   };
-  useEffect(() => {
 
-    fetchCountResumes(userId);
-
-  }, [userId]);
-
-  const [countOfTotalCompanies, setCountOfTotalCompanies] = useState(null);
-  const fetchTotalCompanies = async () => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/getCountOfTotalCompany`);
-
-      console.log(response.data);
-      setCountOfTotalCompanies(response.data);
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-      setCountOfTotalCompanies(null);
-    }
-  };
-  useEffect(() => {
-
-    fetchTotalCompanies();
-
-  }, []);
-
-
-  const [countOfshortlistedApplications, setCountOfshortlistedApplications] = useState(null);
-  const fetchTotalShortlistedApplications = async (userId) => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/getCountOfTotalShortlistedApplication`, {
-        params: {
-          userId: userId
-        }
-      });
-
-      console.log(response.data);
-      setCountOfshortlistedApplications(response.data);
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-      setCountOfshortlistedApplications(null);
-    }
-  };
-  useEffect(() => {
-    fetchTotalShortlistedApplications(userId);
-
-  }, [userId]);
-
-  console.log(userId);
 
 
   const toggleSettings = () => {
@@ -153,6 +106,7 @@ const CandidateDashboard = () => {
   };
   const [countOfUnreadNotification, setCountOfUnreadNotification] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [applicationsData, setApplicationsData] = useState([]);
 
   const fetchTotalUnreadNotification = async (userId) => {
     try {
@@ -214,6 +168,41 @@ const CandidateDashboard = () => {
   };
 
   const initials = getInitials(user.userName);
+
+  useEffect(() => {
+    fetchApplicationsData(userId);
+  }, [userId]);
+
+  const fetchApplicationsData = async (userId) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/countByDate`, {
+        params: { userId }
+      });
+      setApplicationsData(response.data);
+    } catch (error) {
+      console.error('Error fetching application data:', error);
+    }
+  };
+
+  const options = {
+    chart: {
+      id: 'chart1',
+      type: 'line',
+      zoom: {
+        enabled: true,
+      },
+    },
+    xaxis: {
+      type: 'datetime',
+      categories: applicationsData.map(data => new Date(data.date).toISOString()),
+    },
+    series: [{
+      name: 'Applications',
+      data: applicationsData.map(data => data.count),
+    }],
+  };
+
+
   return (
     <Container fluid className='dashboard-container'>
       <Row>
@@ -368,6 +357,15 @@ const CandidateDashboard = () => {
               </Col>
             </Row>
           </Container>
+          <Row className="justify-content-center">
+            <Col md={5} xs={16} className="mb-4">
+              <Card body className="h-100 chart-card" style={{ width: '100%' }}>
+                <Card.Title className="text-center">Applications per Day</Card.Title>
+                <Chart options={options} series={options.series} type={options.chart.type} />
+              </Card>
+            </Col>
+          </Row>
+
         </Col>
       </Row>
     </Container>

@@ -2,7 +2,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -13,13 +13,14 @@ const ResumeAdd = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
   const [fileType, setFileType] = useState('file');
   const [link, setLink] = useState('');
   const [briefMessage, setBriefMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
+  const [showModal, setShowModal] = useState(false);
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -51,59 +52,77 @@ const ResumeAdd = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append('userId', userId);
-    formData.append('fileType', fileType);
-    formData.append('message', message);
-
-    if (fileType === 'file') {
-      formData.append('file', file);
-    } else if (fileType === 'link') {
-      formData.append('link', link);
-    } else if (fileType === 'brief') {
-      formData.append('briefMessage', briefMessage);
-
+    event.preventDefault(); // Prevent default form submission
+    setLoading(true); // Set loading state to true
+  
+    try {
+      const formData = new FormData();
+      formData.append('userId', userId);
+      formData.append('fileType', fileType);
+      formData.append('message', message);
+  
+      if (fileType === 'file') {
+        formData.append('file', file);
+      } else if (fileType === 'link') {
+        formData.append('link', link);
+      } else if (fileType === 'brief') {
+        formData.append('briefMessage', briefMessage);
+        // Handle text file upload separately if fileType is 'brief' and file is text/plain
+      
+      }
       if (file && file.type === 'text/plain') {
         const reader = new FileReader();
         reader.onload = function (event) {
           const text = event.target.result;
           formData.set('briefMessage', text); // Set the text content to formData directly
-          console.log("Brief message from text   " + text)
-          // Append other data to formData here if needed
           axios.post(BASE_API_URL + '/uploadResume', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })
-            .then(response => {
-              console.log('File uploaded successfully:', response.data);
-              setSuccessMessage('Resume uploaded successfully!');
-            })
-            .catch(error => {
-              console.error('Error uploading Resume:', error);
-              setSuccessMessage('File upload failed');
-            });
+          .then(response => {
+            console.log('File uploaded successfully:', response.data);
+            setSuccessMessage('Resume uploaded successfully!');
+            setShowModal(true); // Show modal on success
+            setLoading(false); // Reset loading state after successful upload
+          })
+          .catch(error => {
+            console.error('Error uploading Resume:', error);
+            setSuccessMessage('File upload failed');
+            setLoading(false); // Reset loading state after upload failure
+          });
         };
         reader.readAsText(file); // Read the uploaded text file as plain text
       } else {
+        // For other cases of 'brief' (non-text file or no file selected)
         axios.post(BASE_API_URL + '/uploadResume', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-          .then(response => {
-            console.log('File uploaded successfully:', response.data);
-            setSuccessMessage('Resume uploaded successfully!');
-          })
-          .catch(error => {
-            console.error('Error uploading Resume:', error);
-            setSuccessMessage('File upload failed');
-          });
+        .then(response => {
+          console.log('File uploaded successfully:', response.data);
+          setSuccessMessage('Resume uploaded successfully!');
+          setShowModal(true); // Show modal on success
+          setLoading(false); // Reset loading state after successful upload
+        })
+        .catch(error => {
+          console.error('Error uploading Resume:', error);
+          setSuccessMessage('File upload failed');
+          setLoading(false); // Reset loading state after upload failure
+        });
       }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setLoading(false); // Reset loading state if an error occurs during form submission
     }
   };
-
+  
+  const handleOk = () => {
+    setSuccessMessage('');
+    setShowModal(false);
+    window.location.reload(); // Refresh the page
+  };
   const user = {
     userName: userName,
     userId: userId,
@@ -146,7 +165,7 @@ const ResumeAdd = () => {
                 <Form.Group as={Row} className='select-file'>
                   <Form.Label column sm={3}>Select File:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} />
+                    <Form.Control type='file' accept='.pdf, .doc, .docx' onChange={handleFileChange} required />
                   </Col>
                 </Form.Group>
               )}
@@ -155,7 +174,7 @@ const ResumeAdd = () => {
                 <Form.Group as={Row} className='select-link'>
                   <Form.Label column sm={3}>Enter Link:</Form.Label>
                   <Col sm={9}>
-                    <Form.Control type='text' value={link} onChange={handleLinkChange} />
+                    <Form.Control type='text' value={link} onChange={handleLinkChange} required />
                   </Col>
                 </Form.Group>
               )}
@@ -171,6 +190,7 @@ const ResumeAdd = () => {
                         value={briefMessage}
                         onChange={handleBriefMessageChange}
                         disabled={!!file} // Disable textarea if file is selected
+                        required
                       />
                     </Col>
                   </Form.Group>
@@ -193,16 +213,30 @@ const ResumeAdd = () => {
               <Form.Group as={Row} className='message-type' style={{ marginTop: '20px' }}>
                 <Form.Label column sm={3}>Resume Title:</Form.Label>
                 <Col sm={9}>
-                  <Form.Control as='textarea' value={message} onChange={handleMessageChange} />
+                  <Form.Control as='textarea' value={message} onChange={handleMessageChange} required/>
                 </Col>
               </Form.Group>
 
               <Form.Group as={Row}>
                 <Col sm={{ span: 9, offset: 3 }}>
-                  <Button type="submit" className='uploadResume'>Upload Resume</Button>
+                  <Button type="submit" className='uploadResume' disabled={loading}>
+                    {loading ? 'Uploading...' : 'Upload Resume'}
+                  </Button>
                 </Col>
               </Form.Group>
             </Form>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Success!</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>{successMessage}</Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={handleOk}>
+                  OK
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
             {successMessage && <p>{successMessage}</p>}
           </Col>

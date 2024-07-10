@@ -2,7 +2,7 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
 import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -232,12 +232,12 @@ const ViewApplications = () => {
               </select>
             </div>
             {showBriefSettings && (
-              <div className="modal-summary">
-                <div className="modal-content-summary">
-                  <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
-                  {showMessage}
-                </div>
-              </div>
+              <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Brief Resume</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{showMessage}</Modal.Body>
+              </Modal>
             )}
             <div>
               {loading ? (

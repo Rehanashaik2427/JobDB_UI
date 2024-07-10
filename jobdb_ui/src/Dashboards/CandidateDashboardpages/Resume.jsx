@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Dropdown, Modal, Row } from 'react-bootstrap';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
@@ -164,19 +164,18 @@ const Resume = () => {
 
 
           {showBriefSettings && (
-            <div className="modal-summary">
-              <div className="modal-content-summary">
-                <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
-                {showMessage}
-              </div>
-            </div>
-
-          )}
+              <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Brief Resume</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{showMessage}</Modal.Body>
+              </Modal>
+            )}
 
           <div>
             <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
 
-            <div className=' d-flex flex-wrap justify-content-space-between'>
+            <div className='cards d-flex flex-wrap justify-content-around'>
               {resumes.map((resume, index) => (
                 <Card className='resume-card' key={index}>
                   <Card.Body>

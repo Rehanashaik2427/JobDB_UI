@@ -10,6 +10,7 @@ import CandidateLeftSide from './CandidateLeftSide';
 
 import { Dropdown } from 'react-bootstrap';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
+import Swal from 'sweetalert2';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -83,15 +84,28 @@ const CandidateJobs = () => {
   };
 
   const applyJob = async (jobId, resumeId) => {
-    const appliedOn = new Date().toLocaleDateString();
+    const appliedOn = new Date(); // Get current date and time
+const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
+const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
+const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
+
+const formattedDate = `${year}-${month}-${day}`;
+console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
+
     try {
       const response = await axios.put(`${BASE_API_URL}/applyJob`, null, {
-        params: { jobId, userId, appliedOn, resumeId },
+        params: { jobId, userId, formattedDate, resumeId },
       });
       if (response.data) {
-        setApplyJobs((prevApplyJobs) => [...prevApplyJobs, { jobId, appliedOn }]);
+        setApplyJobs((prevApplyJobs) => [...prevApplyJobs, { jobId, formattedDate }]);
         setHasUserApplied((prev) => ({ ...prev, [jobId]: true }));
-        alert("You have successfully applied for this job");
+        //alert("You have successfully applied for this job");
+
+          await Swal.fire({
+            icon: "success",
+            title: "Apply Successful!",
+            text: "You have successfully applied for this job."
+          });
       }
     } catch (error) {
       console.error('Error applying for job:', error);
@@ -272,7 +286,7 @@ const CandidateJobs = () => {
 
           {jobs.length > 0 && (
             <div>
-              {/* <h2>Jobs For {userName}</h2> */}
+              <h2>Jobs For {userName}</h2>
               <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
                 <thead className="table-light">
                   <tr>

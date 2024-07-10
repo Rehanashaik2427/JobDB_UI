@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
+import Swal from 'sweetalert2';
 
 const AddJob = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -50,7 +51,12 @@ const AddJob = () => {
       const response = await saveJobData(formData);
       if (response.ok) {
         console.log("Job posted successfully", formData);
-        alert("Job posted successfully");
+       // alert("Job posted successfully");
+        await Swal.fire({
+          icon: "success",
+          title: "Job post Successful!",
+          text: "You have successfully posted this job."
+        });
         navigate('/hr-dashboard/my-jobs/addJob/jodAddSuccess', { state: { userName: userName, userEmail: userEmail } });
       } else {
         console.error("Error posting job");

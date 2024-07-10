@@ -7,8 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 
 const MyJobs = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -26,7 +25,7 @@ const MyJobs = () => {
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
 
 

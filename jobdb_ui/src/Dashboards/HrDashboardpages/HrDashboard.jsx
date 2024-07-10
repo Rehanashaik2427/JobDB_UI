@@ -91,14 +91,14 @@ const HrDashboard = () => {
       const shortlistedResponse = await axios.get(`${BASE_API_URL}/CountOfShortlistedCandidatesByEachCompany`, {
         params: { userEmail: userEmail }
       });
-      const underReviewresponse = await axios.get(`${BASE_API_URL}/CountOfUnderReviewCandidateBYHRJob`, {
-        params: { userEmail: userEmail }
-      });
+      // const underReviewresponse = await axios.get(`${BASE_API_URL}/CountOfUnderReviewCandidateBYHRJob`, {
+      //   params: { userEmail: userEmail }
+      // });
 
       setCountOfJobs(jobsResponse.data);
       setCountOfApplications(applicationsResponse.data);
       setCountOfShortlistedCandiCompany(shortlistedResponse.data);
-      setCountOfUnderReview(underReviewresponse.data);
+      // setCountOfUnderReview(underReviewresponse.data);
 
     } catch (error) {
       console.error('Error fetching counts:', error);
@@ -218,7 +218,7 @@ const HrDashboard = () => {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <Container className="my-dashboard-container">
+          <Container className="my-dashboard-container">    
             <h3 className='status-info text-center bg-light'>Company status</h3>
             <Row className="dashboard d-flex mt-4">
               {DATA.map((card, index) => (
