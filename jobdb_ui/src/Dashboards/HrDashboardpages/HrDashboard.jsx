@@ -247,9 +247,9 @@ const HrDashboard = () => {
           </Container>
           <Row>
             <Col md={6} className="offset-md-3 mt-4">
-              <Card className="shadow-sm rounded-4" >
-                <Card.Header className="bg-light text-center">
-                  <Card.Title as="h5">Monthly Job Percentages</Card.Title>
+              <Card className="shadow-sm rounded-4"  >
+                <Card.Header className=" bg-light text-center"style={{height:'40px'}}>
+                  <Card.Title as="h4" className='text-center'>Monthly Job Percentages</Card.Title>
                 </Card.Header>
                 <Card.Body>
                   <Bar
@@ -273,6 +273,7 @@ const HrDashboard = () => {
                             font: {
                               size: 12
                             },
+                            maxTicksLimit:100,
                             stepSize: 10
                           }
                         }
