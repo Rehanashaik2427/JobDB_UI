@@ -22,7 +22,7 @@ const HrDashbaordRoute = () => {
         <Route path="/" element={<HrDashboard />} />
         <Route path="/my-jobs" element={<MyJobs />} />
         <Route path="/posted-jobs" element={<PostedJobs   />} />
-        <Route path="/company-showcase" element={<CompanyShowCase   />} />
+        <Route path="/company-showcase" element={<CompanyShowCase  />} />
       <Route path="/people" element={<People />} />
       <Route path="/hr-applications" element={<Applications />} />
       <Route path="/profile" element={<HrProfile />} />

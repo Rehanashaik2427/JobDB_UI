@@ -17,7 +17,7 @@ const ViewApplications = () => {
   const userEmail = location.state?.userEmail;
   const userName = location.state?.userName;
   const jobId = location.state?.jobId;
-  console.log(jobId);
+  // console.log(jobId);
   const [applications, setApplications] = useState([]);
   const [resumeTypes, setResumeTypes] = useState({});
   const [filterStatus, setFilterStatus] = useState('all');
@@ -95,7 +95,6 @@ const ViewApplications = () => {
       const response = await axios.get(`${BASE_API_URL}/getApplicationsByJobIdWithPagination`, { params });
       setApplications(response.data.content || []);
       fetchResumeTypes(response.data.content || []);
-
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
@@ -148,14 +147,15 @@ const ViewApplications = () => {
         const response = await axios.get(`${BASE_API_URL}/getResumeByApplicationId?resumeId=${application.resumeId}`);
         types[application.resumeId] = response.data.fileType;
         fileNames[application.resumeId] = response.data.fileName;
+        ///console.log(`Resume ID: ${application.resumeId}, File Type: ${response.data.fileType}, File Name: ${response.data.fileName}`);
       } catch (error) {
         console.error('Error fetching resume type:', error);
       }
     }
+    
     setResumeTypes(types);
     setfileNames(fileNames);
   };
-
   const renderResumeComponent = (resumeId) => {
     const fileType = resumeTypes[resumeId];
     const fileName = fileNames[resumeId];
