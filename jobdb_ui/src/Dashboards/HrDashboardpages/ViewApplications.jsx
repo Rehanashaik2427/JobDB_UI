@@ -2,7 +2,7 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
+import { Button, Col, Container, Form, Modal, Row, Table } from "react-bootstrap";
 import { SiImessage } from "react-icons/si";
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -33,7 +33,7 @@ const ViewApplications = () => {
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
- 
+
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
@@ -94,6 +94,8 @@ const ViewApplications = () => {
 
       const response = await axios.get(`${BASE_API_URL}/getApplicationsByJobIdWithPagination`, { params });
       setApplications(response.data.content || []);
+      fetchResumeTypes(response.data.content || []);
+
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
@@ -233,7 +235,40 @@ const ViewApplications = () => {
 
   const navigate = useNavigate();
 
+ const [showModal, setShowModal] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [applicationId, setApplicationId] = useState(0);
+  const[chats,setChats]=useState([]);
+  const[showChat,setShowChat]=useState(false);
+  const handleChatClick =async (applicationId) => {
+    // Handle click logic here
+    setApplicationId(applicationId);
+    const responce= await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
+    setChats(responce.data);
+    console.log('Chat icon clicked for:');
+    // Show the modal
+    setShowModal(true);
+    setShowChat(true);
+  };
 
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setInputValue(''); // Reset input value when closing modal
+  };
+
+  const handleSend = async() => {
+    // Handle send logic here
+    const responce= await axios.put(`${BASE_API_URL}/saveChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
+    console.log('Sending message:', inputValue);
+    // Close the modal or perform any other actions
+    setShowModal(true);
+    setInputValue('');
+    handleChatClick(applicationId) // Reset input value after sending
+  };
 
   return (
     <Container fluid className="dashboard-container">
@@ -269,6 +304,33 @@ const ViewApplications = () => {
                 <Modal.Body>{showMessage}</Modal.Body>
               </Modal>
             )}
+
+             <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Chat Modal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        {showChat && (
+      chats.map((chat) => (
+        <div key={chat.id}> {/* Assuming each chat has a unique id */}
+          {chat.hrMessage}
+        </div>
+      ))
+    )}
+          <Form.Group controlId="messageInput">
+            <Form.Label>Message:</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter your message"
+              value={inputValue}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Button variant="primary" onClick={handleSend}>
+            Send
+          </Button>
+        </Modal.Body>
+      </Modal>
             <div>
               {loading ? (
                 <div className="d-flex justify-content-center align-items-center">
@@ -327,13 +389,16 @@ const ViewApplications = () => {
                               />
                             </Link>
                           </td>
-                          <td style={{alignItems:'center'}}>
+                          <td style={{ alignItems: 'center' }}>
                             <Slider
                               initialStatus={application.applicationStatus}
                               onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                             />
                           </td>
-                          <td><SiImessage  size={25} /></td>
+                          <td onClick={() => handleChatClick(application.applicationId, application.jobId,application.candidateId)}>
+                            <SiImessage size={25} />
+                          </td>
+
                         </tr>
                       ))}
                     </tbody>
@@ -342,36 +407,39 @@ const ViewApplications = () => {
 
                 </div>
               )}
-                   {/* Pagination */}
-         <div className="pagination-container d-flex justify-content-end align-items-center">
-                  <div className="page-size-select me-3">
-                    <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                    </select>
-                  </div>
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={2}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
+              {/* Pagination */}
+              <div className="pagination-container d-flex justify-content-end align-items-center">
+                <div className="page-size-select me-3">
+                  <label htmlFor="pageSize">Page Size:</label>
+                  <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                  </select>
                 </div>
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+              </div>
             </div>
           </div>
         </Col>
       </Row>
     </Container>
   );
+
+
+  
 };
 
 export default ViewApplications;
