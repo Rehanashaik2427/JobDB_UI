@@ -39,18 +39,21 @@
 .admin-right-action{
   overflow: scroll;
 }
-.rightSide {
+.rightside {
   height: 100vh;
   width: 100vw;
   background-color: white;
-  flex: 1; /* Take the remaining space */
-  overflow: auto; /* Hide the scrollbar */
-  position: relative; /* Add position relative */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+  overflow-y: scroll; /* Hide the scrollbar */
+
 
 }
 
-
+*{
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar{
+  display: none;
+}
 
 .admin-details{
     height: 400px;

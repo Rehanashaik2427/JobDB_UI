@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
+import { FaBars } from 'react-icons/fa';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -125,7 +126,11 @@ const DreamCompany = () => {
     event.preventDefault();
 
   };
+  const [showLeftSide, setShowLeftSide] = useState(false);
 
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
   const user = {
     userName: userName,
 
@@ -134,13 +139,14 @@ const DreamCompany = () => {
   return (
     <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
+        <Col md={10} className="rightside">
           <Container>
             <div className="centered-content">
               {showResumePopup && (

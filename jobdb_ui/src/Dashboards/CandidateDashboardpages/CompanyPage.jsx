@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import './CandidateDashboard.css';
 import CandidateLeftSide from "./CandidateLeftSide";
 import { Col, Container, Row } from "react-bootstrap";
+import { FaBars } from "react-icons/fa";
 
 const CompamyPage = () => {
 
@@ -74,16 +75,23 @@ const CompamyPage = () => {
     userName: userName,
     userId: userId,
   };
+
+  const [showLeftSide, setShowLeftSide] = useState(false);
+
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
   return (
  <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
+        <Col md={18} className="rightside">
         <div className="companyPage">
           {company ? (
             <div>

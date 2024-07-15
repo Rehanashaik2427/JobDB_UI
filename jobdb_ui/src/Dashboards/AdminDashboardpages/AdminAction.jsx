@@ -77,7 +77,7 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
     console.log('Request Rejected');
     const rejected = "Rejected";
     try {
-      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${formattedDate}&userStatus=${rejected}`);
+      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${formattedDate }&userStatus=${rejected}`);
       console.log(res.data);
 
       if (res.data) {
@@ -102,7 +102,11 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+    setPage(0); // Reset page when page size changes
+  };
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
@@ -140,23 +144,30 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
           </tbody>
         </Table>
 
-        <div className="pagination-container">
-          <Breadcrumb routeSegments={[{ name: 'UI Kits', path: '/uikits' }, { name: 'Table' }]} />
-
-          <ReactPaginate
-            previousLabel={<i className="i-Previous" />}
-            nextLabel={<i className="i-Next1" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={totalPages}
-            marginPagesDisplayed={1}
-            pageRangeDisplayed={2}
-            onPageChange={handlePageClick}
-            activeClassName="active"
-            containerClassName="pagination"
-            subContainerClassName="pages pagination"
-          />
-        </div>
+         {/* Pagination */}
+         <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
       </div>
     </div>
 

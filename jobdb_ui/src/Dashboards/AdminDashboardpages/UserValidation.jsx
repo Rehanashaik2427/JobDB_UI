@@ -47,7 +47,11 @@ const UserValidation = () => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+    setPage(0); // Reset page when page size changes
+  };
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
@@ -96,23 +100,30 @@ const UserValidation = () => {
          ): (
           <h4 className='text-center'>Loading.. .!!</h4>
         )}
-        <div className="pagination-container">
-          <Breadcrumb routeSegments={[{ name: 'UI Kits', path: '/uikits' }, { name: 'Table' }]} />
-
-          <ReactPaginate
-            previousLabel={<i className="i-Previous" />}
-            nextLabel={<i className="i-Next1" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={totalPages}
-            marginPagesDisplayed={1}
-            pageRangeDisplayed={2}
-            onPageChange={handlePageClick}
-            activeClassName="active"
-            containerClassName="pagination"
-            subContainerClassName="pages pagination"
-          />
-        </div>
+        {/* Pagination */}
+        <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
 
       </div>
     </div>

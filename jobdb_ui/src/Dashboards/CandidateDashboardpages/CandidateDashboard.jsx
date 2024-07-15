@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import CandidateLeftSide from './CandidateLeftSide';
 import Chart from 'react-apexcharts';
+import CandidateLeftSide from './CandidateLeftSide';
+import { FaBars } from 'react-icons/fa';
+
 
 const CandidateDashboard = () => {
   const location = useLocation();
@@ -186,7 +188,7 @@ const CandidateDashboard = () => {
     xaxis: {
       type: 'datetime',
       categories: applicationsData.map(data => new Date(data.date).toISOString()),
-    },  yaxis: {
+    }, yaxis: {
       min: 0,
       max: 50,
       tickAmount: 10,
@@ -201,28 +203,32 @@ const CandidateDashboard = () => {
       data: applicationsData.map(data => data.count),
     }],
   };
+  const [showLeftSide, setShowLeftSide] = useState(false);
+
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
 
 
   return (
     <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
 
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
+        <Col md={10} className="rightside">
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-2">
             <i
               datafullscreen="true"
               onClick={toggleFullScreen}
               className="i-Full-Screen header-icon d-none d-lg-inline-block"
               style={{ fontSize: '20px', marginRight: '12px' }}
             />
-
-
 
             <Dropdown className="ml-2">
               <Dropdown.Toggle
@@ -242,7 +248,11 @@ const CandidateDashboard = () => {
                     <Dropdown.Item>No new notifications</Dropdown.Item>
                   ) : (
                     unreadNotifications.map((notification, index) => (
-                      <Dropdown.Item key={index} onClick={() => markNotificationAsRead(notification.id)} style={{ fontWeight: notification.read ? 'normal' : 'bold' }}>
+                      <Dropdown.Item
+                        key={index}
+                        onClick={() => markNotificationAsRead(notification.id)}
+                        style={{ fontWeight: notification.read ? 'normal' : 'bold' }}
+                      >
                         {notification.message}
                       </Dropdown.Item>
                     ))
@@ -250,9 +260,6 @@ const CandidateDashboard = () => {
                 </Dropdown.Menu>
               ) : null}
             </Dropdown>
-
-
-
 
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
@@ -285,91 +292,82 @@ const CandidateDashboard = () => {
             </Dropdown>
           </div>
 
-
-
-          <Container className="my-dashboard-container ">
-            <h3 className='status-info' style={{ marginTop: '10px' }}>My application status</h3>
+          <Container className="my-dashboard-container">
+            <h3 className='status-info'>My application status</h3>
             <Row className="dashboard d-flex mt-4">
-              <Col xs={3} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px', marginLeft: '20px' }}>
-                <Link
-                  to={{
-                    pathname: '/candidate-companies',
-                    state: { userName: userName, userId: userId }
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
-                  }}
-                >
-                  <h5>Applied to</h5>
-                  <h4>{countOfCompanies !== null ? countOfCompanies : 'Loading...'}</h4>
-                  <h5>companies</h5>
-                </Link>
+              <Col xs={12} md={6} lg={3}>
+                <div className="d-flex flex-column justify-content-center align-items-center data">
+                  <Link
+                    to={{
+                      pathname: '/candidate-companies',
+                      state: { userName, userId }
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
+                    }}
+                  >
+                    <h5>Applied to</h5>
+                    <h4>{countOfCompanies !== null ? countOfCompanies : 'Loading...'}</h4>
+                    <h5>companies</h5>
+                  </Link>
+                </div>
               </Col>
-              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
-                <Link
-                  to={{
-                    pathname: '/resume',
-                    state: { userName: userName, userId: userId }
-                  }} onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/candidate-dashboard/resume', { state: { userName, userId } });
-                  }}
-                >
-                  <h4>{countOfResume !== null ? countOfResume : 'Loading...'}</h4>
-                  <h5>resumes</h5>
-                </Link>
+              <Col xs={12} md={6} lg={3}>
+                <div className="d-flex flex-column justify-content-center align-items-center data">
+                  <Link
+                    to={{
+                      pathname: '/resume',
+                      state: { userName, userId }
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/candidate-dashboard/resume', { state: { userName, userId } });
+                    }}
+                  >
+                    <h4>{countOfResume !== null ? countOfResume : 'Loading...'}</h4>
+                    <h5>resumes</h5>
+                  </Link>
+                </div>
               </Col>
-              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
-                <h1>250</h1>
-                <h4>resume views</h4>
+              <Col xs={12} md={6} lg={3}>
+                <div className="d-flex flex-column justify-content-center align-items-center data">
+                  <h1>250</h1>
+                  <h4>resume views</h4>
+                </div>
               </Col>
+              <Col xs={12} md={6} lg={3}>
+                <div className="d-flex flex-column justify-content-center align-items-center data">
+                  <Link
+                    to={{
+                      pathname: '/candidate-dashboard/my-application',
+                      state: { userName, userId, applicationStatus: "Shortlisted" }
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/candidate-dashboard/my-application', { state: { userName, userId, applicationStatus: "Shortlisted" } });
+                    }}
+                  >
+                    <h4>{countOfshortlistedApplications !== null ? countOfshortlistedApplications : 'Loading...'}</h4>
+                    <h4>shortlist</h4>
+                  </Link>
+                </div>
+              </Col>
+            </Row>
 
-              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px' }}>
-                <Link
-                  to={{
-                    pathname: '/candidate-dashboard/my-application',
-                    state: { userName: userName, userId: userId, applicationStatus: "Shortlisted" }
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/candidate-dashboard/my-application', { state: { userName, userId, applicationStatus: "Shortlisted" } });
-                  }}
-                >
-                  <h4>{countOfshortlistedApplications !== null ? countOfshortlistedApplications : 'Loading...'}</h4>
-                  <h4>shortlist</h4>
-                </Link>
-              </Col>
-              <Col xs={6} md={4} className="d-flex flex-column justify-content-center align-items-center data" style={{ maxHeight: '150px', maxWidth: '150px', textAlign: 'center', marginRight: '20px' }}>
-                <Link
-                  to={{
-                    pathname: '/candidate-companies',
-                    state: { userName: userName, userId: userId }
-                  }} onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
-                  }}
-                >
-                  <h4 className='text-align-center'>{countOfTotalCompanies !== null ? countOfTotalCompanies : 'Loading...'}</h4>
-                  <h5 className='text-align-center'>companies</h5>
-                </Link>
 
+            <Row className="justify-content-center mb-4">
+              <Col xs={16} md={6} className='mb-4'>
+                <Card body className="h-100 chart-card">
+                  <Card.Title className="text-center">Applications per Day</Card.Title>
+                  <Chart options={options} series={options.series} type={options.chart.type} />
+                </Card>
               </Col>
             </Row>
           </Container>
-          <Row className="justify-content-center">
-            <Col md={5} xs={16} className="mb-4">
-              <Card body className="h-100 chart-card" style={{ width: '100%' }}>
-                <Card.Title className="text-center">Applications per Day</Card.Title>
-                <Chart options={options} series={options.series} type={options.chart.type} />
-              </Card>
-            </Col>
-          </Row>
-
         </Col>
       </Row>
     </Container>
-
   );
 };
 

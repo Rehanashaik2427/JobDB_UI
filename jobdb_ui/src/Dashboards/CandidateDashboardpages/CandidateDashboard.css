@@ -1,10 +1,11 @@
 .dashboard-container{
-    height: 100%; /* Ensure the column takes full height */
-    overflow: hidden; /* Disable scrolling */
+  width: 100%;
+    height: 100vh; /* Ensure the column takes full height */
+    /* overflow: hidden; Disable scrolling */
 }
 .left-side{
-    height: 100vh;
-    width: 200px;
+    height: auto;
+    width: 100%;
     /* background-color: rgb(209, 247, 247); */
 }
 .rightside{
@@ -13,6 +14,57 @@
     background-color:white;
     overflow:scroll;
 }
+*{
+  -ms-overflow-style: none;
+}
+::-webkit-scrollbar{
+  display: none;
+}
+.dashboard-container {
+  .left-side {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .hamburger-icon {
+    display: none;
+    @media (max-width: 768px) {
+      display: block;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      z-index: 1000; /* Ensure the hamburger icon is above other elements */
+    }
+  }
+
+  .rightside {
+    @media (max-width: 768px) {
+      margin-left: 0;
+      overflow-y: scroll;
+    }
+  }
+
+  .left-side.show {
+    display: block; /* Ensure the left side shows when the hamburger icon is clicked */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: white;
+    z-index: 999;
+    width: 250px; /* Adjust width as needed */
+  }
+  .dashboard {
+    @media (max-width: 768px) {
+      margin-left: 0;
+    }
+  }
+}
+
+
 #logo img{
     height: 100px;
     width: 200px;

@@ -1,16 +1,13 @@
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Modal, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-// import './CandidateDashboard.css';
-
 import ReactPaginate from 'react-paginate';
 import CandidateLeftSide from './CandidateLeftSide';
-
 import { Dropdown } from 'react-bootstrap';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
 import Swal from 'sweetalert2';
+import { FaBars } from 'react-icons/fa';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -18,7 +15,6 @@ const CandidateJobs = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
-  console.log(userId);
 
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
@@ -26,7 +22,7 @@ const CandidateJobs = () => {
   const [showResumePopup, setShowResumePopup] = useState(false);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(5); // Default page size
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
@@ -35,19 +31,27 @@ const CandidateJobs = () => {
   const [hasUserApplied, setHasUserApplied] = useState({});
   const [selectedJobSummary, setSelectedJobSummary] = useState(null);
   const [showModalSummary, setShowModalSummary] = useState(false);
-
-
-  const handleSearchChange = (event) => {
-    setSearch(event.target.value);
+  const [filterStatus, setFilterStatus] = useState('all');
+  const handleFilterChange = async (e) => {
+    debugger
+    const status = e.target.value
+      setFilterStatus(status);
+      
   };
 
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+  };
   useEffect(() => {
     if (search) {
       fetchJobBySearch();
-    } else {
+    } else if(filterStatus) {
+      fetchDataByFilter(filterStatus);   
+    }else{
       fetchData();
     }
-  }, [page, pageSize, search, sortedColumn, sortOrder]);
+  }, [page, pageSize, search, sortedColumn, sortOrder, filterStatus]);
 
   async function fetchData() {
     try {
@@ -65,9 +69,38 @@ const CandidateJobs = () => {
     }
   }
 
+  async function fetchDataByFilter(filterStatus) {
+    console.log(filterStatus)
+    try {
+      const params = {
+        page: page,
+        size: pageSize,
+        sortBy: sortedColumn,
+        sortOrder: sortOrder,
+        userId: userId, // Example parameter to pass to backend API
+        filterStatus:filterStatus
+      };
+    console.log(filterStatus)
 
-  const toggleSettings = () => {
-    navigate('/');
+
+      // if (filterStatus === 'Apply') {
+      //   // Fetch jobs where user has not applied
+      //   params.userId = userId; // Example parameter to pass to backend API
+      // } else if (filterStatus === 'Applied') {
+      //   // Fetch jobs where user has applied
+      //   params.userId = 0; // Example parameter to pass to backend API
+      // }
+
+      const response = await axios.get(`${BASE_API_URL}/paginationFilterJobs`, { params });
+      setJobs(response.data.content);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
   };
 
   const handleApplyButtonClick = (jobId) => {
@@ -85,12 +118,11 @@ const CandidateJobs = () => {
 
   const applyJob = async (jobId, resumeId) => {
     const appliedOn = new Date(); // Get current date and time
-const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
-const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
-const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
+    const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
+    const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
+    const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
 
-const formattedDate = `${year}-${month}-${day}`;
-console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
+    const formattedDate = `${year}-${month}-${day}`;
 
     try {
       const response = await axios.put(`${BASE_API_URL}/applyJob`, null, {
@@ -99,13 +131,12 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
       if (response.data) {
         setApplyJobs((prevApplyJobs) => [...prevApplyJobs, { jobId, formattedDate }]);
         setHasUserApplied((prev) => ({ ...prev, [jobId]: true }));
-        //alert("You have successfully applied for this job");
 
-          await Swal.fire({
-            icon: "success",
-            title: "Apply Successful!",
-            text: "You have successfully applied for this job."
-          });
+        await Swal.fire({
+          icon: "success",
+          title: "Apply Successful!",
+          text: "You have successfully applied for this job."
+        });
       }
     } catch (error) {
       console.error('Error applying for job:', error);
@@ -144,8 +175,8 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
   const fetchJobBySearch = async () => {
     try {
       const params = {
-        search,
-        page,
+        search:search,
+        page:page,
         size: pageSize,
         sortBy: sortedColumn,
         sortOrder: sortOrder,
@@ -166,7 +197,6 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
     console.log("Search submitted:", search);
   };
 
-
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
@@ -175,8 +205,6 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
     setSortedColumn(column);
     setSortOrder(order);
   };
-
-
 
   const handleCloseModalSummary = () => {
     setSelectedJobSummary(null);
@@ -193,13 +221,6 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
       </Popover.Body>
     </Popover>
   );
-
-  const user = {
-    userName: userName,
-    userId: userId,
-  };
-
-
 
   const handlePageClick = (data) => {
     setPage(data.selected);
@@ -218,17 +239,29 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
       return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
     }
   };
+
   const initials = getInitials(userName);
+
+  const [showLeftSide, setShowLeftSide] = useState(false);
+
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
+
+ 
+
   return (
     <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
+        <Col md={18} className="rightside" >
+
           {showResumePopup && (
             <Modal show={true} onHide={() => setShowResumePopup(false)}>
               <Modal.Header closeButton>
@@ -277,16 +310,27 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
                 <Dropdown.Item as={Link} to="/">
                   <i className="i-Data-Settings me-1" /> Account settings
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <Dropdown.Item as={Link} to="/">
                   <i className="i-Lock-2 me-1" /> Sign out
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </div>
-
+          <div className="filter">
+            <label htmlFor="status">Actions:</label>
+            <select id="status" onChange={handleFilterChange} value={filterStatus}>
+              <option value="all">All</option>
+              <option value="Apply">Apply</option>
+              <option value="Applied">Applied</option>
+            </select>
+          </div>
           {jobs.length > 0 && (
-            <div>
-              <h2>Jobs For {userName}</h2>
+            <div style={{ marginLeft: '5px', marginRight: '50px' }}> 
+            
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <h2>Jobs For {userName}</h2>
+                
+              </div>
               <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
                 <thead className="table-light">
                   <tr>
@@ -330,21 +374,29 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
                 </tbody>
               </Table>
 
-              <div className="pagination-container">
-                <ReactPaginate
-                  previousLabel={<i className="i-Previous" />}
-                  nextLabel={<i className="i-Next1" />}
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={totalPages}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  onPageChange={handlePageClick}
-                  activeClassName="active"
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                />
-              </div>
+                <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
             </div>
           )}
 
@@ -362,9 +414,6 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
               </Button>
             </Link>
           </div>
-
-
-
         </Col>
       </Row>
     </Container>

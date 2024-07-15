@@ -5,6 +5,7 @@ import './CandidateDashboard.css';
 
 import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import CandidateLeftSide from './CandidateLeftSide';
+import { FaBars } from 'react-icons/fa';
 
 
 const Profile = () => {
@@ -55,16 +56,23 @@ const Profile = () => {
   };
 
   const initials = getInitials(userName);
+
+  const [showLeftSide, setShowLeftSide] = useState(false);
+
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
   return (
     <Container fluid className='dashboard-container'>
     <Row>
-      <Col md={2} className="left-side">
-        <CandidateLeftSide user={user} />
-      </Col>
+    <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
+        </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-      <Col md={18} className="rightside" style={{
-        overflow: 'hidden'
-      }}>
+        <Col md={18} className="rightside" >
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
           <Dropdown className="ml-2">

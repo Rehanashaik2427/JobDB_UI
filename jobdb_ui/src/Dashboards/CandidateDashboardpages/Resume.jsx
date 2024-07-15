@@ -5,6 +5,7 @@ import { Button, Card, Col, Container, Dropdown, Modal, Row } from 'react-bootst
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
 import CandidateLeftSide from './CandidateLeftSide';
+import { FaBars } from 'react-icons/fa';
 
 const Resume = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -114,18 +115,25 @@ const Resume = () => {
   };
 
   const initials = getInitials(userName);
+
+  const [showLeftSide, setShowLeftSide] = useState(false);
+
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
   return (
 
 
     <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
+        <Col md={18} className="rightside" >
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
 

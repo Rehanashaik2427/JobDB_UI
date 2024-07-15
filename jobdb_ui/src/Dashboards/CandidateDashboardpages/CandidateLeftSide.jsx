@@ -1,8 +1,8 @@
+import { faBuilding, faEnvelope, faFile, faFileLines, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { RxDashboard } from 'react-icons/rx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faEnvelope, faFile, faFileLines, faLayerGroup, faMoneyCheckDollar, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function CandidateLeftSide({ user }) {
@@ -65,7 +65,7 @@ function CandidateLeftSide({ user }) {
                     />
                 </Navbar.Brand>
                 <Navbar.Text>
-                    <h2 style={{ color: 'black' }}>{userName}</h2>
+                <h2 className="fs-3" style={{ color: 'black' }}>{userName}</h2>
                 </Navbar.Text>
                 <div ref={scrollContainerRef} className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
                     <Nav className="flex-column full-height align-items-center">

@@ -95,7 +95,11 @@ const PostedJobs = () => {
   };
 
 
-
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+    setPage(0); // Reset page when page size change
+  };
 
   const handlePageClick = (data) => {
     setPage(data.selected);
@@ -214,7 +218,16 @@ const PostedJobs = () => {
                   </Table>
                 </div>
                
-                <div className="pagination-container">
+                {/* Pagination */}
+         <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
                   <ReactPaginate
                     previousLabel={<i className="i-Previous" />}
                     nextLabel={<i className="i-Next1" />}

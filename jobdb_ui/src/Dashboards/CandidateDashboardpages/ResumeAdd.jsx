@@ -6,6 +6,7 @@ import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { FaBars } from 'react-icons/fa';
 
 const ResumeAdd = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -131,15 +132,22 @@ const ResumeAdd = () => {
   const handleBack = () => {
     navigate('/candidate-dashboard/resume', { state: { userName, userId } }); // Navigate back to previous page
   };
+  const [showLeftSide, setShowLeftSide] = useState(false);
 
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
   return (
     <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-        <Col md={18} className="rightside" style={{ overflow: 'hidden' }}>
+        <Col md={10} className="rightside" >
 
           <Col xs={6}>
             <Button onClick={handleBack} variant="secondary">
@@ -150,16 +158,37 @@ const ResumeAdd = () => {
           <Col sm={9} className='resume-page' style={{ paddingLeft: '20px' }}>
             <h2>Add Resume</h2>
             <Form onSubmit={handleSubmit} className='resume-Add'>
-              <Form.Group as={Row} className='select-type'>
-                <Form.Label column sm={3}>Select Type:</Form.Label>
-                <Col sm={9}>
-                  <Form.Control as='select' value={fileType} onChange={handleFileTypeChange}>
-                    <option value="file">File</option>
-                    <option value="link">Link</option>
-                    <option value="brief">Brief</option>
-                  </Form.Control>
-                </Col>
-              </Form.Group>
+            <Form.Group as={Row} className='select-type'>
+  <Form.Label column sm={3}>Select Type:</Form.Label>
+  <Col sm={9}>
+    <div className="btn-group btn-group-toggle" data-toggle="buttons">
+      <label className={`btn btn-outline-primary ${fileType === 'file' ? 'active' : ''}`}>
+        <input
+          type="radio"
+          value="file"
+          checked={fileType === 'file'}
+          onChange={handleFileTypeChange}
+        /> File
+      </label>
+      <label className={`btn btn-outline-primary ${fileType === 'link' ? 'active' : ''}`}>
+        <input
+          type="radio"
+          value="link"
+          checked={fileType === 'link'}
+          onChange={handleFileTypeChange}
+        /> Link
+      </label>
+      <label className={`btn btn-outline-primary ${fileType === 'brief' ? 'active' : ''}`}>
+        <input
+          type="radio"
+          value="brief"
+          checked={fileType === 'brief'}
+          onChange={handleFileTypeChange}
+        /> Brief
+      </label>
+    </div>
+  </Col>
+</Form.Group>
 
               {fileType === 'file' && (
                 <Form.Group as={Row} className='select-file'>

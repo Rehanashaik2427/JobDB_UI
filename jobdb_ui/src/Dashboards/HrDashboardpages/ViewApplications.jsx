@@ -29,22 +29,12 @@ const ViewApplications = () => {
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
+ 
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+    setPage(0); // Reset page when page size change
   };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
-
 
 
 
@@ -312,21 +302,30 @@ const ViewApplications = () => {
              
                 </div>
               )}
-                   <div className="pagination-container">
-                    <ReactPaginate
-                      previousLabel={<i className="i-Previous" />}
-                      nextLabel={<i className="i-Next1" />}
-                      breakLabel="..."
-                      breakClassName="break-me"
-                      pageCount={totalPages}
-                      marginPagesDisplayed={1}
-                      pageRangeDisplayed={2}
-                      onPageChange={handlePageClick}
-                      activeClassName="active"
-                      containerClassName="pagination"
-                      subContainerClassName="pages pagination"
-                    />
+                   {/* Pagination */}
+         <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
                   </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
             </div>
           </div>
         </Col>

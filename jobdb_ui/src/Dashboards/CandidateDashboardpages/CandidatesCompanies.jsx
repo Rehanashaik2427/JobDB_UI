@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { FaBars } from 'react-icons/fa';
 
 const CandidatesCompanies = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -86,16 +87,29 @@ const CandidatesCompanies = () => {
   };
 
   const initials = getInitials(userName);
+  const [showLeftSide, setShowLeftSide] = useState(false);
 
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
+
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+    setPage(0); // Reset page when page size changes
+  };
   return (
     <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
+        <Col md={10} className="rightside" style={{
+          overflowY: 'scroll'
         }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar">
@@ -159,19 +173,30 @@ const CandidatesCompanies = () => {
                     </Card>
                   ))}
                 </div>
-                <ReactPaginate
-                  previousLabel={<i className="i-Previous" />}
-                  nextLabel={<i className="i-Next1" />}
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={totalPages}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  onPageChange={handlePageClick}
-                  activeClassName="active"
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                />
+                 {/* Pagination */}
+              <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
 
               </div>
             ) : (

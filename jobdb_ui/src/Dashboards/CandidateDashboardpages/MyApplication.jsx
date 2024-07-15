@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
@@ -6,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-
+import { FaBars } from 'react-icons/fa';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -18,56 +17,57 @@ const MyApplication = () => {
   const [search, setSearch] = useState('');
   const [resumeNames, setResumeNames] = useState({});
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(5); // Default page size
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchResumeNames();
   }, [applications]);
+
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber === page + 1) {
-      handleNextPage();
-
-    } else if (pageNumber === page - 1) {
-      handlePreviousPage();
-
-    } else {
-      setPage(pageNumber);
-      if (applicationStatus) {
-        fetchApplicationsByStatus(applicationStatus);
-      } else if (search) {
-        fetchApplicationBySearch(search);
-      } else {
-        fetchApplications();
-      }
-      fetchResumeNames();
-    }
+  const handlePageClick = (data) => {
+    setPage(data.selected);
   };
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+   // setPage(0); // Reset page when page size changes
+  };
+
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
 
-  // Update fetchApplications function to include the search term
+  useEffect(() => {
+    if (search) {
+      fetchApplicationBySearch(search);
+    } else if (applicationStatus) {
+      fetchApplicationsByStatus(applicationStatus);
+    } else {
+      fetchApplications();
+    }
+  }, [applicationStatus, page, pageSize, search, sortOrder, sortedColumn, userId]);
+
+
   const fetchApplications = async () => {
     try {
       const params = {
         userId: userId,
         page: page,
-        size: pageSize,
+        pageSize: pageSize,
         sortBy: sortedColumn,
         sortOrder: sortOrder,
-
       };
+      
       const response = await axios.get(`${BASE_API_URL}/applicationsPagination`, { params });
 
       if (sortedColumn) {
         params.sortBy = sortedColumn;
         params.sortOrder = sortOrder;
       }
+
       setApplications(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -75,7 +75,6 @@ const MyApplication = () => {
     }
   };
 
-  // Update fetchApplicationsByStatus function to include the search term
   const fetchApplicationsByStatus = async (applicationStatus) => {
     try {
       const params = {
@@ -84,10 +83,12 @@ const MyApplication = () => {
         page: page,
         pageSize: pageSize,
       };
+      
       if (sortedColumn) {
         params.sortBy = sortedColumn;
         params.sortOrder = sortOrder;
       }
+
       const response = await axios.get(`${BASE_API_URL}/applicationsBySearch`, { params });
       setApplications(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -104,10 +105,12 @@ const MyApplication = () => {
         page: page,
         pageSize: pageSize,
       };
+      
       if (sortedColumn) {
         params.sortBy = sortedColumn;
         params.sortOrder = sortOrder;
       }
+
       const response = await axios.get(`${BASE_API_URL}/applicationsBySearch`, { params });
       setApplications(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -115,23 +118,7 @@ const MyApplication = () => {
       console.error('Error fetching applications by search:', error);
     }
     console.log("Search submitted:", search);
-  }
-
-  // Call the appropriate fetch function based on the existence of searchStatus
-  useEffect(() => {
-    if (search) {
-      fetchApplicationBySearch(search);
-
-    } else if (applicationStatus) {
-     
-      fetchApplicationsByStatus(applicationStatus);
-
-    } else {
-      fetchApplications();
-
-    }
-
-  }, [applicationStatus, page, pageSize, search, sortOrder, sortedColumn, userId]);
+  };
 
 
   const fetchResumeNames = async () => {
@@ -147,22 +134,6 @@ const MyApplication = () => {
     }
   };
 
-  const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage(page + 1);
-    }
-  };
-
-
-
-
-
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
@@ -170,13 +141,6 @@ const MyApplication = () => {
     }
     setSortedColumn(column);
     setSortOrder(order);
-  };
-
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    handlePageChange(0);
-
   };
 
   const toggleSettings = () => {
@@ -193,9 +157,7 @@ const MyApplication = () => {
     }
   };
 
-
   const [jobStatuses, setJobStatuses] = useState({});
-
 
   useEffect(() => {
     const fetchJobStatuses = async () => {
@@ -215,12 +177,10 @@ const MyApplication = () => {
     fetchJobStatuses();
   }, [applications]);
 
-  // Function to get job status for a specific job ID
   const getJobStatus = async (jobId) => {
     if (jobId === 0) {
-      return 'Job not availavle';
-    }
-    else {
+      return 'Job not available';
+    } else {
       try {
         const response = await axios.get(`${BASE_API_URL}/getJob?jobId=${jobId}`);
         return response.data.jobStatus ? 'Active' : 'Not Active';
@@ -231,18 +191,12 @@ const MyApplication = () => {
     }
   };
 
-  // Render job status based on application ID
   const renderJobStatus = (applicationId) => {
     return jobStatuses[applicationId] || 'Loading...';
   };
-  const handlePageClick = (data) => {
-    setPage(data.selected);
-  };
 
-  const user = {
-    userName: userName,
-    userId: userId,
-  };
+
+
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
@@ -258,29 +212,35 @@ const MyApplication = () => {
   };
 
   const initials = getInitials(userName);
-  return (
+  const [showLeftSide, setShowLeftSide] = useState(false);
 
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
+
+  return (
     <Container fluid className='dashboard-container'>
       <Row>
-        <Col md={2} className="left-side">
-          <CandidateLeftSide user={user} />
+        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+          <CandidateLeftSide user={{ userName, userId }} />
         </Col>
-
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-          <div className="search-bar" >
-            <input style={{ borderRadius: '6px', height: '35px' }}
-              type="text"
-              name="search"
-              placeholder="Search"
-              value={search}
-              onChange={handleSearchChange}
-            />
-          </div>
-          <Dropdown className="ml-2">
-          <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
+        <Col md={10} className="rightside">
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+            <div className="search-bar">
+              <input
+                style={{ borderRadius: '6px', height: '35px' }}
+                type="text"
+                name="search"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearchChange}
+              />
+            </div>
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
                 <div
                   className="initials-placeholder"
                   style={{
@@ -298,78 +258,77 @@ const MyApplication = () => {
                   {initials}
                 </div>
               </Dropdown.Toggle>
-            <Dropdown.Menu className="mt-3">
-              <Dropdown.Item as={Link} to="/">
-                <i className="i-Data-Settings me-1" /> Account settings
-              </Dropdown.Item>
-
-
-
-              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                <i className="i-Lock-2 me-1" /> Sign out
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-        <div>
-          {applications.length > 0 ? (
-            <>
-              {/* Applications table */}
-              <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
-                <thead className="table-light">
-
-                  <tr>
-                    <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                    <th scope="col" onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                    <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                    <th scope="col">Resume Profile</th>
-                    <th scope="col">Job Status</th>
-                    <th scope="col" onClick={() => handleSort('applicationStatus')}>
-                      Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {applications.map(application => (
-                    <tr key={application.id}>
-                      <td>{application.companyName}</td>
-                      <td>{application.jobRole}</td>
-                      <td>{application.appliedOn}</td>
-                      <td>{resumeNames[application.resumeId]}</td>
-                      <td>{renderJobStatus(application.applicationId)}</td>
-                      <td>{application.applicationStatus}</td>
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div style={{ marginLeft: '5px', marginRight: '50px' }}>
+            {applications.length > 0 ? (
+              <>
+                <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
+                  <thead className="table-light">
+                    <tr>
+                      <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col" onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                      <th scope="col">Resume Profile</th>
+                      <th scope="col">Job Status</th>
+                      <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                        Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-
-              {/* Pagination */}
-              <div className="pagination-container">
-                <ReactPaginate
-                  previousLabel={<i className="i-Previous" />}
-                  nextLabel={<i className="i-Next1" />}
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={totalPages}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  onPageChange={handlePageClick}
-                  activeClassName="active"
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                />
-               </div>
+                  </thead>
+                  <tbody>
+                    {applications.map(application => (
+                      <tr key={application.id}>
+                        <td>{application.companyName}</td>
+                        <td>{application.jobRole}</td>
+                        <td>{application.appliedOn}</td>
+                        <td>{resumeNames[application.resumeId]}</td>
+                        <td>{renderJobStatus(application.applicationId)}</td>
+                        <td>{application.applicationStatus}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
+                </div>
               </>
-              ) : (
-              <h4 className='text-center'>No Application .!!</h4>
+            ) : (
+              <h4 className='text-center'>No Application found..!!</h4>
             )}
-           
-           </div>
-           </Col>
+          </div>
+        </Col>
       </Row>
     </Container>
-      );
-}
+  );
+};
+
 export default MyApplication;
-
-
