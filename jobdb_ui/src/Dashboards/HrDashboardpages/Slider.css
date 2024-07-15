@@ -1,7 +1,6 @@
 .slider-container {
-    position: relative;
-    width: 90px; /* Reduced width */
-    height: 25px; /* Reduced height */
+    width: 60px; /* Reduced width */
+    height: 20px; /* Reduced height */
     border-radius: 12.5px;
     background-color: #ccc; /* Default gray color */
     display: flex;

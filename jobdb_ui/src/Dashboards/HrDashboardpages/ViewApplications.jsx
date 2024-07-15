@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
+import { SiImessage } from "react-icons/si";
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
 import Slider from "./Slider";
+
+
 
 const ViewApplications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -285,7 +288,8 @@ const ViewApplications = () => {
                           Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
                         </th>
                         <th scope="col">View Details</th>
-                        <th scope="col">Application Action</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Chat</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -312,16 +316,17 @@ const ViewApplications = () => {
                             >
                               <FontAwesomeIcon
                                 icon={faEye}
-                                style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }}
+                                style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
                               />
                             </Link>
                           </td>
-                          <td>
+                          <td style={{alignItems:'center'}}>
                             <Slider
                               initialStatus={application.applicationStatus}
                               onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                             />
                           </td>
+                          <td><SiImessage  size={25} /></td>
                         </tr>
                       ))}
                     </tbody>

@@ -258,7 +258,8 @@ const DreamApplication = () => {
                         <th scope="col" onClick={() => handleSort('appliedOn')}> Date {sortedColumn === 'appliedOn' && sortOrder === 'asc' && '▲'}
                           {sortedColumn === 'appliedOn' && sortOrder === 'desc' && '▼'}</th>
                         <th>Application Status</th>
-                        <th>Application Action</th>
+                        <th>Action</th>
+                        <th scope="col">Chat</th>
                       </tr>
                     </thead>
                     <tbody>
