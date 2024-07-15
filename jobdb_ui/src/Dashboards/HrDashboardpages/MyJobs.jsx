@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -142,12 +143,24 @@ const MyJobs = () => {
     setPageSize(size);
     setPage(0); // Reset page when page size changes
   };
+  const [showLeftSide, setShowLeftSide] = useState(false);
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
+
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={2} className="leftside">
+        {/* <Col md={2} className="leftside">
+          <HrLeftSide user={{ userName, userEmail }} />
+        </Col> */}
+
+        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
 
         <Col md={18} className="rightside" style={{
           overflow: 'hidden'

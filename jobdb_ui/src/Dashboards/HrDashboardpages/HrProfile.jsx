@@ -1,16 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa'; // Make sure to install react-icons
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
 
 const HrProfile = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const [userData, setUserData] = useState({});
+  const [showLeftSide, setShowLeftSide] = useState(false);
   const location = useLocation();
   const userName = location.state?.userName || '';
   const userEmail = location.state?.userEmail || '';
-  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     if (userEmail) {
@@ -26,13 +27,21 @@ const HrProfile = () => {
       console.log(error);
     }
   };
+
   const navigate = useNavigate();
+
   const toggleSettings = () => {
     navigate('/');
   };
+
+  const toggleLeftSide = () => {
+    setShowLeftSide(!showLeftSide);
+  };
+
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
+
   const getInitials = (name) => {
     const nameParts = name.split(' ');
     if (nameParts.length > 1) {
@@ -43,17 +52,18 @@ const HrProfile = () => {
   };
 
   const initials = getInitials(userName);
+
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        <Col md={2} className="left-side">
+        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-
-        <Col md={18} className="rightside">
-
+        <div className="hamburger-icon" onClick={toggleLeftSide}>
+          <FaBars />
+        </div>
+        <Col md={10} className="rightside">
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
                 <div

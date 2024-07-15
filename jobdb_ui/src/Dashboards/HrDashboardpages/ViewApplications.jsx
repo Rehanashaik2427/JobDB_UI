@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
-import { BsCheckCircle, BsXCircle } from 'react-icons/bs';
+import { SiImessage } from "react-icons/si";
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
+import Slider from "./Slider";
+
+
 
 const ViewApplications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -20,7 +23,8 @@ const ViewApplications = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [fileNames, setfileNames] = useState({});
 
-
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
@@ -43,14 +47,27 @@ const ViewApplications = () => {
     handleSelect(e.target.value);
   };
 
-  const handleSelect = async (filterStatus) => {
+  const handleSelect = async (filterStatus, fromDate, toDate) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_API_URL}/getFilterApplicationsByJobIdWithpagination?jobId=${jobId}&filterStatus=${filterStatus}&page=${page}&size=${pageSize}`);
-      console.log(response.data);
-      setApplications(response.data.content);
+      const params = {
+        jobId: jobId,
+        filterStatus: filterStatus,
+        page: page,
+        size: pageSize
+      }
+      if (fromDate && toDate) {
+        params.fromDate = fromDate;
+        params.toDate = toDate;
+      }
+      const endpoint = fromDate && toDate
+        ? `${BASE_API_URL}/getFilterApplicationsWithDateByJobIdWithpagination`
+        : `${BASE_API_URL}/getFilterApplicationsByJobIdWithpagination`;
 
+      const response = await axios.get(endpoint, { params });
       console.log(response.data);
+
+
       setApplications(response.data.content || []);
       fetchResumeTypes(response.data.content || []);
       setTotalPages(response.data.totalPages);
@@ -60,29 +77,42 @@ const ViewApplications = () => {
     }
   };
 
+
   const fetchApplications = async () => {
     setLoading(true);
     try {
       const params = {
         jobId: jobId,
+
         page: page,
         size: pageSize,
-        sortBy: sortedColumn, // Include sortedColumn and sortOrder in params
-        sortOrder: sortOrder,
+        sortBy: sortedColumn,
+        sortOrder: sortOrder
       };
+
+
 
       const response = await axios.get(`${BASE_API_URL}/getApplicationsByJobIdWithPagination`, { params });
       setApplications(response.data.content || []);
-      fetchResumeTypes(response.data.content || []);
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
-      console.log('Error fetching applications:', error);
+      console.error('Error fetching applications:', error);
     }
   };
+
+  const handleFromDateChange = (date) => {
+    setFromDate(date);
+    handleSelect(filterStatus, date, toDate);
+  };
+
+  const handleToDateChange = (date) => {
+    setToDate(date);
+    handleSelect(filterStatus, fromDate, date);
+  };
+
   useEffect(() => {
     fetchApplications();
-
   }, [jobId, page, pageSize, sortedColumn, sortOrder]);
 
   const handleSort = (column) => {
@@ -106,6 +136,7 @@ const ViewApplications = () => {
       console.log(error);
     }
   };
+
 
   const fetchResumeTypes = async (applications) => {
     const types = {};
@@ -202,6 +233,8 @@ const ViewApplications = () => {
 
   const navigate = useNavigate();
 
+
+
   return (
     <Container fluid className="dashboard-container">
       <Row>
@@ -209,18 +242,25 @@ const ViewApplications = () => {
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 
-        <Col md={18} className="rightside">
+        <Col md={10} className="rightside">
 
           <div className="application-div">
-            <div className="filter">
-              <label htmlFor="status">Filter by Status:</label>
-              <select id="status" onChange={handleFilterChange} value={filterStatus}>
-                <option value="all">All</option>
-                <option value="Shortlisted">Shortlisted</option>
-                <option value="Under Preview">Under Preview</option>
-                <option value="Not Shortlisted">Rejected</option>
-              </select>
-            </div>
+            <Row className="filter">
+              <Col className="filter" style={{ maxWidth: '40%' }}>
+                <label htmlFor="status">Filter by Status:</label>
+                <select id="status" onChange={handleFilterChange} value={filterStatus}>
+                  <option value="all">All</option>
+                  <option value="Shortlisted">Shortlisted</option>
+                  <option value="Not Seen">Not Seen</option>
+                  <option value="Not Shortlisted">Not Shortlisted</option>
+                </select>
+              </Col>
+              <Col className="filter">
+                <label htmlFor="date" className="mr-2">Filter by Date:</label>
+                From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
+                To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
+              </Col>
+            </Row>
             {showBriefSettings && (
               <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
                 <Modal.Header closeButton>
@@ -255,7 +295,8 @@ const ViewApplications = () => {
                           Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
                         </th>
                         <th scope="col">View Details</th>
-                        <th scope="col">Application Action</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Chat</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -282,24 +323,23 @@ const ViewApplications = () => {
                             >
                               <FontAwesomeIcon
                                 icon={faEye}
-                                style={{ cursor: 'pointer', fontSize: '24px', color: 'black' }}
+                                style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
                               />
                             </Link>
                           </td>
-                          <td>
-                            <span className="icon-button select" onClick={() => updateStatus(application.applicationId, 'Shortlisted')}>
-                              <BsCheckCircle />
-                            </span>
-                            <span className="icon-button reject" onClick={() => updateStatus(application.applicationId, 'Not Shortlisted')}>
-                              <BsXCircle />
-                            </span>
+                          <td style={{alignItems:'center'}}>
+                            <Slider
+                              initialStatus={application.applicationStatus}
+                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
+                            />
                           </td>
+                          <td><SiImessage  size={25} /></td>
                         </tr>
                       ))}
                     </tbody>
                   </Table>
 
-             
+
                 </div>
               )}
                    {/* Pagination */}

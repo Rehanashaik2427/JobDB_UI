@@ -1,4 +1,4 @@
-import { faAddressCard, faBriefcase, faEnvelope, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faBriefcase, faBuilding, faEnvelope, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef } from 'react';
 import Container from 'react-bootstrap/Container';
@@ -13,8 +13,6 @@ const HrLeftSide = ({ user }) => {
     const location = useLocation();
     
 
- 
-
     const navLinks = [
         { to: '/hr-dashboard', label: 'Dashboard', icon: <RxDashboard size={30} /> },
         { to: '/hr-dashboard/my-jobs', label: 'My Jobs', icon: <FontAwesomeIcon icon={faBriefcase} style={{ fontSize: '1.7rem' }} /> },
@@ -22,6 +20,7 @@ const HrLeftSide = ({ user }) => {
         { to: '/hr-dashboard/posted-jobs', label: 'All Jobs', icon: <FontAwesomeIcon icon={faBriefcase} style={{ fontSize: '1.7rem' }} /> },
         { to: '/hr-dashboard/people', label: 'People', icon: <FontAwesomeIcon icon={faUsers} style={{ fontSize: '1.7rem' }} /> },
         { to: '/hr-dashboard/profile', label: 'Profile', icon: <FontAwesomeIcon icon={faUser} style={{ fontSize: '1.7rem' }} /> },
+        { to: '/hr-dashboard/company-showcase', label: 'Company', icon: <FontAwesomeIcon icon={faBuilding} style={{ fontSize: '1.7rem' }} /> },
         { to: '/contact', label: 'Contact', icon: <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: '1.7rem' }} /> }
     ];
 

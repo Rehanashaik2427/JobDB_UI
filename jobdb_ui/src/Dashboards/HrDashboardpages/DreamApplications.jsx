@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
-import { BsCheckCircle, BsXCircle } from "react-icons/bs";
 import ReactPaginate from 'react-paginate';
 import { useLocation } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
+import Slider from "./Slider";
 
 const DreamApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -16,7 +16,8 @@ const DreamApplication = () => {
   const [resumeTypes, setResumeTypes] = useState({});
   const [fileNames, setfileNames] = useState({});
 
-
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -74,22 +75,45 @@ const DreamApplication = () => {
 
   };
 
-  const handleSelect = async (filterStatus) => {
+  const handleSelect = async (filterStatus, fromDate, toDate) => {
     try {
       const jobId = 0;
-      const response = await axios.get(`${BASE_API_URL}/getFilterDreamApplicationsByCompany?jobId=${jobId}&filterStatus=${filterStatus}&userEmail=${userEmail}&page=${page}&size=${pageSize}`);
-      console.log(response.data.content);
+      const params = {
+        jobId: jobId,
+        filterStatus: filterStatus,
+        userEmail: userEmail,
+        page: page,
+        size: pageSize
+      };
+      console.log(filterStatus)
+      if (fromDate && toDate) {
+        params.fromDate = fromDate;
+        params.toDate = toDate;
+      }
+
+      const endpoint = fromDate && toDate
+        ? `${BASE_API_URL}/getFilterDreamApplicationsWithDateByCompany`
+        : `${BASE_API_URL}/getFilterDreamApplicationsByCompany`;
+
+      const response = await axios.get(endpoint, { params });
       setApplications(response.data.content);
-      setTotalPages(response.data.totalPages)
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/getDreamApplicationsByCompany?userEmail=${userEmail}&page=${page}&size=${pageSize}`);
-      console.log(response.data);
+      const params = {
+        userEmail: userEmail,
+        page: page,
+        size: pageSize,
+
+      };
+
+      const response = await axios.get(`${BASE_API_URL}/getDreamApplicationsByCompany`, { params }); console.log(response.data);
       setApplications(response.data.content);
       setTotalPages(response.data.totalPages)
     } catch (error) {
@@ -99,7 +123,7 @@ const DreamApplication = () => {
 
   useEffect(() => {
     fetchApplications();
-  }, []);
+  }, [userEmail, page, pageSize]);
 
   const updateStatus = async (applicationId, newStatus) => {
     console.log(applicationId);
@@ -112,6 +136,16 @@ const DreamApplication = () => {
       console.log(error);
     }
   };
+  const handleFromDateChange = (date) => {
+    setFromDate(date);
+    handleSelect(filterStatus, date, toDate);
+  };
+
+  const handleToDateChange = (date) => {
+    setToDate(date);
+    handleSelect(filterStatus, fromDate, date);
+  };
+
   const [candidateName, setCandidateName] = useState();
   const [candidateEmail, setCandidateEmail] = useState();
 
@@ -183,15 +217,31 @@ const DreamApplication = () => {
         </Col>
         <Col md={20} className="rightside">
           <div className="application-div">
-            <div className="filter">
+            {/* <div className="filter">
               <label htmlFor="status">Filter by Status:</label>
               <select id="status" onChange={handleFilterChange} value={filterStatus}>
                 <option value="all">All</option>
                 <option value="Shortlisted">Shortlisted</option>
-                <option value="Under Preview">Under Preview</option>
+                <option value="Not Seen">Not seen</option>
                 <option value="Not Shortlisted">Rejected</option>
               </select>
-            </div>
+            </div> */}
+            <Row className="filter">
+              <Col className="filter" style={{ maxWidth: '40%' }}>
+                <label htmlFor="status">Filter by Status:</label>
+                <select id="status" onChange={handleFilterChange} value={filterStatus}>
+                  <option value="all">All</option>
+                  <option value="Shortlisted">Shortlisted</option>
+                  <option value="Not Seen">Not Seen</option>
+                  <option value="Not Shortlisted">Not Shortlisted</option>
+                </select>
+              </Col>
+              <Col className="filter">
+                <label htmlFor="date" className="mr-2">Filter by Date:</label>
+                From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
+                To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
+              </Col>
+            </Row>
             {showBriefSettings && (
               <div className="modal-summary">
                 <div className="modal-content-summary">
@@ -210,9 +260,10 @@ const DreamApplication = () => {
                         <th>Candidate Email</th>
                         <th>Resume ID</th>
                         <th scope="col" onClick={() => handleSort('appliedOn')}> Date {sortedColumn === 'appliedOn' && sortOrder === 'asc' && '▲'}
-                        {sortedColumn === 'appliedOn' && sortOrder === 'desc' && '▼'}</th>
+                          {sortedColumn === 'appliedOn' && sortOrder === 'desc' && '▼'}</th>
                         <th>Application Status</th>
-                        <th>Application Action</th>
+                        <th>Action</th>
+                        <th scope="col">Chat</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -223,16 +274,12 @@ const DreamApplication = () => {
                           <td>{renderResumeComponent(application.resumeId)}</td>
                           <td>{application.appliedOn}</td>
                           <td>{application.applicationStatus}</td>
-
                           <td>
-                            <span className="icon-button select" onClick={() => updateStatus(application.applicationId, 'Shortlisted')}>
-                              <BsCheckCircle />
-
-                            </span>
-                            <span className="icon-button reject" onClick={() => updateStatus(application.applicationId, 'Not Shortlisted')}>
-                              <BsXCircle />
-                            </span>                          
-                            </td>
+                            <Slider
+                              initialStatus={application.applicationStatus}
+                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
+                            />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
