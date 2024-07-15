@@ -90,7 +90,7 @@ const Contacts = () => {
                     <td>{contact.subject}</td>
                     <td>{contact.message}</td>
                     <td>
-                      {contact.reply === null ? (
+                      {contact.replyMsg === null ? (
                         <Button onClick={() => openModal(contact.email, contact.contactID,contact.message)}>Reply</Button>
                       ) : (
                         <h3>Replied</h3>
