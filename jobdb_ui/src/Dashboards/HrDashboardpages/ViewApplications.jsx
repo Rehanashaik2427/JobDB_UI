@@ -1,4 +1,4 @@
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -152,7 +152,7 @@ const ViewApplications = () => {
         console.error('Error fetching resume type:', error);
       }
     }
-    
+
     setResumeTypes(types);
     setfileNames(fileNames);
   };
@@ -235,20 +235,25 @@ const ViewApplications = () => {
 
   const navigate = useNavigate();
 
- const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+
   const [inputValue, setInputValue] = useState('');
   const [applicationId, setApplicationId] = useState(0);
-  const[chats,setChats]=useState([]);
-  const[showChat,setShowChat]=useState(false);
-  const handleChatClick =async (applicationId) => {
-    // Handle click logic here
+  const [chats, setChats] = useState([]);
+
+  const handleChatClick = async (applicationId) => {
     setApplicationId(applicationId);
-    const responce= await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
-    setChats(responce.data);
-    console.log('Chat icon clicked for:');
-    // Show the modal
-    setShowModal(true);
-    setShowChat(true);
+    try {
+      const response = await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
+      setChats(response.data);
+      console.log("Chats === > "+chats)
+      console.log("Chats === > "+response.data)
+      setShowModal(true); // Show the modal once chats are fetched
+      setShowChat(true); // Optionally manage showChat state separately
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -257,18 +262,22 @@ const ViewApplications = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setShowChat(false); // Optionally reset showChat state
     setInputValue(''); // Reset input value when closing modal
   };
 
-  const handleSend = async() => {
-    // Handle send logic here
-    const responce= await axios.put(`${BASE_API_URL}/saveChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
-    console.log('Sending message:', inputValue);
-    // Close the modal or perform any other actions
-    setShowModal(true);
-    setInputValue('');
-    handleChatClick(applicationId) // Reset input value after sending
+  const handleSend = async () => {
+    try {
+      await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
+      console.log('Sending message:', inputValue);
+      //handleCloseModal(); // Close modal after sending message
+      handleChatClick(applicationId);
+      setInputValue('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
+
 
   return (
     <Container fluid className="dashboard-container">
@@ -305,32 +314,43 @@ const ViewApplications = () => {
               </Modal>
             )}
 
-             <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Chat Modal</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        {showChat && (
-      chats.map((chat) => (
-        <div key={chat.id}> {/* Assuming each chat has a unique id */}
-          {chat.hrMessage}
+<Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+      <Modal.Header closeButton>
+        <Modal.Title>Chat Modal</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="modal-body">
+        <div className="chat-messages">
+          {chats ? (
+            chats.map((chat) => (
+              <div key={chat.id} className="chat-message">
+                <div className="message-right">{chat.candidateMessage}</div>
+                <div className="message-left">{chat.hrMessage}</div>
+              </div>
+            ))
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
-      ))
-    )}
-          <Form.Group controlId="messageInput">
-            <Form.Label>Message:</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your message"
-              value={inputValue}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Button variant="primary" onClick={handleSend}>
-            Send
-          </Button>
-        </Modal.Body>
-      </Modal>
+        {/* Message input section */}
+      
+      </Modal.Body>
+      <Modal.Footer>
+      <Form.Group controlId="messageInput" className="mb-3">
+          {/* <Form.Label>Message:</Form.Label> */}
+          <Form.Control
+            type="text"
+            placeholder="Enter your message"
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+        <Button variant="primary" onClick={handleSend}>
+        <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
+  </Button>
+      </Modal.Footer>
+    </Modal>
+
+
             <div>
               {loading ? (
                 <div className="d-flex justify-content-center align-items-center">
@@ -395,7 +415,7 @@ const ViewApplications = () => {
                               onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                             />
                           </td>
-                          <td onClick={() => handleChatClick(application.applicationId, application.jobId,application.candidateId)}>
+                          <td onClick={() => handleChatClick(application.applicationId)}>
                             <SiImessage size={25} />
                           </td>
 
@@ -439,7 +459,7 @@ const ViewApplications = () => {
   );
 
 
-  
+
 };
 
 export default ViewApplications;
