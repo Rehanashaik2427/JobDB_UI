@@ -243,8 +243,8 @@ const ViewApplications = () => {
   const handleChatClick =async (applicationId) => {
     // Handle click logic here
     setApplicationId(applicationId);
-    const responce= await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
-    setChats(responce.data);
+    // const responce= await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
+    // setChats(responce.data);
     console.log('Chat icon clicked for:');
     // Show the modal
     setShowModal(true);
@@ -262,7 +262,7 @@ const ViewApplications = () => {
 
   const handleSend = async() => {
     // Handle send logic here
-    const responce= await axios.put(`${BASE_API_URL}/saveChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
+    // const responce= await axios.put(`${BASE_API_URL}/saveChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
     console.log('Sending message:', inputValue);
     // Close the modal or perform any other actions
     setShowModal(true);

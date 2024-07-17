@@ -128,7 +128,7 @@ const PostedJobs = () => {
     if (nameParts.length > 1) {
       return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
     } else {
-      return convertToUpperCase(nameParts[0][0]+nameParts[0][1]);
+      return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
     }
   };
 
@@ -139,8 +139,10 @@ const PostedJobs = () => {
         <Col md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-        <Col md={20} className="rightside">
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+      
+        <Col md={10} className="rightside" style={{
+          overflowY: 'scroll'
+        }}>          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar" >
               <input style={{ borderRadius: '6px', height: '35px' }}
                 type="text"
@@ -217,9 +219,9 @@ const PostedJobs = () => {
                     </tbody>
                   </Table>
                 </div>
-               
+
                 {/* Pagination */}
-         <div className="pagination-container d-flex justify-content-end align-items-center">
+                <div className="pagination-container d-flex justify-content-end align-items-center">
                   <div className="page-size-select me-3">
                     <label htmlFor="pageSize">Page Size:</label>
                     <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>

@@ -151,21 +151,15 @@ const MyJobs = () => {
   return (
     <Container fluid className="dashboard-container">
       <Row>
-        {/* <Col md={2} className="leftside">
-          <HrLeftSide user={{ userName, userEmail }} />
-        </Col> */}
-
         <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
-
-        <Col md={18} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+        <Col md={10} className="rightside" style={{
+          overflowY: 'scroll'
+        }}>          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar">
               <input
                 style={{ borderRadius: '6px', height: '35px' }}
@@ -215,8 +209,6 @@ const MyJobs = () => {
           ) : jobs.length > 0 ? (
             <>
               <h2 className='text-center'>Jobs posted by {userName}</h2>
-
-
               <div>
                 <div>
                   <Table hover className='text-center'>
@@ -300,30 +292,30 @@ const MyJobs = () => {
             </section>
           )}
 
-         {/* Pagination */}
-         <div className="pagination-container d-flex justify-content-end align-items-center">
-                  <div className="page-size-select me-3">
-                    <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                    </select>
-                  </div>
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={2}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
-                </div>
+
+          <div className="pagination-container d-flex justify-content-end align-items-center">
+            <div className="page-size-select me-3">
+              <label htmlFor="pageSize">Page Size:</label>
+              <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+              </select>
+            </div>
+            <ReactPaginate
+              previousLabel={<i className="i-Previous" />}
+              nextLabel={<i className="i-Next1" />}
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={totalPages}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={2}
+              onPageChange={handlePageClick}
+              activeClassName="active"
+              containerClassName="pagination"
+              subContainerClassName="pages pagination"
+            />
+          </div>
           {!loading && jobs.length >= 0 && (
             <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>
               <Link

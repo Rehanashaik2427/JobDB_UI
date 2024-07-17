@@ -56,7 +56,6 @@ label {
   height: 100vh;
   width: 100vw;
   background-color: rgb(252, 253, 253);
-  /* overflow: hidden; */
 }
 
 #logo img {
@@ -710,8 +709,7 @@ section {
     @media (max-width: 768px) {
       height: 100vh;
       width: 100vw;
-      overflow-x: scroll;
-      overflow-y: scroll;
+
       
     }
   }
@@ -731,4 +729,6 @@ section {
   }
 }
 
-
+.company-overview{
+  overflow-y: scroll;
+}

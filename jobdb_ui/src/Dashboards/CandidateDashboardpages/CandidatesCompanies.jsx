@@ -2,12 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import { Button, Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { FaBars } from 'react-icons/fa';
 
 const CandidatesCompanies = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";

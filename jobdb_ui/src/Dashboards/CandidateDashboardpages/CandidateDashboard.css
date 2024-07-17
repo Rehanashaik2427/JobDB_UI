@@ -1,7 +1,6 @@
 .dashboard-container{
   width: 100%;
     height: 100vh; /* Ensure the column takes full height */
-    /* overflow: hidden; Disable scrolling */
 }
 .left-side{
     height: auto;
@@ -12,7 +11,6 @@
     height: 100vh;
     width: 100vw;
     background-color:white;
-    overflow:scroll;
 }
 *{
   -ms-overflow-style: none;
@@ -43,7 +41,6 @@
   .rightside {
     @media (max-width: 768px) {
       margin-left: 0;
-      overflow-y: scroll;
     }
   }
 
@@ -1060,5 +1057,4 @@ button.com:hover {
 .rightside {
   flex: 1; /* Take the remaining space */
   height: 100%; /* Ensure the column takes full height */
-  overflow: hidden; /* Disable scrolling */
 }

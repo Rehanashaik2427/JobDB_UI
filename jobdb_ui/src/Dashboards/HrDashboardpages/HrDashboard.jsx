@@ -180,7 +180,9 @@ const HrDashboard = () => {
         <Col md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-        <Col md={10} className="right-side" style={{ overflow: 'hidden' }}>
+        <Col md={10} className="rightside" style={{
+          overflowY: 'scroll'
+        }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
             <i
               datafullscreen="true"
@@ -218,7 +220,7 @@ const HrDashboard = () => {
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <Container className="my-dashboard-container">    
+          <Container className="my-dashboard-container">
             <h3 className='status-info text-center bg-light'>Company status</h3>
             <Row className="dashboard d-flex mt-4">
               {DATA.map((card, index) => (
@@ -248,7 +250,7 @@ const HrDashboard = () => {
           <Row>
             <Col md={6} className="offset-md-3 mt-4">
               <Card className="shadow-sm rounded-4"  >
-                <Card.Header className=" bg-light text-center"style={{height:'40px'}}>
+                <Card.Header className=" bg-light text-center" style={{ height: '40px' }}>
                   <Card.Title as="h4" className='text-center'>Monthly Job Percentages</Card.Title>
                 </Card.Header>
                 <Card.Body>
@@ -273,7 +275,7 @@ const HrDashboard = () => {
                             font: {
                               size: 12
                             },
-                            maxTicksLimit:100,
+                            maxTicksLimit: 100,
                             stepSize: 10
                           }
                         }

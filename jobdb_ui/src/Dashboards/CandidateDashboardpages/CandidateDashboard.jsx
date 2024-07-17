@@ -5,7 +5,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import Chart from 'react-apexcharts';
 import CandidateLeftSide from './CandidateLeftSide';
-import { FaBars } from 'react-icons/fa';
 
 
 const CandidateDashboard = () => {
@@ -213,15 +212,11 @@ const CandidateDashboard = () => {
   return (
     <Container fluid className='dashboard-container'>
       <Row>
-      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <Col md={2} className="left-side">
           <CandidateLeftSide user={{ userName, userId }} />
         </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
 
-
-        <Col md={10} className="rightside">
+        <Col md={10} className="right-side" style={{ overflowY: 'scroll' }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-2">
             <i
               datafullscreen="true"

@@ -15,6 +15,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
     "formik": "^2.4.6",
+    "google-maps-react": "^2.0.6",
     "leaflet": "^1.9.4",
     "perfect-scrollbar": "^1.5.5",
     "rc-slider": "^10.6.2",

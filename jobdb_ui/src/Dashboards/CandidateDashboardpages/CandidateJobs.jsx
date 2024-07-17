@@ -1,13 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Modal, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import ReactPaginate from 'react-paginate';
-import CandidateLeftSide from './CandidateLeftSide';
-import { Dropdown } from 'react-bootstrap';
-import ResumeSelectionPopup from './ResumeSelectionPopup';
-import Swal from 'sweetalert2';
+import { Button, Col, Container, Dropdown, Modal, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
+import ReactPaginate from 'react-paginate';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import CandidateLeftSide from './CandidateLeftSide';
+import ResumeSelectionPopup from './ResumeSelectionPopup';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -260,7 +259,9 @@ const CandidateJobs = () => {
           <FaBars />
         </div>
 
-        <Col md={18} className="rightside" >
+        <Col md={10} className="rightside" style={{
+          overflowY: 'scroll'
+        }}>
 
           {showResumePopup && (
             <Modal show={true} onHide={() => setShowResumePopup(false)}>

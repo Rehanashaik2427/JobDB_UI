@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { FaBars } from 'react-icons/fa';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -227,7 +227,9 @@ const MyApplication = () => {
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
-        <Col md={10} className="rightside">
+        <Col md={10} className="rightside" style={{
+          overflowY: 'scroll'
+        }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar">
               <input
