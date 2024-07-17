@@ -1080,7 +1080,7 @@ button.com:hover {
 /* styles.css (or in your component CSS) */
 .chat-message {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   margin-bottom: 1px; /*Adjust spacing between messages*/
 }
 
@@ -1089,6 +1089,7 @@ button.com:hover {
   /* padding: 10px;
   border-radius: 10px; */
 /* Pushes to the right side */
+margin-right: auto;
 }
 
 .message-left {
@@ -1096,4 +1097,20 @@ button.com:hover {
   /* padding: 10px;
   border-radius: 10px; */
   margin-left: auto; 
+}
+.message-time {
+  align-self: flex-end; /* Align time stamp to the right */
+  /* margin-left:60%; */
+ 
+  font-size: 0.5rem; /* Example font size */
+  color: #666; /* Example text color */
+}
+
+.message-date {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center; /* Align text center if necessary */
+  font-weight: bold;
+  margin: 10px 0; /* Adjust margin as needed */
 }
