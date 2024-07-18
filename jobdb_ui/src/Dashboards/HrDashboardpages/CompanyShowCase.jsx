@@ -26,7 +26,6 @@ const CompanyShowCase = () => {
   const [logo, setLogo] = useState(null);
   const [banner, setBanner] = useState(null);
 
-
   const [logoUrl, setLogoUrl] = useState(null);
   const [bannerUrl, setBannerUrl] = useState(null);
 
@@ -43,7 +42,7 @@ const CompanyShowCase = () => {
     if (type === 'logo') {
       setLogo(file);
       handleSubmit();
-    } 
+    }
     if (type === 'banner') {
       setBanner(file);
       handleSubmit();
@@ -56,6 +55,41 @@ const CompanyShowCase = () => {
     setActiveTab(tab);
   };
 
+  useEffect(() => {
+    const fetchLogoAndBanner = async () => {
+      try {
+        const response = await axios.get(`${BASE_API_URL}/logoAndBanner?companyName=${userData.companyName}`);
+        const [logoData, bannerData] = response.data;
+
+        if (logoData) {
+          const logoUrl = `data:image/jpeg;base64,${btoa(
+            new Uint8Array(logoData).reduce(
+              (data, byte) => data + String.fromCharCode(byte),
+              ''
+            )
+          )}`;
+          setLogoUrl(logoUrl);
+        }
+
+        if (bannerData) {
+          const bannerUrl = `data:image/jpeg;base64,${btoa(
+            new Uint8Array(bannerData).reduce(
+              (data, byte) => data + String.fromCharCode(byte),
+              ''
+            )
+          )}`;
+          setBannerUrl(bannerUrl);
+        }
+      } catch (error) {
+        console.error('Error fetching logo and banner:', error);
+      }
+    };
+
+    if (userData.companyName) {
+      fetchLogoAndBanner();
+    }
+  }, [userData.companyName]);
+console.log(logoUrl,bannerUrl)
 
   useEffect(() => {
     if (userEmail) {
@@ -67,6 +101,7 @@ const CompanyShowCase = () => {
 
     }
   }, [userEmail]);
+
 
   const getUser = async (userEmail) => {
     try {
@@ -139,8 +174,8 @@ const CompanyShowCase = () => {
       console.error('Error fetching counts:', error);
     }
   }
- 
-   
+
+
 
   const handleSubmit = async () => {
     const formData = new FormData();
@@ -148,7 +183,7 @@ const CompanyShowCase = () => {
     if (logo) {
       formData.append('logo', logo);
     }
-   if (banner) {
+    if (banner) {
       formData.append('banner', banner);
     }
 
@@ -165,45 +200,10 @@ const CompanyShowCase = () => {
 
   console.log(logo, " ", banner)
 
-console.log(companyName)
-  useEffect(() => {
-    const fetchLogoAndBanner = async () => {
-      console.log(companyName)
-      try {
-        const response = await axios.get(`${BASE_API_URL}/logoAndBanner?companyName=${companyName}`);
-        const [logoData, bannerData] = response.data;
+  console.log(companyName)
 
-        // Convert byte arrays to base64 URLs
-        if (logoData) {
-          const logoUrl = `data:image/jpeg;base64,${btoa(
-            new Uint8Array(logoData).reduce(
-              (data, byte) => data + String.fromCharCode(byte),
-              ''
-            )
-          )}`;
-          setLogoUrl(logoUrl);
-        }
 
-        if (bannerData) {
-          const bannerUrl = `data:image/jpeg;base64,${btoa(
-            new Uint8Array(bannerData).reduce(
-              (data, byte) => data + String.fromCharCode(byte),
-              ''
-            )
-          )}`;
-          setBannerUrl(bannerUrl);
-        }
-      } catch (error) {
-        console.error('Error fetching logo and banner:', error);
-      }
-    };
 
-    if (companyName) {
-      fetchLogoAndBanner();
-    }
-  }, [companyName]);
-
-  
   return (
     // <Container fluid className="dashboard-container">
     <Container fluid className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
@@ -223,9 +223,9 @@ console.log(companyName)
                   <h2 className='text-start' data-text='Company Name'>{userData.companyName}</h2>
                   <div className="icon-box" onClick={() => handleClick('logo')}>
                     {logo ? (
-                      <img src={logo} alt="Company Logo" className="logo-image" style={{ width: '180px', height: '180px', marginTop: '30px' }} />
+                      <img src="https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg" alt="Company Logo" className="logo-image" style={{ width: '180px', height: '180px', marginTop: '30px' }} />
                     ) : (
-                      <img src="https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"
+                      <img src={"https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
                         alt="Company Logo" className="logo-image" style={{ width: '180px', height: '180px', marginTop: '30px' }} />
                     )}
                     <FontAwesomeIcon icon={faCamera} size="2x" className="camera-icon" />
@@ -235,7 +235,7 @@ console.log(companyName)
                 <Col xs={4} className="text-end">
                   <div className="icon-box" onClick={() => handleClick('banner')}>
                     {banner ? (
-                      <img src={banner} alt="Company Banner" className="banner-image" style={{ width: '100%', height: '25%' }} />
+                      <img src={bannerUrl || URL.createObjectURL(banner)} alt="Company Banner" className="banner-image" style={{ width: '100%', height: '25%' }} />
                     ) : (
                       <h1 className='text-center'>Company Banner</h1>
                     )}

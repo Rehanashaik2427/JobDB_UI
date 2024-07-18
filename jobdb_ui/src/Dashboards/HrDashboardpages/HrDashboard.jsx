@@ -180,7 +180,7 @@ const HrDashboard = () => {
         <Col md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-        <Col md={10} className="rightside" style={{
+        <Col md={10} className="right-side" style={{
           overflowY: 'scroll'
         }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">

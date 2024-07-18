@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Dropdown, Modal, Row } from 'react-bootstrap';
 
+import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
 import CandidateLeftSide from './CandidateLeftSide';
-import { FaBars } from 'react-icons/fa';
 
 const Resume = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -183,9 +183,9 @@ const Resume = () => {
           <div>
             <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
 
-            <div className='cards d-flex flex-wrap justify-content-around'>
+            <div className='cards d-flex flex-wrap justify-content-start' style={{margin:'24px',padding:'12px'}}>
               {resumes.map((resume, index) => (
-                <Card className='resume-card' key={index}>
+                <Card className='resume-card'style={{margin:'12px'}} key={index}>
                   <Card.Body>
                     <Card.Title>Resume : {index + 1}</Card.Title>
                     <Card.Text>{resume.message}</Card.Text>

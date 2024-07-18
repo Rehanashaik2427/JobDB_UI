@@ -117,7 +117,7 @@ const Applications = () => {
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
 
-        <Col md={18} className="rightside" style={{
+        <Col md={10} className="right-side" style={{
           overflow: 'hidden'
         }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
