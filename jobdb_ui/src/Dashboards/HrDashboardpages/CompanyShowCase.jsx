@@ -1,8 +1,6 @@
-import { faCamera } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Col, Container, Row } from 'react-bootstrap'
+import { Card, Col, Container, Row } from 'react-bootstrap'
 import { FaBars } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 import CompanyJobs from './CompanyJobs'
@@ -23,73 +21,13 @@ const CompanyShowCase = () => {
   const [countOfActiveJobs, setCountOfActiveJobs] = useState();
   const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
 
-  const [logo, setLogo] = useState(null);
-  const [banner, setBanner] = useState(null);
-
-  const [logoUrl, setLogoUrl] = useState(null);
-  const [bannerUrl, setBannerUrl] = useState(null);
-
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
 
-  const { companyName } = userData;
-  console.log(companyName)
-
-  const handleFileChange = (e, type) => {
-    const file = e.target.files[0];
-    console.log(file);
-    if (type === 'logo') {
-      setLogo(file);
-      handleSubmit();
-    }
-    if (type === 'banner') {
-      setBanner(file);
-      handleSubmit();
-    }
-  };
-  const handleClick = (type) => {
-    document.getElementById(`${type}Input`).click();
-  };
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-
-  useEffect(() => {
-    const fetchLogoAndBanner = async () => {
-      try {
-        const response = await axios.get(`${BASE_API_URL}/logoAndBanner?companyName=${userData.companyName}`);
-        const [logoData, bannerData] = response.data;
-
-        if (logoData) {
-          const logoUrl = `data:image/jpeg;base64,${btoa(
-            new Uint8Array(logoData).reduce(
-              (data, byte) => data + String.fromCharCode(byte),
-              ''
-            )
-          )}`;
-          setLogoUrl(logoUrl);
-        }
-
-        if (bannerData) {
-          const bannerUrl = `data:image/jpeg;base64,${btoa(
-            new Uint8Array(bannerData).reduce(
-              (data, byte) => data + String.fromCharCode(byte),
-              ''
-            )
-          )}`;
-          setBannerUrl(bannerUrl);
-        }
-      } catch (error) {
-        console.error('Error fetching logo and banner:', error);
-      }
-    };
-
-    if (userData.companyName) {
-      fetchLogoAndBanner();
-    }
-  }, [userData.companyName]);
-console.log(logoUrl,bannerUrl)
 
   useEffect(() => {
     if (userEmail) {
@@ -111,6 +49,17 @@ console.log(logoUrl,bannerUrl)
       console.log(error);
     }
   };
+
+  const companyName = userData.companyName;
+
+  console.log(companyName)
+
+  useEffect(() => {
+    if (companyName) {
+      fetchCompanyLogo(companyName);
+      fetchCompanyBanner(companyName);
+    }
+  }, [userData.companyName])
 
   const countOfHRSInCompany = async () => {
     console.log(companyName)
@@ -176,38 +125,92 @@ console.log(logoUrl,bannerUrl)
   }
 
 
-
-  const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append('companyName', userData.companyName);
-    if (logo) {
-      formData.append('logo', logo);
-    }
-    if (banner) {
-      formData.append('banner', banner);
-    }
-
-    console.log(logo, " ", banner)
-
-    try {
-      const response = await axios.post(`${BASE_API_URL}/uploadcompanyLogoBanner`, formData);
-      console.log('Response:', response.data);
-      // Handle success message or further actions
-    } catch (error) {
-      console.error('Error updating company details:', error);
+  const [companyLogo, setCompanyLogo] = useState("");
+  const [companyBanner, setCompanyBanner] = useState("");
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Perform validation if needed (size, type, etc.)
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCompanyLogo(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  console.log(logo, " ", banner)
+  const handleBannerChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Perform validation if needed (size, type, etc.)
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCompanyBanner(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleFileChange = async (type, file) => {
+    const formData = new FormData();
+    formData.append('companyName', companyName);
+    formData.append('file', file);
 
-  console.log(companyName)
+    try {
+      const response = await axios.post(
+        type === 'logo' ? `${BASE_API_URL}/uploadLogo` : `${BASE_API_URL}/uploadBanner`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (type === 'logo') {
+          setCompanyLogo(reader.result);
+        } else {
+          setCompanyBanner(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
 
 
+  const handleCameraIconClick = (type) => {
+    document.getElementById(`${type}Input`).click();
+  };
+
+  const fetchCompanyLogo = async (companyName) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/logo`, { params: { companyName }, responseType: 'arraybuffer' });
+      const image = `data:image/jpeg;base64,${btoa(
+        new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      )}`;
+      setCompanyLogo(image);
+    } catch (error) {
+      console.error('Error fetching company logo:', error);
+    }
+  };
+
+  const fetchCompanyBanner = async (companyName) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/banner`, { params: { companyName }, responseType: 'arraybuffer' });
+      const image = `data:image/jpeg;base64,${btoa(
+        new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      )}`;
+      setCompanyBanner(image);
+    } catch (error) {
+      console.error('Error fetching company banner:', error);
+    }
+  };
 
   return (
     // <Container fluid className="dashboard-container">
     <Container fluid className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
-
       <Row>
         <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <HrLeftSide user={{ userName, userEmail }} />
@@ -216,42 +219,47 @@ console.log(logoUrl,bannerUrl)
           <FaBars />
         </div>
         <Col md={10} className="rightside" style={{ overflowY: 'scroll' }}>
-          <Card style={{ width: '100%', height: '25%' }}>
-            <Card.Body>
-              <Row>
-                <Col style={{ height: '70px', width: '10%' }}>
-                  <h2 className='text-start' data-text='Company Name'>{userData.companyName}</h2>
-                  <div className="icon-box" onClick={() => handleClick('logo')}>
-                    {logo ? (
-                      <img src="https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg" alt="Company Logo" className="logo-image" style={{ width: '180px', height: '180px', marginTop: '30px' }} />
-                    ) : (
-                      <img src={"https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
-                        alt="Company Logo" className="logo-image" style={{ width: '180px', height: '180px', marginTop: '30px' }} />
-                    )}
-                    <FontAwesomeIcon icon={faCamera} size="2x" className="camera-icon" />
-                  </div>
-                  <input type="file" id="logoInput" onChange={(e) => handleFileChange(e, 'logo')} style={{ display: 'none' }} />
-                </Col>
-                <Col xs={4} className="text-end">
-                  <div className="icon-box" onClick={() => handleClick('banner')}>
-                    {banner ? (
-                      <img src={bannerUrl || URL.createObjectURL(banner)} alt="Company Banner" className="banner-image" style={{ width: '100%', height: '25%' }} />
-                    ) : (
-                      <h1 className='text-center'>Company Banner</h1>
-                    )}
-                    <FontAwesomeIcon icon={faCamera} size="2x" className="camera-icon" />
-                  </div>
-                  <input type="file" id="bannerInput" onChange={(e) => handleFileChange(e, 'banner')} style={{ display: 'none' }} />
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-          <Card style={{ marginTop: '50px', height: '8%' }}>
-            <Card.Body>
-              <ul className="nav-links d-flex" style={{ paddingLeft: '24px', listStyleType: 'none' }}>
-                <li>
+          <Card style={{ width: '100%', height: '60%' }}>
+            <Card.Body style={{ padding: 0, position: 'relative' }}>
+              <div style={{ position: 'relative', height: '55%' }}>
+                <img
+                  src={companyBanner || "https://cdn.pixabay.com/photo/2016/04/20/07/16/logo-1340516_1280.png"}
+                  alt="Company Banner"
+                  className="banner-image"
+                  onClick={() => handleCameraIconClick('banner')}
+                  style={{ width: '100%', height: '200px', objectFit: 'cover', cursor: 'pointer' }}
+                />
+                <input
+                  id="bannerInput"
+                  type="file"
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleFileChange('banner', e.target.files[0])}
+                  accept="image/*"
+                />
+              </div>
+              <div style={{ position: 'absolute', top: '55%', left: '50px', transform: 'translateY(-50%)' }}>
+                <label htmlFor="logoInput">
+                  <img
+                    src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
+                    alt="Company Logo"
+                    className="logo-image"
+                    style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
+                    onClick={() => handleCameraIconClick('logo')}
+                  />
+                </label>
+                <input
+                  id="logoInput"
+                  type="file"
+                  style={{ display: 'none' }}
+                  onChange={(e) => handleFileChange('logo', e.target.files[0])}
+                  accept="image/*"
+                />
+              </div>
+              <div><h1 style={{ position: 'absolute', top: '70%', right: '100px'}}>{companyName}</h1></div>
+              <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
+              <li>
                   <span>
-                    <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                    <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', fontSize:'24px' ,color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
                       About
                     </a>
                   </span>
@@ -259,14 +267,16 @@ console.log(logoUrl,bannerUrl)
 
                 <li>
                   <span>
-                    <a onClick={() => handleTabClick('jobs')} style={{ paddingLeft: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                    <a onClick={() => handleTabClick('jobs')} style={{ paddingLeft: '24px', fontSize:'24px' ,color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
                       Jobs
                     </a>
                   </span>
                 </li>
               </ul>
+
             </Card.Body>
           </Card>
+
           <Row>
             <Col xs={8}>
               {activeTab === 'home' && (
@@ -293,10 +303,11 @@ console.log(logoUrl,bannerUrl)
               <Card style={{ height: '100%' }}>
                 <Card.Body>
                   <Row className="mb-3">
-                    <Col >
+                    <h1>Other Information</h1>
+                    {/* <Col >
                       <Button variant="primary" style={{ marginRight: "12px" }}>Claim/Login</Button>
                       <Button variant="success">Apply</Button>
-                    </Col>
+                    </Col> */}
                   </Row>
 
                   {/* <Row className="mb-2">
