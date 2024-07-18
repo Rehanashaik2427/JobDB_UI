@@ -40,7 +40,6 @@ const CompanyShowCase = () => {
     }
   }, [userEmail]);
 
-
   const getUser = async (userEmail) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/getHRName?userEmail=${userEmail}`);
@@ -124,7 +123,6 @@ const CompanyShowCase = () => {
     }
   }
 
-
   const [companyLogo, setCompanyLogo] = useState("");
   const [companyBanner, setCompanyBanner] = useState("");
   const handleLogoChange = (e) => {
@@ -178,7 +176,6 @@ const CompanyShowCase = () => {
       console.error('Error uploading image:', error);
     }
   };
-
 
   const handleCameraIconClick = (type) => {
     document.getElementById(`${type}Input`).click();
@@ -326,7 +323,6 @@ const CompanyShowCase = () => {
                     </Col>
                   </Row>
 
-
                   <Row className="mb-2">
                     <Col>
                       <h5>Key Stats:</h5>
@@ -351,3 +347,5 @@ const CompanyShowCase = () => {
 }
 
 export default CompanyShowCase
+
+

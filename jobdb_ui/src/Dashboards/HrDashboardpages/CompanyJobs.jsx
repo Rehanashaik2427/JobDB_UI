@@ -17,7 +17,6 @@ const CompanyJobs = () => {
 
     const userEmail = location.state?.userEmail || '';
 
-
    
 
     const getUser = async (userEmail) => {
@@ -160,3 +159,5 @@ const CompanyJobs = () => {
 }
 
 export default CompanyJobs
+
+

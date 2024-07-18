@@ -42,7 +42,6 @@ const CompnayOverview = () => {
         specialties: '',
     });
 
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setCompanyInfo({ ...companyInfo, [name]: value });
@@ -198,3 +197,5 @@ const CompnayOverview = () => {
 };
 
 export default CompnayOverview;
+
+
