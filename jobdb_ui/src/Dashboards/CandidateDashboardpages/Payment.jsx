@@ -39,7 +39,7 @@ const Payment = () => {
 
   const initials = getInitials(userName);
 
-  const [showLeftSide, setShowLeftSide] = useState(false);
+  const [showLeftSide, setShowLeftSide] = useState     (false);
 
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);

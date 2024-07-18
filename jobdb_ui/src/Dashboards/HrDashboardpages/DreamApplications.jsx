@@ -1,10 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
+import { Button, Col, Container, Form, Modal, Row, Table } from "react-bootstrap";
 import ReactPaginate from 'react-paginate';
 import { useLocation } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
 import Slider from "./Slider";
+import { SiImessage } from "react-icons/si";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const DreamApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -209,6 +212,79 @@ const DreamApplication = () => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
+  const [showModal, setShowModal] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+
+  const [inputValue, setInputValue] = useState('');
+  const [applicationId, setApplicationId] = useState(0);
+  const [chats, setChats] = useState([]);
+
+  const handleChatClick = async (applicationId) => {
+    setApplicationId(applicationId);
+    try {
+      const response = await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
+      setChats(response.data);
+      console.log("Chats === > " + chats)
+      console.log("Chats === > " + response.data)
+      setShowModal(true); // Show the modal once chats are fetched
+      setShowChat(true); // Optionally manage showChat state separately
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setShowChat(false); // Optionally reset showChat state
+    setInputValue(''); // Reset input value when closing modal
+  };
+
+  const handleSend = async () => {
+    try {
+      await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
+      console.log('Sending message:', inputValue);
+      //handleCloseModal(); // Close modal after sending message
+      handleChatClick(applicationId);
+      setInputValue('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
+  // Function to format date with only day
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const options = { weekday: 'long' }; // Show only the full day name
+    return date.toLocaleDateString('en-US', options);
+  }
+
+  // Function to format time with AM/PM
+  function formatMessageDateTime(timestamp) {
+    const date = new Date(timestamp);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+    return `${formattedHours}:${minutes} ${ampm}`;
+  }
+
+  // Function to check if two dates are different days
+  function isDifferentDay(date1, date2) {
+    const day1 = new Date(date1).getDate();
+    const day2 = new Date(date2).getDate();
+    return day1 !== day2;
+  }
+
+  const modalBodyRef = useRef(null);
+  useEffect(() => {
+    // Scroll to bottom of modal body when chats change (new message added)
+    if (modalBodyRef.current) {
+      modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
+    }
+  }, [chats]);
   return (
     <Container fluid className="dashboard-container">
       <Row>
@@ -250,6 +326,64 @@ const DreamApplication = () => {
                 </div>
               </div>
             )}
+
+            <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+              <Modal.Header closeButton>
+                <Modal.Title>Chat</Modal.Title>
+              </Modal.Header>
+              <Modal.Body ref={modalBodyRef}>
+                <div className="chat-messages">
+                  {chats ? (
+                    chats.map((chat, index) => (
+                      <div key={chat.id} className="chat-message">
+                        {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
+                          <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
+                            {formatDate(chat.createdAt)}
+                          </div>
+
+                        )}
+                        {chat.candidateMessage && (
+                          <div className="message-right">
+                            {chat.candidateMessage}
+                            <div className="message-time">
+                              {formatMessageDateTime(chat.createdAt)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Render HR message if present */}
+                        {chat.hrMessage && (
+                          <div className="message-left">
+                            {chat.hrMessage}
+                            <div className="message-time">
+                              {formatMessageDateTime(chat.createdAt)}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </div>
+                {/* Message input section */}
+
+              </Modal.Body>
+              <Modal.Footer>
+                <Form.Group controlId="messageInput" className="mb-3">
+                  {/* <Form.Label>Message:</Form.Label> */}
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your message"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
+                <Button variant="primary" onClick={handleSend}>
+                  <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
+                </Button>
+              </Modal.Footer>
+            </Modal>
             {applications.length > 0 && (
               <div>
                 <div>
@@ -280,14 +414,17 @@ const DreamApplication = () => {
                               onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                             />
                           </td>
+                          <td onClick={() => handleChatClick(application.applicationId)}>
+                            <SiImessage size={25} />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </Table>
                 </div>
 
-                 {/* Pagination */}
-         <div className="pagination-container d-flex justify-content-end align-items-center">
+                {/* Pagination */}
+                <div className="pagination-container d-flex justify-content-end align-items-center">
                   <div className="page-size-select me-3">
                     <label htmlFor="pageSize">Page Size:</label>
                     <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>

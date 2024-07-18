@@ -846,16 +846,7 @@ button.com:hover {
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
 }
 
-.modal-content {
-  /* background-color: aquamarine; /* White background
-  border: 1px solid #ccc; */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
-  padding: 20px;
-  max-width: 400px; /* Maximum width */
-  width: 80%; /* Responsive width */
-  height: 200px;
-}
+
 
 .close {
   color: #666;
@@ -1057,4 +1048,65 @@ button.com:hover {
 .rightside {
   flex: 1; /* Take the remaining space */
   height: 100%; /* Ensure the column takes full height */
+}
+
+
+
+
+
+
+
+.modal-content {
+  /* background-color: aquamarine; /* White background
+  border: 1px solid #ccc; */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
+  padding: 20px;
+
+  height: 400px;
+}
+.modal-body {
+  height: 90vh; /* Increase height to 90% of viewport height */
+  max-height: calc(100vh - 200px); /* Maximum height considering footer and header */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  padding: 10px;
+}
+
+
+/* styles.css (or in your component CSS) */
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1px; /*Adjust spacing between messages*/
+}
+
+.message-right {
+   background-color: #d1ecf1; /*Example background color */
+  /* padding: 10px;
+  border-radius: 10px; */
+/* Pushes to the right side */
+margin-right: auto;
+}
+
+.message-left {
+   background-color: #e2e3e5; /*Example background color */
+  /* padding: 10px;
+  border-radius: 10px; */
+  margin-left: auto; 
+}
+.message-time {
+  align-self: flex-end; /* Align time stamp to the right */
+  /* margin-left:60%; */
+ 
+  font-size: 0.5rem; /* Example font size */
+  color: #666; /* Example text color */
+}
+
+.message-date {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center; /* Align text center if necessary */
+  font-weight: bold;
+  margin: 10px 0; /* Adjust margin as needed */
 }

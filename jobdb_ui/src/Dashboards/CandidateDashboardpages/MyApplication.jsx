@@ -1,7 +1,10 @@
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Col, Container, Dropdown, Form, Modal, Row, Table } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
+import { SiImessage } from 'react-icons/si';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
@@ -34,7 +37,7 @@ const MyApplication = () => {
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
-   // setPage(0); // Reset page when page size changes
+    // setPage(0); // Reset page when page size changes
   };
 
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
@@ -60,7 +63,7 @@ const MyApplication = () => {
         sortBy: sortedColumn,
         sortOrder: sortOrder,
       };
-      
+
       const response = await axios.get(`${BASE_API_URL}/applicationsPagination`, { params });
 
       if (sortedColumn) {
@@ -83,7 +86,7 @@ const MyApplication = () => {
         page: page,
         pageSize: pageSize,
       };
-      
+
       if (sortedColumn) {
         params.sortBy = sortedColumn;
         params.sortOrder = sortOrder;
@@ -105,7 +108,7 @@ const MyApplication = () => {
         page: page,
         pageSize: pageSize,
       };
-      
+
       if (sortedColumn) {
         params.sortBy = sortedColumn;
         params.sortOrder = sortOrder;
@@ -217,7 +220,76 @@ const MyApplication = () => {
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
+  const [showModal, setShowModal] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
+  const [inputValue, setInputValue] = useState('');
+  const [applicationId, setApplicationId] = useState(0);
+  const [chats, setChats] = useState([]);
+  const handleChatClick = async (applicationId) => {
+    setApplicationId(applicationId);
+    try {
+      const response = await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
+      setChats(response.data);
+      console.log("Chats === > " + chats)
+      console.log("Chats === > " + response.data)
+      setShowModal(true); // Show the modal once chats are fetched
+      setShowChat(true); // Optionally manage showChat state separately
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setShowChat(false); // Optionally reset showChat state
+    setInputValue(''); // Reset input value when closing modal
+  };
+
+  const handleSend = async () => {
+    try {
+      await axios.put(`${BASE_API_URL}/saveCandidateChatByApplicationId?applicationId=${applicationId}&candidatechat=${inputValue}`);
+      console.log('Sending message:', inputValue);
+      //handleCloseModal(); // Close modal after sending message
+      handleChatClick(applicationId);
+      setInputValue('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
+
+  // Function to format time with AM/PM
+  function formatMessageDateTime(timestamp) {
+    const date = new Date(timestamp);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+    return `${formattedHours}:${minutes} ${ampm}`;
+  }
+  function isDifferentDay(date1, date2) {
+    const day1 = new Date(date1).getDate();
+    const day2 = new Date(date2).getDate();
+    return day1 !== day2;
+  }
+
+  // Function to format date with only day
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const options = { weekday: 'long' }; // Show only the full day name
+    return date.toLocaleDateString('en-US', options);
+  }
+  const modalBodyRef = useRef(null);
+  useEffect(() => {
+    // Scroll to bottom of modal body when chats change (new message added)
+    if (modalBodyRef.current) {
+      modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
+    }
+  }, [chats]);
   return (
     <Container fluid className='dashboard-container'>
       <Row>
@@ -270,6 +342,64 @@ const MyApplication = () => {
               </Dropdown.Menu>
             </Dropdown>
           </div>
+          <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+            <Modal.Header closeButton>
+              <Modal.Title>Chat</Modal.Title>
+            </Modal.Header>
+            <Modal.Body ref={modalBodyRef}>
+              {chats ? (
+                chats.map((chat, index) => (
+                  <div key={chat.id} className="chat-message">
+                    {/* Render date if it's the first message or a new day */}
+                    {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
+                      <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
+                        {formatDate(chat.createdAt)}
+                      </div>
+
+                    )}
+
+                    {/* Render HR message if present */}
+                    {chat.hrMessage && (
+                      <div className="message-right">
+                        {chat.hrMessage}
+                        <div className="message-time">
+                          {formatMessageDateTime(chat.createdAt)}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Render candidate message if present */}
+                    {chat.candidateMessage && (
+                      <div className="message-left">
+                        {chat.candidateMessage}
+                        <div className="message-time">
+                          {formatMessageDateTime(chat.createdAt)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>Loading...</p>
+              )}
+
+            </Modal.Body>
+            <Modal.Footer>
+              {/* Message input section */}
+              <Form.Group controlId="messageInput" className="mb-2">
+                {/* <Form.Label>Message:</Form.Label> */}
+                <Form.Control
+                  type="text"
+                  placeholder="Enter your message"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Button variant="primary" onClick={handleSend}>
+                <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
+              </Button>
+            </Modal.Footer>
+          </Modal>
           <div style={{ marginLeft: '5px', marginRight: '50px' }}>
             {applications.length > 0 ? (
               <>
@@ -284,6 +414,7 @@ const MyApplication = () => {
                       <th scope="col" onClick={() => handleSort('applicationStatus')}>
                         Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
                       </th>
+                      <th scope="col">Chat</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -295,6 +426,9 @@ const MyApplication = () => {
                         <td>{resumeNames[application.resumeId]}</td>
                         <td>{renderJobStatus(application.applicationId)}</td>
                         <td>{application.applicationStatus}</td>
+                        <td onClick={() => handleChatClick(application.applicationId)}>
+                          <SiImessage size={25} />
+                        </td>
                       </tr>
                     ))}
                   </tbody>
