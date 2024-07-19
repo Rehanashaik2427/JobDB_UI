@@ -18,7 +18,7 @@ const CandidatesCompanies = () => {
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(6);
   const [totalPages, setTotalPages] = useState(0);
 
   const handleSearchChange = (event) => {
@@ -27,7 +27,7 @@ const CandidatesCompanies = () => {
 
 
   const fetchCompany = async () => {
-    const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
+    const response = await axios.get(`${BASE_API_URL}/companiesList?page=${page}&size=${pageSize}`);
     setCompanies(response.data.content);
     setTotalPages(response.data.totalPages);
   };
@@ -157,13 +157,13 @@ const CandidatesCompanies = () => {
 
             {companies.length > 0 ? (
               <div className="row">
-                <div className="cards d-flex flex-wrap justify-content-around" >
+                <div className="cards d-flex flex-wrap justify-content-start" >
 
                   {companies.map((company) => (
                     <Card
                       className="company-card-job"
                       key={company.companyId}
-                      style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '10px' }}
+                      style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}
                     >
                       <Card.Body>
                         <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
@@ -178,7 +178,7 @@ const CandidatesCompanies = () => {
                   <div className="page-size-select me-3">
                     <label htmlFor="pageSize">Page Size:</label>
                     <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                      <option value="5">5</option>
+                      <option value="6">6</option>
                       <option value="10">10</option>
                       <option value="20">20</option>
                     </select>

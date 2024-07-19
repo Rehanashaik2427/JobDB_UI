@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
-import { FaBars } from 'react-icons/fa';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -151,12 +151,14 @@ const DreamCompany = () => {
             <div className="centered-content">
               {showResumePopup && (
               
+            
                     <ResumeSelectionPopup
                       resumes={resumes}
                       onSelectResume={handleResumeSelect}
                       onClose={() => setShowResumePopup(false)}
                     />
                  
+               
               )}
               <Form onSubmit={handleSubmit} className="centered-form">
                 <Form.Group>

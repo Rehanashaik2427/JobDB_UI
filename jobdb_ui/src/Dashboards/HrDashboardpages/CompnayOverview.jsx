@@ -104,7 +104,7 @@ const CompnayOverview = () => {
                                 />
                             </FormGroup>
                             <FormGroup controlId="industryService">
-                                <Form.Label><h4>Industry</h4></Form.Label>
+                                <Form.Label><h4>Industry Service</h4></Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="industryService"

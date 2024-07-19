@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import AddJob from './AddJob.jsx'
 import ApplicationDetails from './ApplicationDetails.jsx'
 import Applications from './Applications.jsx'
+import CompanyJobs from './CompanyJobs.jsx'
 import CompanyShowCase from './CompanyShowCase.jsx'
 import DreamApplication from './DreamApplications.jsx'
 import HrDashboard from './HrDashboard.jsx'
@@ -23,6 +24,7 @@ const HrDashbaordRoute = () => {
         <Route path="/my-jobs" element={<MyJobs />} />
         <Route path="/posted-jobs" element={<PostedJobs   />} />
         <Route path="/company-showcase" element={<CompanyShowCase  />} />
+        <Route path="/company-showcase/company-jobs" element={<CompanyJobs />}/>
       <Route path="/people" element={<People />} />
       <Route path="/hr-applications" element={<Applications />} />
       <Route path="/profile" element={<HrProfile />} />

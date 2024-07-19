@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Dropdown, Modal, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -296,11 +296,11 @@ const CandidateJobs = () => {
         }}>
 
           {showResumePopup && (
-            <ResumeSelectionPopup
-            resumes={resumes}
-            onSelectResume={handleResumeSelect}
-            onClose={() => setShowResumePopup(false)}
-          />
+           <ResumeSelectionPopup
+           resumes={resumes}
+           onSelectResume={handleResumeSelect}
+           onClose={() => setShowResumePopup(false)}
+         />
           )}
 
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
@@ -355,7 +355,6 @@ const CandidateJobs = () => {
             
               <div className="d-flex align-items-center justify-content-between mb-3">
                 <h2>Jobs For {userName}</h2>
-                
               </div>
               <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
                 <thead className="table-light">
