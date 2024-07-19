@@ -264,18 +264,11 @@ const CandidateJobs = () => {
         }}>
 
           {showResumePopup && (
-            <Modal show={true} onHide={() => setShowResumePopup(false)}>
-              <Modal.Header closeButton>
-                <Modal.Title>Select Resume</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <ResumeSelectionPopup
-                  resumes={resumes}
-                  onSelectResume={handleResumeSelect}
-                  onClose={() => setShowResumePopup(false)}
-                />
-              </Modal.Body>
-            </Modal>
+            <ResumeSelectionPopup
+            resumes={resumes}
+            onSelectResume={handleResumeSelect}
+            onClose={() => setShowResumePopup(false)}
+          />
           )}
 
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">

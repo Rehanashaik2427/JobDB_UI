@@ -27,9 +27,13 @@ const JobboxCompanyPage = () => {
 
 
   const fetchCompany = async () => {
+    try {
     const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
     setCompanies(response.data.content);
     setTotalPages(response.data.totalPages);
+  } catch (error) {
+    console.log("No data found: " + error);
+  }
   };
 
   const handleSearchChange = (event) => {
