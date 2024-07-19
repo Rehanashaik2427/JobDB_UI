@@ -1056,16 +1056,13 @@ button.com:hover {
 
 
 
-.modal-content {
-  /* background-color: aquamarine; /* White background
-  border: 1px solid #ccc; */
+.custom-modal .modal-content {
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-
   height: 400px;
 }
-.modal-body {
+.custom-modal .modal-body {
   height: 90vh; /* Increase height to 90% of viewport height */
   max-height: calc(100vh - 200px); /* Maximum height considering footer and header */
   overflow-y: scroll; /* Enable vertical scrolling */

@@ -1,98 +1,80 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Button, OverlayTrigger, Popover, Table } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react'
+import { Button, OverlayTrigger, Popover, Table } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate';
 import { useLocation } from 'react-router-dom';
-const CompanyJobs = () => {
+
+
+const CompanyJobs = ({ companyId }) => {
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
-    const [jobs, setJobs] = useState([]);
-    const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
-    const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(5);
-    const [totalPages, setTotalPages] = useState(0);
-    const location = useLocation();
-    const [userData, setUserData] = useState({});
+const [jobs, setJobs] = useState([]);
+const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
+const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
+const [page, setPage] = useState(0);
+const [pageSize, setPageSize] = useState(5);
+const [totalPages, setTotalPages] = useState(0);
+const location = useLocation();
+const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+    setPage(0); // Reset page when page size change
+  };
 
-    const userEmail = location.state?.userEmail || '';
-
-   
-
-    const getUser = async (userEmail) => {
-        try {
-            const response = await axios.get(`${BASE_API_URL}/getHRName?userEmail=${userEmail}`);
-            setUserData(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    useEffect(() => {
-        if (userEmail) {
-            getUser(userEmail);
-        }
-    }, [userEmail]);
-    const fetchJobs = async () => {
-        try {
-          const params = {
-            userEmail: userEmail,
-            page: page,
-            size: pageSize,
-            sortBy: sortedColumn, // Include sortedColumn and sortOrder in params
-            sortOrder: sortOrder,
-          };
-    
-          const response = await axios.get(`${BASE_API_URL}/jobsPostedByHrEmaileachCompany`, { params });
-          setJobs(response.data.content);
-          setTotalPages(response.data.totalPages);
-        } catch (error) {
-          console.error('Error fetching jobs data:', error);
-        }
-      };
-      useEffect(() => {
-          fetchJobs();
-        
-      }, [userEmail, page, pageSize, sortedColumn, sortOrder]);
-    
-    const handlePageSizeChange = (e) => {
-        const size = parseInt(e.target.value);
-        setPageSize(size);
-        setPage(0); // Reset page when page size change
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
+const handleSort = (column) => {
+    let order = 'asc';
+    if (sortedColumn === column) {
+      order = sortOrder === 'asc' ? 'desc' : 'asc';
+    }
+    setSortedColumn(column);
+    setSortOrder(order);
+  };
+  const fetchJobs = async () => {
+    try {
+      const params = {
+      companyId:companyId,
+        page: page,
+        size: pageSize,
+        sortBy: sortedColumn, // Include sortedColumn and sortOrder in params
+        sortOrder: sortOrder,
       };
 
-      const handlePageClick = (data) => {
-        setPage(data.selected);
-      };
-    const handleSort = (column) => {
-        let order = 'asc';
-        if (sortedColumn === column) {
-          order = sortOrder === 'asc' ? 'desc' : 'asc';
-        }
-        setSortedColumn(column);
-        setSortOrder(order);
-      };
-      const [showJobDescription, setShowJobDescription] = useState(false);
-      const [selectedJobSummary, setSelectedJobSummary] = useState(null);
-      const handleViewSummary = (summary) => {
-        setSelectedJobSummary(summary);
-      };
-      const closeJobDescription = () => {
-        setShowJobDescription(false);
-        setSelectedJobSummary('');
-      };
-      const popover = (summary) => (
-        <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-          <Popover.Body>
-            {summary}
-            <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
+      const response = await axios.get(`${BASE_API_URL}/jobsPostedCompany`, { params });
+      setJobs(response.data.content);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Error fetching jobs data:', error);
+    }
+  };
+  useEffect(() => {
+      fetchJobs();
     
-            </span>
-          </Popover.Body>
-        </Popover>
-      );
-    
-    return (
-        <div  className="company-job"style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+  }, [ page, pageSize, sortedColumn, sortOrder]);
+
+  const [showJobDescription, setShowJobDescription] = useState(false);
+  const [selectedJobSummary, setSelectedJobSummary] = useState(null);
+  const handleViewSummary = (summary) => {
+    setSelectedJobSummary(summary);
+  };
+  const closeJobDescription = () => {
+    setShowJobDescription(false);
+    setSelectedJobSummary('');
+  };
+const popover = (summary) => (
+    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
+      <Popover.Body>
+        {summary}
+        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
+
+        </span>
+      </Popover.Body>
+    </Popover>
+  );
+  return (
+    <div  className="company-job"style={{ maxHeight: '400px', overflowY: 'scroll' }}>
             <div className="jobs_list">
                 {jobs.length > 0 && (
                     <div>
@@ -155,9 +137,7 @@ const CompanyJobs = () => {
                 )}
             </div>
         </div>
-    )
+  )
 }
 
 export default CompanyJobs
-
-
