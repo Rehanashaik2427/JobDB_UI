@@ -21,7 +21,7 @@ const CompanyShowCase = () => {
   const [countOfActiveJobs, setCountOfActiveJobs] = useState();
   const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
   const [countOfDreamApplicationsInCompany, setCountOfDreamApplicationsInCompany] = useState(0);
-
+  const [companyName, setCompanyName] = useState('');
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
