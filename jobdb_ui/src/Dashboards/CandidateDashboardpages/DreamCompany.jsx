@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
 import ResumeSelectionPopup from './ResumeSelectionPopup';
-import { FaBars } from 'react-icons/fa';
 
 const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -150,18 +150,13 @@ const DreamCompany = () => {
           <Container>
             <div className="centered-content">
               {showResumePopup && (
-                <Modal show={showResumePopup} onHide={() => setShowResumePopup(false)} centered>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Select Resume</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
+            
                     <ResumeSelectionPopup
                       resumes={resumes}
                       onSelectResume={handleResumeSelect}
                       onClose={() => setShowResumePopup(false)}
                     />
-                  </Modal.Body>
-                </Modal>
+               
               )}
               <Form onSubmit={handleSubmit} className="centered-form">
                 <Form.Group>

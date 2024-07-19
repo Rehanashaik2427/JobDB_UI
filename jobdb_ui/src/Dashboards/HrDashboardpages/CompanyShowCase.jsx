@@ -4,7 +4,7 @@ import { Card, Col, Container, Row } from 'react-bootstrap'
 import { FaBars } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 import CompanyJobs from './CompanyJobs'
-import CompanyOverview from './CompnayOverview'
+import CompnayOverview from './CompnayOverview'
 import HrLeftSide from './HrLeftSide'
 
 const CompanyShowCase = () => {
@@ -20,6 +20,7 @@ const CompanyShowCase = () => {
   // const [countOfJobs, setCountOfJobs] = useState(0);
   const [countOfActiveJobs, setCountOfActiveJobs] = useState();
   const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
+  const [countOfDreamApplicationsInCompany, setCountOfDreamApplicationsInCompany] = useState(0);
 
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
@@ -36,7 +37,7 @@ const CompanyShowCase = () => {
       // totalJobsofCompany(userEmail)
       countOfActiveJobsInCompany(userEmail)
       countOfSHortlistedCandidatesInCompany(userEmail)
-
+      countOfDreamApplications(userEmail)
     }
   }, [userEmail]);
 
@@ -124,9 +125,21 @@ const CompanyShowCase = () => {
     }
   }
 
+  const countOfDreamApplications = async (userEmail) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/countOfDreamApplications`, {
+        params: { userEmail: userEmail }
+      });
+      setCountOfDreamApplicationsInCompany(response.data);
+    }
+    catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  }
 
   const [companyLogo, setCompanyLogo] = useState("");
   const [companyBanner, setCompanyBanner] = useState("");
+
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -238,7 +251,6 @@ const CompanyShowCase = () => {
                 />
               </div>
               <div style={{ position: 'absolute', top: '55%', left: '50px', transform: 'translateY(-50%)' }}>
-                <label htmlFor="logoInput">
                   <img
                     src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
                     alt="Company Logo"
@@ -246,7 +258,6 @@ const CompanyShowCase = () => {
                     style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
                     onClick={() => handleCameraIconClick('logo')}
                   />
-                </label>
                 <input
                   id="logoInput"
                   type="file"
@@ -296,7 +307,7 @@ const CompanyShowCase = () => {
                   </Card>
                 </div>
               )}
-              {activeTab === 'overview' && <CompanyOverview />}
+              {activeTab === 'overview' && <CompnayOverview />}
               {activeTab === 'jobs' && <CompanyJobs />}
             </Col>
             <Col >
@@ -333,10 +344,10 @@ const CompanyShowCase = () => {
                       <ul>
                         <li>Active Job Postings: {countOfActiveJobs}</li> {/* Placeholder values */}
                         <li>Shortlisted Candidates: {countOfShortlistedCandiCompany}</li>
-                        <li>Conversion Rate: 12%</li>
                         <li>Avg. Time to Fill a Job: 7 days</li>
-                        <li>Top Searched Job: Software Engineer</li>
-                        <li>User Engagement: 75% daily active users</li>
+                        <li>Dream Applications: {countOfDreamApplicationsInCompany}</li>
+                        {/* <li>Top Searched Job: Software Engineer</li>
+                        <li>User Engagement: 75% daily active users</li> */}
                       </ul>
                     </Col>
                   </Row>

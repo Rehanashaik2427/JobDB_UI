@@ -39,7 +39,7 @@ const AddCompanyDetails = () => {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/comapniesList?page=${page}&size=${pageSize}`);
+      const response = await axios.get(`${BASE_API_URL}/companiesList?page=${page}&size=${pageSize}`);
       setCompanyData(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
