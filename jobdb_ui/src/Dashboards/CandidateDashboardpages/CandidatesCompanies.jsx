@@ -153,7 +153,7 @@ const CandidatesCompanies = () => {
             </Dropdown>
           </div>
 
-          <div className="companyJob">
+          <div className="companyJob" style={{ marginRight: '50px' }}>
 
             {companies.length > 0 ? (
               <div className="row">

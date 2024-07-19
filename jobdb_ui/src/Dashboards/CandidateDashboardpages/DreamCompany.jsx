@@ -150,18 +150,13 @@ const DreamCompany = () => {
           <Container>
             <div className="centered-content">
               {showResumePopup && (
-                <Modal show={showResumePopup} onHide={() => setShowResumePopup(false)} centered>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Select Resume</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
+              
                     <ResumeSelectionPopup
                       resumes={resumes}
                       onSelectResume={handleResumeSelect}
                       onClose={() => setShowResumePopup(false)}
                     />
-                  </Modal.Body>
-                </Modal>
+                 
               )}
               <Form onSubmit={handleSubmit} className="centered-form">
                 <Form.Group>

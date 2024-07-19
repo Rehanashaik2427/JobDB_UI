@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Dropdown, Modal, Row } from 'react-bootstrap';
 
-import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
 import CandidateLeftSide from './CandidateLeftSide';
+import { FaBars } from 'react-icons/fa';
 
 const Resume = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -61,7 +61,7 @@ const Resume = () => {
 
   const [showSettings, setShowSettings] = useState(false);
 
-
+  
   const navigate = useNavigate();
   const toggleSettings = () => {
     navigate('/');
@@ -172,13 +172,16 @@ const Resume = () => {
 
 
           {showBriefSettings && (
-              <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Brief Resume</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{showMessage}</Modal.Body>
-              </Modal>
-            )}
+  <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
+    <Modal.Header closeButton>
+      <Modal.Title>Brief Resume</Modal.Title>
+    </Modal.Header>
+    <Modal.Body style={{ overflowY: 'auto' }}>
+      {showMessage}
+    </Modal.Body>
+  </Modal>
+)}
+
 
           <div>
             <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>

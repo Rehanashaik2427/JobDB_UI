@@ -319,12 +319,12 @@ const DreamApplication = () => {
               </Col>
             </Row>
             {showBriefSettings && (
-              <div className="modal-summary">
-                <div className="modal-content-summary">
-                  <span className="close" onClick={() => setShowBriefSettings(false)}>&times;</span>
-                  {showMessage}
-                </div>
-              </div>
+              <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Brief Resume</Modal.Title>
+              </Modal.Header>
+              <Modal.Body style={{ overflowY: 'auto' }}>{showMessage}</Modal.Body>
+            </Modal>
             )}
 
             <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">

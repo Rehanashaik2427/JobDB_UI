@@ -116,21 +116,37 @@ const CandidateJobs = () => {
   };
 
   const applyJob = async (jobId, resumeId) => {
-    const appliedOn = new Date(); // Get current date and time
-    const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
-    const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
-    const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
-
-    const formattedDate = `${year}-${month}-${day}`;
-
+    let loadingPopup;
+  
     try {
+      // Show loading message using SweetAlert
+      loadingPopup = Swal.fire({
+        title: 'Applying to the job...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+  
+      const appliedOn = new Date(); // Get current date and time
+      const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
+      const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
+      const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
+  
+      const formattedDate = `${year}-${month}-${day}`;
+  
       const response = await axios.put(`${BASE_API_URL}/applyJob`, null, {
         params: { jobId, userId, formattedDate, resumeId },
       });
+  
       if (response.data) {
         setApplyJobs((prevApplyJobs) => [...prevApplyJobs, { jobId, formattedDate }]);
         setHasUserApplied((prev) => ({ ...prev, [jobId]: true }));
-
+  
+        // Close the loading popup
+        Swal.close();
+  
+        // Show success message
         await Swal.fire({
           icon: "success",
           title: "Apply Successful!",
@@ -139,8 +155,24 @@ const CandidateJobs = () => {
       }
     } catch (error) {
       console.error('Error applying for job:', error);
+      // Close loading popup on error
+      if (loadingPopup) {
+        Swal.close();
+      }
+      // Show error message
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong! Please try again later.',
+      });
+    } finally {
+      // Ensure loading popup is closed if still open
+      if (loadingPopup) {
+        Swal.close();
+      }
     }
   };
+  
 
   useEffect(() => {
     axios.get(`${BASE_API_URL}/getResume`, { params: { userId } })
