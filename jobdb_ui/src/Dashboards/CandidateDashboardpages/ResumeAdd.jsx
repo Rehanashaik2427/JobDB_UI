@@ -2,11 +2,11 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { FaBars } from 'react-icons/fa';
 
 const ResumeAdd = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -138,16 +138,18 @@ const ResumeAdd = () => {
     setShowLeftSide(!showLeftSide);
   };
   return (
-    <div fluid className='dashboard-container'>
+    <div className='dashboard-container'>
+    
+    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+      <CandidateLeftSide user={{ userName, userId }} />
+    </div>
+    <div className="hamburger-icon" onClick={toggleLeftSide}>
+      <FaBars />
+    </div>
 
-<div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-        <CandidateLeftSide user={{ userName, userId }} />
-        </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
-
-      <div md={10} className="rightside" >
+    <div className="rightside" style={{
+      overflowY: 'scroll'
+    }}>
 
         <Col xs={6}>
           <Button onClick={handleBack} variant="secondary">
@@ -270,8 +272,7 @@ const ResumeAdd = () => {
           {successMessage && <p>{successMessage}</p>}
         </Col>
 
-        </div>
-    </div>
+</div></div>
   );
 };
 

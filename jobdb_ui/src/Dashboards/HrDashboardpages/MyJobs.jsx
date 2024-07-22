@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import { Button, Dropdown, OverlayTrigger, Popover, Table } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
@@ -151,15 +151,17 @@ const MyJobs = () => {
   return (
     <div fluid className="dashboard-container">
      
+     
         <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <HrLeftSide user={{ userName, userEmail }} />
-          </div>
+        </div>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
         <div md={10} className="rightside" style={{
           overflowY: 'scroll'
-        }}>          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+        }}>          
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar">
               <input
                 style={{ borderRadius: '6px', height: '35px' }}
@@ -331,7 +333,8 @@ const MyJobs = () => {
           )}
         </div>
 
-    </div>
+   </div>
+
 
   );
 };

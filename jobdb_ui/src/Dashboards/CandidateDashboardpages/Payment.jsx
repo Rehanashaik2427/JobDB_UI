@@ -1,11 +1,11 @@
 import { faCreditCard, faGlobe, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import { FaBars } from 'react-icons/fa';
 
 const Payment = () => {
 
@@ -45,16 +45,19 @@ const Payment = () => {
     setShowLeftSide(!showLeftSide);
   };
   return (
-    <div fluid className='dashboard-container'>
-      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-        <CandidateLeftSide user={{ userName, userId }} />
-      </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
+    <div className='dashboard-container'>
+    
+    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+      <CandidateLeftSide user={{ userName, userId }} />
+    </div>
+    <div className="hamburger-icon" onClick={toggleLeftSide}>
+      <FaBars />
+    </div>
 
-      <div md={10} className="rightside" >
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+    <div className="rightside" style={{
+      overflowY: 'scroll'
+    }}>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
@@ -96,15 +99,13 @@ const Payment = () => {
             </section>
           </div>
 
-          <div>
-            <h2>Payment History</h2>
-            <p style={{ textAlign: 'center' }}>Payments Details</p>
-            {/* Add payment history details here */}
+            <div>
+              <h2>Payment History</h2>
+              <p style={{ textAlign: 'center' }}>Payments Details</p>
+              {/* Add payment history details here */}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-    
+   </div></div>
 
   );
 }

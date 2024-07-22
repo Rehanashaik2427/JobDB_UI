@@ -11,7 +11,7 @@ const HrLeftSide = ({ user }) => {
     const { userName, userEmail } = user;
     const navigate = useNavigate();
     const location = useLocation();
-    
+
 
     const navLinks = [
         { to: '/hr-dashboard', label: 'Dashboard', icon: <RxDashboard size={30} /> },
@@ -58,53 +58,53 @@ const HrLeftSide = ({ user }) => {
 
     return (
         <Navbar expand="lg" className="flex-column align-items-start" style={{ height: '100vh', backgroundColor: 'white' }}>
-        <Container fluid className="flex-column">
-            <Navbar.Brand>
-                <img
-                    style={{ backgroundColor: 'white' }}
-                    src="/jb_logo.png"
-                    alt="jobboxlogo"
-                    className='auth-logo'
-                />
-            </Navbar.Brand>
-            <Navbar.Text>
-                <h2 style={{ color: 'black' }}>{userName}</h2>
-            </Navbar.Text>
-            <div ref={scrollContainerRef} className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
-                <Nav className="flex-column full-height align-items-center">
-                    {navLinks.map((link, index) => (
-                        <React.Fragment key={index}>
-                            <Link
-                                to={{ pathname: link.to, state: { userName, userEmail } }}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    navigate(link.to, { state: { userName, userEmail } });
-                                }}
-                                className="nav-link d-flex align-items-center"
-                                style={{
-                                    fontSize: '1.1rem',
-                                    transition: 'color 0.3s',
-                                    color: 'black',
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.color = 'purple';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.color = 'black';
-                                }}
-                            >
-                                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                                    {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
-                                    {link.label}
-                                </div>
-                            </Link>
-                            <hr style={{ width: '100%', borderColor: 'black' }} />
-                        </React.Fragment>
-                    ))}
-                </Nav>
-            </div>
-        </Container>
-    </Navbar>
+            <Container fluid className="flex-column">
+                <Navbar.Brand>
+                    <img
+                        style={{ backgroundColor: 'white' }}
+                        src="/jb_logo.png"
+                        alt="jobboxlogo"
+                        className='auth-logo'
+                    />
+                </Navbar.Brand>
+                <Navbar.Text>
+                    <h2 style={{ color: 'black' }}>{userName}</h2>
+                </Navbar.Text>
+                <div ref={scrollContainerRef} className='scrollbar-container' style={{ height: 'calc(100vh - 170px)', overflowY: 'auto', paddingRight: '10px', color: 'gray' }}>
+                    <Nav className="flex-column full-height align-items-center">
+                        {navLinks.map((link, index) => (
+                            <React.Fragment key={index}>
+                                <Link
+                                    to={{ pathname: link.to, state: { userName, userEmail } }}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        navigate(link.to, { state: { userName, userEmail } });
+                                    }}
+                                    className="nav-link d-flex align-items-center"
+                                    style={{
+                                        fontSize: '1.1rem',
+                                        transition: 'color 0.3s',
+                                        color: 'black',
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.color = 'purple';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.color = 'black';
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                                        {link.icon && <span style={{ marginRight: '10px' }}>{link.icon}</span>}
+                                        {link.label}
+                                    </div>
+                                </Link>
+                                <hr style={{ width: '100%', borderColor: 'black' }} />
+                            </React.Fragment>
+                        ))}
+                    </Nav>
+                </div>
+            </Container>
+        </Navbar>
     );
 };
 

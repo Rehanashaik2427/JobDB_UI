@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Container, Form } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
@@ -200,6 +200,7 @@ const DreamCompany = () => {
         </Container>
       </div>
     </div>
+   
   );
 };
 

@@ -177,17 +177,8 @@ table, th, td ,tr{
     font-size: 25px;
     
 }
-.search button{
-    height: 30px;
-    width: 100px;
-    color: green;
-    background-color: coral;
-    border-radius: 10px;
-    border: none;
-     /* Makes the element stay in place when scrolling */
-    top: 5px; /* Adjust the top position if needed (10px is a small margin) */
-    right: 100px; /* Adjust the right position if needed (10px is a small margin) */
-}
+/*  */
+
 .search .icon{
     height: 24px;
     width: 100px;

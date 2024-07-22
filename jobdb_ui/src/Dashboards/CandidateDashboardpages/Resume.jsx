@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Dropdown, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Dropdown, Modal } from 'react-bootstrap';
 
+import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
 import CandidateLeftSide from './CandidateLeftSide';
-import { FaBars } from 'react-icons/fa';
 
 const Resume = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -124,16 +124,19 @@ const Resume = () => {
   return (
 
 
-    <div fluid className='dashboard-container'>
-      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-        <CandidateLeftSide user={{ userName, userId }} />
-      </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
+    <div className='dashboard-container'>
+    
+    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+      <CandidateLeftSide user={{ userName, userId }} />
+    </div>
+    <div className="hamburger-icon" onClick={toggleLeftSide}>
+      <FaBars />
+    </div>
 
-      <div md={10} className="rightside" >
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+    <div className="rightside" style={{
+      overflowY: 'scroll'
+    }}>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
 
 
@@ -202,20 +205,19 @@ const Resume = () => {
                     <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
                   )}
 
-                  <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
-                </Card.Body>
-              </Card>
-            ))}
+                    <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+            <div className='adding-resumes' style={{ marginTop: '50px' }}>
+              <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
+                e.preventDefault();
+                navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
+              }} >ADD NEW RESUME</Link>
+            </div>
           </div>
-          <div className='adding-resumes' style={{ marginTop: '50px' }}>
-            <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
-            }} >ADD NEW RESUME</Link>
-          </div>
-        </div>
-      </div>
-    </div>
+</div></div>
   );
 };
 

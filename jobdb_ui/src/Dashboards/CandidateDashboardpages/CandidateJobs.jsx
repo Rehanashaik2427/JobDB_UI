@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import { Button, Dropdown, OverlayTrigger, Popover, Table } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -285,6 +285,7 @@ const CandidateJobs = () => {
     <div fluid className='dashboard-container'>
       
         <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+   
           <CandidateLeftSide user={{ userName, userId }} />
         </div>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
@@ -441,6 +442,7 @@ const CandidateJobs = () => {
           </div>
           </div>
           </div>
+   
   );
 };
 

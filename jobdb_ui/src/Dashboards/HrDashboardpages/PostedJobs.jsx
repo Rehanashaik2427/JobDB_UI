@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Dropdown, OverlayTrigger, Popover, Row, Table } from 'react-bootstrap';
+import { Button, Dropdown, OverlayTrigger, Popover, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
@@ -134,13 +134,15 @@ const PostedJobs = () => {
 
   const initials = getInitials(userName);
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className="left-side">
+    <div fluid className="dashboard-container">
+        <div md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
+     
 
-        <Col md={10} className="rightside" style={{
+      
+        </div>
+      
+        <div md={10} className="rightside" style={{
           overflowY: 'scroll'
         }}>          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar" >
@@ -250,9 +252,9 @@ const PostedJobs = () => {
             )}
           </div>
 
-        </Col>
-      </Row>
-    </Container>
+      
+        </div>
+        </div>
   );
 }
 

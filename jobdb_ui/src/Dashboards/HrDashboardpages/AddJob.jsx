@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import HrLeftSide from './HrLeftSide';
 import Swal from 'sweetalert2';
+import HrLeftSide from './HrLeftSide';
 
 const AddJob = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -72,13 +72,14 @@ const AddJob = () => {
   };
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className="left-side">
+    <div className='dashboard-container'>
+      <div className='left-side'>
           <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
-      
-        <Col md={18} className="rightside">
+        </div>
+
+        <div md={10} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
         <h3 className='text-center'>Post Job</h3>
           <Card style={{marginTop:'10px'}}>
           
@@ -205,9 +206,7 @@ const AddJob = () => {
               </Card.Footer>
             </Form>
           </Card>
-        </Col>
-      </Row>
-    </Container>
+</div></div>
   );
 
 
