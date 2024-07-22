@@ -17,7 +17,7 @@ const CompanyJobs = () => {
 
     const userEmail = location.state?.userEmail || '';
 
-   
+
 
     const getUser = async (userEmail) => {
         try {
@@ -34,67 +34,67 @@ const CompanyJobs = () => {
     }, [userEmail]);
     const fetchJobs = async () => {
         try {
-          const params = {
-            userEmail: userEmail,
-            page: page,
-            size: pageSize,
-            sortBy: sortedColumn, // Include sortedColumn and sortOrder in params
-            sortOrder: sortOrder,
-          };
-    
-          const response = await axios.get(`${BASE_API_URL}/jobsPostedByHrEmaileachCompany`, { params });
-          setJobs(response.data.content);
-          setTotalPages(response.data.totalPages);
+            const params = {
+                userEmail: userEmail,
+                page: page,
+                size: pageSize,
+                sortBy: sortedColumn, // Include sortedColumn and sortOrder in params
+                sortOrder: sortOrder,
+            };
+
+            const response = await axios.get(`${BASE_API_URL}/jobsPostedByHrEmaileachCompany`, { params });
+            setJobs(response.data.content);
+            setTotalPages(response.data.totalPages);
         } catch (error) {
-          console.error('Error fetching jobs data:', error);
+            console.error('Error fetching jobs data:', error);
         }
-      };
-      useEffect(() => {
-          fetchJobs();
-        
-      }, [userEmail, page, pageSize, sortedColumn, sortOrder]);
-    
+    };
+    useEffect(() => {
+        fetchJobs();
+
+    }, [userEmail, page, pageSize, sortedColumn, sortOrder]);
+
     const handlePageSizeChange = (e) => {
         const size = parseInt(e.target.value);
         setPageSize(size);
         setPage(0); // Reset page when page size change
-      };
+    };
 
-      const handlePageClick = (data) => {
+    const handlePageClick = (data) => {
         setPage(data.selected);
-      };
+    };
     const handleSort = (column) => {
         let order = 'asc';
         if (sortedColumn === column) {
-          order = sortOrder === 'asc' ? 'desc' : 'asc';
+            order = sortOrder === 'asc' ? 'desc' : 'asc';
         }
         setSortedColumn(column);
         setSortOrder(order);
-      };
-      const [showJobDescription, setShowJobDescription] = useState(false);
-      const [selectedJobSummary, setSelectedJobSummary] = useState(null);
-      const handleViewSummary = (summary) => {
+    };
+    const [showJobDescription, setShowJobDescription] = useState(false);
+    const [selectedJobSummary, setSelectedJobSummary] = useState(null);
+    const handleViewSummary = (summary) => {
         setSelectedJobSummary(summary);
-      };
-      const closeJobDescription = () => {
+    };
+    const closeJobDescription = () => {
         setShowJobDescription(false);
         setSelectedJobSummary('');
-      };
-      const popover = (summary) => (
+    };
+    const popover = (summary) => (
         <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-          <Popover.Body>
-            {summary}
-            <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
-    
-            </span>
-          </Popover.Body>
+            <Popover.Body>
+                {summary}
+                <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
+
+                </span>
+            </Popover.Body>
         </Popover>
-      );
-    
+    );
+
     return (
-        <div  className="company-job"style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+        <div className="company-job" style={{ maxHeight: '400px', overflowY: 'scroll' }}>
             <div className="jobs_list">
-                {jobs.length > 0 && (
+                {jobs.length > 0 ? (
                     <div>
                         <div>
                             <Table hover className='text-center'>
@@ -110,7 +110,6 @@ const CompanyJobs = () => {
                                 <tbody>
                                     {jobs.map(job => (
                                         <tr key={job.id}>
-
                                             <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
                                             <td>{job.jobType}</td>
                                             <td>{job.skills}</td>
@@ -120,7 +119,6 @@ const CompanyJobs = () => {
                                                     <Button variant="secondary" className='description btn-rounded' >Description</Button>
                                                 </OverlayTrigger>
                                             </td>
-                                        
                                         </tr>
                                     ))}
                                 </tbody>
@@ -152,8 +150,11 @@ const CompanyJobs = () => {
                             />
                         </div>
                     </div>
+                ) : (
+                    <p>No jobs available.</p>
                 )}
             </div>
+
         </div>
     )
 }

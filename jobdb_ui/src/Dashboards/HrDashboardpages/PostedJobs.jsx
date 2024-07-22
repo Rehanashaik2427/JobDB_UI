@@ -139,7 +139,7 @@ const PostedJobs = () => {
         <Col md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
         </Col>
-      
+
         <Col md={10} className="rightside" style={{
           overflowY: 'scroll'
         }}>          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
@@ -183,7 +183,7 @@ const PostedJobs = () => {
           </div>
 
           <div className="jobs_list">
-            {jobs.length > 0 && (
+            {jobs.length > 0 ? (
               <div>
                 <div>
                   <Table hover className='text-center'>
@@ -245,8 +245,11 @@ const PostedJobs = () => {
                   />
                 </div>
               </div>
+            ) : (
+              <p>No jobs available.</p>
             )}
           </div>
+
         </Col>
       </Row>
     </Container>
