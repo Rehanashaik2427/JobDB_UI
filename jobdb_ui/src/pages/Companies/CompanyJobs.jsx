@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Button, OverlayTrigger, Popover, Table } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react';
+import { Button, OverlayTrigger, Popover, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { useLocation } from 'react-router-dom';
 

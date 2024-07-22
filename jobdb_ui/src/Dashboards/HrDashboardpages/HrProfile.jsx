@@ -62,7 +62,7 @@ const HrProfile = () => {
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
-        <Col md={10} className="rightside">
+        <Col md={10} className="right-side">
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">

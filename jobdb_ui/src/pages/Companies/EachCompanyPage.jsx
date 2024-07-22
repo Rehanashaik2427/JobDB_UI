@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Col, Container, Row, Card, Button, Modal } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CompanyJobs from './CompanyJobs';
 import CompanyOverView from './CompanyOverView';
@@ -249,9 +249,9 @@ const EachCompanyPage = () => {
                 <Row className="mb-2">
                   <Col>
                   {countOfHR > 0 ? (
-                  <p>HR mapped = Yes</p>
+                  <h5>HR mapped = Yes</h5>
                 ) : (
-                  <p>HR mapped = No</p>
+                  <h5>HR mapped = No</h5>
                 )}
                     <h5>Total HR's: {countOfHR}</h5>
                   </Col>

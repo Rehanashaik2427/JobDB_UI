@@ -44,17 +44,15 @@ const CompanyShowCase = () => {
   const getUser = async (userEmail) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/getHRName?userEmail=${userEmail}`);
-      const hrData=response.data;
       setUserData(response.data);
-      setCompanyName(hrData.companyName);
     } catch (error) {
       console.log(error);
     }
   };
 
 
+  const {companyName} = userData.companyName
 
-  console.log(companyName)
 
   useEffect(() => {
     if (companyName) {

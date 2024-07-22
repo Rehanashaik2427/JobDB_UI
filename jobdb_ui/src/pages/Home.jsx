@@ -7,7 +7,7 @@ import React from 'react';
 import { Button, Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
 
 import { Link } from 'react-router-dom';
-
+import jb_logo from '../Images/jb_logo.png';
 import './PagesStyle/Pages.css';
 
 const Home = () => {
@@ -19,7 +19,7 @@ const Home = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
             <img
-              src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png"
+              src={jb_logo}
               alt="JobBox Logo"
               className="logo"
             
