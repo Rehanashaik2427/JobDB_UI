@@ -1,13 +1,13 @@
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Button, Col, Container, Form, Modal, Row, Table } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
+import { SiImessage } from "react-icons/si";
 import ReactPaginate from 'react-paginate';
 import { useLocation } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
 import Slider from "./Slider";
-import { SiImessage } from "react-icons/si";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const DreamApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -286,22 +286,14 @@ const DreamApplication = () => {
     }
   }, [chats]);
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className="left-side">
-          <HrLeftSide user={user} />
-        </Col>
-        <Col md={20} className="rightside">
+    <div className='dashboard-container'>
+    <div className='left-side'>
+        <HrLeftSide user={{ userName, userEmail }} />
+      </div>
+
+      <div md={10} className="rightside" >
           <div className="application-div">
-            {/* <div className="filter">
-              <label htmlFor="status">Filter by Status:</label>
-              <select id="status" onChange={handleFilterChange} value={filterStatus}>
-                <option value="all">All</option>
-                <option value="Shortlisted">Shortlisted</option>
-                <option value="Not Seen">Not seen</option>
-                <option value="Not Shortlisted">Rejected</option>
-              </select>
-            </div> */}
+
             <Row className="filter">
               <Col className="filter" style={{ maxWidth: '40%' }}>
                 <label htmlFor="status">Filter by Status:</label>
@@ -455,9 +447,7 @@ const DreamApplication = () => {
               </section>
             )}
           </div>
-        </Col>
-      </Row>
-    </Container>
+</div></div>
   );
 };
 export default DreamApplication;

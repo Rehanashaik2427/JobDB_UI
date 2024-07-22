@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import './CandidateDashboard.css';
 
-import { Col, Container, Dropdown, Row } from 'react-bootstrap';
-import CandidateLeftSide from './CandidateLeftSide';
+import { Dropdown } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
+import CandidateLeftSide from './CandidateLeftSide';
 
 
 const Profile = () => {
@@ -63,16 +63,18 @@ const Profile = () => {
     setShowLeftSide(!showLeftSide);
   };
   return (
-    <Container fluid className='dashboard-container'>
-    <Row>
-    <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
+    <div className='dashboard-container'>
+    
+    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+      <CandidateLeftSide user={{ userName, userId }} />
+    </div>
+    <div className="hamburger-icon" onClick={toggleLeftSide}>
+      <FaBars />
+    </div>
 
-        <Col md={18} className="rightside" >
+    <div className="rightside" style={{
+      overflowY: 'scroll'
+    }}>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
           <Dropdown className="ml-2">
@@ -130,9 +132,7 @@ const Profile = () => {
         <div className="profile-container"></div> */}
         </div>
 
-        </Col>
-      </Row>
-    </Container>
+</div></div>
 
   )
 }

@@ -2,7 +2,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Col, Container, Dropdown, Form, Modal, Row, Table } from 'react-bootstrap';
+import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
 import { SiImessage } from 'react-icons/si';
 import ReactPaginate from 'react-paginate';
@@ -291,15 +291,16 @@ const MyApplication = () => {
     }
   }, [chats]);
   return (
-    <Container fluid className='dashboard-container'>
-      <Row>
-        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+    <div className='dashboard-container'>
+    
+        <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+        </div>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
-        <Col md={10} className="rightside" style={{
+
+        <div className="rightside" style={{
           overflowY: 'scroll'
         }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
@@ -461,9 +462,7 @@ const MyApplication = () => {
               <h4 className='text-center'>No Application found..!!</h4>
             )}
           </div>
-        </Col>
-      </Row>
-    </Container>
+   </div></div>
   );
 };
 

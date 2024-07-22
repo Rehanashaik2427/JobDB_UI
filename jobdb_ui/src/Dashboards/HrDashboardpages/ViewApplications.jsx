@@ -2,7 +2,7 @@ import { faEye, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Button, Col, Container, Form, Modal, Row, Table } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
 import { SiImessage } from "react-icons/si";
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -313,14 +313,12 @@ const ViewApplications = () => {
     }
   }, [chats]);
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className="left-side">
-          <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
+    <div className='dashboard-container'>
+    <div className='left-side'>
+        <HrLeftSide user={{ userName, userEmail }} />
+      </div>
 
-        <Col md={10} className="rightside">
-
+      <div md={10} className="rightside" >
           <div className="application-div">
             <Row className="filter">
               <Col className="filter" style={{ maxWidth: '40%' }}>
@@ -508,9 +506,7 @@ const ViewApplications = () => {
               </div>
             </div>
           </div>
-        </Col>
-      </Row>
-    </Container>
+</div></div>
   );
 
 

@@ -58,11 +58,11 @@ const AddCompanyDetails = () => {
 
   return (
     <div className='dashboard-container'>
-      <div className='leftside'>
-        <AdminleftSide />
-      </div>
+    <div className='left-side'>
+      <AdminleftSide />
+    </div>
 
-      <div className="rightSide">
+    <div className="rightside">
         {companyData.length > 0 ? (
           <>
             <h2>Add Company Details</h2>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Dropdown, Row, Table } from 'react-bootstrap';
+import { Button, Dropdown, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
@@ -111,13 +111,12 @@ const Applications = () => {
   const initials = getInitials(userName);
   return (
 
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className="leftside">
+    <div className='dashboard-container'>
+      <div className='left-side'>
           <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
+        </div>
 
-        <Col md={10} className="right-side" style={{
+        <div md={10} className="rightside" style={{
           overflow: 'hidden'
         }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
@@ -240,10 +239,9 @@ const Applications = () => {
                   />
                 </div>
 
-        </Col>
+        </div>
+        </div>
 
-      </Row>
-    </Container>
 
   );
 }

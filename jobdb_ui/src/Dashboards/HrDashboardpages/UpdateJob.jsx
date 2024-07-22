@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { FaEdit, FaSave } from "react-icons/fa";
 import { useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
@@ -82,12 +82,12 @@ const UpdateJob = () => {
   };
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className="left-side">
-          <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
-        <Col md={18} className="rightside">
+    <div className='dashboard-container'>
+    <div className='left-side'>
+        <HrLeftSide user={{ userName, userEmail }} />
+      </div>
+
+      <div md={10} className="rightside">
         <h3 className='text-center'>Update Job</h3>
           <Card style={{ marginTop: '10px' }}>
             <Form onSubmit={handleSubmit}>
@@ -223,9 +223,7 @@ const UpdateJob = () => {
 
             </Form>
           </Card>
-        </Col >
-      </Row >
-    </Container >
+</div></div>
   );
 };
 

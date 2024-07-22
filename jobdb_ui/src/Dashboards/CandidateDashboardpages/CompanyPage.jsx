@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Container, OverlayTrigger, Popover, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, OverlayTrigger, Popover, Row, Table } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -348,16 +348,16 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
   
   };
   return (
-    <Container fluid className='dashboard-container'>
-      <Row>
-        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+    <div className='dashboard-container'>
+    
+        <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+        </div>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
 
-        <Col md={10} className="rightside" style={{
+        <div className="rightside" style={{
           overflowY: 'scroll'
         }}>
             {showResumePopup && (
@@ -580,9 +580,7 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
           </Row>
 
 
-        </Col>
-      </Row>
-    </Container>
+  </div></div>
   );
 };
 

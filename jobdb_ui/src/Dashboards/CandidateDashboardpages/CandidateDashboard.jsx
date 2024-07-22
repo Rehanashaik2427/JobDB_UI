@@ -210,13 +210,12 @@ const CandidateDashboard = () => {
 
 
   return (
-    <Container fluid className='dashboard-container'>
-      <Row>
-        <Col md={2} className="left-side">
+    <div className='dashboard-container'>
+        <div className="left-side">
           <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
+        </div>
 
-        <Col md={10} className="right-side" style={{ overflowY: 'scroll' }}>
+        <div className="rightside" style={{ overflowY: 'scroll' }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-2">
             <i
               datafullscreen="true"
@@ -360,9 +359,8 @@ const CandidateDashboard = () => {
               </Col>
             </Row>
           </Container>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+        </div>
   );
 };
 

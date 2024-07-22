@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Card, Col, Container, Row } from 'react-bootstrap'
+import { Card, Col, Row } from 'react-bootstrap'
 import { FaBars } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 import CompanyJobs from './CompanyJobs'
@@ -17,11 +17,10 @@ const CompanyShowCase = () => {
   const [userData, setUserData] = useState({});
   const [countOfHr, setCountOfHR] = useState();
   const [countOfApplications, setCountOfApplications] = useState(0);
-  // const [countOfJobs, setCountOfJobs] = useState(0);
   const [countOfActiveJobs, setCountOfActiveJobs] = useState();
   const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
   const [countOfDreamApplicationsInCompany, setCountOfDreamApplicationsInCompany] = useState(0);
-  const [companyName, setCompanyName] = useState('');
+  
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
@@ -34,12 +33,19 @@ const CompanyShowCase = () => {
     if (userEmail) {
       getUser(userEmail);
       countofApplicantsInCompany(userEmail);
-      // totalJobsofCompany(userEmail)
-      countOfActiveJobsInCompany(userEmail)
-      countOfSHortlistedCandidatesInCompany(userEmail)
-      countOfDreamApplications(userEmail)
+      countOfActiveJobsInCompany(userEmail);
+      countOfShortlistedCandidatesInCompany(userEmail);
+      countOfDreamApplications(userEmail);
     }
   }, [userEmail]);
+
+  useEffect(() => {
+    if (userData.companyName) {
+      fetchCompanyLogo(userData.companyName);
+      fetchCompanyBanner(userData.companyName);
+      countOfHRSInCompany(userData.companyName);
+    }
+  }, [userData.companyName]);
 
   const getUser = async (userEmail) => {
     try {
@@ -50,19 +56,7 @@ const CompanyShowCase = () => {
     }
   };
 
-
-  const {companyName} = userData.companyName
-
-
-  useEffect(() => {
-    if (companyName) {
-      fetchCompanyLogo(companyName);
-      fetchCompanyBanner(companyName);
-    }
-  }, [companyName])
-
-  const countOfHRSInCompany = async () => {
-    console.log(companyName)
+  const countOfHRSInCompany = async (companyName) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/countOfHRSInCompany?companyName=${companyName}`);
       console.log("Response from countOfHRSInCompany API:", response.data); // Log response for debugging
@@ -70,7 +64,7 @@ const CompanyShowCase = () => {
     } catch (error) {
       console.error("Error fetching count of HRs:", error); // Log any errors
     }
-  }
+  };
 
   const countofApplicantsInCompany = async (userEmail) => {
     try {
@@ -78,27 +72,10 @@ const CompanyShowCase = () => {
         params: { userEmail: userEmail }
       });
       setCountOfApplications(response.data);
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error fetching counts:', error);
     }
-  }
-
-  useEffect(() => {
-    countOfHRSInCompany();
-  },);
-
-  // const totalJobsofCompany = async (userEmail) =>{
-  //   try{
-  //   const response =  await axios.get(`${BASE_API_URL}/totalJobsofCompany`, {
-  //     params: { userEmail: userEmail }
-  //   });
-  //   setCountOfJobs(response.data);
-  // }
-  // catch (error) {
-  //   console.error('Error fetching counts:', error);
-  // }
-  // }
+  };
 
   const countOfActiveJobsInCompany = async (userEmail) => {
     try {
@@ -106,23 +83,21 @@ const CompanyShowCase = () => {
         params: { userEmail: userEmail }
       });
       setCountOfActiveJobs(response.data);
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error fetching counts:', error);
     }
-  }
+  };
 
-  const countOfSHortlistedCandidatesInCompany = async (userEmail) => {
+  const countOfShortlistedCandidatesInCompany = async (userEmail) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/CountOfShortlistedCandidatesByEachCompany`, {
         params: { userEmail: userEmail }
       });
       setCountOfShortlistedCandiCompany(response.data);
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error fetching counts:', error);
     }
-  }
+  };
 
   const countOfDreamApplications = async (userEmail) => {
     try {
@@ -130,11 +105,10 @@ const CompanyShowCase = () => {
         params: { userEmail: userEmail }
       });
       setCountOfDreamApplicationsInCompany(response.data);
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error fetching counts:', error);
     }
-  }
+  };
 
   const [companyLogo, setCompanyLogo] = useState("");
   const [companyBanner, setCompanyBanner] = useState("");
@@ -142,7 +116,6 @@ const CompanyShowCase = () => {
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Perform validation if needed (size, type, etc.)
       const reader = new FileReader();
       reader.onload = () => {
         setCompanyLogo(reader.result);
@@ -154,7 +127,6 @@ const CompanyShowCase = () => {
   const handleBannerChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Perform validation if needed (size, type, etc.)
       const reader = new FileReader();
       reader.onload = () => {
         setCompanyBanner(reader.result);
@@ -162,9 +134,10 @@ const CompanyShowCase = () => {
       reader.readAsDataURL(file);
     }
   };
+
   const handleFileChange = async (type, file) => {
     const formData = new FormData();
-    formData.append('companyName', companyName);
+    formData.append('companyName', userData.companyName);
     formData.append('file', file);
 
     try {
@@ -219,17 +192,17 @@ const CompanyShowCase = () => {
     }
   };
 
+
   return (
     // <Container fluid className="dashboard-container">
-    <Container fluid className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
-      <Row>
-        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+    <div fluid className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
+        <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
+        </div>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
-        <Col md={10} className="rightside" style={{ overflowY: 'scroll' }}>
+        <div md={10} className="rightside" style={{ overflowY: 'scroll' }}>
           <Card style={{ width: '100%', height: '60%' }}>
             <Card.Body style={{ padding: 0, position: 'relative' }}>
               <div style={{ position: 'relative', height: '55%' }}>
@@ -264,7 +237,7 @@ const CompanyShowCase = () => {
                   accept="image/*"
                 />
               </div>
-              <div><h1 style={{ position: 'absolute', top: '70%', right: '100px'}}>{companyName}</h1></div>
+              <div><h1 style={{ position: 'absolute', top: '70%', right: '100px'}}>{userData.companyName}</h1></div>
               <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
               <li>
                   <span>
@@ -352,9 +325,8 @@ const CompanyShowCase = () => {
               </Card>
             </Col>
           </Row>
-        </Col>
-      </Row>
-    </Container>
+      </div>
+    </div>
   )
 }
 

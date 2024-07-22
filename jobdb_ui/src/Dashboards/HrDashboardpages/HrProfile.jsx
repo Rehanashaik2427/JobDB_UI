@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa'; // Make sure to install react-icons
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
@@ -54,15 +54,17 @@ const HrProfile = () => {
   const initials = getInitials(userName);
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
-        <Col md={10} className="right-side">
+    <div fluid className="dashboard-container">
+    
+      <div  className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <HrLeftSide user={{ userName, userEmail }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+      <div md={10} className="rightside" style={{
+        overflowY: 'scroll'
+      }}>       
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
@@ -113,9 +115,8 @@ const HrProfile = () => {
               )}
             </div>
           </div>
-        </Col>
-      </Row>
-    </Container>
+      </div>
+      </div>
   );
 };
 

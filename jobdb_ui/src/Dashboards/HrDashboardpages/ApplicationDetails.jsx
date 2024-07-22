@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import "./ApplicationDetails.css";
 import HrLeftSide from "./HrLeftSide";
@@ -55,14 +54,14 @@ const ApplicationDetails = () => {
 
 
     return (
-        <Container fluid className="dashboard-container">
-            <Row>
-                <Col md={2} className="left-side">
-                    <HrLeftSide user={{ userName, userEmail }} />
-                </Col>
-
-                <Col md={18} className="rightside">
-
+        <div className='dashboard-container'>
+        <div className='left-side'>
+            <HrLeftSide user={{ userName, userEmail }} />
+          </div>
+  
+          <div md={10} className="rightside" style={{
+            overflow: 'hidden'
+          }}>
 
 
                     <div className="application-details-container">
@@ -97,9 +96,7 @@ const ApplicationDetails = () => {
                             </div>
                         </div>
                     </div>
-                </Col>
-            </Row>
-        </Container>
+</div></div>
     );
 };
 
