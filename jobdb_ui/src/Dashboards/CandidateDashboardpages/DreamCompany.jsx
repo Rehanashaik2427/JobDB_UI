@@ -150,12 +150,14 @@ const DreamCompany = () => {
           <Container>
             <div className="centered-content">
               {showResumePopup && (
+              
             
                     <ResumeSelectionPopup
                       resumes={resumes}
                       onSelectResume={handleResumeSelect}
                       onClose={() => setShowResumePopup(false)}
                     />
+                 
                
               )}
               <Form onSubmit={handleSubmit} className="centered-form">

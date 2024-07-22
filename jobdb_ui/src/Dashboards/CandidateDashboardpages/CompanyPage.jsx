@@ -249,6 +249,7 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
       if (response.data) {
         alert("You have successfully applied for this job");
         // setShowMessage(true);
+        checkHasUserDreamApplied();
       }
     } catch (error) {
       console.error('Error fetching jobs:', error);

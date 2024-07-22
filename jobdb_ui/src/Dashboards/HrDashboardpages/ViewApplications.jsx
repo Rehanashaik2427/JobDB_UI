@@ -343,7 +343,7 @@ const ViewApplications = () => {
                 <Modal.Header closeButton>
                   <Modal.Title>Brief Resume</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{showMessage}</Modal.Body>
+                <Modal.Body style={{ overflowY: 'auto' }}>{showMessage}</Modal.Body>
               </Modal>
             )}
 
