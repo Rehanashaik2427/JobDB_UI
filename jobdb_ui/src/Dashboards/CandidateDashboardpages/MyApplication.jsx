@@ -1,14 +1,14 @@
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
+import { Button, Col, Container, Dropdown, Form, Modal, Row, Table } from 'react-bootstrap';
 import { FaBars } from 'react-icons/fa';
 import { SiImessage } from 'react-icons/si';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -291,16 +291,15 @@ const MyApplication = () => {
     }
   }, [chats]);
   return (
-    <div className='dashboard-container'>
-    
-        <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+    <Container fluid className='dashboard-container'>
+      <Row>
+        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <CandidateLeftSide user={{ userName, userId }} />
-        </div>
+        </Col>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
-
-        <div className="rightside" style={{
+        <Col md={10} className="rightside" style={{
           overflowY: 'scroll'
         }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
@@ -357,32 +356,31 @@ const MyApplication = () => {
                         {formatDate(chat.createdAt)}
                       </div>
 
-                    )}
-
-                    {/* Render HR message if present */}
-                    {chat.hrMessage && (
-                      <div className="message-right">
-                        {chat.hrMessage}
-                        <div className="message-time">
-                          {formatMessageDateTime(chat.createdAt)}
-                        </div>
+                  )}
+                  {/* Render HR message if present */}
+                  {chat.hrMessage && (
+                    <div className="message-right">
+                      {chat.hrMessage}
+                      <div className="message-time">
+                        {formatMessageDateTime(chat.createdAt)}
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {/* Render candidate message if present */}
-                    {chat.candidateMessage && (
-                      <div className="message-left">
-                        {chat.candidateMessage}
-                        <div className="message-time">
-                          {formatMessageDateTime(chat.createdAt)}
-                        </div>
+                  {/* Render candidate message if present */}
+                  {chat.candidateMessage && (
+                    <div className="message-left">
+                      {chat.candidateMessage}
+                      <div className="message-time">
+                        {formatMessageDateTime(chat.createdAt)}
                       </div>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <p>Loading...</p>
-              )}
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p>Loading...</p>
+            )}
 
             </Modal.Body>
             <Modal.Footer>
@@ -462,7 +460,9 @@ const MyApplication = () => {
               <h4 className='text-center'>No Application found..!!</h4>
             )}
           </div>
-   </div></div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

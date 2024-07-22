@@ -9,7 +9,7 @@ const navigate = useNavigate();
   const handleUserTypeChange = (type) => {
     setUserType(type);
     if (type === "hr") {
-      navigate("/findCompany");
+      navigate("/signup/hrSignup");
     }
     if (type === "candidate") {
       navigate("/signup/candiSignup"); // Navigate to the nested route

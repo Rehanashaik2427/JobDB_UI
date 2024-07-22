@@ -160,7 +160,6 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
     }
   };
 
-
   useEffect(() => {
     fetchCountOfApplicationByCompany();
     fetchCountOfHRByCompany();
@@ -173,7 +172,6 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
-
 
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
@@ -575,13 +573,13 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
                 </Card.Body>
               </Card>
 
-
             </Col>
           </Row>
-
 
   </div></div>
   );
 };
 
 export default CompamyPage;
+
+

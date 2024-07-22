@@ -61,7 +61,7 @@ const Resume = () => {
 
   const [showSettings, setShowSettings] = useState(false);
 
-  
+
   const navigate = useNavigate();
   const toggleSettings = () => {
     navigate('/');
@@ -141,69 +141,69 @@ const Resume = () => {
 
 
 
-            <Dropdown className="ml-2">
-              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <div
-                  className="initials-placeholder"
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {initials}
-                </div>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="mt-3">
-                <Dropdown.Item as={Link} to="/">
-                  <i className="i-Data-Settings me-1" /> Account settings
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                  <i className="i-Lock-2 me-1" /> Sign out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <div
+                className="initials-placeholder"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  backgroundColor: 'grey',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                {initials}
+              </div>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
 
 
 
-          {showBriefSettings && (
-  <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
-    <Modal.Header closeButton>
-      <Modal.Title>Brief Resume</Modal.Title>
-    </Modal.Header>
-    <Modal.Body style={{ overflowY: 'auto' }}>
-      {showMessage}
-    </Modal.Body>
-  </Modal>
-)}
+        {showBriefSettings && (
+          <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Brief Resume</Modal.Title>
+            </Modal.Header>
+            <Modal.Body style={{ overflowY: 'auto' }}>
+              {showMessage}
+            </Modal.Body>
+          </Modal>
+        )}
 
 
-          <div>
-            <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
+        <div>
+          <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
 
-            <div className='cards d-flex flex-wrap justify-content-start' style={{margin:'24px',padding:'12px'}}>
-              {resumes.map((resume, index) => (
-                <Card className='resume-card'style={{margin:'12px'}} key={index}>
-                  <Card.Body>
-                    <Card.Title>Resume : {index + 1}</Card.Title>
-                    <Card.Text>{resume.message}</Card.Text>
+          <div className='cards d-flex flex-wrap justify-content-start' style={{ margin: '24px', padding: '12px' }}>
+            {resumes.map((resume, index) => (
+              <Card className='resume-card' style={{ margin: '12px' }} key={index}>
+                <Card.Body>
+                  <Card.Title>Resume : {index + 1}</Card.Title>
+                  <Card.Text>{resume.message}</Card.Text>
 
-                    {resume.fileType === 'file' && (
-                      <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
-                    )}
-                    {resume.fileType === 'link' && (
-                      <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
-                    )}
-                    {resume.fileType === 'brief' && (
-                      <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
-                    )}
+                  {resume.fileType === 'file' && (
+                    <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
+                  )}
+                  {resume.fileType === 'link' && (
+                    <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
+                  )}
+                  {resume.fileType === 'brief' && (
+                    <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
+                  )}
 
                     <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
                   </Card.Body>

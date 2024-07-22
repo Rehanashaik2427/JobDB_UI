@@ -20,6 +20,7 @@ const CompanyShowCase = () => {
   const [countOfActiveJobs, setCountOfActiveJobs] = useState();
   const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
   const [countOfDreamApplicationsInCompany, setCountOfDreamApplicationsInCompany] = useState(0);
+   const [companyName, setCompanyName] = useState('');
   
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
@@ -51,12 +52,26 @@ const CompanyShowCase = () => {
     try {
       const response = await axios.get(`${BASE_API_URL}/getHRName?userEmail=${userEmail}`);
       setUserData(response.data);
+      setCompanyName(response.data.companyName);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const countOfHRSInCompany = async (companyName) => {
+
+  // const {companyName} = userData.companyName
+
+
+  useEffect(() => {
+    if (companyName) {
+      fetchCompanyLogo(companyName);
+      fetchCompanyBanner(companyName);
+    }
+  }, [companyName])
+
+  const countOfHRSInCompany = async () => {
+    console.log(companyName)
+  
     try {
       const response = await axios.get(`${BASE_API_URL}/countOfHRSInCompany?companyName=${companyName}`);
       console.log("Response from countOfHRSInCompany API:", response.data); // Log response for debugging

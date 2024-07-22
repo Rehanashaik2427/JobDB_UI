@@ -72,7 +72,7 @@ const DreamCompany = () => {
     const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
     const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
     const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
-    
+
     const formattedDate = `${year}-${month}-${day}`;
     console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
 
@@ -137,71 +137,70 @@ const DreamCompany = () => {
     userId: userId,
   };
   return (
-    <div className='dashboard-container'>
-    
-    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
-      <CandidateLeftSide user={{ userName, userId }} />
-    </div>
-    <div className="hamburger-icon" onClick={toggleLeftSide}>
-      <FaBars />
-    </div>
+    <div fluid className='dashboard-container'>
+      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
 
-    <div className="rightside" style={{
-      overflowY: 'scroll'
-    }}>
-          <Container>
-            <div className="centered-content">
-              {showResumePopup && (
-              
-            
-                    <ResumeSelectionPopup
-                      resumes={resumes}
-                      onSelectResume={handleResumeSelect}
-                      onClose={() => setShowResumePopup(false)}
-                    />
-                 
-               
+      <div md={10} className="rightside">
+        <Container>
+          <div className="centered-content">
+            {showResumePopup && (
+
+
+              <ResumeSelectionPopup
+                resumes={resumes}
+                onSelectResume={handleResumeSelect}
+                onClose={() => setShowResumePopup(false)}
+              />
+
+
+            )}
+            <Form onSubmit={handleSubmit} className="centered-form">
+              <Form.Group>
+                <Form.Label htmlFor="companyName">Company Name:</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="companyName"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <br></br><Form.Group>
+                <Form.Label htmlFor="resume">Resume:</Form.Label>
+                <Button variant='info' onClick={handleApplyButtonClick}>Select Resume</Button>
+              </Form.Group>
+
+              {showMessage && (
+                <Card className="success-message">
+                  <Card.Body>
+                    <Card.Title>Congratulations</Card.Title>
+                    <Card.Text>
+                      You successfully applied to your Dream Company
+                    </Card.Text>
+                    <Card.Text>
+                      <Link to={{
+                        pathname: '/candidate-dashboard',
+                        state: { userName: userName, userId: userId }
+                      }} onClick={(e) => {
+                        e.preventDefault();
+                        navigate('/candidate-dashboard', { state: { userName, userId } });
+                      }}>Go back to dashboard</Link>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
               )}
-              <Form onSubmit={handleSubmit} className="centered-form">
-                <Form.Group>
-                  <Form.Label htmlFor="companyName">Company Name:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    id="companyName"
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-                <br></br><Form.Group>
-                  <Form.Label htmlFor="resume">Resume:</Form.Label>
-                  <Button variant='info' onClick={handleApplyButtonClick}>Select Resume</Button>
-                </Form.Group>
-
-                {showMessage && (
-                  <Card className="success-message">
-                    <Card.Body>
-                      <Card.Title>Congratulations</Card.Title>
-                      <Card.Text>
-                        You successfully applied to your Dream Company
-                      </Card.Text>
-                      <Card.Text>
-                        <Link to={{
-                          pathname: '/candidate-dashboard',
-                          state: { userName: userName, userId: userId }
-                        }} onClick={(e) => {
-                          e.preventDefault();
-                          navigate('/candidate-dashboard', { state: { userName, userId } });
-                        }}>Go back to dashboard</Link>
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                )}
-              </Form>
-            </div>
-          </Container>
- </div></div>
+            </Form>
+          </div>
+        </Container>
+      </div>
+    </div>
+   
   );
 };
 

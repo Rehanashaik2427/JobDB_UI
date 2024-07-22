@@ -282,16 +282,17 @@ const CandidateJobs = () => {
  
 
   return (
-    <div className='dashboard-container'>
-    
-        <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+    <div fluid className='dashboard-container'>
+      
+        <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+   
           <CandidateLeftSide user={{ userName, userId }} />
         </div>
         <div className="hamburger-icon" onClick={toggleLeftSide}>
           <FaBars />
         </div>
 
-        <div className="rightside" style={{
+        <div md={10} className="rightside" style={{
           overflowY: 'scroll'
         }}>
 
@@ -439,9 +440,9 @@ const CandidateJobs = () => {
               </Button>
             </Link>
           </div>
-        </div>
-      
-    </div>
+          </div>
+          </div>
+   
   );
 };
 

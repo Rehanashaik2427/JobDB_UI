@@ -18,7 +18,10 @@ const CandiRegister = () => {
     const [enterOtpValue, setEnterOtpValue] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
-
+    const [showModal, setShowModal] = useState(false);
+    const [agreed, setAgreed] = useState(false);
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
 
     const [disableFormFields, setDisableFormFields] = useState(false); // State to manage form field disablement
@@ -142,7 +145,12 @@ const CandiRegister = () => {
         }
     };
 
-
+    const handleAgree = () => {
+        setAgreed(true);
+        // Perform action when user agrees to terms
+        alert('You agreed to Terms and Conditions!');
+        handleClose(); // Close the modal after agreeing
+    };
 
     return (
         <div className="auth-layout-wrap">
@@ -276,15 +284,32 @@ const CandiRegister = () => {
                                                         sendOTP(values.userEmail); }// Trigger OTP sending}
                                                         
                                                     }}
-                                                />
-                                                <label htmlFor="agreeToEmailValidation" className="form-check-label">
-                                                    I agree to validate my email
-                                                </label>
+                                                    style={{ marginRight: '10px', transform: 'scale(1.4)', borderColor:'black' }}
+                                                    />
+                                                    <label htmlFor="agreeToEmailValidation" className="form-check-label" style={{ fontSize: '16px', fontWeight: 'bold', marginLeft: '5px', verticalAlign: 'middle' }}>
+                                                        I agree to validate my email
+                                                    </label>
                                                 {errors.agreeToEmailValidation && (
                                                     <p className="error-message">{errors.agreeToEmailValidation}</p>
                                                 )}
                                             </div>
+                                            <Button
+                                                    onClick={handleShow}
+                                                    disabled={agreed}
+                                                    className="mt-3"
+                                                    style={{
+                                                        backgroundColor: '#007bff',
+                                                        borderColor: '#007bff',
+                                                        color: '#ffffff',
+                                                        // padding: '5px 10px',
+                                                        fontSize: '10px',
+                                                        borderRadius: '4px',
+                                                        cursor: 'pointer',
 
+                                                    }}
+                                                >
+                                                    Agree to Terms and Conditions
+                                                </Button>
                                             {passwordCriteriaError && (
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
@@ -304,7 +329,7 @@ const CandiRegister = () => {
                                             <Button
                                                 type="submit"
                                                 className="btn btn-primary w-100 my-1 btn-rounded mt-3"
-                                                disabled={!otpVerified || isSubmitting || emailExistsError}
+                                                disabled={!otpVerified || isSubmitting || emailExistsError || !agreed}
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
                                             </Button>
@@ -332,6 +357,23 @@ const CandiRegister = () => {
                                         </Button>
                                         <Button variant="primary" onClick={handleOTPVerification}>
                                             Verify OTP
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                                <Modal show={showModal} onHide={handleClose} centered>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Terms and Conditions</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <p>This is where your terms and conditions content will be displayed.</p>
+                                        <p>Make sure to include all necessary information.</p>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleClose}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" onClick={handleAgree}>
+                                            Agree
                                         </Button>
                                     </Modal.Footer>
                                 </Modal>

@@ -1,11 +1,17 @@
-import axios from 'axios';
+
+
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Carousel, Container, Nav, Navbar, OverlayTrigger, Popover, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
 import './PagesStyle/Pages.css';
+import axios from 'axios';
+
 
 const Home = () => {
+ 
+ 
+
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
   const carouselImageList = [

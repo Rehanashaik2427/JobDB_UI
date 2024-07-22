@@ -55,6 +55,7 @@ const HrProfile = () => {
 
   return (
     <div fluid className="dashboard-container">
+
     
       <div  className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <HrLeftSide user={{ userName, userEmail }} />
@@ -115,6 +116,7 @@ const HrProfile = () => {
               )}
             </div>
           </div>
+
       </div>
       </div>
   );

@@ -150,6 +150,8 @@ const MyJobs = () => {
 
   return (
     <div fluid className="dashboard-container">
+     
+     
         <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
           <HrLeftSide user={{ userName, userEmail }} />
         </div>
@@ -329,8 +331,10 @@ const MyJobs = () => {
               </Link>
             </Button>
           )}
+        </div>
+
    </div>
-    </div>
+
 
   );
 };

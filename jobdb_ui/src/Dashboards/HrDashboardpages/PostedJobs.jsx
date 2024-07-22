@@ -137,6 +137,9 @@ const PostedJobs = () => {
     <div fluid className="dashboard-container">
         <div md={2} className="left-side">
           <HrLeftSide user={{ userName, userEmail }} />
+     
+
+      
         </div>
       
         <div md={10} className="rightside" style={{
@@ -182,7 +185,7 @@ const PostedJobs = () => {
           </div>
 
           <div className="jobs_list">
-            {jobs.length > 0 && (
+            {jobs.length > 0 ? (
               <div>
                 <div>
                   <Table hover className='text-center'>
@@ -244,8 +247,12 @@ const PostedJobs = () => {
                   />
                 </div>
               </div>
+            ) : (
+              <p>No jobs available.</p>
             )}
           </div>
+
+      
         </div>
         </div>
   );
