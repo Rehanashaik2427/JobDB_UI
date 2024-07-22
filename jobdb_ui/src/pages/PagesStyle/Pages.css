@@ -85,6 +85,8 @@
 
 .jobs{
   background-color: #f2f2f2;
+  margin: 12px;
+  padding: 20px;
 }
 
 .search {
@@ -96,6 +98,7 @@
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 /* Styles for search bar */
@@ -157,5 +160,5 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+  width: 100%;
 }

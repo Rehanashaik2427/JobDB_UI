@@ -163,6 +163,7 @@ const Home = () => {
           <Carousel >
             {carouselImageList.map((img, ind) => (
               <Carousel.Item key={ind} >
+                
                 <img
                   className="d-block w-25 carousel-image"
                   src={img}
@@ -192,12 +193,12 @@ const Home = () => {
         </div>
       </div>
       {jobs.length > 0 && (
-        <div style={{ marginLeft: '5px', marginRight: '50px' }}>
+        <div>
 
           <div className='text-center'>
             <h2>Jobs</h2>
           </div>
-          <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
+          <Table hover className='text-center' >
             <thead className="table-light">
               <tr>
                 <th scope='col' onClick={() => handleSort('jobTitle')}>
@@ -268,7 +269,7 @@ const Home = () => {
           <Carousel indicators={false}>
             {groupedImages.map((group, index) => (
               <Carousel.Item key={index}>
-                <div className="d-flex justify-content-center" style={{  backgroundColor: "#f2f2f2",boxShadow:"0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+                <div className="d-flex justify-content-center" style={{  backgroundColor: "gainsboro",boxShadow:"0 4px 8px rgba(0, 0, 0, 0.1)" }}>
                   {group.map((img, imgIndex) => (
                     <div className="p-2" key={imgIndex} >
                       <img
