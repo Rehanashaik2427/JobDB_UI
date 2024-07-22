@@ -54,16 +54,17 @@ const HrProfile = () => {
   const initials = getInitials(userName);
 
   return (
-    <Container fluid className="dashboard-container">
-      <Row>
-        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
-        <Col md={10} className="rightside">
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+    <div fluid className="dashboard-container">
+    <Row>
+      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <HrLeftSide user={{ userName, userEmail }} />
+      </Col>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+      <Col md={10} className="rightside" style={{
+        overflowY: 'scroll'
+      }}>          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <Dropdown className="ml-2">
               <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
                 <div
@@ -115,7 +116,7 @@ const HrProfile = () => {
           </div>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 

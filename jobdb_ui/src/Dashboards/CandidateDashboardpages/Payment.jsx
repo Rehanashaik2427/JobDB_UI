@@ -39,73 +39,72 @@ const Payment = () => {
 
   const initials = getInitials(userName);
 
-  const [showLeftSide, setShowLeftSide] = useState     (false);
+  const [showLeftSide, setShowLeftSide] = useState(false);
 
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
   return (
-    <Container fluid className='dashboard-container'>
-      <Row>
-      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
+    <div fluid className='dashboard-container'>
+      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+
+      <div md={10} className="rightside" >
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <div
+                className="initials-placeholder"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  backgroundColor: 'grey',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                {initials}
+              </div>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
 
-        <Col md={18} className="rightside" >
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-
-            <Dropdown className="ml-2">
-              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <div
-                  className="initials-placeholder"
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {initials}
-                </div>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="mt-3">
-                <Dropdown.Item as={Link} to="/">
-                  <i className="i-Data-Settings me-1" /> Account settings
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                  <i className="i-Lock-2 me-1" /> Sign out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+        <div className="payment-container">
+          <div>
+            <h2>Payment Via</h2>
+            <section className="payment-options">
+              <h2 className='payment-option'><FontAwesomeIcon icon={faCreditCard} /> Credit/Debit card</h2>
+              <h2 className='payment-option'><FontAwesomeIcon icon={faPaperclip} /> UPI payments</h2>
+              <h2 className='payment-option'><FontAwesomeIcon icon={faGlobe} /> Net Banking</h2>
+            </section>
           </div>
 
-          <div className="payment-container">
-            <div>
-              <h2>Payment Via</h2>
-              <section className="payment-options">
-                <h2 className='payment-option'><FontAwesomeIcon icon={faCreditCard} /> Credit/Debit card</h2>
-                <h2 className='payment-option'><FontAwesomeIcon icon={faPaperclip} /> UPI payments</h2>
-                <h2 className='payment-option'><FontAwesomeIcon icon={faGlobe} /> Net Banking</h2>
-              </section>
-            </div>
-
-            <div>
-              <h2>Payment History</h2>
-              <p style={{ textAlign: 'center' }}>Payments Details</p>
-              {/* Add payment history details here */}
-            </div>
+          <div>
+            <h2>Payment History</h2>
+            <p style={{ textAlign: 'center' }}>Payments Details</p>
+            {/* Add payment history details here */}
           </div>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
+    
 
   );
 }

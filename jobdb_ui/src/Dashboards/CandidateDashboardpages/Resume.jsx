@@ -61,7 +61,7 @@ const Resume = () => {
 
   const [showSettings, setShowSettings] = useState(false);
 
-  
+
   const navigate = useNavigate();
   const toggleSettings = () => {
     navigate('/');
@@ -124,100 +124,98 @@ const Resume = () => {
   return (
 
 
-    <Container fluid className='dashboard-container'>
-      <Row>
-      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
+    <div fluid className='dashboard-container'>
+      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+
+      <div md={10} className="rightside" >
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+
+
+
+
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <div
+                className="initials-placeholder"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  backgroundColor: 'grey',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                {initials}
+              </div>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
 
-        <Col md={18} className="rightside" >
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
 
+        {showBriefSettings && (
+          <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Brief Resume</Modal.Title>
+            </Modal.Header>
+            <Modal.Body style={{ overflowY: 'auto' }}>
+              {showMessage}
+            </Modal.Body>
+          </Modal>
+        )}
 
 
-            <Dropdown className="ml-2">
-              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <div
-                  className="initials-placeholder"
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {initials}
-                </div>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="mt-3">
-                <Dropdown.Item as={Link} to="/">
-                  <i className="i-Data-Settings me-1" /> Account settings
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                  <i className="i-Lock-2 me-1" /> Sign out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+        <div>
+          <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
+
+          <div className='cards d-flex flex-wrap justify-content-start' style={{ margin: '24px', padding: '12px' }}>
+            {resumes.map((resume, index) => (
+              <Card className='resume-card' style={{ margin: '12px' }} key={index}>
+                <Card.Body>
+                  <Card.Title>Resume : {index + 1}</Card.Title>
+                  <Card.Text>{resume.message}</Card.Text>
+
+                  {resume.fileType === 'file' && (
+                    <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
+                  )}
+                  {resume.fileType === 'link' && (
+                    <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
+                  )}
+                  {resume.fileType === 'brief' && (
+                    <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
+                  )}
+
+                  <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
+                </Card.Body>
+              </Card>
+            ))}
           </div>
-
-
-
-          {showBriefSettings && (
-  <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
-    <Modal.Header closeButton>
-      <Modal.Title>Brief Resume</Modal.Title>
-    </Modal.Header>
-    <Modal.Body style={{ overflowY: 'auto' }}>
-      {showMessage}
-    </Modal.Body>
-  </Modal>
-)}
-
-
-          <div>
-            <h1 style={{ textAlign: 'center' }}>MY RESUMES</h1>
-
-            <div className='cards d-flex flex-wrap justify-content-start' style={{margin:'24px',padding:'12px'}}>
-              {resumes.map((resume, index) => (
-                <Card className='resume-card'style={{margin:'12px'}} key={index}>
-                  <Card.Body>
-                    <Card.Title>Resume : {index + 1}</Card.Title>
-                    <Card.Text>{resume.message}</Card.Text>
-
-                    {resume.fileType === 'file' && (
-                      <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
-                    )}
-                    {resume.fileType === 'link' && (
-                      <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
-                    )}
-                    {resume.fileType === 'brief' && (
-                      <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
-                    )}
-
-                    <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
-                  </Card.Body>
-                </Card>
-              ))}
-            </div>
-            <div className='adding-resumes' style={{ marginTop: '50px' }}>
-              <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
-                e.preventDefault();
-                navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
-              }} >ADD NEW RESUME</Link>
-            </div>
+          <div className='adding-resumes' style={{ marginTop: '50px' }}>
+            <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
+            }} >ADD NEW RESUME</Link>
           </div>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import SocialButtons from './sessions/SocialButtons';
 import TextField from './sessions/TextField';
-
 const UserSignin = () => {
     const navigate = useNavigate();
 
@@ -78,7 +77,7 @@ const UserSignin = () => {
                         <Col md={6} className="text-center auth-cover">
                             <div className="pe-3 auth-right">
                                 <div className="auth-logo text-center mb-4">
-                                    <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="jobdblogo" />
+                                    <img src="/jb_logo.png" alt="jobdblogo" />
                                 </div>
                                 <SocialButtons routeUrl="/signup" googleHandler={() => alert("google")} facebookHandler={() => alert("facebook")} />
                             </div>

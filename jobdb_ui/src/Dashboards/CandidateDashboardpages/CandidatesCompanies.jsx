@@ -99,120 +99,119 @@ const CandidatesCompanies = () => {
     setPage(0); // Reset page when page size changes
   };
   return (
-    <Container fluid className='dashboard-container'>
-      <Row>
-      <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
+    <div fluid className='dashboard-container'>
+
+      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+
+      <div md={10} className="rightside" style={{
+        overflowY: 'scroll'
+      }}>
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+          <div className="search-bar">
+            <input
+              style={{ borderRadius: '6px', height: '35px' }}
+
+              type="text"
+              name="search"
+              placeholder="Search"
+              value={search}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <div
+                className="initials-placeholder"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  backgroundColor: 'grey',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                {initials}
+              </div>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
 
-        <Col md={10} className="rightside" style={{
-          overflowY: 'scroll'
-        }}>
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-            <div className="search-bar">
-              <input
-                style={{ borderRadius: '6px', height: '35px' }}
+        <div className="companyJob" style={{ marginRight: '50px' }}>
 
-                type="text"
-                name="search"
-                placeholder="Search"
-                value={search}
-                onChange={handleSearchChange}
-              />
-            </div>
-            <Dropdown className="ml-2">
-              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <div
-                  className="initials-placeholder"
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {initials}
-                </div>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="mt-3">
-                <Dropdown.Item as={Link} to="/">
-                  <i className="i-Data-Settings me-1" /> Account settings
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                  <i className="i-Lock-2 me-1" /> Sign out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          {companies.length > 0 ? (
+            <div className="row">
+              <div className="cards d-flex flex-wrap justify-content-start" >
 
-          <div className="companyJob" style={{ marginRight: '50px' }}>
-
-            {companies.length > 0 ? (
-              <div className="row">
-                <div className="cards d-flex flex-wrap justify-content-start" >
-
-                  {companies.map((company) => (
-                    <Card
-                      className="company-card-job"
-                      key={company.companyId}
-                      style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}
-                    >
-                      <Card.Body>
-                        <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                        <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                        <Button onClick={() => handleClick(company.companyId)}>View</Button>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-                 {/* Pagination */}
+                {companies.map((company) => (
+                  <Card
+                    className="company-card-job"
+                    key={company.companyId}
+                    style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}
+                  >
+                    <Card.Body>
+                      <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                      <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+                      <Button onClick={() => handleClick(company.companyId)}>View</Button>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </div>
+              {/* Pagination */}
               <div className="pagination-container d-flex justify-content-end align-items-center">
-                  <div className="page-size-select me-3">
-                    <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                      <option value="6">6</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                    </select>
-                  </div>
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={2}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
+                <div className="page-size-select me-3">
+                  <label htmlFor="pageSize">Page Size:</label>
+                  <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                    <option value="6">6</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                  </select>
                 </div>
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+              </div>
+
+            </div>
+          ) : (
+            <>
+              <div className="d-flex justify-content-center flex-direction-row">
+                <div className="spinner-bubble spinner-bubble-primary m-5" />
+                <span >Loading...</span>
 
               </div>
-            ) : (
-              <>
-                <div className="d-flex justify-content-center flex-direction-row">
-                  <div className="spinner-bubble spinner-bubble-primary m-5" />
-                  <span >Loading...</span>
+            </>
+          )}
 
-                </div>
-              </>
-            )}
-
-          </div>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 

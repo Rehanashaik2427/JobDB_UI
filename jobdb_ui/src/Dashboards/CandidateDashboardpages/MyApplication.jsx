@@ -1,14 +1,16 @@
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Col, Container, Dropdown, Form, Modal, Row, Table } from 'react-bootstrap';
-import { FaBars } from 'react-icons/fa';
-import { SiImessage } from 'react-icons/si';
+// import { FaBars } from 'react-icons/fa';
+// import { SiImessage } from 'react-icons/si';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import { FaBars } from 'react-icons/fa';
+import { SiImessage } from 'react-icons/si';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -291,179 +293,176 @@ const MyApplication = () => {
     }
   }, [chats]);
   return (
-    <Container fluid className='dashboard-container'>
-      <Row>
-        <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
+    <div fluid className='dashboard-container'>
+      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+      <div md={10} className="rightside" style={{
+        overflowY: 'scroll'
+      }}>
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+          <div className="search-bar">
+            <input
+              style={{ borderRadius: '6px', height: '35px' }}
+              type="text"
+              name="search"
+              placeholder="Search"
+              value={search}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <Dropdown className="ml-2">
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <div
+                className="initials-placeholder"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  backgroundColor: 'grey',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                {initials}
+              </div>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="mt-3">
+              <Dropdown.Item as={Link} to="/">
+                <i className="i-Data-Settings me-1" /> Account settings
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                <i className="i-Lock-2 me-1" /> Sign out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
-        <Col md={10} className="rightside" style={{
-          overflowY: 'scroll'
-        }}>
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-            <div className="search-bar">
-              <input
-                style={{ borderRadius: '6px', height: '35px' }}
-                type="text"
-                name="search"
-                placeholder="Search"
-                value={search}
-                onChange={handleSearchChange}
-              />
-            </div>
-            <Dropdown className="ml-2">
-              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <div
-                  className="initials-placeholder"
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {initials}
+        <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+          <Modal.Header closeButton>
+            <Modal.Title>Chat</Modal.Title>
+          </Modal.Header>
+          <Modal.Body ref={modalBodyRef}>
+            {chats ? (
+              chats.map((chat, index) => (
+                <div key={chat.id} className="chat-message">
+                  {/* Render date if it's the first message or a new day */}
+                  {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
+                    <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
+                      {formatDate(chat.createdAt)}
+                    </div>
+
+                  )}
+                  {/* Render HR message if present */}
+                  {chat.hrMessage && (
+                    <div className="message-right">
+                      {chat.hrMessage}
+                      <div className="message-time">
+                        {formatMessageDateTime(chat.createdAt)}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Render candidate message if present */}
+                  {chat.candidateMessage && (
+                    <div className="message-left">
+                      {chat.candidateMessage}
+                      <div className="message-time">
+                        {formatMessageDateTime(chat.createdAt)}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="mt-3">
-                <Dropdown.Item as={Link} to="/">
-                  <i className="i-Data-Settings me-1" /> Account settings
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                  <i className="i-Lock-2 me-1" /> Sign out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
-            <Modal.Header closeButton>
-              <Modal.Title>Chat</Modal.Title>
-            </Modal.Header>
-            <Modal.Body ref={modalBodyRef}>
-              {chats ? (
-                chats.map((chat, index) => (
-                  <div key={chat.id} className="chat-message">
-                    {/* Render date if it's the first message or a new day */}
-                    {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
-                      <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
-                        {formatDate(chat.createdAt)}
-                      </div>
-
-                    )}
-
-                    {/* Render HR message if present */}
-                    {chat.hrMessage && (
-                      <div className="message-right">
-                        {chat.hrMessage}
-                        <div className="message-time">
-                          {formatMessageDateTime(chat.createdAt)}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Render candidate message if present */}
-                    {chat.candidateMessage && (
-                      <div className="message-left">
-                        {chat.candidateMessage}
-                        <div className="message-time">
-                          {formatMessageDateTime(chat.createdAt)}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <p>Loading...</p>
-              )}
-
-            </Modal.Body>
-            <Modal.Footer>
-              {/* Message input section */}
-              <Form.Group controlId="messageInput" className="mb-2">
-                {/* <Form.Label>Message:</Form.Label> */}
-                <Form.Control
-                  type="text"
-                  placeholder="Enter your message"
-                  value={inputValue}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-              <Button variant="primary" onClick={handleSend}>
-                <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          <div style={{ marginLeft: '5px', marginRight: '50px' }}>
-            {applications.length > 0 ? (
-              <>
-                <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
-                  <thead className="table-light">
-                    <tr>
-                      <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col" onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                      <th scope="col">Resume Profile</th>
-                      <th scope="col">Job Status</th>
-                      <th scope="col" onClick={() => handleSort('applicationStatus')}>
-                        Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col">Chat</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {applications.map(application => (
-                      <tr key={application.id}>
-                        <td>{application.companyName}</td>
-                        <td>{application.jobRole}</td>
-                        <td>{application.appliedOn}</td>
-                        <td>{resumeNames[application.resumeId]}</td>
-                        <td>{renderJobStatus(application.applicationId)}</td>
-                        <td>{application.applicationStatus}</td>
-                        <td onClick={() => handleChatClick(application.applicationId)}>
-                          <SiImessage size={25} />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-                <div className="pagination-container d-flex justify-content-end align-items-center">
-                  <div className="page-size-select me-3">
-                    <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                    </select>
-                  </div>
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={2}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
-                </div>
-              </>
+              ))
             ) : (
-              <h4 className='text-center'>No Application found..!!</h4>
+              <p>Loading...</p>
             )}
-          </div>
-        </Col>
-      </Row>
-    </Container>
+
+          </Modal.Body>
+          <Modal.Footer>
+            {/* Message input section */}
+            <Form.Group controlId="messageInput" className="mb-2">
+              {/* <Form.Label>Message:</Form.Label> */}
+              <Form.Control
+                type="text"
+                placeholder="Enter your message"
+                value={inputValue}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Button variant="primary" onClick={handleSend}>
+              <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <div style={{ marginLeft: '5px', marginRight: '50px' }}>
+          {applications.length > 0 ? (
+            <>
+              <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
+                <thead className="table-light">
+                  <tr>
+                    <th scope="col" onClick={() => handleSort('companyName')}>Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('jobRole')}>Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('appliedOn')}>Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col">Resume Profile</th>
+                    <th scope="col">Job Status</th>
+                    <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                      Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                    </th>
+                    <th scope="col">Chat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {applications.map(application => (
+                    <tr key={application.id}>
+                      <td>{application.companyName}</td>
+                      <td>{application.jobRole}</td>
+                      <td>{application.appliedOn}</td>
+                      <td>{resumeNames[application.resumeId]}</td>
+                      <td>{renderJobStatus(application.applicationId)}</td>
+                      <td>{application.applicationStatus}</td>
+                      <td onClick={() => handleChatClick(application.applicationId)}>
+                        <SiImessage size={25} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <div className="pagination-container d-flex justify-content-end align-items-center">
+                <div className="page-size-select me-3">
+                  <label htmlFor="pageSize">Page Size:</label>
+                  <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+              </div>
+            </>
+          ) : (
+            <h4 className='text-center'>No Application found..!!</h4>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

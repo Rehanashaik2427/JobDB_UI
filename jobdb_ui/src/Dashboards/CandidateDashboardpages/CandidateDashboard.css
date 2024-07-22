@@ -184,7 +184,7 @@ table, th, td ,tr{
     background-color: coral;
     border-radius: 10px;
     border: none;
-    position: fixed; /* Makes the element stay in place when scrolling */
+     /* Makes the element stay in place when scrolling */
     top: 5px; /* Adjust the top position if needed (10px is a small margin) */
     right: 100px; /* Adjust the right position if needed (10px is a small margin) */
 }

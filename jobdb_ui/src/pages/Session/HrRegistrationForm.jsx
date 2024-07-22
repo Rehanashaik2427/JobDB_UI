@@ -16,15 +16,20 @@ const HrRegistrationForm = () => {
     const [otpValue, setOtpValue] = useState('');
     const [enterOtpValue, setEnterOtpValue] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
+    const [agreed, setAgreed] = useState(false);
     const [disableFormFields, setDisableFormFields] = useState(false); // State to manage form field disablement
     const navigate = useNavigate();
     const location = useLocation();
-    const { companyName } = location.state || {};
+    const [showModal, setShowModal] = useState(false);
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     // Validation schema using Yup
     const validationSchema = yup.object().shape({
         userName: yup.string().required("Name is required"),
         userEmail: yup.string().email("Invalid email").required("Email is required"),
+        companyName: yup.string().required("Company Name is required"),
         password: yup.string()
             .required("Password is required")
             .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,12}$/, "Password should include at least one number, one special character, one uppercase letter, one lowercase letter, and be between 8 to 12 characters"),
@@ -37,10 +42,10 @@ const HrRegistrationForm = () => {
     const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
     const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
     const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
-    
+
     const formattedDate = `${year}-${month}-${day}`;
     console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
-    
+
     // Initial form values
     const initialValues = {
         userName: "",
@@ -49,7 +54,7 @@ const HrRegistrationForm = () => {
         appliedDate: formattedDate,
         password: "",
         confirmPassword: "",
-        companyName: companyName,
+        companyName: "",
         userRole: 'HR',
         agreeToEmailValidation: false,
     };
@@ -142,7 +147,12 @@ const HrRegistrationForm = () => {
             alert("Data not updated");
         }
     };
-
+    const handleAgree = () => {
+        setAgreed(true);
+        // Perform action when user agrees to terms
+        alert('You agreed to Terms and Conditions!');
+        handleClose(); // Close the modal after agreeing
+    };
     return (
         <div className="auth-layout-wrap">
             <div className="auth-content">
@@ -152,7 +162,7 @@ const HrRegistrationForm = () => {
                         <Col md={6} className="text-center auth-cover">
                             <div className="ps-3 auth-right">
                                 <div className="auth-logo text-center mt-4">
-                                    <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="JobDB" />
+                                    <img src="/jb_logo.png" alt="JobDB" />
                                 </div>
                                 <div className="w-100 h-100 justify-content-center d-flex flex-column">
                                     <SocialButtons
@@ -212,18 +222,23 @@ const HrRegistrationForm = () => {
                                                 error={errors.userEmail && touched.userEmail}
                                                 disabled={disableFormFields}
                                             />
-
                                             <TextField
-                                                type="tel"
-                                                name="phone"
-                                                label="Phone Number"
-                                                value={values.phone}
+                                                type="text"
+                                                name="companyName"
+                                                label={
+                                                    <>
+                                                        Company name <span style={{ color: 'red' }}>*</span>
+                                                    </>
+                                                }
+                                                required
+                                                onBlur={handleBlur}
+                                                value={values.companyName}
                                                 onChange={handleChange}
-                                                helperText={errors.phone}
-                                                error={errors.phone && touched.phone}
-                                                fullWidth
+                                                helperText={errors.companyName}
+                                                error={errors.companyName && touched.companyName}
                                                 disabled={disableFormFields}
                                             />
+
 
                                             <TextField
                                                 type="password"
@@ -259,7 +274,7 @@ const HrRegistrationForm = () => {
                                                 disabled={disableFormFields}
                                             />
                                             {/* Display error messages */}
-                                           
+
                                             <div className="form-check">
                                                 <Field
                                                     type="checkbox"
@@ -270,18 +285,39 @@ const HrRegistrationForm = () => {
                                                     onChange={(e) => {
                                                         handleChange(e);
                                                         setDisableFormFields(e.target.checked); // Set disable state based on checkbox
-                                                        if(e.target.checked){
-                                                            sendOTP(values.userEmail); }// // Trigger OTP sending
+                                                        if (e.target.checked) {
+                                                            sendOTP(values.userEmail); // Trigger OTP sending
+                                                        }
                                                     }}
+                                                    style={{ marginRight: '10px', transform: 'scale(1.4)', borderColor: 'black' }}
                                                 />
-                                                <label htmlFor="agreeToEmailValidation" className="form-check-label">
+                                                <label htmlFor="agreeToEmailValidation" className="form-check-label" style={{ fontSize: '16px', fontWeight: 'bold', marginLeft: '5px', verticalAlign: 'middle' }}>
                                                     I agree to validate my email
                                                 </label>
+
                                                 {errors.agreeToEmailValidation && (
                                                     <p className="error-message">{errors.agreeToEmailValidation}</p>
                                                 )}
-                                            </div>
+                                               
 
+                                            </div>
+                                            <Button
+                                                    onClick={handleShow}
+                                                    disabled={agreed}
+                                                    className="mt-3"
+                                                    style={{
+                                                        backgroundColor: '#007bff',
+                                                        borderColor: '#007bff',
+                                                        color: '#ffffff',
+                                                        // padding: '5px 10px',
+                                                        fontSize: '10px',
+                                                        borderRadius: '4px',
+                                                        cursor: 'pointer',
+
+                                                    }}
+                                                >
+                                                    Agree to Terms and Conditions
+                                                </Button>
                                             {passwordCriteriaError && (
                                                 <p className="error-message">Password should include at least one number, one special character, one capital letter, one small letter, and have a length between 8 to 12 characters</p>
                                             )}
@@ -301,7 +337,7 @@ const HrRegistrationForm = () => {
                                             <Button
                                                 type="submit"
                                                 className="btn btn-primary w-100 my-1 btn-rounded mt-3"
-                                                disabled={!otpVerified || isSubmitting || emailExistsError}
+                                                disabled={!otpVerified || isSubmitting || emailExistsError || !agreed}
                                             >
                                                 {isSubmitting ? "Signing Up..." : "Sign Up"}
                                             </Button>
@@ -329,6 +365,23 @@ const HrRegistrationForm = () => {
                                         </Button>
                                         <Button variant="primary" onClick={handleOTPVerification}>
                                             Verify OTP
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                                <Modal show={showModal} onHide={handleClose} centered>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Terms and Conditions</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <p>This is where your terms and conditions content will be displayed.</p>
+                                        <p>Make sure to include all necessary information.</p>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleClose}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" onClick={handleAgree}>
+                                            Agree
                                         </Button>
                                     </Modal.Footer>
                                 </Modal>

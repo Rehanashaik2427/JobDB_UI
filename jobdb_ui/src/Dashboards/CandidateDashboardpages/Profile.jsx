@@ -63,37 +63,37 @@ const Profile = () => {
     setShowLeftSide(!showLeftSide);
   };
   return (
-    <Container fluid className='dashboard-container'>
-    <Row>
-    <Col md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <CandidateLeftSide user={{ userName, userId }} />
-        </Col>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
+    <div fluid className='dashboard-container'>
 
-        <Col md={18} className="rightside" >
+      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+
+      <div md={10} className="rightside" >
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
           <Dropdown className="ml-2">
-          <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-                <div
-                  className="initials-placeholder"
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    backgroundColor: 'grey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {initials}
-                </div>
-              </Dropdown.Toggle>
+            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+              <div
+                className="initials-placeholder"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  backgroundColor: 'grey',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+                {initials}
+              </div>
+            </Dropdown.Toggle>
             <Dropdown.Menu className="mt-3">
               <Dropdown.Item as={Link} to="/">
                 <i className="i-Data-Settings me-1" /> Account settings
@@ -106,33 +106,32 @@ const Profile = () => {
         </div>
         <h4>Personal details:</h4>
         <div>
-        <div className="profile-container">
-          {userData && (
-            <>
-              <div className="profile-item">
-                <span className="profile-label">Name:</span>
-                <span className="profile-value">{userData.userName}</span>
-              </div>
-              <div className="profile-item">
-                <span className="profile-label">Email:</span>
-                <span className="profile-value">{userData.userEmail}</span>
-              </div>
-              <div className="profile-item">
-                <span className="profile-label">PhoneNumber:</span>
-                <span className="profile-value">{userData.phone}</span>
-              </div>
-            </>
-          )}
-        </div>
-        {/* <h4>Education Details:</h4>
+          <div className="profile-container">
+            {userData && (
+              <>
+                <div className="profile-item">
+                  <span className="profile-label">Name:</span>
+                  <span className="profile-value">{userData.userName}</span>
+                </div>
+                <div className="profile-item">
+                  <span className="profile-label">Email:</span>
+                  <span className="profile-value">{userData.userEmail}</span>
+                </div>
+                <div className="profile-item">
+                  <span className="profile-label">PhoneNumber:</span>
+                  <span className="profile-value">{userData.phone}</span>
+                </div>
+              </>
+            )}
+          </div>
+          {/* <h4>Education Details:</h4>
         <div className="profile-container"></div>
         <h4>Additional Details:</h4>
         <div className="profile-container"></div> */}
         </div>
 
-        </Col>
-      </Row>
-    </Container>
+      </div>
+    </div>
 
   )
 }

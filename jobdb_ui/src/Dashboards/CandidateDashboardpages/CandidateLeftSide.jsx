@@ -59,7 +59,7 @@ function CandidateLeftSide({ user }) {
                 <Navbar.Brand>
                     <img
                         style={{ backgroundColor: 'white' }}
-                        src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png"
+                        src="/jb_logo.png"
                         alt="jobboxlogo"
                         className='auth-logo'
                     />
