@@ -157,7 +157,7 @@ const Home = () => {
               <Nav.Link as={Link} to="/jobdbcompanies" style={{ marginRight: '40px' }}>Companies</Nav.Link>
               {/* <Nav.Link as={Link} to="/candidates">Candidates</Nav.Link> */}
               {/* <Nav.Link as={Link} to="/contact">Contact</Nav.Link> */}
-              <Nav.Link as={Link} to="/signup" className="nav-link-custom"><Button>Register</Button></Nav.Link>
+              <Nav.Link as={Link} to="/signup/userSignup" className="nav-link-custom"><Button>Register</Button></Nav.Link>
               <Nav.Link as={Link} to="/signin" className="nav-link-custom"><Button variant="success">Login</Button></Nav.Link>
             </Nav>
           </Navbar.Collapse>

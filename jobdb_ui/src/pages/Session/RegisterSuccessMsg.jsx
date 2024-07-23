@@ -8,7 +8,7 @@ const RegisterSuccessMsg = () => {
             <h2>Registration Successful</h2>
             <p>please check Your Mail id</p>
             <p>You can login after approved</p>
-            <Link to='/signup/hrSignup/registration-success-msg/user-signin'>click here to Login</Link>
+            <Link to='/'>click here to Visit Home</Link>
         </div>
     )
 }

@@ -8,11 +8,11 @@ const Signup = () => {
 const navigate = useNavigate();
   const handleUserTypeChange = (type) => {
     setUserType(type);
-    if (type === "hr") {
-      navigate("/signup/hrSignup");
+    if (type === "HR") {
+      navigate("/signup/userSignup", { state: { userType: type } });
     }
-    if (type === "candidate") {
-      navigate("/signup/candiSignup"); // Navigate to the nested route
+    if (type === "Candidate") {
+      navigate("/signup/userSignup", { state: { userType: type } }); // Navigate to the nested route
     }
     
   };
@@ -29,17 +29,17 @@ const navigate = useNavigate();
               type="radio"
               label="HR"
               name="userType"
-              value="hr"
-              onChange={() => handleUserTypeChange("hr")}
-              checked={userType === "hr"}
+              value="HR"
+              onChange={() => handleUserTypeChange("HR")}
+              checked={userType === "HR"}
             />
             <Form.Check
               type="radio"
               label="Candidate"
               name="userType"
-              value="candidate"
-              onChange={() => handleUserTypeChange("candidate")}
-              checked={userType === "candidate"}
+              value="Candidate"
+              onChange={() => handleUserTypeChange("Candidate")}
+              checked={userType === "Candidate"}
             />
           </div>
         </Form>

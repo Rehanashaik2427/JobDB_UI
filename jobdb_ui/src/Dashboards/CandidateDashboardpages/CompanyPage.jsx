@@ -446,6 +446,8 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
                 </>
               )}
               {activeTab === 'jobs' && (
+                <>
+                {jobs.length > 0 && (
                 <div className="company-job" style={{ maxHeight: '400px', overflowY: 'scroll' }}>
                   <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
                     <thead className="table-light">
@@ -510,6 +512,9 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
                     />
                   </div>
                 </div>
+              )}
+              {jobs.length === 0 && <h1>No jobs found.</h1>}
+              </>
               )}
             </Col>
 
