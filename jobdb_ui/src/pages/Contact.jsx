@@ -2,8 +2,9 @@ import { faEnvelope, faMapMarkerAlt, faPhone } from '@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Form, Nav, Navbar, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import HomeFooter from './HomeFooter';
 
 const Contact = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -12,7 +13,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject:'',
+    subject: '',
     message: '',
     agreeTerms: false, // New state for terms agreement
   });
@@ -29,7 +30,7 @@ const Contact = () => {
   };
 
 
-  
+
 
 
   const handleSubmit = async (e) => {
@@ -53,7 +54,7 @@ const Contact = () => {
     }
 
 
-  
+
     console.log('Form submitted:', formData);
     setFormData({
       name: '',
@@ -64,89 +65,122 @@ const Contact = () => {
     });
     setIsMessageSent(true);
   };
- 
- 
+
+
 
   return (
-    <Container className="contact-container my-4">
-      <Row>
-        <Col md={6}>
-          <h1>Contact Us</h1>
-          <p>
-            We are here to assist you with any inquiries or questions you may have. Feel free to reach out to us via email at info@paisafund.com or call us at +1 234 567 890. Our office is located at 123 Job Portal Street, City, Country. We look forward to hearing from you!
-          </p>
-          <div className="contact-info">
-            <p><FontAwesomeIcon icon={faEnvelope} /> Email: info@paisafund.com</p>
-            <p><FontAwesomeIcon icon={faPhone} /> Phone: +1 234 567 890</p>
-            <p><FontAwesomeIcon icon={faMapMarkerAlt} /> Address: 123 Job Portal Street, City, Country</p>
-          </div>
-        </Col>
-        <Col md={6}>
-          <h2>Send Us a Message</h2>
-          {isMessageSent ? (
-            <Alert variant="success" className="text-center">
-              Your message has been sent successfully! <Link to="/">Go to Home Page</Link>
-            </Alert>
-          ) : (
-            <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group controlId="email">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group controlId="subject">
-                <Form.Label>Subject</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group controlId="message">
-                <Form.Label>Message</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group controlId="agreeTerms">
-                <Form.Check
-                  type="checkbox"
-                  name="agreeTerms"
-                  checked={formData.agreeTerms}
-                  onChange={handleChange}
-                  label={<span>I agree to the <Link to="/termsandconditions">Terms and Conditions</Link></span>}
-                  required
-                />
-              </Form.Group>
-              <Button variant="primary" type="submit">
-                Send Message
-              </Button>
-            </Form>
-          )}
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <Navbar expand="lg" className="bg-body-tertiary" style={{ width: '100%' }}>
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/">
+            <img
+              src="/jb_logo.png"
+              alt="JobBox Logo"
+              className="logo"
+              style={{ height: '100px', width: '300px', marginRight: '100px' }}
+            />
+          </Navbar.Brand>
+
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/" style={{ marginRight: '40px' }}>Home</Nav.Link>
+              <Nav.Link as={Link} to='/about-jobbox' style={{ marginRight: '40px' }}>About Jobbox</Nav.Link>
+              <Nav.Link as={Link} to="/aboutus" style={{ marginRight: '40px' }}>About Us</Nav.Link>
+              <Nav.Link as={Link} to="/admin-register" style={{ marginRight: '40px' }}>Admin</Nav.Link>
+              <Nav.Link as={Link} to="/jobdbcompanies" style={{ marginRight: '40px' }}>Companies</Nav.Link>
+              {/* <Nav.Link as={Link} to="/candidates">Candidates</Nav.Link> */}
+              {/* <Nav.Link as={Link} to="/contact">Contact</Nav.Link> */}
+              <Nav.Link as={Link} to="/signup" className="nav-link-custom"><Button>Register</Button></Nav.Link>
+              <Nav.Link as={Link} to="/signin" className="nav-link-custom"><Button variant="success">Login</Button></Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Container className="contact-container my-4">
+        <Row>
+          <Col md={6}>
+            <h1>Contact Us</h1>
+            <p>
+              We are here to assist you with any inquiries or questions you may have. Feel free to reach out to us via email at info@paisafund.com or call us at +1 234 567 890. Our office is located at 123 Job Portal Street, City, Country. We look forward to hearing from you!
+            </p>
+            <div className="contact-info">
+              <p><FontAwesomeIcon icon={faEnvelope} /> Email: info@paisafund.com</p>
+              <p><FontAwesomeIcon icon={faPhone} /> Phone: +1 234 567 890</p>
+              <p><FontAwesomeIcon icon={faMapMarkerAlt} /> Address: 123 Job Portal Street, City, Country</p>
+            </div>
+          </Col>
+          <Col md={6}>
+            <h2>Send Us a Message</h2>
+            {isMessageSent ? (
+              <Alert variant="success" className="text-center">
+                Your message has been sent successfully! <Link to="/">Go to Home Page</Link>
+              </Alert>
+            ) : (
+              <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="name">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="subject">
+                  <Form.Label>Subject</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="message">
+                  <Form.Label>Message</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="agreeTerms">
+                  <Form.Check
+                    type="checkbox"
+                    name="agreeTerms"
+                    checked={formData.agreeTerms}
+                    onChange={handleChange}
+                    label={<span>I agree to the <Link to="/termsandconditions">Terms and Conditions</Link></span>}
+                    required
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                  Send Message
+                </Button>
+              </Form>
+            )}
+          </Col>
+        </Row>
+
+      </Container>
+      <div>
+        <HomeFooter />
+      </div>
+    </div>
   );
 };
 export default Contact;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { FaEdit, FaSave } from "react-icons/fa";
+import { Button, Card, Form, FormGroup } from 'react-bootstrap';
+import { FaEdit } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
@@ -10,14 +10,24 @@ const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
 const CompanyDetailsByAdmin = () => {
   const [editableCompanyDetails, setEditableCompanyDetails] = useState(false);
+  const [companyLogo, setCompanyLogo] = useState("");
+  const [companyBanner, setCompanyBanner] = useState("");
   const [companyDetails, setCompanyDetails] = useState({
     industry: '',
     location: '',
-    description: ''
+    discription: '',
+    headquaters: '',
+    overView: '',
+    websiteLink: '',
+    companySize: '',
+    industryService: '',
+    year: '',
+    specialties: ''
   });
 
+
   const navigate = useNavigate();
-  const location=useLocation();
+  const location = useLocation();
 
   const companyName = location.state?.companyName;
 
@@ -35,91 +45,270 @@ const CompanyDetailsByAdmin = () => {
     fetchCompanyDetails();
   }, [companyName]);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCompanyDetails({ ...companyDetails, [name]: value });
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+  const handleSave = async () => {
     try {
-      await axios.put(`${BASE_API_URL}/updateCompanyByName?companyName=${companyName}`, companyDetails);
-      alert('Company details updated successfully.');
-      navigate({
-        pathname: '/admin-dashboard/add-company-details',
-      });
+      const response = await axios.put(`${BASE_API_URL}/updateCompanyDetailsByAdmin?companyName=${companyName}`, companyDetails);
+      console.log(response.data); // Log success message or handle response as needed
+      setCompanyDetails({ ...companyDetails }); // Update local state with saved values
+      setEditableCompanyDetails(false); // Exit edit mode
     } catch (error) {
       console.error('Error updating company details:', error);
+      // Handle error state or display error message to user
     }
   };
 
-  const handleEditCompanyDetails = () => {
-    setEditableCompanyDetails(true);
+
+  const [activeTab, setActiveTab] = useState('home'); // State to control the active tab
+
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+  const handleCameraIconClick = (type) => {
+    document.getElementById(`${type}Input`).click();
+  };
+  const handleFileChange = async (type, file) => {
+    const formData = new FormData();
+    formData.append('companyName', companyName);
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post(
+        type === 'logo' ? `${BASE_API_URL}/uploadLogo` : `${BASE_API_URL}/uploadBanner`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (type === 'logo') {
+          setCompanyLogo(reader.result);
+        } else {
+          setCompanyBanner(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
-  const handleSaveCompanyDetails = () => {
-    setEditableCompanyDetails(false);
+  const fetchCompanyLogo = async (companyName) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/logo`, { params: { companyName }, responseType: 'arraybuffer' });
+      const image = `data:image/jpeg;base64,${btoa(
+        new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      )}`;
+      setCompanyLogo(image);
+    } catch (error) {
+      console.error('Error fetching company logo:', error);
+    }
   };
+
+  const fetchCompanyBanner = async (companyName) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/banner`, { params: { companyName }, responseType: 'arraybuffer' });
+      const image = `data:image/jpeg;base64,${btoa(
+        new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      )}`;
+      setCompanyBanner(image);
+    } catch (error) {
+      console.error('Error fetching company banner:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (companyName) {
+      fetchCompanyLogo(companyName);
+      fetchCompanyBanner(companyName);
+    }
+  }, [companyName])
 
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
         <AdminleftSide />
       </div>
-      <div className='rightside'>
-        <div className="company-admin-container">
-          <h2>Company Information</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="company-admin-form-group">
-              <label htmlFor="companyName">Company Name: {companyName}</label>
-            </div>
-            <div className="company-admin-form-group">
-              <label htmlFor="location">Location:</label>
+      <div className="rightside" style={{ overflowY: 'scroll' }}>
+        <Card style={{ width: '100%', height: '60%' }}>
+          <Card.Body style={{ padding: 0, position: 'relative' }}>
+            <div style={{ position: 'relative', height: '55%' }}>
+              <img
+                src={companyBanner || "https://cdn.pixabay.com/photo/2016/04/20/07/16/logo-1340516_1280.png"}
+                alt="Company Banner"
+                className="banner-image"
+                onClick={() => handleCameraIconClick('banner')}
+                style={{ width: '100%', height: '200px', objectFit: 'cover', cursor: 'pointer' }}
+              />
               <input
-                type="text"
-                id="location"
-                name="location"
-                placeholder="Enter company location"
-                value={companyDetails.location}
-                onChange={handleChange}
-                disabled={!editableCompanyDetails}
-                required
+                id="bannerInput"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={(e) => handleFileChange('banner', e.target.files[0])}
+                accept="image/*"
               />
             </div>
-            <div className="company-admin-form-group">
-              <label htmlFor="industry">Industry:</label>
+            <div style={{ position: 'absolute', top: '55%', left: '50px', transform: 'translateY(-50%)' }}>
+              <img
+                src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
+                alt="Company Logo"
+                className="logo-image"
+                style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
+                onClick={() => handleCameraIconClick('logo')}
+              />
               <input
-                type="text"
-                id="industry"
-                name="industry"
-                placeholder="Industry Type"
-                value={companyDetails.industry}
-                onChange={handleChange}
-                disabled={!editableCompanyDetails}
-                required
+                id="logoInput"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={(e) => handleFileChange('logo', e.target.files[0])}
+                accept="image/*"
               />
             </div>
-            <div className="company-admin-form-group">
-              <label htmlFor="discription">Description:</label>
-              <textarea
-                id="description"
-                name="description"
-                placeholder="Enter company description"
-                value={companyDetails.description}
-                onChange={handleChange}
-                disabled={!editableCompanyDetails}
-              ></textarea>
-            </div>
-            <div className='job-save-edit-buttons'>
-              {editableCompanyDetails ? (
-                <Button variant="primary" type="button" onClick={handleSaveCompanyDetails}><FaSave />Save</Button>
-              ) : (
-                <Button variant="info" type="button" onClick={handleEditCompanyDetails}><FaEdit />Edit</Button>
-              )}
-              <Button variant="success" type="submit">Submit</Button>
-            </div>
-          </form>
-        </div>
+            <div><h1 style={{ position: 'absolute', top: '80%', right: '100px' }}>{companyName}</h1></div>
+            <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', position: 'absolute', top: '80%', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
+              About
+            </a>
+          </Card.Body>
+        </Card>
+        {activeTab === 'overview' && (
+          editableCompanyDetails ? (
+            // Content to render when editableCompanyDetails is true
+            <Form>
+              <FormGroup controlId="overView">
+                <Form.Label><h3>About {companyName}</h3></Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name="overView"
+                  value={companyDetails.overView}
+                  onChange={handleInputChange}
+                  className="fullWidthTextarea"
+                  style={{ minHeight: '150px' }}
+                />
+              </FormGroup>
+              <FormGroup controlId="websiteLink">
+                <Form.Label><h4>Website</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="websiteLink"
+                  value={companyDetails.websiteLink}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="industry">
+                <Form.Label><h4>Industry Type</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="industry"
+                  value={companyDetails.industry}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="discription">
+                <Form.Label><h4>Description</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="discription"
+                  value={companyDetails.discription}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup controlId="industryService">
+                <Form.Label><h4>Industry Service</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="industryService"
+                  value={companyDetails.industryService}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="companySize">
+                <Form.Label><h4>Company Size</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="companySize"
+                  value={companyDetails.companySize}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="headquaters">
+                <Form.Label><h4>Headquaters</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="headquaters"
+                  value={companyDetails.headquaters}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="year">
+                <Form.Label><h4>Founded</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="year"
+                  value={companyDetails.year}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="location">
+                <Form.Label><h4>Location</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="location"
+                  value={companyDetails.location}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="specialties">
+                <Form.Label><h4>Specialties</h4></Form.Label>
+                <Form.Control
+                  type="text"
+                  name="specialties"
+                  value={companyDetails.specialties}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+              <Button variant="primary" onClick={handleSave}>
+                Save
+              </Button>
+            </Form>
+          ) : (
+            <>
+              <h3>About {companyName}  <FaEdit onClick={() => setEditableCompanyDetails(true)} style={{ cursor: 'pointer' }} /></h3>
+
+              <p>{companyDetails.overView}</p>
+              <h4>Website</h4>
+              <p>
+                <a href={companyDetails.websiteLink} target="_blank" rel="noopener noreferrer">
+               {companyDetails.websiteLink}
+                </a>
+              </p>
+              <h4>Industry Type</h4>
+              <p>{companyDetails.industry}</p>
+              <h4>Description</h4>
+              <p>{companyDetails.discription}</p>
+              <h4>Industry Service</h4>
+              <p>{companyDetails.industryService}</p>
+              <h4>Company Size</h4>
+              <p>{companyDetails.companySize}</p>
+              <h4>Headquarters</h4>
+              <p>{companyDetails.headquaters}</p>
+              <h4>Founded</h4>
+              <p>{companyDetails.year}</p>
+              <h4>Location</h4>
+              <p>{companyDetails.location}</p>
+              <h4>Specialties</h4>
+              <p>{companyDetails.specialties}</p>
+            </>
+          )
+        )}
+
       </div>
     </div>
   );

@@ -62,8 +62,8 @@ const AddCompanyDetails = () => {
       <AdminleftSide />
     </div>
 
-    <div className="rightside">
-        {companyData.length > 0 ? (
+    <div className="rightside" style={{ overflowY: 'scroll' }}>
+    {companyData.length > 0 ? (
           <>
             <h2>Add Company Details</h2>
             <Table hover className='text-center' style={{ marginLeft: '12px' }}>
@@ -95,7 +95,7 @@ const AddCompanyDetails = () => {
                     <td>{company.jobboxEmail}</td>
                     <td>{company.industry}</td>
                     <td>{company.location}</td>
-                    <td>{company.description}</td>
+                    <td>{company.discription}</td>
                     <td>{company.date}</td>
                     <td>{company.companyStatus}</td>
                     <td>{company.actionDate}</td>

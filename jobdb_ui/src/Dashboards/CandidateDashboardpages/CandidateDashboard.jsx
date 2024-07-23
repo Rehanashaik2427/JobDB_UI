@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
+import { Card, Col, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import Chart from 'react-apexcharts';
@@ -205,12 +205,10 @@ const CandidateDashboard = () => {
 
 
   return (
-    <div fluid className='dashboard-container'>
+   
 
-      <div md={2} className="left-side">
-        <CandidateLeftSide user={{ userName, userId }} />
-      </div>
-    <div className='dashboard-container'>
+
+      <div className='dashboard-container'>
         <div className="left-side">
           <CandidateLeftSide user={{ userName, userId }} />
         </div>
@@ -224,154 +222,71 @@ const CandidateDashboard = () => {
               style={{ fontSize: '20px', marginRight: '12px' }}
             />
 
-      <div md={10} className="right-side" style={{ overflowY: 'scroll' }}>
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-2">
-          <i
-            datafullscreen="true"
-            onClick={toggleFullScreen}
-            className="i-Full-Screen header-icon d-none d-lg-inline-block"
-            style={{ fontSize: '20px', marginRight: '12px' }}
-          />
 
-          <Dropdown className="ml-2">
-            <Dropdown.Toggle
-              as="div"
-              id="dropdownNotification"
-              className="badge-top-container toggle-hidden ml-2"
-            >
-              <span className="badge bg-primary cursor-pointer">
-                {countOfUnreadNotification}
-              </span>
-              <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
-            </Dropdown.Toggle>
 
-            {countOfUnreadNotification > 0 ? (
-              <Dropdown.Menu>
-                {unreadNotifications.length === 0 ? (
-                  <Dropdown.Item>No new notifications</Dropdown.Item>
-                ) : (
-                  unreadNotifications.map((notification, index) => (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={() => markNotificationAsRead(notification.id)}
-                      style={{ fontWeight: notification.read ? 'normal' : 'bold' }}
-                    >
-                      {notification.message}
-                    </Dropdown.Item>
-                  ))
-                )}
-              </Dropdown.Menu>
-            ) : null}
-          </Dropdown>
-
-          <Dropdown className="ml-2">
-            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-              <div
-                className="initials-placeholder"
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  backgroundColor: 'grey',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                }}
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle
+                as="div"
+                id="dropdownNotification"
+                className="badge-top-container toggle-hidden ml-2"
               >
-                {initials}
-              </div>
-            </Dropdown.Toggle>
+                <span className="badge bg-primary cursor-pointer">
+                  {countOfUnreadNotification}
+                </span>
+                <i className="i-Bell text-muted header-icon" style={{ fontSize: '22px' }} />
+              </Dropdown.Toggle>
 
-            <Dropdown.Menu className="mt-3">
-              <Dropdown.Item as={Link} to="/">
-                <i className="i-Data-Settings me-1" /> Account settings
-              </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
-                <i className="i-Lock-2 me-1" /> Sign out
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+              {countOfUnreadNotification > 0 ? (
+                <Dropdown.Menu>
+                  {unreadNotifications.length === 0 ? (
+                    <Dropdown.Item>No new notifications</Dropdown.Item>
+                  ) : (
+                    unreadNotifications.map((notification, index) => (
+                      <Dropdown.Item
+                        key={index}
+                        onClick={() => markNotificationAsRead(notification.id)}
+                        style={{ fontWeight: notification.read ? 'normal' : 'bold' }}
+                      >
+                        {notification.message}
+                      </Dropdown.Item>
+                    ))
+                  )}
+                </Dropdown.Menu>
+              ) : null}
+            </Dropdown>
 
-        <div className="my-dashboard-container">
-          <h3 className='status-info'>My application status</h3>
-          <Row className="dashboard d-flex mt-4">
-            <Col xs={12} md={6} lg={3}>
-              <div className="d-flex flex-column justify-content-center align-items-center data">
-                <Link
-                  to={{
-                    pathname: '/candidate-companies',
-                    state: { userName, userId }
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
+            <Dropdown className="ml-2">
+              <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
+                <div
+                  className="initials-placeholder"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'grey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
                   }}
                 >
-                  <h5>Applied to</h5>
-                  <h4>{countOfCompanies !== null ? countOfCompanies : 'Loading...'}</h4>
-                  <h5>companies</h5>
-                </Link>
-              </div>
-            </Col>
-            <Col xs={12} md={6} lg={3}>
-              <div className="d-flex flex-column justify-content-center align-items-center data">
-                <Link
-                  to={{
-                    pathname: '/resume',
-                    state: { userName, userId }
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/candidate-dashboard/resume', { state: { userName, userId } });
-                  }}
-                >
-                  <h4>{countOfResume !== null ? countOfResume : 'Loading...'}</h4>
-                  <h5>resumes</h5>
-                </Link>
-              </div>
-            </Col>
-            <Col xs={12} md={6} lg={3}>
-              <div className="d-flex flex-column justify-content-center align-items-center data">
-                <h1>250</h1>
-                <h4>resume views</h4>
-              </div>
-            </Col>
-            <Col xs={12} md={6} lg={3}>
-              <div className="d-flex flex-column justify-content-center align-items-center data">
-                <Link
-                  to={{
-                    pathname: '/candidate-dashboard/my-application',
-                    state: { userName, userId, applicationStatus: "Shortlisted" }
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/candidate-dashboard/my-application', { state: { userName, userId, applicationStatus: "Shortlisted" } });
-                  }}
-                >
-                  <h4>{countOfshortlistedApplications !== null ? countOfshortlistedApplications : 'Loading...'}</h4>
-                  <h4>shortlist</h4>
-                </Link>
-              </div>
-            </Col>
-          </Row>
+                  {initials}
+                </div>
+              </Dropdown.Toggle>
 
-
-          <Row className="justify-content-center mb-4">
-            <Col xs={16} md={6} className='mb-4'>
-              <Card body className="h-100 chart-card">
-                <Card.Title className="text-center">Applications per Day</Card.Title>
-                <Chart options={options} series={options.series} type={options.chart.type} />
-              </Card>
-            </Col>
-          </Row>
+              <Dropdown.Menu className="mt-3">
+                <Dropdown.Item as={Link} to="/">
+                  <i className="i-Data-Settings me-1" /> Account settings
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/" onClick={toggleSettings}>
+                  <i className="i-Lock-2 me-1" /> Sign out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
-      </div>
-    </div>
 
-          <Container className="my-dashboard-container">
+          <div className="my-dashboard-container">
             <h3 className='status-info'>My application status</h3>
             <Row className="dashboard d-flex mt-4">
               <Col xs={12} md={6} lg={3}>
@@ -443,10 +358,12 @@ const CandidateDashboard = () => {
                 </Card>
               </Col>
             </Row>
-          </Container>
+          </div>
         </div>
-        </div>
-        </div>
+      </div>
+
+
+
   );
 };
 

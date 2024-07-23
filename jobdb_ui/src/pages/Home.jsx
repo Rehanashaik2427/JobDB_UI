@@ -1,16 +1,18 @@
 
 
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Carousel, Container, Nav, Navbar, OverlayTrigger, Popover, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
+import HomeFooter from './HomeFooter';
+import LatestJobsCompanies from './LatestJobsCompanies';
 import './PagesStyle/Pages.css';
-import axios from 'axios';
 
 
 const Home = () => {
- 
- 
+
+
 
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
@@ -148,6 +150,8 @@ const Home = () => {
               style={{ height: '100px', width: '300px', marginRight: '100px' }}
             />
           </Navbar.Brand>
+
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/" style={{ marginRight: '40px' }}>Home</Nav.Link>
@@ -169,7 +173,7 @@ const Home = () => {
           <Carousel >
             {carouselImageList.map((img, ind) => (
               <Carousel.Item key={ind} >
-                
+
                 <img
                   className="d-block w-25 carousel-image"
                   src={img}
@@ -182,92 +186,92 @@ const Home = () => {
         </Card>
       </div>
 
-<div className='jobs'>
-      <div className='search'>
-        <div className='search-bar'>
-          <input
-            type="text"
-            placeholder="Company, JobRole, Location etc...."
-            value={search}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-          />
-          <Button onClick={fetchJobBySearch}>Search</Button>
-        </div>
-        <div className="text-center">
-          <p><b>Popular Searches:</b> Designer, Web Developer, IOS, Developer, PHP, Senior Developer, Engineer</p>
-        </div>
-      </div>
-      {jobs.length > 0 && (
-        <div>
-
-          <div className='text-center'>
-            <h2>Jobs</h2>
+      <div className='jobs'>
+        <div className='search'>
+          <div className='search-bar'>
+            <input
+              type="text"
+              placeholder="Company, JobRole, Location etc...."
+              value={search}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+            />
+            <Button onClick={fetchJobBySearch}>Search</Button>
           </div>
-          <Table hover className='text-center' >
-            <thead className="table-light">
-              <tr>
-                <th scope='col' onClick={() => handleSort('jobTitle')}>
-                  Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th scope='col' onClick={() => handleSort('companyName')}>
-                  Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th scope='col' onClick={() => handleSort('applicationDeadline')}>
-                  Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th scope='col' onClick={() => handleSort('skills')}>
-                  Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th scope='col'>Job Summary</th>
+          <div className="text-center">
+            <p><b>Popular Searches:</b> Designer, Web Developer, IOS, Developer, PHP, Senior Developer, Engineer</p>
+          </div>
+        </div>
+        {jobs.length > 0 && (
+          <div>
 
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.map(job => (
-                <tr key={job.id} id='job-table-list'>
-                  <td>{job.jobTitle}</td>
-                  <td>{job.companyName}</td>
-                  <td>{job.applicationDeadline}</td>
-                  <td>{job.skills}</td>
-                  <td>
-                    <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                      <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
-                    </OverlayTrigger>
-                  </td>
+            <div className='text-center'>
+              <h2>Jobs</h2>
+            </div>
+            <Table hover className='text-center' >
+              <thead className="table-light">
+                <tr>
+                  <th scope='col' onClick={() => handleSort('jobTitle')}>
+                    Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th scope='col' onClick={() => handleSort('companyName')}>
+                    Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th scope='col' onClick={() => handleSort('applicationDeadline')}>
+                    Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th scope='col' onClick={() => handleSort('skills')}>
+                    Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th scope='col'>Job Summary</th>
 
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {jobs.map(job => (
+                  <tr key={job.id} id='job-table-list'>
+                    <td>{job.jobTitle}</td>
+                    <td>{job.companyName}</td>
+                    <td>{job.applicationDeadline}</td>
+                    <td>{job.skills}</td>
+                    <td>
+                      <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                        <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
+                      </OverlayTrigger>
+                    </td>
 
-          <div className="pagination-container d-flex justify-content-end align-items-center">
-            <div className="page-size-select me-3">
-              <label htmlFor="pageSize">Page Size:</label>
-              <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+
+            <div className="pagination-container d-flex justify-content-end align-items-center">
+              <div className="page-size-select me-3">
+                <label htmlFor="pageSize">Page Size:</label>
+                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+              <ReactPaginate
+                previousLabel={<i className="i-Previous" />}
+                nextLabel={<i className="i-Next1" />}
+                breakLabel="..."
+                breakClassName="break-me"
+                pageCount={totalPages}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageClick}
+                activeClassName="active"
+                containerClassName="pagination"
+                subContainerClassName="pages pagination"
+              />
             </div>
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
           </div>
-        </div>
-      )}
+        )}
 
-      {jobs.length === 0 && <h1>No jobs found.</h1>}
+        {jobs.length === 0 && <h1>No jobs found.</h1>}
       </div>
 
       <div className="carousel-container" style={{ position: 'relative' }}>
@@ -275,7 +279,7 @@ const Home = () => {
           <Carousel indicators={false}>
             {groupedImages.map((group, index) => (
               <Carousel.Item key={index}>
-                <div className="d-flex justify-content-center" style={{  backgroundColor: "gainsboro",boxShadow:"0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+                <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
                   {group.map((img, imgIndex) => (
                     <div className="p-2" key={imgIndex} >
                       <img
@@ -292,6 +296,14 @@ const Home = () => {
           </Carousel>
         </Card>
       </div>
+
+      <div className='text-center'>
+        <LatestJobsCompanies />
+      </div>
+      <div>
+        <HomeFooter />
+      </div>
+
     </div >
   );
 }
