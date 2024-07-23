@@ -241,7 +241,7 @@ const UserRegistrationForm = () => {
                         Candidate
                     </label>
                 </div>
-                <div className="auth-content" style={{ marginBottom: "120px", overflowY: 'auto' }}>
+                <div className="auth-content" style={{ marginBottom: "120px", overflowY: 'auto' }}> 
                     <Card className="o-hidden">
                         <Row>
                             {/* Left Section */}
@@ -253,7 +253,7 @@ const UserRegistrationForm = () => {
                                     <div className="w-100 h-100 justify-content-center d-flex flex-column">
                                         <SocialButtons
                                             isLogin={false} // Set isLogin to false for registration
-                                            routeUrl="/signup/candiSignup/registration-success-msg/user-signin"
+                                            routeUrl="/signin"
                                             googleHandler={() => alert("google")}
                                             facebookHandler={() => alert("facebook")}
                                         />
