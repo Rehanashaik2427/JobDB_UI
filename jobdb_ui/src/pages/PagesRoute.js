@@ -15,6 +15,7 @@ import UserSignin from './Session/UserSignin';
 
 import AdminDashboardRoute from '../Dashboards/AdminDashboardpages/AdminDashboardRoute';
 import Contact from './Contact';
+import PrivacyPolicy from './PrivacyPolicy';
 import TermsAndConditions from './TermsAndConditions';
 
 
@@ -40,7 +41,8 @@ const PagesRoute = () => {
           <Route path="/jobboxCompanyPage/eachCompanyPage" element={<EachCompanyPage />} />
           <Route path='/candidates' element={<CandiRegister />} />
           <Route path='/contact' element={<Contact />} />
-
+          <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
+          <Route path='/privacy-and-policy' element={<PrivacyPolicy />} />
 
           <Route path='/hr-dashboard/*' element={<HrDashbaordRoute />} />
           <Route path='/candidate-dashboard/*' element={< CandidateDashbaordRoute />} />
