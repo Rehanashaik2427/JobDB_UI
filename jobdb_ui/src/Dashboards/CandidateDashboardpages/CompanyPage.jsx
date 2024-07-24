@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, OverlayTrigger, Popover, Row, Table } from "react-bootstrap";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaFacebook, FaInstagramSquare, FaLinkedin, FaTwitter } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -36,7 +36,7 @@ const CompamyPage = () => {
   const [hasDreamApplied, setHasDreamApplied] = useState(false);
   const [resumes, setResumes] = useState([]);
   const [countOfTotalJobs, setCountOfTotalJobs] = useState();
-const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useState();
+  const [countOfshortlistedApplications, setCountOfshortlistedApplications] = useState();
   const navigate = useNavigate();
   const [companyInfo, setCompanyInfo] = useState({
     overView: '',
@@ -77,9 +77,9 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
       fetchCompanyDetails();
       fetchCompanyLogo(company?.companyName);
       fetchCompanyBanner(company?.companyName);
-      fetchCountOfShortlistedCandidatesByCompany(userId,company?.companyName)
+      fetchCountOfShortlistedCandidatesByCompany(userId, company?.companyName)
     }
-  }, [company?.companyName,userId]);
+  }, [company?.companyName, userId]);
 
   const fetchCompanyLogo = async (companyName) => {
     try {
@@ -237,7 +237,7 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
     const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
     const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
     const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
-    
+
     const formattedDate = `${year}-${month}-${day}`;
     console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
 
@@ -314,15 +314,15 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
     checkHasUserDreamApplied();
   }, [company?.companyName, userId]);
   const checkHasUserDreamApplied = async () => {
-   
+
     try {
-   
-        const response = await axios.get(`${BASE_API_URL}/applicationDreamAplied`, {
-          params: { userId,companyName: company?.companyName}
-        });
-       setHasDreamApplied(response.data);
-  
-      
+
+      const response = await axios.get(`${BASE_API_URL}/applicationDreamAplied`, {
+        params: { userId, companyName: company?.companyName }
+      });
+      setHasDreamApplied(response.data);
+
+
     } catch (error) {
       console.error('Error checking application:', error);
     }
@@ -332,256 +332,301 @@ const [countOfshortlistedApplications,setCountOfshortlistedApplications] = useSt
     setShowResumePopup(true);
   };
 
-  const handleApplyCompany = () =>{
+  const handleApplyCompany = () => {
     setShowResumePopup(true);
   }
   const handleResumeSelect = async (resumeId) => {
     if (selectedJobId && resumeId) {
       await applyJob(selectedJobId, resumeId);
       setSelectedJobId(null);
-    }else{
+    } else {
       await applyDreamCompanyJob(resumeId);
     }
-      setShowResumePopup(false);
-  
+    setShowResumePopup(false);
+
+  };
+
+
+  const handleCompanyIconClick = (socialMedia) => {
+    let url;
+    switch (socialMedia) {
+      case 'Facebook':
+        url = `https://www.facebook.com/${company?.companyName}`;
+        break;
+      case 'Twitter':
+        url = `https://twitter.com/${company?.companyName}`;
+        break;
+      case 'Instagram':
+        url = `https://www.instagram.com/${company?.companyName}`;
+        break;
+      case 'LinkedIn':
+        url = `https://www.linkedin.com/company/${company?.companyName}`;
+        break;
+      default:
+        url = '';
+    }
+    if (url) {
+      window.open(url, '_blank');
+    }
   };
   return (
     <div className='dashboard-container'>
-    
-        <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <CandidateLeftSide user={{ userName, userId }} />
-        </div>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
 
-        <div className="rightside" style={{
-          overflowY: 'scroll'
-        }}>
-            {showResumePopup && (
-  
-                <ResumeSelectionPopup
-                  resumes={resumes}
-                  onSelectResume={handleResumeSelect}
-                  onClose={() => setShowResumePopup(false)}
+      <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+
+      <div className="rightside" style={{
+        overflowY: 'hidden'
+      }}>
+        {showResumePopup && (
+
+          <ResumeSelectionPopup
+            resumes={resumes}
+            onSelectResume={handleResumeSelect}
+            onClose={() => setShowResumePopup(false)}
+          />
+
+        )}
+        <Card style={{ width: '100%', height: '60%' }}>
+          <Card.Body style={{ padding: 0, position: 'relative' }}>
+            <div style={{ position: 'relative', height: '55%' }}>
+              <img
+                src={companyBanner || "https://cdn.pixabay.com/photo/2016/04/20/07/16/logo-1340516_1280.png"}
+                alt="Company Banner"
+                className="banner-image"
+                style={{ width: '100%', height: '200px', objectFit: 'cover', cursor: 'pointer' }}
+              />
+            </div>
+            <div style={{ position: 'absolute', top: '55%', left: '50px', transform: 'translateY(-50%)' }}>
+              <img
+                src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
+                alt="Company Logo"
+                className="logo-image"
+                style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
+              />
+            </div>
+            <div><h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{company?.companyName}</h1>
+
+              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
+                <FaFacebook
+                  onClick={() => handleCompanyIconClick('Facebook')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2', marginRight: '10px' }}
                 />
-          
-          )}
-          <Card style={{ width: '100%', height: '60%' }}>
-            <Card.Body style={{ padding: 0, position: 'relative' }}>
-              <div style={{ position: 'relative', height: '55%' }}>
-                <img
-                  src={companyBanner || "https://cdn.pixabay.com/photo/2016/04/20/07/16/logo-1340516_1280.png"}
-                  alt="Company Banner"
-                  className="banner-image"
-                  style={{ width: '100%', height: '200px', objectFit: 'cover', cursor: 'pointer' }}
+                <FaTwitter
+                  onClick={() => handleCompanyIconClick('Twitter')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2', marginLeft: '10px', marginRight: '10px' }}
+                />
+                <FaInstagramSquare
+                  onClick={() => handleCompanyIconClick('Instagram')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584', marginLeft: '10px', marginRight: '10px' }}
+                />
+                <FaLinkedin
+                  onClick={() => handleCompanyIconClick('LinkedIn')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5', marginLeft: '10px' }}
                 />
               </div>
-              <div style={{ position: 'absolute', top: '55%', left: '50px', transform: 'translateY(-50%)' }}>
-                <img
-                  src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
-                  alt="Company Logo"
-                  className="logo-image"
-                  style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
-                />
-              </div>
-              <div><h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{company?.companyName}</h1></div>
-              <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
-                <li>
-                  <span>
-                    <a onClick={() => setActiveTab('overview')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                      About
-                    </a>
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    <a onClick={() => setActiveTab('jobs')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                      Jobs
-                    </a>
-                  </span>
-                </li>
-              </ul>
-            </Card.Body>
-          </Card>
 
-          <Row>
-            <Col xs={8}>
-              {activeTab === 'home' && (
-                <div>
-                  <Card onClick={() => setActiveTab('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+            </div>
+            <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
+              <li>
+                <span>
+                  <a onClick={() => setActiveTab('overview')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                    About
+                  </a>
+                </span>
+              </li>
+              <li>
+                <span>
+                  <a onClick={() => setActiveTab('jobs')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                    Jobs
+                  </a>
+                </span>
+              </li>
+            </ul>
+          </Card.Body>
+        </Card>
+
+        <Row>
+          <Col xs={8}>
+            {activeTab === 'home' && (
+              <div>
+                <Card onClick={() => setActiveTab('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+                  <Card.Body>
+                    <h3>About {company?.companyName}</h3>
+                    <p>Click to view Overview content...</p>
+                  </Card.Body>
+                </Card>
+                <Card onClick={() => setActiveTab('jobs')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+                  <Card.Body>
+                    <h3>Jobs</h3>
+                    <p>Click to view Jobs content...</p>
+                  </Card.Body>
+                </Card>
+              </div>
+            )}
+            {activeTab === 'overview' && (
+              <>
+                <div className='company-overview'>
+                  <Card>
                     <Card.Body>
-                      <h3>About {company?.companyName}</h3>
-                      <p>Click to view Overview content...</p>
+                      <h3>About {company?.companyName} </h3>
+                      <p><strong>Overview:</strong> {companyInfo.overView}</p>
+                      <p><strong>Website:</strong> <a href={companyInfo.websiteLink} target="_blank" rel="noopener noreferrer">{companyInfo.websiteLink}</a></p>
+                      <p><strong>Industry Service:</strong> {companyInfo.industryService}</p>
+                      <p><strong>Company Size:</strong> {companyInfo.companySize}</p>
                     </Card.Body>
                   </Card>
-                  <Card onClick={() => setActiveTab('jobs')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+                  <Card>
                     <Card.Body>
-                      <h3>Jobs</h3>
-                      <p>Click to view Jobs content...</p>
+                      <p><strong>Headquarters:</strong> {companyInfo.headquaters}</p>
+                      <p><strong>Year Founded:</strong> {companyInfo.year}</p>
+                      <p><strong>Specialties:</strong> {companyInfo.specialties}</p>
                     </Card.Body>
                   </Card>
                 </div>
-              )}
-              {activeTab === 'overview' && (
-                <>
-                  <div className='company-overview' style={{ maxHeight: '400px', overflowY: 'scroll' }}>
-                    <Card>
-                      <Card.Body>
-                        <h3>About {company?.companyName} </h3>
-                        <p><strong>Overview:</strong> {companyInfo.overView}</p>
-                        <p><strong>Website:</strong> <a href={companyInfo.websiteLink} target="_blank" rel="noopener noreferrer">{companyInfo.websiteLink}</a></p>
-                        <p><strong>Industry Service:</strong> {companyInfo.industryService}</p>
-                        <p><strong>Company Size:</strong> {companyInfo.companySize}</p>
-                      </Card.Body>
-                    </Card>
-                    <Card>
-                      <Card.Body>
-                        <p><strong>Headquarters:</strong> {companyInfo.headquaters}</p>
-                        <p><strong>Year Founded:</strong> {companyInfo.year}</p>
-                        <p><strong>Specialties:</strong> {companyInfo.specialties}</p>
-                      </Card.Body>
-                    </Card>
-                  </div>
-                </>
-              )}
-              {activeTab === 'jobs' && (
-                <>
-                {jobs.length > 0 && (
-                <div className="company-job" style={{ maxHeight: '400px', overflowY: 'scroll' }}>
-                  <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
-                    <thead className="table-light">
-                      <tr>
-                        <th scope='col' onClick={() => handleSort('jobTitle')}>
-                          Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
-                        </th>
-                      
-                        <th scope='col' onClick={() => handleSort('applicationDeadline')}>
-                          Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
-                        </th>
-                        <th scope='col' onClick={() => handleSort('skills')}>
-                          Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
-                        </th>
-                        <th scope='col'>Job Summary</th>
-                        <th scope='col'>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {jobs.map(job => (
-                        <tr key={job.id} id='job-table-list'>
-                          <td>{job.jobTitle}</td>
-                          <td>{job.applicationDeadline}</td>
-                          <td>{job.skills}</td>
-                          <td>
-                            <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                              <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
-                            </OverlayTrigger>
-                          </td>
-                          <td>
-                            {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
-                              <p>Applied</p>
-                            ) : (
-                              <Button onClick={() => handleApplyButtonClick(job.jobId)}>Apply</Button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                  <div className="pagination-container d-flex justify-content-end align-items-center">
-                    <div className="page-size-select me-3">
-                      <label htmlFor="pageSize">Page Size:</label>
-                      <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                      </select>
-                    </div>
-                    <ReactPaginate
-                      previousLabel={<i className="i-Previous" />}
-                      nextLabel={<i className="i-Next1" />}
-                      breakLabel="..."
-                      breakClassName="break-me"
-                      pageCount={totalPages}
-                      marginPagesDisplayed={1}
-                      pageRangeDisplayed={2}
-                      onPageChange={handlePageClick}
-                      activeClassName="active"
-                      containerClassName="pagination"
-                      subContainerClassName="pages pagination"
-                    />
-                  </div>
-                </div>
-              )}
-              {jobs.length === 0 && <h1>No jobs found.</h1>}
               </>
-              )}
-            </Col>
+            )}
+            {activeTab === 'jobs' && (
+              <>
+                {jobs.length > 0 && (
+                  <div className="company-job" style={{ maxHeight: '200px', overflowY: 'scroll' }}>
+                    <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
+                      <thead className="table-light">
+                        <tr>
+                          <th scope='col' onClick={() => handleSort('jobTitle')}>
+                            Job Profile {sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}
+                          </th>
 
-            <Col>
-              <Card style={{ height: '100%' }}>
-                <Card.Body>
-                  <Row className="mb-3">
-                   
-                    <Col>
-                    {hasDreamApplied === true  ? (
-                             <p style={{
-                              color: '#28a745', /* Green color for the text */
-                              fontSize: '18px', /* Larger font size */
-                              fontWeight: 'bold', /* Bold text */
-                              backgroundColor: '#e9f5e9', /* Light green background color */
-                              padding: '10px', /* Padding around the text */
-                              borderRadius: '5px', /* Rounded corners */
-                              textAlign: 'center', /* Center-align the text */
-                              margin: '10px 0', /* Margin above and below the paragraph */
-                              boxShadow: 'rgba(0, 0, 0, 0.1)' /* Subtle shadow effect */
-                            }}>
-                              Applied
-                            </p>
-                            
-                            ) : (
-                              <Button variant="success" onClick={handleApplyCompany}>Apply</Button>
-                            )}
-                     
-                    </Col>
-                  </Row>
-                  <h1>Other Information</h1>
-                  <Row className="mb-2">
-                  
-                    <Col>
-                      <h5>Applicants: {countOfApplications}</h5>
-                    </Col>
-                  </Row>
-                  <Row className="mb-2">
-                    <Col>
-                      <h5>Total HR's: {countOfHR}</h5>
-                    </Col>
-                  </Row>
-                  <Row className="mb-2">
-                    <Col>
-                      <h5>Total Jobs:{countOfTotalJobs}</h5>
-                    </Col>
-                  </Row>
+                          <th scope='col' onClick={() => handleSort('applicationDeadline')}>
+                            Application Deadline {sortedColumn === 'applicationDeadline' && (sortOrder === 'asc' ? '▲' : '▼')}
+                          </th>
+                          <th scope='col' onClick={() => handleSort('skills')}>
+                            Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
+                          </th>
+                          <th scope='col'>Job Summary</th>
+                          <th scope='col'>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {jobs.map(job => (
+                          <tr key={job.id} id='job-table-list'>
+                            <td>{job.jobTitle}</td>
+                            <td>{job.applicationDeadline}</td>
+                            <td>{job.skills}</td>
+                            <td>
+                              <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
+                                <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
+                              </OverlayTrigger>
+                            </td>
+                            <td>
+                              {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
+                                <p>Applied</p>
+                              ) : (
+                                <Button onClick={() => handleApplyButtonClick(job.jobId)}>Apply</Button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <div className="pagination-container d-flex justify-content-end align-items-center">
+                      <div className="page-size-select me-3">
+                        <label htmlFor="pageSize">Page Size:</label>
+                        <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                          <option value="5">5</option>
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                        </select>
+                      </div>
+                      <ReactPaginate
+                        previousLabel={<i className="i-Previous" />}
+                        nextLabel={<i className="i-Next1" />}
+                        breakLabel="..."
+                        breakClassName="break-me"
+                        pageCount={totalPages}
+                        marginPagesDisplayed={1}
+                        pageRangeDisplayed={2}
+                        onPageChange={handlePageClick}
+                        activeClassName="active"
+                        containerClassName="pagination"
+                        subContainerClassName="pages pagination"
+                      />
+                    </div>
+                  </div>
+                )}
+                {jobs.length === 0 && <h1>No jobs found.</h1>}
+              </>
+            )}
+          </Col>
 
-                  <Row className="mb-2">
-                    <Col>
-                      <h5>Key Stats:</h5>
-                      <ul>
-                        <li>Active Job Postings:{countOfJobs}</li> {/* Placeholder values */}
-                        <li>Shortlisted Applications:{countOfshortlistedApplications} </li>
-                        <li>Avg. Time to Fill a Job: 7 days</li>
-                        {/* <li>Top Searched Job: Software Engineer</li>
+          <Col>
+            <Card className='key-stats'>
+              <Card.Body>
+                <Row className="mb-3">
+
+                  <Col>
+                    {hasDreamApplied === true ? (
+                      <p style={{
+                        color: '#28a745', /* Green color for the text */
+                        fontSize: '18px', /* Larger font size */
+                        fontWeight: 'bold', /* Bold text */
+                        backgroundColor: '#e9f5e9', /* Light green background color */
+                        padding: '10px', /* Padding around the text */
+                        borderRadius: '5px', /* Rounded corners */
+                        textAlign: 'center', /* Center-align the text */
+                        margin: '10px 0', /* Margin above and below the paragraph */
+                        boxShadow: 'rgba(0, 0, 0, 0.1)' /* Subtle shadow effect */
+                      }}>
+                        Applied
+                      </p>
+
+                    ) : (
+                      <Button variant="success" onClick={handleApplyCompany}>Apply</Button>
+                    )}
+
+                  </Col>
+                </Row>
+                <h1>Other Information</h1>
+                <Row className="mb-2">
+
+                  <Col>
+                    <h5>Applicants: {countOfApplications}</h5>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Col>
+                    <h5>Total HR's: {countOfHR}</h5>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Col>
+                    <h5>Total Jobs:{countOfTotalJobs}</h5>
+                  </Col>
+                </Row>
+
+                <Row className="mb-2">
+                  <Col>
+                    <h5>Key Stats:</h5>
+                    <ul>
+                      <li>Active Job Postings:{countOfJobs}</li> {/* Placeholder values */}
+                      <li>Shortlisted Applications:{countOfshortlistedApplications} </li>
+                      <li>Avg. Time to Fill a Job: 7 days</li>
+                      {/* <li>Top Searched Job: Software Engineer</li>
                         <li>User Engagement: 75% daily active users</li> */}
-                      </ul>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
+                    </ul>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
 
-            </Col>
-          </Row>
+          </Col>
+        </Row>
 
-  </div></div>
+      </div></div>
   );
 };
 

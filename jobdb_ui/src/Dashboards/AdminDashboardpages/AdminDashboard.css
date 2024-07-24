@@ -340,4 +340,8 @@ company details by admin */
     color: #dc3545;
   }
   
- 
+ .company-overview-by-admin{
+  max-height: 200px; /* Adjust the max-height as needed */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  padding-right: 15px; /* Ensure content does not get hidden by scrollbar */
+ }

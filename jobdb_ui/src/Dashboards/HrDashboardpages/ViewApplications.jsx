@@ -426,9 +426,9 @@ const ViewApplications = () => {
                         <th scope="col" onClick={() => handleSort('appliedOn')}>
                           Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
                         </th>
-                        <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                        {/* <th scope="col" onClick={() => handleSort('applicationStatus')}>
                           Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                        </th>
+                        </th> */}
                         <th scope="col">View Details</th>
                         <th scope="col">Action</th>
                         <th scope="col">Chat</th>
@@ -442,7 +442,7 @@ const ViewApplications = () => {
                           <td>{candidateEmail[application.candidateId]}</td>
                           <td>{renderResumeComponent(application.resumeId)}</td>
                           <td>{application.appliedOn}</td>
-                          <td>{application.applicationStatus}</td>
+                          {/* <td>{application.applicationStatus}</td> */}
                           <td>
                             <Link
                               to={{

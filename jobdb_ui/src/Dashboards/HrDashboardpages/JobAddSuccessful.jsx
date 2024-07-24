@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
 // import "./JobAddSuccessful.css";
@@ -12,12 +12,15 @@ const JobAddSuccessful = () => {
   console.log(userEmail);
 
   return (
-    <Container fluid className="dashboard-container text-center">
-      <Row>
-        <Col md={2} className="left-side">
+   
+    <div className='dashboard-container'>
+      <div className='left-side'>
           <HrLeftSide user={{ userName, userEmail }} />
-        </Col>
-        <Col md={9} className="rightside">
+        </div>
+
+        <div md={10} className="rightside" style={{
+          overflow: 'hidden'
+        }}>
           <Card className='d-flex justify-content-center align-items-center' style={{margin:'80px',padding:'24px'}}>
             <h2>Job Successfully Added!</h2>
             <br></br>
@@ -39,9 +42,8 @@ const JobAddSuccessful = () => {
                 </Link>
       
           </Card>
-        </Col>
-      </Row>
-    </Container>
+   </div>
+   </div>
   );
 };
 

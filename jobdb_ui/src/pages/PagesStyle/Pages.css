@@ -177,7 +177,7 @@
   padding: 20px;
   padding-top: 250px;
 }
-.social-icons a{
+.social-icons a,.social-icons-company a{
   margin: 8px;
 }
 
