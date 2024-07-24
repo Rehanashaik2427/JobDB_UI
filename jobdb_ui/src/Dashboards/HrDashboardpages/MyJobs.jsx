@@ -319,7 +319,7 @@ const MyJobs = () => {
             />
           </div>
           {!loading && jobs.length >= 0 && (
-            <Button className='add-job-button btn-info position-absolute top-70 start-40 translate-middle'>
+            <Button className='add-job-button position-absolute top-70 start-40 translate-middle'>
               <Link
                 to={{ pathname: '/hr-dashboard/my-jobs/addJob', state: { userName, userEmail } }}
                 onClick={(e) => {

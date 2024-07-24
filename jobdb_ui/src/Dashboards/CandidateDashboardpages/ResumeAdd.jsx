@@ -139,17 +139,17 @@ const ResumeAdd = () => {
   };
   return (
     <div className='dashboard-container'>
-    
-    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
-      <CandidateLeftSide user={{ userName, userId }} />
-    </div>
-    <div className="hamburger-icon" onClick={toggleLeftSide}>
-      <FaBars />
-    </div>
 
-    <div className="rightside" style={{
-      overflowY: 'scroll'
-    }}>
+      <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+
+      <div className="rightside" style={{
+        overflowY: 'scroll'
+      }}>
 
         <Col xs={6}>
           <Button onClick={handleBack} variant="secondary">
@@ -202,13 +202,20 @@ const ResumeAdd = () => {
             )}
 
             {fileType === 'link' && (
+              <>
               <Form.Group as={Row} className='select-link'>
                 <Form.Label column sm={3}>Enter Link:</Form.Label>
                 <Col sm={9}>
                   <Form.Control type='text' value={link} onChange={handleLinkChange} required />
                 </Col>
+              
               </Form.Group>
+              <div className="note-container">
+              <p className="note-text">“You can also apply just using a resume link or a LinkedIn profile using this feature”.</p>
+                </div>
+              </>
             )}
+
 
             {fileType === 'brief' && (
               <React.Fragment>
@@ -236,7 +243,13 @@ const ResumeAdd = () => {
                       disabled={!!briefMessage} // Disable file input if briefMessage is entered
                     />
                   </Col>
+                 
                 </Form.Group>
+                <div className="note-container">
+    <p className="note-text">
+        “You can use this to apply in stealth mode without sharing all details to the HR”.
+    </p>
+</div>
               </React.Fragment>
             )}
 
@@ -272,7 +285,7 @@ const ResumeAdd = () => {
           {successMessage && <p>{successMessage}</p>}
         </Col>
 
-</div></div>
+      </div></div>
   );
 };
 

@@ -1052,7 +1052,7 @@ button.com:hover {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  height: 400px;
+  height: 600px;
 }
 .custom-modal .modal-body {
   height: 90vh; /* Increase height to 90% of viewport height */
@@ -1098,4 +1098,20 @@ margin-right: auto;
   text-align: center; /* Align text center if necessary */
   font-weight: bold;
   margin: 10px 0; /* Adjust margin as needed */
+}
+
+.note-container {
+  margin-top: 20px;
+  background-color: #f8f9fa; /* Light gray background */
+ /* border: 1px solid #ced4da;  Light border */
+ /* padding: 15px;  Padding around the text */
+ text-align: center;
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Shadow for depth */
+}
+
+.note-text {
+  font-size: 14px; /* Font size */
+  line-height: 1.5; /* Line height for readability */
+  color: #a00707; /* Text color */
 }

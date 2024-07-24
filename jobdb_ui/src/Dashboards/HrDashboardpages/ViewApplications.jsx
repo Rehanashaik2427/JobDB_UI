@@ -241,6 +241,7 @@ const ViewApplications = () => {
   const [inputValue, setInputValue] = useState('');
   const [applicationId, setApplicationId] = useState(0);
   const [chats, setChats] = useState([]);
+  const [newMessageReceived, setNewMessageReceived] = useState(false); // State for new message indicator
 
   const handleChatClick = async (applicationId) => {
     setApplicationId(applicationId);
@@ -257,6 +258,7 @@ const ViewApplications = () => {
       console.log("Chats === > " + response.data)
       setShowModal(true); // Show the modal once chats are fetched
       setShowChat(true); // Optionally manage showChat state separately
+      setNewMessageReceived(false); // Reset new message indicator
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
@@ -272,9 +274,9 @@ const ViewApplications = () => {
     setInputValue(''); // Reset input value when closing modal
   };
 
-  const handleSend = async() => {
+  const handleSend = async () => {
     // Handle send logic here
-    const responce= await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
+    const responce = await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
     console.log('Sending message:', inputValue);
     // Close the modal or perform any other actions
 
@@ -314,199 +316,201 @@ const ViewApplications = () => {
   }, [chats]);
   return (
     <div className='dashboard-container'>
-    <div className='left-side'>
+      <div className='left-side'>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
 
       <div md={10} className="rightside" >
-          <div className="application-div">
-            <Row className="filter">
-              <Col className="filter" style={{ maxWidth: '40%' }}>
-                <label htmlFor="status">Filter by Status:</label>
-                <select id="status" onChange={handleFilterChange} value={filterStatus}>
-                  <option value="all">All</option>
-                  <option value="Shortlisted">Shortlisted</option>
-                  <option value="Not Seen">Not Seen</option>
-                  <option value="Not Shortlisted">Not Shortlisted</option>
-                </select>
-              </Col>
-              <Col className="filter">
-                <label htmlFor="date" className="mr-2">Filter by Date:</label>
-                From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
-                To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
-              </Col>
-            </Row>
-            {showBriefSettings && (
-              <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Brief Resume</Modal.Title>
-                </Modal.Header>
-                <Modal.Body style={{ overflowY: 'auto' }}>{showMessage}</Modal.Body>
-              </Modal>
-            )}
-
-            <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+        <div className="application-div">
+          <Row className="filter">
+            <Col className="filter" style={{ maxWidth: '40%' }}>
+              <label htmlFor="status">Filter by Status:</label>
+              <select id="status" onChange={handleFilterChange} value={filterStatus}>
+                <option value="all">All</option>
+                <option value="Shortlisted">Shortlisted</option>
+                <option value="Not Seen">Not Seen</option>
+                <option value="Not Shortlisted">Not Shortlisted</option>
+              </select>
+            </Col>
+            <Col className="filter">
+              <label htmlFor="date" className="mr-2">Filter by Date:</label>
+              From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
+              To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
+            </Col>
+          </Row>
+          {showBriefSettings && (
+            <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
               <Modal.Header closeButton>
-                <Modal.Title>Chat</Modal.Title>
+                <Modal.Title>Brief Resume</Modal.Title>
               </Modal.Header>
-              <Modal.Body ref={modalBodyRef}>
-                <div className="chat-messages">
-                  {chats ? (
-                    chats.map((chat, index) => (
-                      <div key={chat.id} className="chat-message">
-                        {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
-                          <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
-                            {formatDate(chat.createdAt)}
-                          </div>
-
-                        )}
-                        {chat.candidateMessage && (
-                          <div className="message-right">
-                            {chat.candidateMessage}
-                            <div className="message-time">
-                              {formatMessageDateTime(chat.createdAt)}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Render HR message if present */}
-                        {chat.hrMessage && (
-                          <div className="message-left">
-                            {chat.hrMessage}
-                            <div className="message-time">
-                              {formatMessageDateTime(chat.createdAt)}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </div>
-                {/* Message input section */}
-
-              </Modal.Body>
-              <Modal.Footer>
-                <Form.Group controlId="messageInput" className="mb-3">
-                  {/* <Form.Label>Message:</Form.Label> */}
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter your message"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                  />
-                </Form.Group>
-                <Button variant="primary" onClick={handleSend}>
-                  <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
-                </Button>
-              </Modal.Footer>
+              <Modal.Body style={{ overflowY: 'auto' }}>{showMessage}</Modal.Body>
             </Modal>
+          )}
 
+          <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+            <Modal.Header closeButton>
+              <Modal.Title>Chat</Modal.Title>
+            </Modal.Header>
+            <Modal.Body ref={modalBodyRef}>
+              <div className="chat-messages">
+                {chats ? (
+                  chats.map((chat, index) => (
+                    <div key={chat.id} className="chat-message">
+                      {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
+                        <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
+                          {formatDate(chat.createdAt)}
+                        </div>
 
-            <div>
-              {loading ? (
-                <div className="d-flex justify-content-center align-items-center">
-                  <div className="spinner-bubble spinner-bubble-primary m-5" />
-                  <span>Loading...</span>
-                </div>
-              ) : applications.length === 0 ? (
-                <section>
-                  <h2>Sorry, you haven't received any applications yet.</h2>
-                </section>
-              ) : (
-                <div>
-                  <Table hover className='text-center'>
-                    <thead className="table-light">
-                      <tr>
-                        <th scope="col">Job Title</th>
-                        <th scope="col">Candidate Name</th>
-                        <th scope="col">Candidate Email</th>
-                        <th scope="col">Resume ID</th>
-                        <th scope="col" onClick={() => handleSort('appliedOn')}>
-                          Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
-                        </th>
-                        <th scope="col" onClick={() => handleSort('applicationStatus')}>
-                          Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                        </th>
-                        <th scope="col">View Details</th>
-                        <th scope="col">Action</th>
-                        <th scope="col">Chat</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applications.map((application) => (
-                        <tr key={application.applicationId}>
-                          <td>{application.jobRole}</td>
-                          <td>{candidateName[application.candidateId]}</td>
-                          <td>{candidateEmail[application.candidateId]}</td>
-                          <td>{renderResumeComponent(application.resumeId)}</td>
-                          <td>{application.appliedOn}</td>
-                          <td>{application.applicationStatus}</td>
-                          <td>
-                            <Link
-                              to={{
-                                pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
-                                state: { userEmail, applicationId: application.applicationId, userName },
-                              }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
-                                  state: { userEmail, applicationId: application.applicationId, userName },
-                                });
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faEye}
-                                style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
-                              />
-                            </Link>
-                          </td>
-                          <td style={{ alignItems: 'center' }}>
-                            <Slider
-                              initialStatus={application.applicationStatus}
-                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                            />
-                          </td>
-                          <td onClick={() => handleChatClick(application.applicationId)}>
-                            <SiImessage size={25} />
-                          </td>
+                      )}
+                      {chat.candidateMessage && (
+                        <div className="message-right">
+                          {chat.candidateMessage}
+                          <div className="message-time">
+                            {formatMessageDateTime(chat.createdAt)}
+                          </div>
+                        </div>
+                      )}
 
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-
-
-                </div>
-              )}
-              {/* Pagination */}
-              <div className="pagination-container d-flex justify-content-end align-items-center">
-                <div className="page-size-select me-3">
-                  <label htmlFor="pageSize">Page Size:</label>
-                  <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                  </select>
-                </div>
-                <ReactPaginate
-                  previousLabel={<i className="i-Previous" />}
-                  nextLabel={<i className="i-Next1" />}
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={totalPages}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  onPageChange={handlePageClick}
-                  activeClassName="active"
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                />
+                      {/* Render HR message if present */}
+                      {chat.hrMessage && (
+                        <div className="message-left">
+                          {chat.hrMessage}
+                          <div className="message-time">
+                            {formatMessageDateTime(chat.createdAt)}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p>Loading...</p>
+                )}
               </div>
+              {/* Message input section */}
+
+            </Modal.Body>
+            <Modal.Footer>
+              <Form.Group controlId="messageInput" className="mb-3">
+                {/* <Form.Label>Message:</Form.Label> */}
+                <Form.Control
+                  as='textarea'
+                  type="text"
+                  placeholder="Enter your message"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  style={{ width: '350px' }} // Custom styles to increase size
+                />
+              </Form.Group>
+              <Button variant="primary" onClick={handleSend}>
+                <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+          <div>
+            {loading ? (
+              <div className="d-flex justify-content-center align-items-center">
+                <div className="spinner-bubble spinner-bubble-primary m-5" />
+                <span>Loading...</span>
+              </div>
+            ) : applications.length === 0 ? (
+              <section>
+                <h2>Sorry, you haven't received any applications yet.</h2>
+              </section>
+            ) : (
+              <div>
+                <Table hover className='text-center'>
+                  <thead className="table-light">
+                    <tr>
+                      <th scope="col">Job Title</th>
+                      <th scope="col">Candidate Name</th>
+                      <th scope="col">Candidate Email</th>
+                      <th scope="col">Resume ID</th>
+                      <th scope="col" onClick={() => handleSort('appliedOn')}>
+                        Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                        Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      <th scope="col">View Details</th>
+                      <th scope="col">Action</th>
+                      <th scope="col">Chat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {applications.map((application) => (
+                      <tr key={application.applicationId}>
+                        <td>{application.jobRole}</td>
+                        <td>{candidateName[application.candidateId]}</td>
+                        <td>{candidateEmail[application.candidateId]}</td>
+                        <td>{renderResumeComponent(application.resumeId)}</td>
+                        <td>{application.appliedOn}</td>
+                        <td>{application.applicationStatus}</td>
+                        <td>
+                          <Link
+                            to={{
+                              pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
+                              state: { userEmail, applicationId: application.applicationId, userName },
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
+                                state: { userEmail, applicationId: application.applicationId, userName },
+                              });
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faEye}
+                              style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
+                            />
+                          </Link>
+                        </td>
+                        <td style={{ alignItems: 'center' }}>
+                          <Slider
+                            initialStatus={application.applicationStatus}
+                            onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
+                          />
+                        </td>
+                        <td onClick={() => handleChatClick(application.applicationId)}>
+                          <SiImessage size={25} style={{ color: newMessageReceived ? 'red' : 'black' }} />
+                        </td>
+
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+
+
+              </div>
+            )}
+            {/* Pagination */}
+            <div className="pagination-container d-flex justify-content-end align-items-center">
+              <div className="page-size-select me-3">
+                <label htmlFor="pageSize">Page Size:</label>
+                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+              <ReactPaginate
+                previousLabel={<i className="i-Previous" />}
+                nextLabel={<i className="i-Next1" />}
+                breakLabel="..."
+                breakClassName="break-me"
+                pageCount={totalPages}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageClick}
+                activeClassName="active"
+                containerClassName="pagination"
+                subContainerClassName="pages pagination"
+              />
             </div>
           </div>
-</div></div>
+        </div>
+      </div></div>
   );
 
 

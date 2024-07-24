@@ -79,7 +79,7 @@ const UserSignin = () => {
                                 <div className="auth-logo text-center mb-4">
                                     <img src="/jb_logo.png" alt="jobdblogo" />
                                 </div>
-                                <SocialButtons routeUrl="/userSignup" googleHandler={() => alert("google")} facebookHandler={() => alert("facebook")} />
+                                <SocialButtons routeUrl="/signup/userSignup" googleHandler={() => alert("google")} facebookHandler={() => alert("facebook")} />
                             </div>
                         </Col>
                     </Row>

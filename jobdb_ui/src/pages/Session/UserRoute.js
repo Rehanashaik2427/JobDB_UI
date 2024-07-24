@@ -18,8 +18,6 @@ export default function UserRoute() {
                 <Route path='/hrSignup/registration-success-msg' element={<RegisterSuccessMsg />} />
                 <Route path='/hrSignup/registration-success-msg/user-signin' element={<UserSignin />} />
                 <Route path="/candiSignup/registration-success-msg/user-signin" element={<UserSignin />} />
-
- 
             </Routes>
         </div>
     );

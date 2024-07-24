@@ -141,11 +141,11 @@ const EachCompanyPage = () => {
       // Handle registration logic
       if (modalContent === 'hr') {
         if (company) {
-          navigate("/signup/hrSignup", { state: { companyName } });
+          navigate("/signup/userSignup", { state: { companyName } });
         }  // Navigate to HR sign-in page
       } else if (modalContent === 'candidate') {
         if (company) {
-          navigate('/signup/candiSignup');
+          navigate('/signup/userSignup');
         } // Handle candidate login logic
       }
     }

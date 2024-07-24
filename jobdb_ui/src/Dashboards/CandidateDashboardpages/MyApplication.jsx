@@ -391,9 +391,11 @@ const MyApplication = () => {
                 {/* <Form.Label>Message:</Form.Label> */}
                 <Form.Control
                   type="text"
+                  as='textarea'
                   placeholder="Enter your message"
                   value={inputValue}
                   onChange={handleInputChange}
+                  style={{ width: '350px' }} // Custom styles to increase size
                 />
               </Form.Group>
               <Button variant="primary" onClick={handleSend}>
