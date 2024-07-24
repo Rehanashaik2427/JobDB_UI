@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, FormGroup } from 'react-bootstrap';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaFacebook, FaInstagramSquare, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
@@ -131,12 +131,36 @@ const CompanyDetailsByAdmin = () => {
     }
   }, [companyName])
 
+
+  const handleCompanyIconClick = (socialMedia) => {
+    let url;
+    switch (socialMedia) {
+      case 'Facebook':
+        url = `https://www.facebook.com/${companyName}`;
+        break;
+      case 'Twitter':
+        url = `https://twitter.com/${companyName}`;
+        break;
+      case 'Instagram':
+        url = `https://www.instagram.com/${companyName}`;
+        break;
+      case 'LinkedIn':
+        url = `https://www.linkedin.com/company/${companyName}`;
+        break;
+      default:
+        url = '';
+    }
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
+  
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
         <AdminleftSide />
       </div>
-      <div className="rightside" style={{ overflowY: 'scroll' }}>
+      <div className="rightside" style={{ overflowY: 'hidden' }}>
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
             <div style={{ position: 'relative', height: '55%' }}>
@@ -171,147 +195,185 @@ const CompanyDetailsByAdmin = () => {
                 accept="image/*"
               />
             </div>
-            <div><h1 style={{ position: 'absolute', top: '80%', right: '100px' }}>{companyName}</h1></div>
-            <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', position: 'absolute', top: '80%', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
-              About
-            </a>
+            <div>
+              <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{companyName}</h1>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
+                <FaFacebook
+                  onClick={() => handleCompanyIconClick('Facebook')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2',marginRight:'10px' }}
+                />
+                <FaTwitter
+                  onClick={() => handleCompanyIconClick('Twitter')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2' ,marginLeft:'10px',marginRight:'10px'}}
+                />
+                <FaInstagramSquare
+                  onClick={() => handleCompanyIconClick('Instagram')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584',marginLeft:'10px',marginRight:'10px' }}
+                />
+                <FaLinkedin
+                  onClick={() => handleCompanyIconClick('LinkedIn')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5',marginLeft:'10px'}}
+                />
+              </div>
+
+            </div>
+            <h3 style={{ position: 'absolute', top: '80%'}}>About {companyName}</h3>
           </Card.Body>
         </Card>
-        {activeTab === 'overview' && (
-          editableCompanyDetails ? (
-            // Content to render when editableCompanyDetails is true
-            <Form>
-              <FormGroup controlId="overView">
-                <Form.Label><h3>About {companyName}</h3></Form.Label>
-                <Form.Control
-                  as="textarea"
-                  name="overView"
-                  value={companyDetails.overView}
-                  onChange={handleInputChange}
-                  className="fullWidthTextarea"
-                  style={{ minHeight: '150px' }}
-                />
-              </FormGroup>
-              <FormGroup controlId="websiteLink">
-                <Form.Label><h4>Website</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="websiteLink"
-                  value={companyDetails.websiteLink}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="industry">
-                <Form.Label><h4>Industry Type</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="industry"
-                  value={companyDetails.industry}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="discription">
-                <Form.Label><h4>Description</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="discription"
-                  value={companyDetails.discription}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-
-              <FormGroup controlId="industryService">
-                <Form.Label><h4>Industry Service</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="industryService"
-                  value={companyDetails.industryService}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="companySize">
-                <Form.Label><h4>Company Size</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="companySize"
-                  value={companyDetails.companySize}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="headquaters">
-                <Form.Label><h4>Headquaters</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="headquaters"
-                  value={companyDetails.headquaters}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="year">
-                <Form.Label><h4>Founded</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="year"
-                  value={companyDetails.year}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="location">
-                <Form.Label><h4>Location</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="location"
-                  value={companyDetails.location}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="specialties">
-                <Form.Label><h4>Specialties</h4></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="specialties"
-                  value={companyDetails.specialties}
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <Button variant="primary" onClick={handleSave}>
-                Save
-              </Button>
-            </Form>
-          ) : (
-            <>
-              <h3>About {companyName}  <FaEdit onClick={() => setEditableCompanyDetails(true)} style={{ cursor: 'pointer' }} /></h3>
-
-              <p>{companyDetails.overView}</p>
-              <h4>Website</h4>
-              <p>
-                <a href={companyDetails.websiteLink} target="_blank" rel="noopener noreferrer">
-               {companyDetails.websiteLink}
-                </a>
-              </p>
-              <h4>Industry Type</h4>
-              <p>{companyDetails.industry}</p>
-              <h4>Description</h4>
-              <p>{companyDetails.discription}</p>
-              <h4>Industry Service</h4>
-              <p>{companyDetails.industryService}</p>
-              <h4>Company Size</h4>
-              <p>{companyDetails.companySize}</p>
-              <h4>Headquarters</h4>
-              <p>{companyDetails.headquaters}</p>
-              <h4>Founded</h4>
-              <p>{companyDetails.year}</p>
-              <h4>Location</h4>
-              <p>{companyDetails.location}</p>
-              <h4>Specialties</h4>
-              <p>{companyDetails.specialties}</p>
-            </>
-          )
+        {editableCompanyDetails ? (
+          <Form className='company-overview-by-admin'>
+            <FormGroup controlId="overView">
+              <Form.Label>
+                <h3>Overview</h3>
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                name="overView"
+                value={companyDetails.overView}
+                onChange={handleInputChange}
+                className="fullWidthTextarea"
+                style={{ minHeight: '150px' }}
+              />
+            </FormGroup>
+            <FormGroup controlId="websiteLink">
+              <Form.Label>
+                <h4>Website</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="websiteLink"
+                value={companyDetails.websiteLink}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="industry">
+              <Form.Label>
+                <h4>Industry Type</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="industry"
+                value={companyDetails.industry}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="description">
+              <Form.Label>
+                <h4>Description</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="description"
+                value={companyDetails.discription}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="industryService">
+              <Form.Label>
+                <h4>Industry Service</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="industryService"
+                value={companyDetails.industryService}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="companySize">
+              <Form.Label>
+                <h4>Company Size</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="companySize"
+                value={companyDetails.companySize}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="headquarters">
+              <Form.Label>
+                <h4>Headquarters</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="headquarters"
+                value={companyDetails.headquaters}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="year">
+              <Form.Label>
+                <h4>Founded</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="year"
+                value={companyDetails.year}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="location">
+              <Form.Label>
+                <h4>Location</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="location"
+                value={companyDetails.location}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="specialties">
+              <Form.Label>
+                <h4>Specialties</h4>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="specialties"
+                value={companyDetails.specialties}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <Button variant="primary" onClick={handleSave}>
+              Save
+            </Button>
+          </Form>
+        ) : (
+          <>
+          <div className='company-overview-by-admin'>
+            <h3>
+              About 
+              <FaEdit onClick={() => setEditableCompanyDetails(true)} style={{ cursor: 'pointer' }} />
+            </h3>
+            <p>{companyDetails.overView}</p>
+            <h4>Website</h4>
+            <p>
+              <a href={companyDetails.websiteLink} target="_blank" rel="noopener noreferrer">
+                {companyDetails.websiteLink}
+              </a>
+            </p>
+            <h4>Industry Type</h4>
+            <p>{companyDetails.industry}</p>
+            <h4>Description</h4>
+            <p>{companyDetails.discription}</p>
+            <h4>Industry Service</h4>
+            <p>{companyDetails.industryService}</p>
+            <h4>Company Size</h4>
+            <p>{companyDetails.companySize === 0 ? '' : companyDetails.companySize}</p>
+            <h4>Headquarters</h4>
+            <p>{companyDetails.headquaters}</p>
+            <h4>Founded</h4>
+            <p>{companyDetails.year === 0 ? '' : companyDetails.year}</p>
+            <h4>Location</h4>
+            <p>{companyDetails.location}</p>
+            <h4>Specialties</h4>
+            <p>{companyDetails.specialties}</p>
+            </div>
+          </>
         )}
-
       </div>
     </div>
   );
-}
+};
 
 export default CompanyDetailsByAdmin;

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, FormGroup } from 'react-bootstrap';
 import { FaEdit } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
+import './HrDashboard.css';
 
 const CompnayOverview = () => {
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -10,8 +11,8 @@ const CompnayOverview = () => {
     const location = useLocation();
     const userName = location.state?.userName || '';
     const userEmail = location.state?.userEmail || '';
- 
-  
+
+
 
     useEffect(() => {
         if (userEmail) {
@@ -29,7 +30,7 @@ const CompnayOverview = () => {
     };
     const companyName = userData.companyName;
     console.log(companyName)
-   
+
     const [companyinfoieditMode, setCompanyInfoEditMode] = useState(false);
     const [maininfoeditMode, setMainInfoEditMode] = useState(false);
     const [companyInfo, setCompanyInfo] = useState({
@@ -59,26 +60,26 @@ const CompnayOverview = () => {
             // Handle error state or display error message to user
         }
     };
-    
 
-      // Fetch company details when component mounts
-  useEffect(() => {
-    const fetchCompanyDetails = async () => {
-      try {
-        const response = await axios.get(`${BASE_API_URL}/getCompanyByName?companyName=${companyName}`);
-        setCompanyInfo(response.data);
-      } catch (error) {
-        console.error('Error fetching company details:', error);
-      }
-    };
 
-    fetchCompanyDetails();
-  }, [companyName]);
+    // Fetch company details when component mounts
+    useEffect(() => {
+        const fetchCompanyDetails = async () => {
+            try {
+                const response = await axios.get(`${BASE_API_URL}/getCompanyByName?companyName=${companyName}`);
+                setCompanyInfo(response.data);
+            } catch (error) {
+                console.error('Error fetching company details:', error);
+            }
+        };
 
-  
+        fetchCompanyDetails();
+    }, [companyName]);
+
+
 
     return (
-        <div className='company-overview' style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+        <div className='company-overview'>
             <Card style={{ marginTop: '20px' }}>
                 <Card.Body>
                     {companyinfoieditMode ? (
@@ -121,33 +122,6 @@ const CompnayOverview = () => {
                                     onChange={handleInputChange}
                                 />
                             </FormGroup>
-                            <Button variant="primary" onClick={handleSave}>
-                                Save
-                            </Button>
-                        </Form>
-                    ) : (
-                        <>
-                            <h3>About {companyName}  <FaEdit onClick={() => setCompanyInfoEditMode(true)} style={{ cursor: 'pointer' }} /></h3>
-
-                            <p>{companyInfo.overView}</p>
-                            <h4>Website</h4>
-                            <p>
-                                <a href={companyInfo.websiteLink} target="_blank" rel="noopener noreferrer">
-                                    {companyInfo.websiteLink}
-                                </a>
-                            </p>
-                            <h4>Industry</h4>
-                            <p>{companyInfo.industryService}</p>
-                            <h4>Company Size</h4>
-                            <p>{companyInfo.companySize}</p>
-                        </>
-                    )}
-                </Card.Body>
-            </Card>
-            <Card style={{ marginTop: '20px' }}>
-                <Card.Body>
-                    {maininfoeditMode ? (
-                        <Form>
                             <FormGroup controlId="headquaters">
                                 <Form.Label><h4>Headquarters</h4></Form.Label>
                                 <Form.Control
@@ -181,17 +155,31 @@ const CompnayOverview = () => {
                         </Form>
                     ) : (
                         <>
-                            <h4>Headquarters <FaEdit onClick={() => setMainInfoEditMode(true)} style={{ cursor: 'pointer' }} /></h4>
+                            <h3>About {companyName}  <FaEdit onClick={() => setCompanyInfoEditMode(true)} style={{ cursor: 'pointer' }} /></h3>
+
+                            <p>{companyInfo.overView}</p>
+                            <h4>Website</h4>
+                            <p>
+                                <a href={companyInfo.websiteLink} target="_blank" rel="noopener noreferrer">
+                                    {companyInfo.websiteLink}
+                                </a>
+                            </p>
+                            <h4>Industry</h4>
+                            <p>{companyInfo.industryService}</p>
+                            <h4>Company Size</h4>
+                            <p>{companyInfo.companySize === 0 ? '' : companyInfo.companySize}</p>
+                            <h4>Headquarters</h4>
                             <p>{companyInfo.headquaters}</p>
                             <h4>Founded</h4>
-                            <p>{companyInfo.year}</p>
+                            <p>{companyInfo.year === 0 ? '' : companyInfo.year}</p>
                             <h4>Specialties</h4>
                             <p>{companyInfo.specialties}</p>
                         </>
                     )}
                 </Card.Body>
             </Card>
-       
+     
+
         </div>
     );
 };

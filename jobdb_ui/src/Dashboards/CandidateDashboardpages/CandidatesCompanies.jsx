@@ -152,12 +152,11 @@ const CandidatesCompanies = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-
         {companies.length > 0 ? (
-          <div className="row">
+          <div className="row  cards d-flex flex-wrap justify-content-start">
             {companies.map((company) => (
-              <div key={company.companyId} className="col-md-4 mb-4">
-                <Card className="company-card">
+              <div key={company.companyId} className="col-md-4 mb-4 ">
+                <Card className="company-card ">
                   <Card.Body>
                     <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                     <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
@@ -166,7 +165,7 @@ const CandidatesCompanies = () => {
                 </Card>
               </div>
             ))}
-          </div>
+            </div>
         ) : (
           <div className="d-flex justify-content-center mt-5">
             <div className="spinner-border text-primary" role="status">

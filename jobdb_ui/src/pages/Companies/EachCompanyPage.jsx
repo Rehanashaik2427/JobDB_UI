@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
+import { FaFacebook, FaInstagramSquare, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CompanyJobs from './CompanyJobs';
 import CompanyOverView from './CompanyOverView';
@@ -19,6 +20,8 @@ const EachCompanyPage = () => {
   const [companyName, setCompanyName] = useState("");
   const [showModal, setShowModal] = useState(false); // State to manage modal visibility
   const [modalContent, setModalContent] = useState(''); // State to manage modal content
+  const [countOfTotalJobs, setCountOfTotalJobs] = useState();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +30,7 @@ const EachCompanyPage = () => {
       fetchCountOfApplicationByCompany();
       fetchCountOfHRByCompany();
       fetchCountOfJobsByCompany();
+      fetchCountOfTotalJobsByCompany()
     }
   }, [companyId]);
 
@@ -75,6 +79,16 @@ const EachCompanyPage = () => {
     }
   };
 
+  const fetchCountOfTotalJobsByCompany = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_API_URL}/countOfTotalJobsByCompany?companyId=${companyId}`
+      );
+      setCountOfTotalJobs(response.data);
+    } catch (error) {
+      console.error('Error fetching count of jobs:', error);
+    }
+  };
   const fetchCompanyLogo = async (companyName) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/logo`, { params: { companyName }, responseType: 'arraybuffer' });
@@ -150,10 +164,35 @@ const EachCompanyPage = () => {
       }
     }
   };
-  return (
-    <Container fluid className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
 
-      <Col style={{ overflowY: 'scroll' }}>
+
+
+  const handleCompanyIconClick = (socialMedia) => {
+    let url;
+    switch (socialMedia) {
+      case 'Facebook':
+        url = `https://www.facebook.com/${companyName}`;
+        break;
+      case 'Twitter':
+        url = `https://twitter.com/${companyName}`;
+        break;
+      case 'Instagram':
+        url = `https://www.instagram.com/${companyName}`;
+        break;
+      case 'LinkedIn':
+        url = `https://www.linkedin.com/company/${companyName}`;
+        break;
+      default:
+        url = '';
+    }
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
+  return (
+    <div className='dashboard-container'>
+
+      <Col>
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
             <div style={{ position: 'relative', height: '55%' }}>
@@ -174,7 +213,26 @@ const EachCompanyPage = () => {
                 />
               </label>
             </div>
-            <div><h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{companyName}</h1></div>
+            <div><h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{companyName}</h1>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
+                <FaFacebook
+                  onClick={() => handleCompanyIconClick('Facebook')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2', marginRight: '10px' }}
+                />
+                <FaTwitter
+                  onClick={() => handleCompanyIconClick('Twitter')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2', marginLeft: '10px', marginRight: '10px' }}
+                />
+                <FaInstagramSquare
+                  onClick={() => handleCompanyIconClick('Instagram')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584', marginLeft: '10px', marginRight: '10px' }}
+                />
+                  <FaLinkedin
+                  onClick={() => handleCompanyIconClick('LinkedIn')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5',marginLeft:'10px'}}
+                />
+              </div>
+            </div>
             <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
               <li>
                 <span>
@@ -222,7 +280,7 @@ const EachCompanyPage = () => {
             )}
           </Col>
           <Col>
-            <Card style={{ height: '100%' }}>
+            <Card className='key-stats'>
               <Card.Body>
                 <Row className="mb-3">
                   <Col>
@@ -249,22 +307,25 @@ const EachCompanyPage = () => {
                 <Row className="mb-2">
                   <Col>
                     {countOfHR > 0 ? (
-                      <h5>HR mapped = Yes</h5>
+                      <h5>HR mapped : Yes</h5>
                     ) : (
-                      <h5>HR mapped = No</h5>
+                      <h5>HR mapped : No</h5>
                     )}
                     <h5>Total HR's: {countOfHR}</h5>
                   </Col>
                 </Row>
                 <Row className="mb-2">
                   <Col>
+                    <h5>Total Jobs: {countOfTotalJobs}</h5>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Col>
                     <h5>Key Stats:</h5>
                     <ul>
-                      <li>Total Job Postings: {countOfJobs}</li>
-                      <li>Conversion Rate: 12%</li>
+                      <li>Total Active Jobs: {countOfJobs}</li>
                       <li>Avg. Time to Fill a Job: 7 days</li>
                       <li>Top Searched Job: Software Engineer</li>
-                      <li>User Engagement: 75% daily active users</li>
                     </ul>
                   </Col>
                 </Row>
@@ -328,7 +389,7 @@ const EachCompanyPage = () => {
         </Modal.Body>
       </Modal>
 
-    </Container>
+    </div>
   );
 };
 

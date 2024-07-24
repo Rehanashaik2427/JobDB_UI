@@ -74,7 +74,7 @@ const popover = (summary) => (
     </Popover>
   );
   return (
-    <div  className="company-job"style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+    <div  className="company-job">
             <div className="jobs_list">
                 {jobs.length > 0 && (
                     <div>

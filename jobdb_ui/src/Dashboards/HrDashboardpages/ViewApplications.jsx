@@ -408,73 +408,73 @@ const ViewApplications = () => {
           </Modal>
 
 
-          <div>
-            {loading ? (
-              <div className="d-flex justify-content-center align-items-center">
-                <div className="spinner-bubble spinner-bubble-primary m-5" />
-                <span>Loading...</span>
-              </div>
-            ) : applications.length === 0 ? (
-              <section>
-                <h2>Sorry, you haven't received any applications yet.</h2>
-              </section>
-            ) : (
-              <div>
-                <Table hover className='text-center'>
-                  <thead className="table-light">
-                    <tr>
-                      <th scope="col">Job Title</th>
-                      <th scope="col">Candidate Name</th>
-                      <th scope="col">Candidate Email</th>
-                      <th scope="col">Resume ID</th>
-                      <th scope="col" onClick={() => handleSort('appliedOn')}>
-                        Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col" onClick={() => handleSort('applicationStatus')}>
-                        Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                      </th>
-                      <th scope="col">View Details</th>
-                      <th scope="col">Action</th>
-                      <th scope="col">Chat</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {applications.map((application) => (
-                      <tr key={application.applicationId}>
-                        <td>{application.jobRole}</td>
-                        <td>{candidateName[application.candidateId]}</td>
-                        <td>{candidateEmail[application.candidateId]}</td>
-                        <td>{renderResumeComponent(application.resumeId)}</td>
-                        <td>{application.appliedOn}</td>
-                        <td>{application.applicationStatus}</td>
-                        <td>
-                          <Link
-                            to={{
-                              pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
-                              state: { userEmail, applicationId: application.applicationId, userName },
-                            }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
+            <div>
+              {loading ? (
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="spinner-bubble spinner-bubble-primary m-5" />
+                  <span>Loading...</span>
+                </div>
+              ) : applications.length === 0 ? (
+                <section>
+                  <h2>Sorry, you haven't received any applications yet.</h2>
+                </section>
+              ) : (
+                <div>
+                  <Table hover className='text-center'>
+                    <thead className="table-light">
+                      <tr>
+                        <th scope="col">Job Title</th>
+                        <th scope="col">Candidate Name</th>
+                        <th scope="col">Candidate Email</th>
+                        <th scope="col">Resume ID</th>
+                        <th scope="col" onClick={() => handleSort('appliedOn')}>
+                          Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th>
+                        {/* <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                          Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th> */}
+                        <th scope="col">View Details</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Chat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {applications.map((application) => (
+                        <tr key={application.applicationId}>
+                          <td>{application.jobRole}</td>
+                          <td>{candidateName[application.candidateId]}</td>
+                          <td>{candidateEmail[application.candidateId]}</td>
+                          <td>{renderResumeComponent(application.resumeId)}</td>
+                          <td>{application.appliedOn}</td>
+                          {/* <td>{application.applicationStatus}</td> */}
+                          <td>
+                            <Link
+                              to={{
+                                pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
                                 state: { userEmail, applicationId: application.applicationId, userName },
-                              });
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faEye}
-                              style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
+                              }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
+                                  state: { userEmail, applicationId: application.applicationId, userName },
+                                });
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faEye}
+                                style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
+                              />
+                            </Link>
+                          </td>
+                          <td style={{ alignItems: 'center' }}>
+                            <Slider
+                              initialStatus={application.applicationStatus}
+                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                             />
-                          </Link>
-                        </td>
-                        <td style={{ alignItems: 'center' }}>
-                          <Slider
-                            initialStatus={application.applicationStatus}
-                            onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                          />
-                        </td>
-                        <td onClick={() => handleChatClick(application.applicationId)}>
-                          <SiImessage size={25} style={{ color: newMessageReceived ? 'red' : 'black' }} />
-                        </td>
+                          </td>
+                          <td onClick={() => handleChatClick(application.applicationId)}>
+                            <SiImessage size={25} />
+                          </td>
 
                       </tr>
                     ))}

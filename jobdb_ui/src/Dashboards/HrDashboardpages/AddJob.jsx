@@ -151,8 +151,8 @@ const AddJob = () => {
                         name="numberOfPosition"
                         value={formData.numberOfPosition}
                         onChange={handleChange}
-                        required
                         placeholder='Number of openings'
+                        required
                       />
                     </Form.Group>
                   </Col>

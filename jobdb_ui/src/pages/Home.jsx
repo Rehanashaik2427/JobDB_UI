@@ -6,7 +6,6 @@ import { Button, Card, Carousel, Container, Nav, Navbar, OverlayTrigger, Popover
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
 import HomeFooter from './HomeFooter';
-import LatestJobsCompanies from './LatestJobsCompanies';
 import './PagesStyle/Pages.css';
 
 
@@ -83,8 +82,12 @@ const Home = () => {
         sortBy: sortedColumn,
         sortOrder: sortOrder,
       };
-      const response = await axios.get(`${BASE_API_URL}/paginationJobs`, { params });
-      setJobs(response.data.content);
+      let response;
+      if (search) {
+        response = await axios.get(`${BASE_API_URL}/searchJobs`, { params: { ...params, search } });
+      } else {
+        response = await axios.get(`${BASE_API_URL}/latestJobs`, { params });
+      }      setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -147,14 +150,15 @@ const Home = () => {
               src="/jb_logo.png"
               alt="JobBox Logo"
               className="logo"
-              style={{ height: '100px', width: '300px', marginRight: '100px' }}
+             style={{  backgroundColor: 'transparent'
+             }}
             />
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to="/" style={{ marginRight: '40px' }}>Home</Nav.Link>
+            <Nav className="me-auto" >
+              <Nav.Link as={Link} to="/" style={{ marginRight: '40px',marginLeft:'150px' }}>Home</Nav.Link>
               <Nav.Link as={Link} to='/about-jobbox' style={{ marginRight: '40px' }}>About Jobbox</Nav.Link>
               <Nav.Link as={Link} to="/aboutus" style={{ marginRight: '40px' }}>About Us</Nav.Link>
               <Nav.Link as={Link} to="/admin-register" style={{ marginRight: '40px' }}>Admin</Nav.Link>
@@ -206,7 +210,7 @@ const Home = () => {
           <div>
 
             <div className='text-center'>
-              <h2>Jobs</h2>
+              <h2>Latest Jobs & Companies</h2>
             </div>
             <Table hover className='text-center' >
               <thead className="table-light">
@@ -297,9 +301,7 @@ const Home = () => {
         </Card>
       </div>
 
-      <div className='text-center'>
-        <LatestJobsCompanies />
-      </div>
+    
       <div>
         <HomeFooter />
       </div>

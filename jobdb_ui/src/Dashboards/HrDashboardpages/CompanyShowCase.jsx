@@ -1,11 +1,12 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Card, Col, Row } from 'react-bootstrap'
-import { FaBars } from 'react-icons/fa'
+import { FaBars, FaFacebook, FaInstagramSquare, FaLinkedin, FaTwitter } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 import CompanyJobs from './CompanyJobs'
 import CompnayOverview from './CompnayOverview'
 import HrLeftSide from './HrLeftSide'
+
 
 const CompanyShowCase = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -20,8 +21,8 @@ const CompanyShowCase = () => {
   const [countOfActiveJobs, setCountOfActiveJobs] = useState();
   const [countOfShortlistedCandiCompany, setCountOfShortlistedCandiCompany] = useState(0);
   const [countOfDreamApplicationsInCompany, setCountOfDreamApplicationsInCompany] = useState(0);
-   const [companyName, setCompanyName] = useState('');
-  
+  const [companyName, setCompanyName] = useState('');
+
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
@@ -71,7 +72,7 @@ const CompanyShowCase = () => {
 
   const countOfHRSInCompany = async () => {
     console.log(companyName)
-  
+
     try {
       const response = await axios.get(`${BASE_API_URL}/countOfHRSInCompany?companyName=${companyName}`);
       console.log("Response from countOfHRSInCompany API:", response.data); // Log response for debugging
@@ -207,139 +208,179 @@ const CompanyShowCase = () => {
     }
   };
 
+  const handleCompanyIconClick = (socialMedia) => {
+    let url;
+    switch (socialMedia) {
+      case 'Facebook':
+        url = `https://www.facebook.com/${companyName}`;
+        break;
+      case 'Twitter':
+        url = `https://twitter.com/${companyName}`;
+        break;
+      case 'Instagram':
+        url = `https://www.instagram.com/${companyName}`;
+        break;
+      case 'LinkedIn':
+        url = `https://www.linkedin.com/company/${companyName}`;
+        break;
+      default:
+        url = '';
+    }
+    console.log(`Opening URL: ${url}`); // Debugging URL
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
+  
 
   return (
     // <Container fluid className="dashboard-container">
-    <div fluid className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
-        <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
-          <HrLeftSide user={{ userName, userEmail }} />
-        </div>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
-        <div md={10} className="rightside" style={{ overflowY: 'scroll' }}>
-          <Card style={{ width: '100%', height: '60%' }}>
-            <Card.Body style={{ padding: 0, position: 'relative' }}>
-              <div style={{ position: 'relative', height: '55%' }}>
-                <img
-                  src={companyBanner || "https://cdn.pixabay.com/photo/2016/04/20/07/16/logo-1340516_1280.png"}
-                  alt="Company Banner"
-                  className="banner-image"
-                  onClick={() => handleCameraIconClick('banner')}
-                  style={{ width: '100%', height: '200px', objectFit: 'cover', cursor: 'pointer' }}
+    <div  className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
+      <div  className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <HrLeftSide user={{ userName, userEmail }} />
+      </div>
+      <div className="hamburger-icon" onClick={toggleLeftSide}>
+        <FaBars />
+      </div>
+      <div className="rightside" style={{overflowY:'hidden'}}>
+        <Card style={{ width: '100%', height: '60%' }}>
+          <Card.Body style={{ padding: 0, position: 'relative' }}>
+            <div style={{ position: 'relative', height: '55%' }}>
+              <img
+                src={companyBanner || "https://cdn.pixabay.com/photo/2016/04/20/07/16/logo-1340516_1280.png"}
+                alt="Company Banner"
+                className="banner-image"
+                onClick={() => handleCameraIconClick('banner')}
+                style={{ width: '100%', height: '200px', objectFit: 'cover', cursor: 'pointer' }}
+              />
+              <input
+                id="bannerInput"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={(e) => handleFileChange('banner', e.target.files[0])}
+                accept="image/*"
+              />
+            </div>
+            <div style={{ position: 'absolute', top: '55%', left: '50px', transform: 'translateY(-50%)' }}>
+              <img
+                src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
+                alt="Company Logo"
+                className="logo-image"
+                style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
+                onClick={() => handleCameraIconClick('logo')}
+              />
+              <input
+                id="logoInput"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={(e) => handleFileChange('logo', e.target.files[0])}
+                accept="image/*"
+              />
+            </div>
+            <div>
+              <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{userData.companyName}</h1>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
+                <FaFacebook
+                  onClick={() => handleCompanyIconClick('Facebook')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2',marginRight:'10px' }}
                 />
-                <input
-                  id="bannerInput"
-                  type="file"
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleFileChange('banner', e.target.files[0])}
-                  accept="image/*"
+                <FaTwitter
+                  onClick={() => handleCompanyIconClick('Twitter')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2' ,marginLeft:'10px',marginRight:'10px'}}
+                />
+                <FaInstagramSquare
+                  onClick={() => handleCompanyIconClick('Instagram')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584',marginLeft:'10px',marginRight:'10px' }}
+                />
+                <FaLinkedin
+                  onClick={() => handleCompanyIconClick('LinkedIn')}
+                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5',marginLeft:'10px'}}
                 />
               </div>
-              <div style={{ position: 'absolute', top: '55%', left: '50px', transform: 'translateY(-50%)' }}>
-                  <img
-                    src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
-                    alt="Company Logo"
-                    className="logo-image"
-                    style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
-                    onClick={() => handleCameraIconClick('logo')}
-                  />
-                <input
-                  id="logoInput"
-                  type="file"
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleFileChange('logo', e.target.files[0])}
-                  accept="image/*"
-                />
-              </div>
-              <div><h1 style={{ position: 'absolute', top: '70%', right: '100px'}}>{userData.companyName}</h1></div>
-              <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
+
+
+            </div>
+
+            <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
               <li>
-                  <span>
-                    <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', fontSize:'24px' ,color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                      About
-                    </a>
-                  </span>
-                </li>
+                <span>
+                  <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                    About
+                  </a>
+                </span>
+              </li>
 
-                <li>
-                  <span>
-                    <a onClick={() => handleTabClick('jobs')} style={{ paddingLeft: '24px', fontSize:'24px' ,color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                      Jobs
-                    </a>
-                  </span>
-                </li>
-              </ul>
+              <li>
+                <span>
+                  <a onClick={() => handleTabClick('jobs')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                    Jobs
+                  </a>
+                </span>
+              </li>
+            </ul>
 
-            </Card.Body>
-          </Card>
+          </Card.Body>
+        </Card>
 
-          <Row>
-            <Col xs={8}>
-              {activeTab === 'home' && (
-                <div>
-                  <Card onClick={() => handleTabClick('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
-                    <Card.Body>
-                      <h3>About {userData.companyName}</h3>
-                      <p>Click to view Overview content...</p>
-                    </Card.Body>
-                  </Card>
+        <Row>
+          <Col xs={8}>
+            {activeTab === 'home' && (
+              <div>
+                <Card onClick={() => handleTabClick('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+                  <Card.Body>
+                    <h3>About {userData.companyName}</h3>
+                    <p>Click to view Overview content...</p>
+                  </Card.Body>
+                </Card>
 
-                  <Card onClick={() => handleTabClick('jobs')} style={{ cursor: 'pointer', marginTop: '20px' }}>
-                    <Card.Body>
-                      <h3>Jobs</h3>
-                      <p>Click to view Jobs content...</p>
-                    </Card.Body>
-                  </Card>
-                </div>
-              )}
-              {activeTab === 'overview' && <CompnayOverview />}
-              {activeTab === 'jobs' && <CompanyJobs />}
-            </Col>
-            <Col >
-              <Card style={{ height: '100%' }}>
-                <Card.Body>
-                  <Row className="mb-3">
-                    <h1>Other Information</h1>
-                    {/* <Col >
-                      <Button variant="primary" style={{ marginRight: "12px" }}>Claim/Login</Button>
-                      <Button variant="success">Apply</Button>
-                    </Col> */}
-                  </Row>
+                <Card onClick={() => handleTabClick('jobs')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+                  <Card.Body>
+                    <h3>Jobs</h3>
+                    <p>Click to view Jobs content...</p>
+                  </Card.Body>
+                </Card>
+              </div>
+            )}
+            {activeTab === 'overview' && <CompnayOverview style={{overflowY:'scroll'}} />}
+            {activeTab === 'jobs' && <CompanyJobs />}
+          </Col>
+          <Col>
+            <Card style={{ height: '90%',marginTop:'5px',marginRight:'30px'}} className='key-stats'>
+              <Card.Body>
+                <Row className="mb-3">
+                  <h1>Other Information</h1>
+           
+                </Row>
 
-                  {/* <Row className="mb-2">
-                    <Col>
-                      <h5>Total Jobs:{countOfJobs}</h5>
-                    </Col>
-                  </Row> */}
-                  <Row className="mb-2">
-                    <Col>
-                      <h5>Applicants:{countOfApplications}</h5>
-                    </Col>
-                  </Row>
-                  <Row className="mb-2">
-                    <Col>
-                      <h5>Total HR's:{countOfHr}</h5>
-                    </Col>
-                  </Row>
+             
+                <Row className="mb-2">
+                  <Col>
+                    <h5>Applicants:{countOfApplications}</h5>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Col>
+                    <h5>Total HR's:{countOfHr}</h5>
+                  </Col>
+                </Row>
 
-                  <Row className="mb-2">
-                    <Col>
-                      <h5>Key Stats:</h5>
-                      <ul>
-                        <li>Active Job Postings: {countOfActiveJobs}</li> {/* Placeholder values */}
-                        <li>Shortlisted Candidates: {countOfShortlistedCandiCompany}</li>
-                        <li>Avg. Time to Fill a Job: 7 days</li>
-                        <li>Dream Applications: {countOfDreamApplicationsInCompany}</li>
-                        {/* <li>Top Searched Job: Software Engineer</li>
+                <Row className="mb-2">
+                  <Col>
+                    <h5>Key Stats:</h5>
+                    <ul>
+                      <li>Active Job Postings: {countOfActiveJobs}</li> {/* Placeholder values */}
+                      <li>Shortlisted Candidates: {countOfShortlistedCandiCompany}</li>
+                      <li>Avg. Time to Fill a Job: 7 days</li>
+                      <li>Dream Applications: {countOfDreamApplicationsInCompany}</li>
+                      {/* <li>Top Searched Job: Software Engineer</li>
                         <li>User Engagement: 75% daily active users</li> */}
-                      </ul>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+                    </ul>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 
 const CompanyOverView = ({ companyId }) => {
@@ -25,7 +25,7 @@ const CompanyOverView = ({ companyId }) => {
   }
 
   return (
-    <div className='company-overview' style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+    <div className='company-overview'>
       <Card style={{ marginTop: '20px' }}>
         <Card.Body>
           <>
@@ -40,7 +40,7 @@ const CompanyOverView = ({ companyId }) => {
             <h4>Industry</h4>
             <p>{overviewData.industryService}</p>
             <h4>Company Size</h4>
-            <p>{overviewData.companySize}</p>
+            <p>{overviewData.companySize === 0 ? '' : overviewData.companySize}</p>          
           </>
         </Card.Body>
       </Card>
@@ -50,7 +50,7 @@ const CompanyOverView = ({ companyId }) => {
             <h4>Headquarters</h4>
             <p>{overviewData.headquaters}</p>
             <h4>Founded</h4>
-            <p>{overviewData.year}</p>
+            <p>{overviewData.year === 0 ? '' : overviewData.year}</p>   
             <h4>Specialties</h4>
             <p>{overviewData.specialties}</p>
           </>
