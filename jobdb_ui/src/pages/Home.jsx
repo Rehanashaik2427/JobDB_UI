@@ -85,6 +85,7 @@ const Home = () => {
       let response;
       if (search) {
         response = await axios.get(`${BASE_API_URL}/searchJobs`, { params: { ...params, search } });
+        setJobs(response.data.content);
       } else {
         response = await axios.get(`${BASE_API_URL}/latestJobs`, { params });
       } setJobs(response.data.content);
