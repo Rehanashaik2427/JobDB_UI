@@ -71,7 +71,13 @@ const Home = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+    if(search){
+      fetchJobBySearch()
+    }
+    else{
+      fetchData();
+
+    }
 
   }, [page, pageSize, search, sortedColumn, sortOrder]);
   async function fetchData() {
@@ -86,9 +92,11 @@ const Home = () => {
       if (search) {
         response = await axios.get(`${BASE_API_URL}/searchJobs`, { params: { ...params, search } });
         setJobs(response.data.content);
-      } else {
+      } 
+      else {
         response = await axios.get(`${BASE_API_URL}/latestJobs`, { params });
-      } setJobs(response.data.content);
+      } 
+      setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);

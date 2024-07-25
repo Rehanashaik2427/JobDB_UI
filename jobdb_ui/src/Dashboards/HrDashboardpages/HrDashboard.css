@@ -746,3 +746,7 @@ section {
   margin-right: 20px; /* Right margin of 20px */
   margin-left: 5px;
 }
+
+.custom-col {
+  margin: 15px; /* Adjust the value as needed */
+}

@@ -466,8 +466,8 @@ const ViewApplications = () => {
                               />
                             </Link>
                           </td>
-                          <td style={{ alignItems: 'center' }}>
-                            <Slider
+                          <td >
+                            <Slider 
                               initialStatus={application.applicationStatus}
                               onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                             />

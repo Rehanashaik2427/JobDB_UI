@@ -152,28 +152,29 @@ const CandidatesCompanies = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        {companies.length > 0 ? (
-          <div className="row  cards d-flex flex-wrap justify-content-start">
-            {companies.map((company) => (
-              <div key={company.companyId} className="col-md-4 mb-4 ">
-                <Card className="company-card ">
-                  <Card.Body>
-                    <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                    <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                    <Button onClick={() => handleClick(company.companyId)}>View</Button>
-                  </Card.Body>
-                </Card>
-              </div>
-            ))}
-          </div>
 
-        ) : (
-          <div className="d-flex justify-content-center mt-5">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
+        <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
+          {companies.length > 0 ? (
+            companies.map((company) => (
+              <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}>
+                <Card.Body>
+                  <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                  <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+
+                  <Button onClick={() => handleClick(company.companyId)}>
+                    View
+                  </Button>
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <div className="d-flex justify-content-center mt-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Pagination */}
         <div className="pagination-container d-flex justify-content-end align-items-center mt-4">
