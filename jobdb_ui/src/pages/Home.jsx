@@ -85,6 +85,7 @@ const Home = () => {
       let response;
       if (search) {
         response = await axios.get(`${BASE_API_URL}/searchJobs`, { params: { ...params, search } });
+        setJobs(response.data.content);
       } else {
         response = await axios.get(`${BASE_API_URL}/latestJobs`, { params });
       }      setJobs(response.data.content);
@@ -173,7 +174,7 @@ const Home = () => {
       </Navbar>
 
       <div className="carousel-container" style={{ position: 'relative' }}>
-        <Card body className="text-center">
+        <Card body className="text-center" style={{width:"100%"}}>
           <Carousel >
             {carouselImageList.map((img, ind) => (
               <Carousel.Item key={ind} >
@@ -279,7 +280,7 @@ const Home = () => {
       </div>
 
       <div className="carousel-container" style={{ position: 'relative' }}>
-        <Card body className="text-center">
+        <Card body className="text-center" style={{width:"100%"}}>
           <Carousel indicators={false}>
             {groupedImages.map((group, index) => (
               <Carousel.Item key={index}>
