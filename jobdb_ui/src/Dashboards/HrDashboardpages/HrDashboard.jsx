@@ -208,7 +208,6 @@ const HrDashboard = () => {
                 {initials}
               </div>
             </Dropdown.Toggle>
-
             <Dropdown.Menu className="mt-3">
               <Dropdown.Item as={Link} to="/">
                 <i className="i-Data-Settings me-1" /> Account settings
@@ -223,9 +222,9 @@ const HrDashboard = () => {
           <h3 className='status-info text-center bg-light'>Company status</h3>
           <Row className="dashboard d-flex mt-4">
             {DATA.map((card, index) => (
-              <Col lg={3} sm={6} key={index}>
-                <Card className="card-icon-bg gap-3 card-icon-bg-primary o-hidden mb-4">
-                  <Card.Body className="align-items-center gap-4">
+              <Col lg={3} sm={6} key={index} >
+                <Card className="card-icon-bg gap-3 card-icon-bg-primary o-hidden mb-4" style={{maxWidth:'250px'}}>
+                  <Card.Body className="align-items-center gap-4" >
                     <FontAwesomeIcon icon={card.icon} className="me-2 text-primary mb-0 text-24 fw-semibold" />
                     <div className="content gap-1">
                       {card.link ? (
@@ -245,14 +244,18 @@ const HrDashboard = () => {
               </Col>
             ))}
           </Row>
+
+
         </Container>
         <Row>
           <Col md={6} className="offset-md-3 mt-4">
-            <Card className="shadow-sm rounded-4"  >
-              <Card.Header className=" bg-light text-center" style={{ height: '40px' }}>
+            <Card className="shadow-sm rounded-4">
+              <Card.Header className=" bg-light text-center" style={{ height: '30px', width: '70%' }}>
                 <Card.Title as="h4" className='text-center'>Monthly Job Percentages</Card.Title>
               </Card.Header>
-              <Card.Body>
+              <Card.Body style={{
+                height: '300px'
+              }}>
                 <Bar
                   data={monthlyJobData}
                   options={{

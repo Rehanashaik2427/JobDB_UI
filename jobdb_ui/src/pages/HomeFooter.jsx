@@ -14,7 +14,6 @@ const HomeFooter = () => {
                 
                 <div className='contact'>
                     <div className='social-icons'>
-                        <img src="/jb_logo.png" className='text-center' />
 
                         <a href='https://www.facebook.com' target='_blank' rel='noopener noreferrer' className='icon'>
                             <FaFacebook />

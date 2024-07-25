@@ -71,7 +71,13 @@ const Home = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+    if (search) {
+      fetchJobBySearch()
+    }
+    else {
+      fetchData();
+
+    }
 
   }, [page, pageSize, search, sortedColumn, sortOrder]);
   async function fetchData() {
@@ -86,9 +92,11 @@ const Home = () => {
       if (search) {
         response = await axios.get(`${BASE_API_URL}/searchJobs`, { params: { ...params, search } });
         setJobs(response.data.content);
-      } else {
+      }
+      else {
         response = await axios.get(`${BASE_API_URL}/latestJobs`, { params });
-      }      setJobs(response.data.content);
+      }
+      setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -151,15 +159,16 @@ const Home = () => {
               src="/jb_logo.png"
               alt="JobBox Logo"
               className="logo"
-             style={{  backgroundColor: 'transparent'
-             }}
+              style={{
+                backgroundColor: 'transparent'
+              }}
             />
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto" >
-              <Nav.Link as={Link} to="/" style={{ marginRight: '40px',marginLeft:'150px' }}>Home</Nav.Link>
+              <Nav.Link as={Link} to="/" style={{ marginRight: '40px', marginLeft: '150px' }}>Home</Nav.Link>
               <Nav.Link as={Link} to='/about-jobbox' style={{ marginRight: '40px' }}>About Jobbox</Nav.Link>
               <Nav.Link as={Link} to="/aboutus" style={{ marginRight: '40px' }}>About Us</Nav.Link>
               <Nav.Link as={Link} to="/admin-register" style={{ marginRight: '40px' }}>Admin</Nav.Link>
@@ -173,12 +182,11 @@ const Home = () => {
         </Container>
       </Navbar>
 
-      <div className="carousel-container" style={{ position: 'relative' }}>
-        <Card body className="text-center" style={{width:"100%"}}>
+      <div className="carousel-container ">
+        <Card body className="text-center" style={{ width: '100%' }}>
           <Carousel >
             {carouselImageList.map((img, ind) => (
               <Carousel.Item key={ind} >
-
                 <img
                   className="d-block w-25 carousel-image"
                   src={img}
@@ -279,30 +287,29 @@ const Home = () => {
         {jobs.length === 0 && <h1>No jobs found.</h1>}
       </div>
 
-      <div className="carousel-container" style={{ position: 'relative' }}>
-        <Card body className="text-center" style={{width:"100%"}}>
-          <Carousel indicators={false}>
-            {groupedImages.map((group, index) => (
-              <Carousel.Item key={index}>
-                <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-                  {group.map((img, imgIndex) => (
-                    <div className="p-2" key={imgIndex} >
+      <Card body className="text-center" style={{ width: '100%' }}>
+        <Carousel indicators={false}>
+          {groupedImages.map((group, index) => (
+            <Carousel.Item key={index}>
+              <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+                {group.map((img, imgIndex) => (
+                  <div className="p-2" key={imgIndex} >
                       <img
                         className="d-block carousel-image"
                         src={img}
                         alt={`Slide ${index}-${imgIndex}`}
                         style={{ width: '200px', height: '150px', objectFit: 'cover', margin: '20px' }} // Set fixed width, height and object-fit
                       />
-                    </div>
-                  ))}
-                </div>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </Card>
-      </div>
+                  </div>
+                ))}
+              </div>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      </Card>
 
-    
+
+
       <div>
         <HomeFooter />
       </div>

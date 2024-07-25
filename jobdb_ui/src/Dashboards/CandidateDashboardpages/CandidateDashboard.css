@@ -408,14 +408,7 @@ table, th, td ,tr{
   text-align: center;
 }
 
-.cards {
-  padding-right: 12px;
-  display: flex; 
-  flex-wrap: wrap;
-  margin-left: 50px;
-  /* justify-content: center; */
- 
-}
+
 
 .company-card-job {
   border: 1px solid #ccc;
@@ -1114,4 +1107,15 @@ margin-right: auto;
   font-size: 14px; /* Font size */
   line-height: 1.5; /* Line height for readability */
   color: #a00707; /* Text color */
+}
+
+
+.chart-card{
+  width:400px;
+}
+
+
+.resume-card {
+  width: 200px;
+  margin: 12px;
 }

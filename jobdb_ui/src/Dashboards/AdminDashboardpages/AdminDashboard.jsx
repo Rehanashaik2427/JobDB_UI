@@ -112,7 +112,7 @@ const AdminDashboard = () => {
         <AdminleftSide />
       </div>
 
-      <div className="rightside" style={{ overflowY: 'scroll' }}>
+      <div className="rightside" style={{ overflowY: 'hidden' }}>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
           <i
             datafullscreen="true"
@@ -189,10 +189,10 @@ const AdminDashboard = () => {
           <Row className="mx-0">
             <Col md={6} className="offset-md-3 mt-4">
               <Card className="shadow-sm rounded-4" >
-                <Card.Header className="bg-light text-center">
+                <Card.Header className="bg-light text-center"style={{ height: '30px',width:'70%' }}>
                   <Card.Title as="h5">Monthly Validation</Card.Title>
                 </Card.Header>
-                <Card.Body>
+                <Card.Body style={{ height: '300px' }}>
                   <Bar
                     data={combinedData}
                     options={{
