@@ -209,29 +209,7 @@ const CompanyShowCase = () => {
       console.error('Error fetching company banner:', error);
     }
   };
-  
-  //   let url;
-  //   switch (socialMedia) {
-  //     case 'Facebook':
-  //       url = `https://www.facebook.com/${companyName}`;
-  //       break;
-  //     case 'Twitter':
-  //       url = `https://twitter.com/${companyName}`;
-  //       break;
-  //     case 'Instagram':
-  //       url = `https://www.instagram.com/${companyName}`;
-  //       break;
-  //     case 'LinkedIn':
-  //       url = `https://www.linkedin.com/company/${companyName}`;
-  //       break;
-  //     default:
-  //       url = '';
-  //   }
-  //   console.log(`Opening URL: ${url}`); // Debugging URL
-  //   if (url) {
-  //     window.open(url, '_blank');
-  //   }
-  // };
+
   const [editableSocialLinks, setEditableSocialLinks] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [socialMediaLinks, setSocialMediaLinks] = useState({
@@ -241,7 +219,7 @@ const CompanyShowCase = () => {
     linkedinLink: ''
   });
 
-  const handleShowModal = () => setShowModal(true);
+ 
   const handleCloseModal = () => setShowModal(false);
 
   const handleInputChange = (e) => {
@@ -280,14 +258,12 @@ const CompanyShowCase = () => {
         linkedinLink: response.data.linkedinLink || ''
       });
       setShowModal(true);
-
-      console.log(socialMediaLinks.facebooklonk)
     } catch (error) {
       console.error('Error fetching social media links:', error);
     }
 
   };
-  
+
   return (
     // <Container fluid className="dashboard-container">
     <div className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
@@ -346,77 +322,77 @@ const CompanyShowCase = () => {
               </div>
 
               <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Update Social Media Links</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {editableSocialLinks ? (
-            <Form>
-              <Form.Group controlId="facebook">
-                <Form.Label>Facebook Link</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="facebooklonk"
-                  value={socialMediaLinks.facebooklonk}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-              <Form.Group controlId="twitter">
-                <Form.Label>Twitter Link</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="twitterlink"
-                  value={socialMediaLinks.twitterlink}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-              <Form.Group controlId="instagram">
-                <Form.Label>Instagram Link</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="instagramlink"
-                  value={socialMediaLinks.instagramlink}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-              <Form.Group controlId="linkedin">
-                <Form.Label>LinkedIn Link</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="linkedinLink"
-                  value={socialMediaLinks.linkedinLink}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-              <Button variant="primary" onClick={handleSaveLinks}>
-                Save Changes
-              </Button>
-            </Form>
-          ) : (
-            <div>
-              <h4>Social Media Links</h4>
-              <p>
-                <strong>Facebook:</strong> <a href={socialMediaLinks.facebooklonk} target="_blank" rel="noopener noreferrer">{socialMediaLinks.facebooklonk}</a>
-              </p>
-              <p>
-                <strong>Twitter:</strong> <a href={socialMediaLinks.twitterlink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.twitterlink}</a>
-              </p>
-              <p>
-                <strong>Instagram:</strong> <a href={socialMediaLinks.instagramlink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.instagramlink}</a>
-              </p>
-              <p>
-                <strong>LinkedIn:</strong> <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.linkedinLink}</a>
-              </p>
-              <Button variant="primary" onClick={() => setEditableSocialLinks(true)}>
-                <FaEdit /> Edit
-              </Button>
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-        </Modal.Footer>
-      </Modal>
+                <Modal.Header closeButton>
+                  <Modal.Title>Update Social Media Links</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {editableSocialLinks ? (
+                    <Form>
+                      <Form.Group controlId="facebook">
+                        <Form.Label>Facebook Link</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="facebooklonk"
+                          value={socialMediaLinks.facebooklonk}
+                          onChange={handleInputChange}
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="twitter">
+                        <Form.Label>Twitter Link</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="twitterlink"
+                          value={socialMediaLinks.twitterlink}
+                          onChange={handleInputChange}
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="instagram">
+                        <Form.Label>Instagram Link</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="instagramlink"
+                          value={socialMediaLinks.instagramlink}
+                          onChange={handleInputChange}
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="linkedin">
+                        <Form.Label>LinkedIn Link</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="linkedinLink"
+                          value={socialMediaLinks.linkedinLink}
+                          onChange={handleInputChange}
+                        />
+                      </Form.Group>
+                      <Button variant="primary" onClick={handleSaveLinks}>
+                        Save Changes
+                      </Button>
+                    </Form>
+                  ) : (
+                    <div>
+                      <h4>Social Media Links</h4>
+                      <p>
+                        <strong>Facebook:</strong> <a href={socialMediaLinks.facebooklonk} target="_blank" rel="noopener noreferrer">{socialMediaLinks.facebooklonk}</a>
+                      </p>
+                      <p>
+                        <strong>Twitter:</strong> <a href={socialMediaLinks.twitterlink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.twitterlink}</a>
+                      </p>
+                      <p>
+                        <strong>Instagram:</strong> <a href={socialMediaLinks.instagramlink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.instagramlink}</a>
+                      </p>
+                      <p>
+                        <strong>LinkedIn:</strong> <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.linkedinLink}</a>
+                      </p>
+                      <Button variant="primary" onClick={() => setEditableSocialLinks(true)}>
+                        <FaEdit /> Edit
+                      </Button>
+                    </div>
+                  )}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+                </Modal.Footer>
+              </Modal>
 
 
             </div>
