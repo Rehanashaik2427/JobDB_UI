@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Card, Col, Row } from 'react-bootstrap'
-import { FaBars, FaFacebook, FaInstagramSquare, FaLinkedin, FaTwitter } from 'react-icons/fa'
+import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap'
+import { FaBars, FaEdit } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 import CompanyJobs from './CompanyJobs'
 import CompnayOverview from './CompnayOverview'
@@ -46,6 +46,7 @@ const CompanyShowCase = () => {
       fetchCompanyLogo(userData.companyName);
       fetchCompanyBanner(userData.companyName);
       countOfHRSInCompany(userData.companyName);
+      fetchSocialMediaLinks()
     }
   }, [userData.companyName]);
 
@@ -58,8 +59,6 @@ const CompanyShowCase = () => {
       console.log(error);
     }
   };
-
-
   // const {companyName} = userData.companyName
 
 
@@ -67,8 +66,11 @@ const CompanyShowCase = () => {
     if (companyName) {
       fetchCompanyLogo(companyName);
       fetchCompanyBanner(companyName);
+      handleSaveLinks(companyName)
     }
   }, [companyName])
+
+
 
   const countOfHRSInCompany = async () => {
     console.log(companyName)
@@ -207,42 +209,95 @@ const CompanyShowCase = () => {
       console.error('Error fetching company banner:', error);
     }
   };
+  
+  //   let url;
+  //   switch (socialMedia) {
+  //     case 'Facebook':
+  //       url = `https://www.facebook.com/${companyName}`;
+  //       break;
+  //     case 'Twitter':
+  //       url = `https://twitter.com/${companyName}`;
+  //       break;
+  //     case 'Instagram':
+  //       url = `https://www.instagram.com/${companyName}`;
+  //       break;
+  //     case 'LinkedIn':
+  //       url = `https://www.linkedin.com/company/${companyName}`;
+  //       break;
+  //     default:
+  //       url = '';
+  //   }
+  //   console.log(`Opening URL: ${url}`); // Debugging URL
+  //   if (url) {
+  //     window.open(url, '_blank');
+  //   }
+  // };
+  const [editableSocialLinks, setEditableSocialLinks] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [socialMediaLinks, setSocialMediaLinks] = useState({
+    facebooklonk: '',
+    twitterlink: '',
+    instagramlink: '',
+    linkedinLink: ''
+  });
 
-  const handleCompanyIconClick = (socialMedia) => {
-    let url;
-    switch (socialMedia) {
-      case 'Facebook':
-        url = `https://www.facebook.com/${companyName}`;
-        break;
-      case 'Twitter':
-        url = `https://twitter.com/${companyName}`;
-        break;
-      case 'Instagram':
-        url = `https://www.instagram.com/${companyName}`;
-        break;
-      case 'LinkedIn':
-        url = `https://www.linkedin.com/company/${companyName}`;
-        break;
-      default:
-        url = '';
-    }
-    console.log(`Opening URL: ${url}`); // Debugging URL
-    if (url) {
-      window.open(url, '_blank');
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSocialMediaLinks(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveLinks = async () => {
+    try {
+      await axios.put(`${BASE_API_URL}/updateSocialMediaLinks?companyName=${userData.companyName}`, {
+        facebooklonk: socialMediaLinks.facebooklonk,
+        twitterlink: socialMediaLinks.twitterlink,
+        instagramlink: socialMediaLinks.instagramlink,
+        linkedinLink: socialMediaLinks.linkedinLink
+      });
+      setSocialMediaLinks({
+        facebooklonk: '',
+        twitterlink: '',
+        instagramlink: '',
+        linkedinLink: ''
+      });
+      setEditableSocialLinks(false);
+      handleCloseModal(); // Close the modal after saving
+    } catch (error) {
+      console.error('Error updating social media links:', error.response ? error.response.data : error.message);
     }
   };
-  
 
+  const fetchSocialMediaLinks = async () => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/getSocialMediaLinks?companyName=${userData.companyName}`);
+      setSocialMediaLinks({
+        facebooklonk: response.data.facebooklonk || '',
+        twitterlink: response.data.twitterlink || '',
+        instagramlink: response.data.instagramlink || '',
+        linkedinLink: response.data.linkedinLink || ''
+      });
+      setShowModal(true);
+
+      console.log(socialMediaLinks.facebooklonk)
+    } catch (error) {
+      console.error('Error fetching social media links:', error);
+    }
+
+  };
+  
   return (
     // <Container fluid className="dashboard-container">
-    <div  className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
-      <div  className={`left-side ${showLeftSide ? 'show' : ''}`}>
+    <div className='dashboard-container' style={{ background: '#f2f2f2', minHeight: '100vh' }}>
+      <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
       <div className="hamburger-icon" onClick={toggleLeftSide}>
         <FaBars />
       </div>
-      <div className="rightside" style={{overflowY:'scroll'}}>
+      <div className="rightside" style={{ overflowY: 'scroll' }}>
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
             <div style={{ position: 'relative', height: '55%' }}>
@@ -279,28 +334,92 @@ const CompanyShowCase = () => {
             </div>
             <div>
               <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{userData.companyName}</h1>
-              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
-                <FaFacebook
-                  onClick={() => handleCompanyIconClick('Facebook')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2',marginRight:'10px' }}
-                />
-                <FaTwitter
-                  onClick={() => handleCompanyIconClick('Twitter')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2' ,marginLeft:'10px',marginRight:'10px'}}
-                />
-                <FaInstagramSquare
-                  onClick={() => handleCompanyIconClick('Instagram')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584',marginLeft:'10px',marginRight:'10px' }}
-                />
-                <FaLinkedin
-                  onClick={() => handleCompanyIconClick('LinkedIn')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5',marginLeft:'10px'}}
-                />
+
+              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', left: '900px' }}>
+
+                <div className="social-media-buttons">
+                  <Button variant="primary" onClick={fetchSocialMediaLinks}>Add Social Media Links</Button>
+
+
+                </div>
+
               </div>
+
+              <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Social Media Links</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {editableSocialLinks ? (
+            <Form>
+              <Form.Group controlId="facebook">
+                <Form.Label>Facebook Link</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="facebooklonk"
+                  value={socialMediaLinks.facebooklonk}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="twitter">
+                <Form.Label>Twitter Link</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="twitterlink"
+                  value={socialMediaLinks.twitterlink}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="instagram">
+                <Form.Label>Instagram Link</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="instagramlink"
+                  value={socialMediaLinks.instagramlink}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="linkedin">
+                <Form.Label>LinkedIn Link</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="linkedinLink"
+                  value={socialMediaLinks.linkedinLink}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Button variant="primary" onClick={handleSaveLinks}>
+                Save Changes
+              </Button>
+            </Form>
+          ) : (
+            <div>
+              <h4>Social Media Links</h4>
+              <p>
+                <strong>Facebook:</strong> <a href={socialMediaLinks.facebooklonk} target="_blank" rel="noopener noreferrer">{socialMediaLinks.facebooklonk}</a>
+              </p>
+              <p>
+                <strong>Twitter:</strong> <a href={socialMediaLinks.twitterlink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.twitterlink}</a>
+              </p>
+              <p>
+                <strong>Instagram:</strong> <a href={socialMediaLinks.instagramlink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.instagramlink}</a>
+              </p>
+              <p>
+                <strong>LinkedIn:</strong> <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">{socialMediaLinks.linkedinLink}</a>
+              </p>
+              <Button variant="primary" onClick={() => setEditableSocialLinks(true)}>
+                <FaEdit /> Edit
+              </Button>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+        </Modal.Footer>
+      </Modal>
 
 
             </div>
-
             <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
               <li>
                 <span>
@@ -341,18 +460,18 @@ const CompanyShowCase = () => {
                 </Card>
               </div>
             )}
-            {activeTab === 'overview' && <CompnayOverview style={{overflowY:'scroll'}} />}
+            {activeTab === 'overview' && <CompnayOverview style={{ overflowY: 'scroll' }} />}
             {activeTab === 'jobs' && <CompanyJobs />}
           </Col>
           <Col xs={4}>
-            <Card style={{ height: '90%',marginTop:'5px',marginRight:'30px'}} className='key-stats'>
+            <Card style={{ height: '90%', marginTop: '5px', marginRight: '30px' }} className='key-stats'>
               <Card.Body>
                 <Row className="mb-3">
                   <h1>Other Information</h1>
-           
+
                 </Row>
 
-             
+
                 <Row className="mb-2">
                   <Col>
                     <h5>Applicants:{countOfApplications}</h5>
