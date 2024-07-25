@@ -77,11 +77,9 @@ const AddJob = () => {
           <HrLeftSide user={{ userName, userEmail }} />
         </div>
 
-        <div md={10} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
+        <div className="rightside" style={{overflowY:'scroll'}}>
         <h3 className='text-center'>Post Job</h3>
-          <Card style={{marginTop:'10px'}}>
+          <Card style={{marginTop:'10px',width:'100%'}}>
           
             <Form onSubmit={handleSubmit}>
               <Card.Body>

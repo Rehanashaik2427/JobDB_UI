@@ -387,7 +387,6 @@ const DreamApplication = () => {
                         <th>Resume ID</th>
                         <th scope="col" onClick={() => handleSort('appliedOn')}> Date {sortedColumn === 'appliedOn' && sortOrder === 'asc' && '▲'}
                           {sortedColumn === 'appliedOn' && sortOrder === 'desc' && '▼'}</th>
-                        <th>Application Status</th>
                         <th>Action</th>
                         <th scope="col">Chat</th>
                       </tr>
@@ -399,7 +398,6 @@ const DreamApplication = () => {
                           <td>{candidateEmail[application.candidateId]}</td>
                           <td>{renderResumeComponent(application.resumeId)}</td>
                           <td>{application.appliedOn}</td>
-                          <td>{application.applicationStatus}</td>
                           <td>
                             <Slider
                               initialStatus={application.applicationStatus}

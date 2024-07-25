@@ -61,6 +61,7 @@
 .carousel-container {
   overflow: hidden;
   position: relative;
+  width: 100vw;
 }
 
 .custom-carousel .carousel-inner {
@@ -79,7 +80,7 @@
   width: 5%; /* Adjust this if you want to customize control button size */
 }
 
-.carousel-image {
+.carousel-image ,.carousel-container{
   width: 100%; /* Ensure images take up the full width of the carousel item */
 }
 

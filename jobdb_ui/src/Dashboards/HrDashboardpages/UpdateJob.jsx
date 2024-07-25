@@ -83,147 +83,147 @@ const UpdateJob = () => {
 
   return (
     <div className='dashboard-container'>
-    <div className='left-side'>
+      <div className='left-side'>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
 
-      <div md={10} className="rightside">
+      <div className="rightside" style={{ overflowY: 'scroll' }}>
         <h3 className='text-center'>Update Job</h3>
-          <Card style={{ marginTop: '10px' }}>
-            <Form onSubmit={handleSubmit}>
-              <Card.Body>
-                <Row style={{ marginBottom: '24px' }}>
-                  <Col md={6}>
-                    <Form.Group controlId="jobTitle">
-                      <Form.Label htmlFor="jobTitle">Job Title:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="jobTitle"
-                        name="jobTitle"
-                        value={formData.jobTitle}
-                        onChange={handleChange}
-                        disabled={!editableJobDetails}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className='jobType'>
-                      <Form.Label htmlFor="jobType">Job Type:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="jobType"
-                        name="jobType"
-                        value={formData.jobType}
-                        onChange={handleChange}
-                        disabled={!editableJobDetails}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+        <Card style={{ marginTop: '10px', width: '100%' }}>
+          <Form onSubmit={handleSubmit}>
+            <Card.Body>
+              <Row style={{ marginBottom: '24px' }}>
+                <Col md={6}>
+                  <Form.Group controlId="jobTitle">
+                    <Form.Label htmlFor="jobTitle">Job Title:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      id="jobTitle"
+                      name="jobTitle"
+                      value={formData.jobTitle}
+                      onChange={handleChange}
+                      disabled={!editableJobDetails}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className='jobType'>
+                    <Form.Label htmlFor="jobType">Job Type:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      id="jobType"
+                      name="jobType"
+                      value={formData.jobType}
+                      onChange={handleChange}
+                      disabled={!editableJobDetails}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
-                <Row style={{ marginBottom: '24px' }}>
-                  <Col md={6}>
-                    <Form.Group className='postingDate'>
-                      <Form.Label htmlFor="postingDate">Posting Date:</Form.Label>
-                      <Form.Control
-                        type="date"
-                        id="postingDate"
-                        name="postingDate"
-                        value={formData.postingDate}
-                        onChange={handleChange}
-                        disabled={!editableJobDetails}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className='skills'>
-                      <Form.Label htmlFor="skills">Skills:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="skills"
-                        name="skills"
-                        value={formData.skills}
-                        onChange={handleChange}
-                        disabled={!editableJobDetails}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+              <Row style={{ marginBottom: '24px' }}>
+                <Col md={6}>
+                  <Form.Group className='postingDate'>
+                    <Form.Label htmlFor="postingDate">Posting Date:</Form.Label>
+                    <Form.Control
+                      type="date"
+                      id="postingDate"
+                      name="postingDate"
+                      value={formData.postingDate}
+                      onChange={handleChange}
+                      disabled={!editableJobDetails}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className='skills'>
+                    <Form.Label htmlFor="skills">Skills:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      id="skills"
+                      name="skills"
+                      value={formData.skills}
+                      onChange={handleChange}
+                      disabled={!editableJobDetails}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
-                <Row style={{ marginBottom: '24px' }}>
-                  <Col md={6}>
-                    <Form.Group className='numberOfPosition'>
-                      <Form.Label htmlFor="numberOfPosition">Number of Positions:</Form.Label>
-                      <Form.Control
-                        type="number"
-                        id="numberOfPosition"
-                        name="numberOfPosition"
-                        value={formData.numberOfPosition}
-                        onChange={handleChange}
-                        disabled={!editableJobDetails}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className='salary'>
-                      <Form.Label htmlFor="salary">Salary:</Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="salary"
-                        name="salary"
-                        value={formData.salary}
-                        onChange={handleChange}
-                        disabled={!editableJobDetails}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row style={{ marginBottom: '24px' }}>
-                  <Col md={6}>
-                    <Form.Group className='applicationDeadline'>
-                      <Form.Label htmlFor="applicationDeadline">Application Deadline:</Form.Label>
-                      <Form.Control
-                        type="date"
-                        id="applicationDeadline"
-                        name="applicationDeadline"
-                        value={formData.applicationDeadline}
-                        onChange={handleChange}
-                        disabled={!editableJobDetails}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+              <Row style={{ marginBottom: '24px' }}>
+                <Col md={6}>
+                  <Form.Group className='numberOfPosition'>
+                    <Form.Label htmlFor="numberOfPosition">Number of Positions:</Form.Label>
+                    <Form.Control
+                      type="number"
+                      id="numberOfPosition"
+                      name="numberOfPosition"
+                      value={formData.numberOfPosition}
+                      onChange={handleChange}
+                      disabled={!editableJobDetails}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className='salary'>
+                    <Form.Label htmlFor="salary">Salary:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      id="salary"
+                      name="salary"
+                      value={formData.salary}
+                      onChange={handleChange}
+                      disabled={!editableJobDetails}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: '24px' }}>
+                <Col md={6}>
+                  <Form.Group className='applicationDeadline'>
+                    <Form.Label htmlFor="applicationDeadline">Application Deadline:</Form.Label>
+                    <Form.Control
+                      type="date"
+                      id="applicationDeadline"
+                      name="applicationDeadline"
+                      value={formData.applicationDeadline}
+                      onChange={handleChange}
+                      disabled={!editableJobDetails}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
-                <Form.Group controlId="jobsummary">
-                  <Form.Label htmlFor="jobsummary">Job summary:</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    id="jobsummary"
-                    name="jobsummary"
-                    value={formData.jobsummary}
-                    onChange={handleChange}
-                    disabled={!editableJobDetails}
-                    style={{minHeight:'150px'}}
-                  />
-                </Form.Group>
+              <Form.Group controlId="jobsummary">
+                <Form.Label htmlFor="jobsummary">Job summary:</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  id="jobsummary"
+                  name="jobsummary"
+                  value={formData.jobsummary}
+                  onChange={handleChange}
+                  disabled={!editableJobDetails}
+                  style={{ minHeight: '150px' }}
+                />
+              </Form.Group>
 
 
-              </Card.Body>
-              <Card.Footer>
-                <div className='job-save-edit-buttons'>
-                  {editableJobDetails ? (
-                    <Button variant="primary" type="button" onClick={handleSaveJobDetails}><FaSave /> Save</Button>
-                  ) : (
-                    <Button variant="info" type="button" onClick={handleEditJobDetails}><FaEdit /> Edit</Button>
-                  )}
-                  <Button variant="success" type="submit">Post</Button>
+            </Card.Body>
+            <Card.Footer>
+              <div className='job-save-edit-buttons'>
+                {editableJobDetails ? (
+                  <Button variant="primary" type="button" onClick={handleSaveJobDetails}><FaSave /> Save</Button>
+                ) : (
+                  <Button variant="info" type="button" onClick={handleEditJobDetails}><FaEdit /> Edit</Button>
+                )}
+                <Button variant="success" type="submit">Post</Button>
 
-                </div>
-              </Card.Footer>
+              </div>
+            </Card.Footer>
 
-            </Form>
-          </Card>
-</div></div>
+          </Form>
+        </Card>
+      </div></div>
   );
 };
 

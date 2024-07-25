@@ -191,7 +191,6 @@ const EachCompanyPage = () => {
   };
   return (
     <div className='dashboard-container'>
-
       <Col>
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
@@ -279,7 +278,7 @@ const EachCompanyPage = () => {
               <CompanyJobs companyId={companyId} />
             )}
           </Col>
-          <Col>
+          <Col xs={4}>
             <Card className='key-stats'>
               <Card.Body>
                 <Row className="mb-3">

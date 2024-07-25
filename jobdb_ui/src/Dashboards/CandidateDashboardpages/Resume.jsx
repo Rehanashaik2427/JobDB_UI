@@ -210,6 +210,7 @@ const Resume = () => {
                 </Card>
               ))}
             </div>
+
             <div className='adding-resumes' style={{ marginTop: '50px' }}>
               <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
                 e.preventDefault();

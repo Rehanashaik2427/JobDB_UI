@@ -1115,3 +1115,8 @@ margin-right: auto;
   line-height: 1.5; /* Line height for readability */
   color: #a00707; /* Text color */
 }
+
+
+.chart-card{
+  width:400px;
+}

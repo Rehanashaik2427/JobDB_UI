@@ -248,11 +248,12 @@ const HrDashboard = () => {
         </Container>
         <Row>
           <Col md={6} className="offset-md-3 mt-4">
-            <Card className="shadow-sm rounded-4"  >
-              <Card.Header className=" bg-light text-center" style={{ height: '40px' }}>
+            <Card className="shadow-sm rounded-4">
+              <Card.Header className=" bg-light text-center" style={{ height: '30px',width:'70%' }}>
                 <Card.Title as="h4" className='text-center'>Monthly Job Percentages</Card.Title>
               </Card.Header>
-              <Card.Body>
+              <Card.Body style={{height:'300px'
+              }}>
                 <Bar
                   data={monthlyJobData}
                   options={{

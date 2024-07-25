@@ -730,19 +730,19 @@ section {
 }
 
 .company-overview {
-  max-height: 280px; /* Adjust the max-height as needed */
-  overflow-y: scroll; /* Enable vertical scrolling */
+  /* Adjust the max-height as needed */
+  /* overflow-y: scroll; Enable vertical scrolling */
   padding-right: 15px; /* Ensure content does not get hidden by scrollbar */
 }
 .company-job{
-  max-height: 250px; /* Adjust the max-height as needed */
-  overflow-y: scroll; /* Enable vertical scrolling */
+  /* Adjust the max-height as needed */
   padding-right: 15px; /* Ensure content does not get hidden by scrollbar */
 }
 .key-stats {
-  height: 90%; /* Set height to 100% */
-  overflow-y: scroll; /* Enable vertical scrolling */
-  max-height: 250px; /* Maximum height of 250px */
+  height: 100%; /* Set height to 100% */
+  /* overflow-y: scroll; Enable vertical scrolling */
+ 
   margin-top: 8px; /* Top margin of 8px */
   margin-right: 20px; /* Right margin of 20px */
+  margin-left: 5px;
 }

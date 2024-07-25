@@ -343,10 +343,10 @@ const CandidateDashboard = () => {
 
             <Row className="justify-content-center mb-4">
               <Col xs={16} md={6} className='mb-4'>
-                <Card body className="h-100 chart-card">
+                <div className="chart-card" >
                   <Card.Title className="text-center">Applications per Day</Card.Title>
-                  <Chart options={options} series={options.series} type={options.chart.type} />
-                </Card>
+                  <Chart style={{height:'200px'}} options={options} series={options.series} type={options.chart.type} />
+                </div>
               </Col>
             </Row>
           </div>

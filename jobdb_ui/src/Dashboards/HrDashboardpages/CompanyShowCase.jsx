@@ -242,7 +242,7 @@ const CompanyShowCase = () => {
       <div className="hamburger-icon" onClick={toggleLeftSide}>
         <FaBars />
       </div>
-      <div className="rightside" style={{overflowY:'hidden'}}>
+      <div className="rightside" style={{overflowY:'scroll'}}>
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
             <div style={{ position: 'relative', height: '55%' }}>
@@ -344,7 +344,7 @@ const CompanyShowCase = () => {
             {activeTab === 'overview' && <CompnayOverview style={{overflowY:'scroll'}} />}
             {activeTab === 'jobs' && <CompanyJobs />}
           </Col>
-          <Col>
+          <Col xs={4}>
             <Card style={{ height: '90%',marginTop:'5px',marginRight:'30px'}} className='key-stats'>
               <Card.Body>
                 <Row className="mb-3">

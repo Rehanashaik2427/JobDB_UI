@@ -380,7 +380,7 @@ const CompamyPage = () => {
       </div>
 
       <div className="rightside" style={{
-        overflowY: 'hidden'
+        overflowY: 'scroll'
       }}>
         {showResumePopup && (
 
@@ -493,7 +493,7 @@ const CompamyPage = () => {
             {activeTab === 'jobs' && (
               <>
                 {jobs.length > 0 && (
-                  <div className="company-job" style={{ maxHeight: '200px', overflowY: 'scroll' }}>
+                  <div className="company-job">
                     <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
                       <thead className="table-light">
                         <tr>
@@ -563,7 +563,7 @@ const CompamyPage = () => {
             )}
           </Col>
 
-          <Col>
+          <Col xs={4}>
             <Card className='key-stats'>
               <Card.Body>
                 <Row className="mb-3">
@@ -575,11 +575,12 @@ const CompamyPage = () => {
                         fontSize: '18px', /* Larger font size */
                         fontWeight: 'bold', /* Bold text */
                         backgroundColor: '#e9f5e9', /* Light green background color */
-                        padding: '10px', /* Padding around the text */
+                        padding:'10px',
                         borderRadius: '5px', /* Rounded corners */
-                        textAlign: 'center', /* Center-align the text */
+                        textAlign: 'left', /* Center-align the text */
                         margin: '10px 0', /* Margin above and below the paragraph */
-                        boxShadow: 'rgba(0, 0, 0, 0.1)' /* Subtle shadow effect */
+                        boxShadow: 'rgba(0, 0, 0, 0.1)', /* Subtle shadow effect */
+                        width:'100px'
                       }}>
                         Applied
                       </p>

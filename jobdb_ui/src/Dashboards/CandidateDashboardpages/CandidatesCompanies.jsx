@@ -126,19 +126,19 @@ const CandidatesCompanies = () => {
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
               <div className="initials-placeholder"
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '50%',
-                      backgroundColor: 'grey',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontWeight: 'bold',
-                    }}
-                >
-          
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  backgroundColor: 'grey',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+              >
+
                 {initials}
               </div>
             </Dropdown.Toggle>
@@ -165,7 +165,8 @@ const CandidatesCompanies = () => {
                 </Card>
               </div>
             ))}
-            </div>
+          </div>
+
         ) : (
           <div className="d-flex justify-content-center mt-5">
             <div className="spinner-border text-primary" role="status">
