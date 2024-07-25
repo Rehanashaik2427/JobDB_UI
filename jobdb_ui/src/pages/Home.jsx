@@ -71,10 +71,10 @@ const Home = () => {
     }
   };
   useEffect(() => {
-    if(search){
+    if (search) {
       fetchJobBySearch()
     }
-    else{
+    else {
       fetchData();
 
     }
@@ -92,10 +92,10 @@ const Home = () => {
       if (search) {
         response = await axios.get(`${BASE_API_URL}/searchJobs`, { params: { ...params, search } });
         setJobs(response.data.content);
-      } 
+      }
       else {
         response = await axios.get(`${BASE_API_URL}/latestJobs`, { params });
-      } 
+      }
       setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -187,7 +187,6 @@ const Home = () => {
           <Carousel >
             {carouselImageList.map((img, ind) => (
               <Carousel.Item key={ind} >
-
                 <img
                   className="d-block w-25 carousel-image"
                   src={img}
@@ -295,12 +294,12 @@ const Home = () => {
               <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
                 {group.map((img, imgIndex) => (
                   <div className="p-2" key={imgIndex} >
-                    <img
-                      className="d-block carousel-image"
-                      src={img}
-                      alt={`Slide ${index}-${imgIndex}`}
-                      style={{ width: '200px', height: '150px', objectFit: 'cover', margin: '20px' }} // Set fixed width, height and object-fit
-                    />
+                      <img
+                        className="d-block carousel-image"
+                        src={img}
+                        alt={`Slide ${index}-${imgIndex}`}
+                        style={{ width: '200px', height: '150px', objectFit: 'cover', margin: '20px' }} // Set fixed width, height and object-fit
+                      />
                   </div>
                 ))}
               </div>

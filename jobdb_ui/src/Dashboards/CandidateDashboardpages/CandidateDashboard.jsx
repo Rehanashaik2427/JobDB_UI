@@ -207,7 +207,7 @@ const CandidateDashboard = () => {
           <CandidateLeftSide user={{ userName, userId }} />
         </div>
 
-        <div className="rightside" style={{ overflowY: 'scroll' }}>
+        <div className="rightside" style={{ overflowY: 'hidden' }}>
           <div className="d-flex justify-content-end align-items-center mb-3 mt-2">
             <i
               datafullscreen="true"
@@ -352,7 +352,6 @@ const CandidateDashboard = () => {
           </div>
         </div>
       </div>
-
   );
 };
 

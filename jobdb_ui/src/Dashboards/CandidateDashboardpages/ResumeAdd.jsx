@@ -240,7 +240,7 @@ const ResumeAdd = () => {
                       type='file'
                       accept='.txt'
                       onChange={handleTextFileChange}
-                      disabled={!!briefMessage} // Disable file input if briefMessage is entered
+                      // disabled={!!briefMessage} // Disable file input if briefMessage is entered
                     />
                   </Col>
                  

@@ -11,6 +11,7 @@ const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
 const DreamCompany = () => {
   const [showMessage, setShowMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
@@ -32,6 +33,11 @@ const DreamCompany = () => {
 
   const [showResumePopup, setShowResumePopup] = useState(false);
   const handleApplyButtonClick = () => {
+    if (formData.companyName.trim() === '') {
+      setErrorMessage('Please enter the company name before selecting a resume.');
+      return;
+    }
+    setErrorMessage(''); // Clear any previous error message
     setShowResumePopup(true);
   };
 
@@ -45,13 +51,12 @@ const DreamCompany = () => {
       .catch(error => {
         console.error('Error fetching resumes:', error);
       });
-  }, []);
+  }, [userId]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-
 
   const handleResumeSelect = async (resumeId) => {
     if (resumeId) {
@@ -66,7 +71,6 @@ const DreamCompany = () => {
     }
   };
 
-
   const applyJob = async (resumeId) => {
     const appliedOn = new Date(); // Get current date and time
     const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
@@ -78,22 +82,16 @@ const DreamCompany = () => {
 
     try {
       const response = await axios.put(`${BASE_API_URL}/applyDreamCompany?userId=${userId}&companyName=${companyName}&formattedDate=${formattedDate}&resumeId=${resumeId}`);
-
-
       console.log(response.data);
-
 
       if (response.data) {
         alert("You have successfully applied for this job");
-
         setShowMessage(true);
       }
     } catch (error) {
-      console.error('Error fetching jobs:', error);
+      console.error('Error applying for job:', error);
     }
-
   };
-
 
   const saveCompanyData = async (formData) => {
     try {
@@ -109,55 +107,39 @@ const DreamCompany = () => {
         discription: '',
         date: currentDate,
       });
-
-
     } catch (error) {
       console.error('Error during submission:', error);
-
-
-
     }
-
   };
-
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
   };
+
   const [showLeftSide, setShowLeftSide] = useState(false);
 
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
-  const user = {
-    userName: userName,
 
-    userId: userId,
-  };
   return (
-    <div fluid className='dashboard-container'>
-      <div md={2} className={`left-side ${showLeftSide ? 'show' : ''}`}>
+    <div className='dashboard-container'>
+      <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
       <div className="hamburger-icon" onClick={toggleLeftSide}>
         <FaBars />
       </div>
 
-      <div md={10} className="rightside">
+      <div className="rightside">
         <Container>
           <div className="centered-content">
             {showResumePopup && (
-
-
               <ResumeSelectionPopup
                 resumes={resumes}
                 onSelectResume={handleResumeSelect}
                 onClose={() => setShowResumePopup(false)}
               />
-
-
             )}
             <Form onSubmit={handleSubmit} className="centered-form">
               <Form.Group>
@@ -171,9 +153,11 @@ const DreamCompany = () => {
                   required
                 />
               </Form.Group>
-              <br></br><Form.Group>
+              <br />
+              <Form.Group>
                 <Form.Label htmlFor="resume">Resume:</Form.Label>
                 <Button variant='info' onClick={handleApplyButtonClick}>Select Resume</Button>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
               </Form.Group>
 
               {showMessage && (
@@ -200,7 +184,6 @@ const DreamCompany = () => {
         </Container>
       </div>
     </div>
-   
   );
 };
 
