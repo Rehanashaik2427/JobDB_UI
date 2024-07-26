@@ -111,9 +111,7 @@ const EachCompanyPage = () => {
       console.error('Error fetching company banner:', error);
     }
   };
-  const navigateToHRSignin = () => {
 
-  };
 
   const handleBack = () => {
     navigate("/jobdbcompanies"); // Navigate back to previous page
@@ -143,26 +141,36 @@ const EachCompanyPage = () => {
     closeModal(); // Close modal after clicking an option
     if (option === 'login') {
       if (modalContent === 'hr') {
-        if (company) {
-          navigate('/signin');
-        } // Navigate to HR sign-in page
+        navigate('/signin');
+        // Navigate to HR sign-in page
       } else if (modalContent === 'candidate') {
-        if (company) {
-          navigate('/signin');
-        } // Handle candidate login logic
-      }
+
+        navigate('/signin');
+      } // Handle candidate login logic
+
     } else if (option === 'register') {
       // Handle registration logic
-      if (modalContent === 'hr') {
-        if (company) {
-          navigate("/signup/userSignup", { state: { companyName } });
-        }  // Navigate to HR sign-in page
-      } else if (modalContent === 'candidate') {
-        if (company) {
-          navigate('/signup/userSignup');
-        } // Handle candidate login logic
-      }
-    }
+      // if (modalContent === 'hr') {
+
+      //     navigate("/signup/userSignup", {
+      //       state: {
+      //         companyName,
+      //         userRole:"HR",
+      //       }
+      //     });
+      //   }  // Navigate to HR sign-in page
+      // } else if (modalContent === 'candidate') {
+
+
+      //     navigate("/signup/userSignup", {
+      //       state: {
+      //          userRole:"Candidate",
+      //       }
+      //     });
+      navigate("/signup/userSignup");
+    } // Handle candidate login logic
+
+
   };
 
 
@@ -211,60 +219,74 @@ const EachCompanyPage = () => {
                   style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
                 />
               </label>
+            
             </div>
-            <div><h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{companyName}</h1>
-              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
+            <div style={{ position: 'absolute', top: '70%', left: '5%', width: '90%' }}>
+              <h1 style={{ fontSize: 'clamp(24px, 4vw, 36px)', textAlign: 'end', margin: 0 }}>{companyName}</h1>
+              <div className='social-icons-company d-flex flex-row' style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'end',
+                marginTop: '10px'
+              }}>
                 <FaFacebook
                   onClick={() => handleCompanyIconClick('Facebook')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2', marginRight: '10px' }}
+                  style={{ fontSize: 'clamp(24px, 4vw, 30px)', cursor: 'pointer', color: '#4267B2', margin: '5px' }}
                 />
                 <FaTwitter
                   onClick={() => handleCompanyIconClick('Twitter')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2', marginLeft: '10px', marginRight: '10px' }}
+                  style={{ fontSize: 'clamp(24px, 4vw, 30px)', cursor: 'pointer', color: '#1DA1F2', margin: '5px' }}
                 />
                 <FaInstagramSquare
                   onClick={() => handleCompanyIconClick('Instagram')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584', marginLeft: '10px', marginRight: '10px' }}
+                  style={{ fontSize: 'clamp(24px, 4vw, 30px)', cursor: 'pointer', color: '#C13584', margin: '5px' }}
                 />
-                  <FaLinkedin
+                <FaLinkedin
                   onClick={() => handleCompanyIconClick('LinkedIn')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5',marginLeft:'10px'}}
+                  style={{ fontSize: 'clamp(24px, 4vw, 30px)', cursor: 'pointer', color: '#0077B5', margin: '5px' }}
                 />
               </div>
             </div>
-            <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
-              <li>
-                <span>
-                  <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                    About
-                  </a>
-                </span>
-              </li>
+            <ul className="nav-links" style={{ position: 'absolute', top: '80%', listStyleType: 'none', display: 'flex', width: 'fit-content' }}>
+                <li>
+                  <span>
+                    <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                      About
+                    </a>
+                  </span>
+                </li>
 
-              <li>
-                <span>
-                  <a onClick={() => handleTabClick('jobs')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                    Jobs
-                  </a>
-                </span>
-              </li>
-            </ul>
+                <li>
+                  <span>
+                    <a onClick={() => handleTabClick('jobs')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
+                      Jobs
+                    </a>
+                  </span>
+                </li>
+              </ul>
+
 
           </Card.Body>
         </Card>
 
         <Row>
-          <Col xs={8}>
+          <Col xs={12} md={8}>
             {activeTab === 'home' && (
               <div>
-                <Card onClick={() => handleTabClick('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+                <Card
+                  onClick={() => handleTabClick('overview')}
+                  style={{ cursor: 'pointer', marginTop: '20px', width: '100%' }}
+                >
                   <Card.Body>
                     <h3>About {companyName}</h3>
                     <p>Click to view Overview content...</p>
                   </Card.Body>
                 </Card>
 
-                <Card onClick={() => handleTabClick('jobs')} style={{ cursor: 'pointer', marginTop: '20px' }}>
+                <Card
+                  onClick={() => handleTabClick('jobs')}
+                  style={{ cursor: 'pointer', marginTop: '20px', width: '100%' }}
+                >
                   <Card.Body>
                     <h3>Jobs</h3>
                     <p>Click to view Jobs content...</p>
@@ -273,13 +295,20 @@ const EachCompanyPage = () => {
               </div>
             )}
 
-            {activeTab === 'overview' && (<CompanyOverView companyId={companyId} />)}
+            {activeTab === 'overview' && (
+              <div style={{ marginTop: '20px' }}>
+                <CompanyOverView companyId={companyId} />
+              </div>
+            )}
             {activeTab === 'jobs' && (
-              <CompanyJobs companyId={companyId} />
+              <div style={{ marginTop: '20px' }}>
+                <CompanyJobs companyId={companyId} />
+              </div>
             )}
           </Col>
-          <Col xs={4}>
-            <Card className='key-stats'>
+
+          <Col xs={12} md={4}>
+            <Card className='key-stats' style={{ width: '80%', height: 'fit-content' }}>
               <Card.Body>
                 <Row className="mb-3">
                   <Col>

@@ -173,6 +173,39 @@ const DreamApplication = () => {
     fetchCandidateDetails();
     fetchResumeTypes(applications);
   }, [applications]);
+  const [unreadMessages, setUnreadMessages] = useState([]); // State to track unread messages
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+     
+      const unread = {}; // Initialize unread messages state
+
+      for (const application of applications) {
+        try {
+         
+          const countUnread = await fetchCountUnreadMessage(application.applicationId);
+        
+          unread[application.applicationId] = countUnread;
+
+        } catch (error) {
+          console.error('Error fetching job status:', error);
+        
+        }
+      }
+      setUnreadMessages(unread); // Set unread messages state
+    };
+    fetchStatuses();
+  }, [applications]);
+
+  const fetchCountUnreadMessage = async (applicationId) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/fetchCountUnreadMessageForHRByApplicationId?applicationId=${applicationId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  }
+
 
   const handleDownload = async (resumeId, fileName) => {
     try {
@@ -220,14 +253,26 @@ const DreamApplication = () => {
   const [chats, setChats] = useState([]);
 
   const handleChatClick = async (applicationId) => {
-    setApplicationId(applicationId);
+   setApplicationId(applicationId);
+    setUnreadMessages(0);
+    // const responce= await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
+    // setChats(responce.data);
+    console.log('Chat icon clicked for:');
+    // Show the modal
+    setShowModal(true);
+    setShowChat(true);
     try {
+      await axios.put(`${BASE_API_URL}/markCandidateMessagesAsRead?applicationId=${applicationId}`);
       const response = await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
       setChats(response.data);
       console.log("Chats === > " + chats)
       console.log("Chats === > " + response.data)
       setShowModal(true); // Show the modal once chats are fetched
       setShowChat(true); // Optionally manage showChat state separately
+     
+    
+
+
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
@@ -244,15 +289,21 @@ const DreamApplication = () => {
   };
 
   const handleSend = async () => {
-    try {
-      await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
+    // Handle send logic here
+    try{
+      await axios.put(`${BASE_API_URL}/markCandidateMessagesAsRead?applicationId=${applicationId}`);
+      const response = await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
       console.log('Sending message:', inputValue);
-      //handleCloseModal(); // Close modal after sending message
-      handleChatClick(applicationId);
+      // Close the modal or perform any other actions
+     
+      setShowModal(true);
       setInputValue('');
-    } catch (error) {
-      console.error('Error sending message:', error);
+      handleChatClick(applicationId)
+     // Reset input value after sending
+    }catch{
+      console.log('error')
     }
+   
   };
   // Function to format date with only day
   function formatDate(timestamp) {
@@ -319,63 +370,65 @@ const DreamApplication = () => {
             </Modal>
             )}
 
-            <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
-              <Modal.Header closeButton>
-                <Modal.Title>Chat</Modal.Title>
-              </Modal.Header>
-              <Modal.Body ref={modalBodyRef}>
-                <div className="chat-messages">
-                  {chats ? (
-                    chats.map((chat, index) => (
-                      <div key={chat.id} className="chat-message">
-                        {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
-                          <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
-                            {formatDate(chat.createdAt)}
-                          </div>
+<Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+            <Modal.Header closeButton>
+              <Modal.Title>Chat</Modal.Title>
+            </Modal.Header>
+            <Modal.Body ref={modalBodyRef}>
+              <div className="chat-messages">
+                {chats ? (
+                  chats.map((chat, index) => (
+                    <div key={chat.id} className="chat-message">
+                      {index === 0 || isDifferentDay(chats[index - 1].createdAt, chat.createdAt) && (
+                        <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
+                          {formatDate(chat.createdAt)}
+                        </div>
 
-                        )}
-                        {chat.candidateMessage && (
-                          <div className="message-right">
-                            {chat.candidateMessage}
-                            <div className="message-time">
-                              {formatMessageDateTime(chat.createdAt)}
-                            </div>
+                      )}
+                      {chat.candidateMessage && (
+                        <div className="message-right">
+                          {chat.candidateMessage}
+                          <div className="message-time">
+                            {formatMessageDateTime(chat.createdAt)}
                           </div>
-                        )}
+                        </div>
+                      )}
 
-                        {/* Render HR message if present */}
-                        {chat.hrMessage && (
-                          <div className="message-left">
-                            {chat.hrMessage}
-                            <div className="message-time">
-                              {formatMessageDateTime(chat.createdAt)}
-                            </div>
+                      {/* Render HR message if present */}
+                      {chat.hrMessage && (
+                        <div className="message-left">
+                          {chat.hrMessage}
+                          <div className="message-time">
+                            {formatMessageDateTime(chat.createdAt)}
                           </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </div>
-                {/* Message input section */}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </div>
+              {/* Message input section */}
 
-              </Modal.Body>
-              <Modal.Footer>
-                <Form.Group controlId="messageInput" className="mb-3">
-                  {/* <Form.Label>Message:</Form.Label> */}
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter your message"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                  />
-                </Form.Group>
-                <Button variant="primary" onClick={handleSend}>
-                  <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
-                </Button>
-              </Modal.Footer>
-            </Modal>
+            </Modal.Body>
+            <Modal.Footer>
+              <Form.Group controlId="messageInput" className="mb-3">
+                {/* <Form.Label>Message:</Form.Label> */}
+                <Form.Control
+                  as='textarea'
+                  type="text"
+                  placeholder="Enter your message"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  style={{ width: '350px' }} // Custom styles to increase size
+                />
+              </Form.Group>
+              <Button variant="primary" onClick={handleSend}>
+                <FontAwesomeIcon icon={faPaperPlane} /> {/* Send icon from Font Awesome */}
+              </Button>
+            </Modal.Footer>
+          </Modal>
             {applications.length > 0 && (
               <div>
                 <div>
@@ -404,8 +457,39 @@ const DreamApplication = () => {
                               onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                             />
                           </td>
-                          <td onClick={() => handleChatClick(application.applicationId)}>
-                            <SiImessage size={25} />
+                          <td >
+                          <div style={{ position: 'relative', display: 'inline-block' }}>
+                          {unreadMessages[application.applicationId] > 0 && (
+                            <span
+                              style={{
+                                position: 'absolute',
+                                top: '-5px',
+                                right: '-15px',
+                                backgroundColor: 'red',
+                                color: 'white',
+                                borderRadius: '50%',
+                                width: '20px',
+                                height: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '12px',
+                                fontWeight: 'bold',
+                                zIndex: 1, // Ensure notification badge is above SiImessage icon
+                              }}
+                            >
+                              {unreadMessages[application.applicationId]}
+                            </span>
+                          )}
+                          <SiImessage
+                            size={25}
+                            onClick={() => {
+                              handleChatClick(application.applicationId);
+                              setShowModal(true);
+                            }}
+                            style={{ color: 'green', cursor: 'pointer' }}
+                          />
+                        </div>
                           </td>
                         </tr>
                       ))}

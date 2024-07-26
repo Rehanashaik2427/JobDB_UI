@@ -1,20 +1,14 @@
-
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Carousel, Container, Nav, Navbar, OverlayTrigger, Popover, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import HomeFooter from './HomeFooter';
 import './PagesStyle/Pages.css';
 
-
 const Home = () => {
 
-
-
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
-
   const carouselImageList = [
     "/jb_logo.png",
     "/jb_logo.png",
@@ -23,14 +17,27 @@ const Home = () => {
   ];
   const [carouselImages, setCarouselImages] = useState([]);
   const [groupedImages, setGroupedImages] = useState([]);
-
+  const [imageKeys, setImageKeys] = useState({}); // To store the mapping of image URLs to keys
+  const navigate = useNavigate(); // Hook for navigation
   useEffect(() => {
     const fetchImages = async () => {
       try {
         const response = await axios.get(`${BASE_API_URL}/companylogos`);
-        const images = response.data.map(imageData => `data:image/jpeg;base64,${imageData}`);
-        setCarouselImages(images);
-        setGroupedImages(groupeImages(images, 4)); // Grouping images into chunks of 4
+        
+        // Process the Map into an array of objects with id and image
+        const imagesMap = response.data;
+        const imagesArray = Object.entries(imagesMap).map(([id, imageData]) => ({
+          id: parseInt(id, 10),
+          src: `data:image/jpeg;base64,${imageData}`
+        }));
+        
+        const imageSrcKeys = imagesArray.reduce((acc, { id, src }) => {
+          acc[src] = id;
+          return acc;
+        }, {});
+        
+        setImageKeys(imageSrcKeys);
+        setGroupedImages(groupeImages(imagesArray, 4));
       } catch (error) {
         console.error('Error fetching images:', error);
       }
@@ -47,6 +54,15 @@ const Home = () => {
     return result;
   };
 
+  const handleImageClick = (imageSrc) => {
+    const key = imageKeys[imageSrc];
+    if (key) {
+      //navigate(`/some-page/${key}`);
+      navigate(`/jobboxCompanyPage/eachCompanyPage`, { state: { companyId: key } });
+
+    }
+  };
+console.log(imageKeys)
   const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -61,6 +77,7 @@ const Home = () => {
     const size = parseInt(e.target.value);
     setPageSize(size);
   };
+
   const handleInputChange = (event) => {
     setSearch(event.target.value);
   };
@@ -70,16 +87,15 @@ const Home = () => {
       fetchJobBySearch();
     }
   };
+
   useEffect(() => {
     if (search) {
-      fetchJobBySearch()
-    }
-    else {
+      fetchJobBySearch();
+    } else {
       fetchData();
-
     }
-
   }, [page, pageSize, search, sortedColumn, sortOrder]);
+
   async function fetchData() {
     try {
       const params = {
@@ -92,8 +108,7 @@ const Home = () => {
       if (search) {
         response = await axios.get(`${BASE_API_URL}/searchJobs`, { params: { ...params, search } });
         setJobs(response.data.content);
-      }
-      else {
+      } else {
         response = await axios.get(`${BASE_API_URL}/latestJobs`, { params });
       }
       setJobs(response.data.content);
@@ -101,7 +116,7 @@ const Home = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  }
 
   const fetchJobBySearch = async () => {
     try {
@@ -115,7 +130,6 @@ const Home = () => {
       const response = await axios.get(`${BASE_API_URL}/searchJobs`, { params });
       setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
-
     } catch (error) {
       console.log("No data Found" + error);
     }
@@ -130,6 +144,7 @@ const Home = () => {
     setSortedColumn(column);
     setSortOrder(order);
   };
+
   const popover = (summary) => (
     <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
       <Popover.Body>
@@ -140,6 +155,7 @@ const Home = () => {
       </Popover.Body>
     </Popover>
   );
+
   const handleCloseModalSummary = () => {
     setSelectedJobSummary(null);
     setShowModalSummary(false);
@@ -148,7 +164,6 @@ const Home = () => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
 
   return (
     <div>
@@ -167,14 +182,12 @@ const Home = () => {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto" >
+            <Nav className="me-auto">
               <Nav.Link as={Link} to="/" style={{ marginRight: '40px', marginLeft: '150px' }}>Home</Nav.Link>
               <Nav.Link as={Link} to='/about-jobbox' style={{ marginRight: '40px' }}>About Jobbox</Nav.Link>
               <Nav.Link as={Link} to="/aboutus" style={{ marginRight: '40px' }}>About Us</Nav.Link>
               <Nav.Link as={Link} to="/admin-register" style={{ marginRight: '40px' }}>Admin</Nav.Link>
               <Nav.Link as={Link} to="/jobdbcompanies" style={{ marginRight: '40px' }}>Companies</Nav.Link>
-              {/* <Nav.Link as={Link} to="/candidates">Candidates</Nav.Link> */}
-              {/* <Nav.Link as={Link} to="/contact">Contact</Nav.Link> */}
               <Nav.Link as={Link} to="/signup/userSignup" className="nav-link-custom"><Button>Register</Button></Nav.Link>
               <Nav.Link as={Link} to="/signin" className="nav-link-custom"><Button variant="success">Login</Button></Nav.Link>
             </Nav>
@@ -217,11 +230,10 @@ const Home = () => {
         </div>
         {jobs.length > 0 && (
           <div>
-
             <div className='text-center'>
               <h2>Latest Jobs & Companies</h2>
             </div>
-            <Table hover className='text-center' >
+            <Table hover className='text-center'>
               <thead className="table-light">
                 <tr>
                   <th scope='col' onClick={() => handleSort('jobTitle')}>
@@ -237,7 +249,6 @@ const Home = () => {
                     Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
                   </th>
                   <th scope='col'>Job Summary</th>
-
                 </tr>
               </thead>
               <tbody>
@@ -249,10 +260,9 @@ const Home = () => {
                     <td>{job.skills}</td>
                     <td>
                       <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                        <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
+                        <Button variant="secondary" className='description btn-rounded'>View Summary</Button>
                       </OverlayTrigger>
                     </td>
-
                   </tr>
                 ))}
               </tbody>
@@ -283,39 +293,43 @@ const Home = () => {
             </div>
           </div>
         )}
-
         {jobs.length === 0 && <h1>No jobs found.</h1>}
       </div>
 
       <Card body className="text-center" style={{ width: '100%' }}>
-        <Carousel indicators={false}>
-          {groupedImages.map((group, index) => (
-            <Carousel.Item key={index}>
-              <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-                {group.map((img, imgIndex) => (
-                  <div className="p-2" key={imgIndex} >
-                      <img
-                        className="d-block carousel-image"
-                        src={img}
-                        alt={`Slide ${index}-${imgIndex}`}
-                        style={{ width: '200px', height: '150px', objectFit: 'cover', margin: '20px' }} // Set fixed width, height and object-fit
-                      />
+          <Carousel>
+            {groupedImages.length > 0 ? (
+              groupedImages.map((group, index) => (
+                <Carousel.Item key={index}>
+                  <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+                    {group.map((img, imgIndex) => (
+                      <div className="p-2" key={imgIndex} onClick={() => handleImageClick(img.src)}>
+                        <img
+                          className="d-block carousel-image"
+                          src={img.src}
+                          alt={`Slide ${index}-${imgIndex}`}
+                          style={{ width: '200px', height: '150px', objectFit: 'cover', margin: '20px' }}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </Carousel.Item>
-          ))}
-        </Carousel>
-      </Card>
-
-
+                </Carousel.Item>
+              ))
+            ) : (
+              <Carousel.Item>
+                <div className="d-flex justify-content-center">
+                  <p>No images available</p>
+                </div>
+              </Carousel.Item>
+            )}
+          </Carousel>
+        </Card>
 
       <div>
         <HomeFooter />
       </div>
-
-    </div >
+    </div>
   );
-}
+};
 
 export default Home;

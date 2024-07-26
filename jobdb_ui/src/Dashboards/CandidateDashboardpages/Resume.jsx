@@ -89,6 +89,11 @@ const Resume = () => {
     }
   };
 
+  const user = {
+    userName: userName,
+
+    userId: userId,
+  };
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
@@ -110,17 +115,26 @@ const Resume = () => {
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
-
   return (
+
+
     <div className='dashboard-container'>
-      <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
-        <CandidateLeftSide user={{ userName, userId }} />
-      </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
-      <div className="rightside" style={{overflowY: 'scroll'}}>
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+    
+    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+      <CandidateLeftSide user={{ userName, userId }} />
+    </div>
+    <div className="hamburger-icon" onClick={toggleLeftSide}>
+      <FaBars />
+    </div>
+
+    <div className="rightside" style={{
+      overflowY: 'scroll'
+    }}>
+          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+
+
+
+
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
               <div
@@ -151,6 +165,8 @@ const Resume = () => {
           </Dropdown>
         </div>
 
+
+
         {showBriefSettings && (
           <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
             <Modal.Header closeButton>
@@ -162,37 +178,38 @@ const Resume = () => {
           </Modal>
         )}
 
+
         <div>
           <h1 className='text-center'>MY RESUMES</h1>
           <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content'}}>            
             {resumes.map((resume, index) => (
             <Card className='resume-card' style={{ width: '200px', margin: '12px' }} key={index}>
-              <Card.Body>
-                <Card.Title>Resume : {index + 1}</Card.Title>
-                <Card.Text>{resume.message}</Card.Text>
+                <Card.Body>
+                  <Card.Title>Resume : {index + 1}</Card.Title>
+                  <Card.Text>{resume.message}</Card.Text>
 
-                {resume.fileType === 'file' && (
-                  <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
-                )}
-                {resume.fileType === 'link' && (
-                  <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
-                )}
-                {resume.fileType === 'brief' && (
-                  <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
-                )}
+                  {resume.fileType === 'file' && (  
+                    <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
+                  )}
+                  {resume.fileType === 'link' && (
+                    <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
+                  )}
+                  {resume.fileType === 'brief' && (
+                    <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
+                  )}
 
-                <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
-              </Card.Body>
-            </Card>
-          ))}
+                    <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+            <div className='adding-resumes' style={{ marginTop: '50px' }}>
+              <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
+                e.preventDefault();
+                navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
+              }} >ADD NEW RESUME</Link>
+            </div>
           </div>
-          <div className='adding-resumes' style={{ marginTop: '50px' }}>
-            <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
-              e.preventDefault();
-              navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
-            }} >ADD NEW RESUME</Link>
-          </div>
-        </div>
       </div>
     </div>
   );

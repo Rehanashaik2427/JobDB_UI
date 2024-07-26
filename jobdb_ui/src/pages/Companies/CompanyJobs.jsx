@@ -74,7 +74,7 @@ const popover = (summary) => (
     </Popover>
   );
   return (
-    <div  className="company-job">
+    <div  className="company-job"  style={{ marginTop: '20px', width: '100%', height:"fit-content" }}>
             <div className="jobs_list">
                 {jobs.length > 0 && (
                     <div>

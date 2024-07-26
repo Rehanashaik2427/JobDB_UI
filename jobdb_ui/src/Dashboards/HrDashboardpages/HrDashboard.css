@@ -750,3 +750,9 @@ section {
 .custom-col {
   margin: 15px; /* Adjust the value as needed */
 }
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .card-body {
+    padding: 15px;
+  }
+}

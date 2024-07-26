@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import TextField from './sessions/TextField';
@@ -17,10 +17,27 @@ const UserRegistrationForm = () => {
     const [enterOtpValue, setEnterOtpValue] = useState('');
     const [otpVerified, setOtpVerified] = useState(false);
     const [disableFormFields, setDisableFormFields] = useState(false);
-    const [userType, setUserType] = useState('');
+    const [userType, setUserType] = useState("");
+    // const location = useLocation();
+    // const { companyName, userRole } = location.state || {}; // Destructure state
     const navigate = useNavigate();
 
-    // State to manage form values
+    // useEffect(() => {
+    //     // Log location.state and userRole to verify correct values
+    //     console.log("Location state in effect:", location.state);
+    //     console.log("userRole in effect:", userRole);
+    //     console.log("Location userRole state in effect:", location.state.userRole);
+    //     if (location.state && location.state.userRole) {
+    //         // Set userType based on userRole from location.state
+    //         setUserType(location.state.userRole);
+    //     }
+    // }, [location.state]);
+    
+    // Log directly in the render method to verify the current value of userType
+    console.log("Rendering with userType:", userType);
+    
+
+
     const initialFormValues = {
         userName: '',
         userEmail: '',
@@ -245,15 +262,25 @@ const UserRegistrationForm = () => {
                     <p style={{ color: 'red', textAlign: 'center' }}>Please select a user type below to proceed with the form.</p>
                 )}
                 <div className="radio-group d-flex justify-content-center align-items-center">
-                    <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : ''}`}>
-                        <input type="radio" value="HR" checked={userType === 'HR'} onChange={handleUserTypeChange} />
-                        HR
-                    </label>
+                <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : ''}`}>
+                    <input 
+                        type="radio" 
+                        value="HR" 
+                        checked={userType === 'HR'} 
+                        onChange={() => setUserType('HR')} 
+                    />
+                    HR
+                </label>
 
-                    <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : ''}`}>
-                        <input type="radio" value="Candidate" checked={userType === 'Candidate'} onChange={handleUserTypeChange} />
-                        Candidate
-                    </label>
+            <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : ''}`}>
+                <input 
+                    type="radio" 
+                    value="Candidate" 
+                    checked={userType === 'Candidate'} 
+                    onChange={() => setUserType('Candidate')} 
+                />
+                Candidate
+            </label>
                 </div>
 
                 {userType && (
