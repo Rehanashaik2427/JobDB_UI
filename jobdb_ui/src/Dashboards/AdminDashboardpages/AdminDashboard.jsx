@@ -1,9 +1,8 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Dropdown, Row } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
+import { FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
@@ -112,15 +111,10 @@ const AdminDashboard = () => {
         <AdminleftSide />
       </div>
 
-      <div className="rightside" style={{ overflowY: 'hidden' }}>
+      <div className="right-side" style={{ overflowY: 'hidden' }}>
+        
+        {/* admin header icons - full screen icon , user icon , notification */}
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
-          <i
-            datafullscreen="true"
-            onClick={toggleFullScreen}
-            className="i-Full-Screen header-icon d-none d-lg-inline-block"
-            style={{ fontSize: '20px', marginRight: '12px' }}
-          />
-
           <Dropdown className="ml-2">
             <Dropdown.Toggle
               as="div"
@@ -138,10 +132,10 @@ const AdminDashboard = () => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-
+          <i datafullscreen="true" onClick={toggleFullScreen} className="i-Full-Screen header-icon d-none d-lg-inline-block"/>
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-              <FontAwesomeIcon icon={faUser} id="user" className="icon" style={{ color: 'black' }} />
+              <FaUser className='admin-icon'/>
             </Dropdown.Toggle>
             <Dropdown.Menu className="mt-3">
               <Dropdown.Item as={Link} to="/">
@@ -154,7 +148,7 @@ const AdminDashboard = () => {
           </Dropdown>
         </div>
 
-        <div className="adminDashboard">
+        <div className="dashboard-container-boxes">
           <span>
             <h2>{validatedCompaniesCount}</h2>
             companies validated
@@ -189,7 +183,7 @@ const AdminDashboard = () => {
           <Row className="mx-0">
             <Col md={6} className="offset-md-3 mt-4">
               <Card className="shadow-sm rounded-4" >
-                <Card.Header className="bg-light text-center"style={{ height: '30px',width:'70%' }}>
+                <Card.Header className="bg-light text-center" style={{ height: '30px', width: '70%' }}>
                   <Card.Title as="h5">Monthly Validation</Card.Title>
                 </Card.Header>
                 <Card.Body style={{ height: '300px' }}>

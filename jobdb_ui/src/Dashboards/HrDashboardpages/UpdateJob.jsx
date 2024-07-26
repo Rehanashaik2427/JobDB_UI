@@ -87,7 +87,7 @@ const UpdateJob = () => {
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
 
-      <div className="rightside" style={{ overflowY: 'scroll' }}>
+      <div className="right-side">
         <h3 className='text-center'>Update Job</h3>
         <Card style={{ marginTop: '10px', width: '100%' }}>
           <Form onSubmit={handleSubmit}>

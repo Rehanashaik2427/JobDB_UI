@@ -353,7 +353,7 @@ const ViewApplications = () => {
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
 
-      <div md={10} className="rightside" >
+      <div className="right-side" >
         <div className="application-div">
           <Row className="filter">
             <Col className="filter" style={{ maxWidth: '40%' }}>

@@ -1,15 +1,4 @@
-.dashboard-container{
-    display: flex;
-    flex-direction: row;
-}
-.leftside{
-    height: 100vh;
-    width: 200px;
-   
-}
-.leftside section link{
-    text-decoration-color: rgb(16, 15, 15);
-}
+
 
 
 
@@ -31,29 +20,12 @@
     /* Example hover effect */
     color: blue;
   }
-.rightSide{
-    height: 100vh;
-    width: 100vw;
-    background-color: white;
-  
-}
+
 .admin-right-action{
   overflow: scroll;
 }
-.rightside {
-  height: 100vh;
-  width: 100vw;
-  background-color: white;
 
 
-}
-
-*{
-  -ms-overflow-style: none;
-}
-::-webkit-scrollbar{
-  display: none;
-}
 
 .admin-details{
     height: 400px;
@@ -91,20 +63,7 @@ a{
     
 }
 
-.adminDashboard{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-}
 
-.adminDashboard span{
-    height: 150px;
-    width: 150px;
-    border: 2px solid black;
-    border-radius: 5px;
-    text-align: center;
-    margin-top: 5px;
-}
 
 .applyforValidation{
     text-align: center;

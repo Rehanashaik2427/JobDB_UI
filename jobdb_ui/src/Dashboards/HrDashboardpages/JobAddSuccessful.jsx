@@ -18,9 +18,7 @@ const JobAddSuccessful = () => {
           <HrLeftSide user={{ userName, userEmail }} />
         </div>
 
-        <div md={10} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
+        <div className="right-side">
           <Card className='d-flex justify-content-center align-items-center' style={{margin:'80px',padding:'24px'}}>
             <h2>Job Successfully Added!</h2>
             <br></br>

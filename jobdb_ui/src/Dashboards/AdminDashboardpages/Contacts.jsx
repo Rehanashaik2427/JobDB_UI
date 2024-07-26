@@ -68,7 +68,7 @@ const Contacts = () => {
         <AdminleftSide />
       </div>
 
-      <div className="rightside">
+      <div className="right-side">
         <h2 style={{ textAlign: 'center' }}>Request from the Users</h2>
         <div className="help">
           <div className='contacts-table'>

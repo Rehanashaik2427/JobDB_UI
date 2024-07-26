@@ -180,31 +180,14 @@ const HrDashboard = () => {
       <div className='left-side'>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
-      <div className="rightside">
-
+      <div className="right-side" style={{ overflowY: 'hidden' }}>
+        
+        {/* HR header icons - full screen icon , user icon , notification */}
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12 ml-2">
-          <i
-            datafullscreen="true"
-            onClick={toggleFullScreen}
-            className="i-Full-Screen header-icon d-none d-lg-inline-block"
-            style={{ fontSize: '20px', marginRight: '12px' }}
-          />
+          <i datafullscreen="true" onClick={toggleFullScreen} className="i-Full-Screen header-icon d-none d-lg-inline-block" />
           <Dropdown className="ml-2">
-            <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
-              <div
-                className="initials-placeholder"
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  backgroundColor: 'grey',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                }}
-              >
+            <Dropdown.Toggle as="span" className="toggle-hidden">
+              <div className="initials-placeholder">
                 {initials}
               </div>
             </Dropdown.Toggle>
@@ -218,12 +201,13 @@ const HrDashboard = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
+
         <Container className="my-dashboard-container">
           <h3 className='status-info text-center bg-light'>Company status</h3>
           <Row className="dashboard d-flex mt-4">
             {DATA.map((card, index) => (
               <Col lg={3} sm={6} key={index} >
-                <Card className="card-icon-bg gap-3 card-icon-bg-primary o-hidden mb-4" style={{maxWidth:'250px'}}>
+                <Card className="card-icon-bg gap-3 card-icon-bg-primary o-hidden mb-4" style={{ maxWidth: '250px' }}>
                   <Card.Body className="align-items-center gap-4" >
                     <FontAwesomeIcon icon={card.icon} className="me-2 text-primary mb-0 text-24 fw-semibold" />
                     <div className="content gap-1">
@@ -244,9 +228,8 @@ const HrDashboard = () => {
               </Col>
             ))}
           </Row>
-
-
         </Container>
+
         <Row>
           <Col md={6} className="offset-md-3 mt-4">
             <Card className="shadow-sm rounded-4">

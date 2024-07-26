@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, OverlayTrigger, Popover, Row, Table } from "react-bootstrap";
-import { FaBars, FaFacebook, FaInstagramSquare, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -77,6 +77,7 @@ const CompamyPage = () => {
       fetchCompanyDetails();
       fetchCompanyLogo(company?.companyName);
       fetchCompanyBanner(company?.companyName);
+      fetchSocialMediaLinks(company?.companyName)
       fetchCountOfShortlistedCandidatesByCompany(userId, company?.companyName)
     }
   }, [company?.companyName, userId]);
@@ -347,26 +348,29 @@ const CompamyPage = () => {
   };
 
 
-  const handleCompanyIconClick = (socialMedia) => {
-    let url;
-    switch (socialMedia) {
-      case 'Facebook':
-        url = `https://www.facebook.com/${company?.companyName}`;
-        break;
-      case 'Twitter':
-        url = `https://twitter.com/${company?.companyName}`;
-        break;
-      case 'Instagram':
-        url = `https://www.instagram.com/${company?.companyName}`;
-        break;
-      case 'LinkedIn':
-        url = `https://www.linkedin.com/company/${company?.companyName}`;
-        break;
-      default:
-        url = '';
-    }
-    if (url) {
-      window.open(url, '_blank');
+  const [socialMediaLinks, setSocialMediaLinks] = useState({
+    facebookLink: '',
+    twitterLink: '',
+    instagramLink: '',
+    linkedinLink: ''
+  });
+
+
+
+  const fetchSocialMediaLinks = async (companyName) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/getSocialMediaLinks`, {
+        params: { companyName },
+      });
+      const { facebookLink, twitterLink, instagramLink, linkedinLink } = response.data;
+      setSocialMediaLinks({
+        facebookLink,
+        twitterLink,
+        instagramLink,
+        linkedinLink,
+      });
+    } catch (error) {
+      console.error('Error fetching social media links:', error);
     }
   };
   return (
@@ -375,13 +379,8 @@ const CompamyPage = () => {
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
 
-      <div className="rightside" style={{
-        overflowY: 'scroll'
-      }}>
+      <div className="right-side">
         {showResumePopup && (
 
           <ResumeSelectionPopup
@@ -409,25 +408,33 @@ const CompamyPage = () => {
                 style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
               />
             </div>
-            <div><h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{company?.companyName}</h1>
+            <div>
+              <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{company?.companyName}</h1>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '60px' }}>
+                
+                   <div className="social-media-icons">
+                  {socialMediaLinks.facebookLink && (
+                    <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
+                      <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.twitterLink && (
+                    <a href={socialMediaLinks.twitterLink} target="_blank" rel="noopener noreferrer">
+                      <FaTwitter size={24} style={{ margin: '0 5px', color: '#1da1f2' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.instagramLink && (
+                    <a href={socialMediaLinks.instagramLink} target="_blank" rel="noopener noreferrer">
+                      <FaInstagram size={24} style={{ margin: '0 5px', color: '#e4405f' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.linkedinLink && (
+                    <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">
+                      <FaLinkedin size={24} style={{ margin: '0 5px', color: '#0077b5' }} />
+                    </a>
+                  )}
+                </div>
 
-              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
-                <FaFacebook
-                  onClick={() => handleCompanyIconClick('Facebook')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2', marginRight: '10px' }}
-                />
-                <FaTwitter
-                  onClick={() => handleCompanyIconClick('Twitter')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2', marginLeft: '10px', marginRight: '10px' }}
-                />
-                <FaInstagramSquare
-                  onClick={() => handleCompanyIconClick('Instagram')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584', marginLeft: '10px', marginRight: '10px' }}
-                />
-                <FaLinkedin
-                  onClick={() => handleCompanyIconClick('LinkedIn')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5', marginLeft: '10px' }}
-                />
               </div>
 
             </div>

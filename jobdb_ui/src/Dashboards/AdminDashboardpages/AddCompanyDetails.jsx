@@ -62,7 +62,7 @@ const AddCompanyDetails = () => {
       <AdminleftSide />
     </div>
 
-    <div className="rightside" style={{ overflowY: 'scroll' }}>
+    <div className="right-side">
     {companyData.length > 0 ? (
           <>
             <h2>Add Company Details</h2>

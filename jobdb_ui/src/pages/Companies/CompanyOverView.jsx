@@ -40,8 +40,8 @@ const CompanyOverView = ({ companyId }) => {
             <h4>Industry</h4>
             <p>{overviewData.industryService}</p>
             <h4>Company Size</h4>
-            <p>{overviewData.companySize === 0 ? '' : overviewData.companySize}</p>          
          
+       
             <h4>Headquarters</h4>
             <p>{overviewData.headquaters}</p>
             <h4>Founded</h4>

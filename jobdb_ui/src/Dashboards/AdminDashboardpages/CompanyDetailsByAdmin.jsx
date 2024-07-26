@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Form, FormGroup } from 'react-bootstrap';
-import { FaEdit, FaFacebook, FaInstagramSquare, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { Button, Card, Form, FormGroup, Modal } from 'react-bootstrap';
+import { FaEdit, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
@@ -128,6 +128,7 @@ const CompanyDetailsByAdmin = () => {
     if (companyName) {
       fetchCompanyLogo(companyName);
       fetchCompanyBanner(companyName);
+      fetchSocialMediaLinks(companyName)
     }
   }, [companyName])
 
@@ -154,13 +155,74 @@ const CompanyDetailsByAdmin = () => {
       window.open(url, '_blank');
     }
   };
-  
+
+  const [showModal, setShowModal] = useState(false);
+  const [socialMediaLinks, setSocialMediaLinks] = useState({
+    facebookLink: '',
+    twitterLink: '',
+    instagramLink: '',
+    linkedinLink: ''
+  });
+
+
+  const handleCloseModal = () => setShowModal(false);
+
+  const handleSocialInputChange = (e) => {
+    const { name, value } = e.target;
+    setSocialMediaLinks((prevLinks) => ({
+      ...prevLinks,
+      [name]: value,
+    }));
+  };
+
+  const fetchSocialMediaLinks = async (companyName) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/getSocialMediaLinks`, {
+        params: { companyName },
+      });
+      const { facebookLink, twitterLink, instagramLink, linkedinLink } = response.data;
+      setSocialMediaLinks({
+        facebookLink,
+        twitterLink,
+        instagramLink,
+        linkedinLink,
+      });
+    } catch (error) {
+      console.error('Error fetching social media links:', error);
+    }
+  };
+  const handleSaveLinks = async () => {
+    try {
+      // Save the updated social media links
+      await axios.put(`${BASE_API_URL}/updateSocialMediaLinks?companyName=${companyName}`, {
+        facebookink: socialMediaLinks.facebookLink,
+        twitterLink: socialMediaLinks.twitterLInk,
+        instagramLink: socialMediaLinks.instagramLink,
+        linkedinLink: socialMediaLinks.linkedinLink
+      });
+
+      // Update the state with the new links
+      setSocialMediaLinks({
+        facebookLink: socialMediaLinks.facebookLink,
+        twitterLink: socialMediaLinks.twitterLink,
+        instagramLink: socialMediaLinks.instagramLink,
+        linkedinLink: socialMediaLinks.linkedinLink
+      });
+
+      handleCloseModal(); // Close the modal after saving
+    } catch (error) {
+      console.error('Error updating social media links:', error.response ? error.response.data : error.message);
+    }
+  };
+
+
+
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
         <AdminleftSide />
       </div>
-      <div className="rightside" style={{ overflowY: 'hidden' }}>
+      <div className="right-side">
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
             <div style={{ position: 'relative', height: '55%' }}>
@@ -196,28 +258,96 @@ const CompanyDetailsByAdmin = () => {
               />
             </div>
             <div>
-              <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{companyName}</h1>
-              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '100px' }}>
-                <FaFacebook
-                  onClick={() => handleCompanyIconClick('Facebook')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#4267B2',marginRight:'10px' }}
-                />
-                <FaTwitter
-                  onClick={() => handleCompanyIconClick('Twitter')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#1DA1F2' ,marginLeft:'10px',marginRight:'10px'}}
-                />
-                <FaInstagramSquare
-                  onClick={() => handleCompanyIconClick('Instagram')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#C13584',marginLeft:'10px',marginRight:'10px' }}
-                />
-                <FaLinkedin
-                  onClick={() => handleCompanyIconClick('LinkedIn')}
-                  style={{ fontSize: '30px', cursor: 'pointer', color: '#0077B5',marginLeft:'10px'}}
-                />
-              </div>
+              <h1 style={{ position: 'absolute', top: '65%', right: '100px' }}>{companyName}</h1>
 
+              <div className='social-icons-company' style={{ position: 'absolute', top: '80%', left: '920px' }}>
+
+                <div className="social-media-buttons">
+                  <Button variant="primary" onClick={setShowModal}>Add Social Media Links</Button>
+                </div>
+                <Modal show={showModal} onHide={handleCloseModal}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Add Social Media Links</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form>
+                      <Form.Group controlId='facebookLink'>
+                        <Form.Label>Facebook</Form.Label>
+                        <Form.Control
+                          type='text'
+                          name='facebookLink'
+                          value={socialMediaLinks.facebookLink}
+                          onChange={handleSocialInputChange}
+                          placeholder='Enter Facebook link'
+                        />
+                      </Form.Group>
+                      <Form.Group controlId='twitterLink'>
+                        <Form.Label>Twitter</Form.Label>
+                        <Form.Control
+                          type='text'
+                          name='twitterLink'
+                          value={socialMediaLinks.twitterLink}
+                          onChange={handleSocialInputChange}
+                          placeholder='Enter Twitter link'
+                        />
+                      </Form.Group>
+                      <Form.Group controlId='instagramLink'>
+                        <Form.Label>Instagram</Form.Label>
+                        <Form.Control
+                          type='text'
+                          name='instagramLink'
+                          value={socialMediaLinks.instagramLink}
+                          onChange={handleSocialInputChange}
+                          placeholder='Enter Instagram link'
+                        />
+                      </Form.Group>
+                      <Form.Group controlId='linkedinLink'>
+                        <Form.Label>LinkedIn</Form.Label>
+                        <Form.Control
+                          type='text'
+                          name='linkedinLink'
+                          value={socialMediaLinks.linkedinLink}
+                          onChange={handleSocialInputChange}
+                          placeholder='Enter LinkedIn link'
+                        />
+                      </Form.Group>
+                    </Form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant='secondary' onClick={handleCloseModal}>
+                      Close
+                    </Button>
+                    <Button variant='primary' onClick={handleSaveLinks}>
+                      Save Changes
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+                <div className="social-media-icons">
+                  {socialMediaLinks.facebookLink && (
+                    <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
+                      <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.twitterLink && (
+                    <a href={socialMediaLinks.twitterLink} target="_blank" rel="noopener noreferrer">
+                      <FaTwitter size={24} style={{ margin: '0 5px', color: '#1da1f2' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.instagramLink && (
+                    <a href={socialMediaLinks.instagramLink} target="_blank" rel="noopener noreferrer">
+                      <FaInstagram size={24} style={{ margin: '0 5px', color: '#e4405f' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.linkedinLink && (
+                    <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">
+                      <FaLinkedin size={24} style={{ margin: '0 5px', color: '#0077b5' }} />
+                    </a>
+                  )}
+                </div>
+
+              </div>
             </div>
-            <h3 style={{ position: 'absolute', top: '80%'}}>About {companyName}</h3>
+            <h3 style={{ position: 'absolute', top: '80%' }}>About {companyName}</h3>
           </Card.Body>
         </Card>
         {editableCompanyDetails ? (
@@ -340,34 +470,34 @@ const CompanyDetailsByAdmin = () => {
           </Form>
         ) : (
           <>
-          <div className='company-overview-by-admin'>
-            <h3>
-              About 
-              <FaEdit onClick={() => setEditableCompanyDetails(true)} style={{ cursor: 'pointer' }} />
-            </h3>
-            <p>{companyDetails.overView}</p>
-            <h4>Website</h4>
-            <p>
-              <a href={companyDetails.websiteLink} target="_blank" rel="noopener noreferrer">
-                {companyDetails.websiteLink}
-              </a>
-            </p>
-            <h4>Industry Type</h4>
-            <p>{companyDetails.industry}</p>
-            <h4>Description</h4>
-            <p>{companyDetails.discription}</p>
-            <h4>Industry Service</h4>
-            <p>{companyDetails.industryService}</p>
-            <h4>Company Size</h4>
-            <p>{companyDetails.companySize === 0 ? '' : companyDetails.companySize}</p>
-            <h4>Headquarters</h4>
-            <p>{companyDetails.headquaters}</p>
-            <h4>Founded</h4>
-            <p>{companyDetails.year === 0 ? '' : companyDetails.year}</p>
-            <h4>Location</h4>
-            <p>{companyDetails.location}</p>
-            <h4>Specialties</h4>
-            <p>{companyDetails.specialties}</p>
+            <div className='company-overview-by-admin'>
+              <h3>
+                About
+                <FaEdit onClick={() => setEditableCompanyDetails(true)} style={{ cursor: 'pointer' }} />
+              </h3>
+              <p>{companyDetails.overView}</p>
+              <h4>Website</h4>
+              <p>
+                <a href={companyDetails.websiteLink} target="_blank" rel="noopener noreferrer">
+                  {companyDetails.websiteLink}
+                </a>
+              </p>
+              <h4>Industry Type</h4>
+              <p>{companyDetails.industry}</p>
+              <h4>Description</h4>
+              <p>{companyDetails.discription}</p>
+              <h4>Industry Service</h4>
+              <p>{companyDetails.industryService}</p>
+              <h4>Company Size</h4>
+              <p>{companyDetails.companySize === 0 ? '' : companyDetails.companySize}</p>
+              <h4>Headquarters</h4>
+              <p>{companyDetails.headquaters}</p>
+              <h4>Founded</h4>
+              <p>{companyDetails.year === 0 ? '' : companyDetails.year}</p>
+              <h4>Location</h4>
+              <p>{companyDetails.location}</p>
+              <h4>Specialties</h4>
+              <p>{companyDetails.specialties}</p>
             </div>
           </>
         )}

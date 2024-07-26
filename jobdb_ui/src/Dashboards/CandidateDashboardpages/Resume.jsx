@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Dropdown, Modal } from 'react-bootstrap';
 
-import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2'; // Import SweetAlert2
 import './CandidateDashboard.css';
@@ -119,22 +118,16 @@ const Resume = () => {
 
 
     <div className='dashboard-container'>
-    
-    <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
-      <CandidateLeftSide user={{ userName, userId }} />
-    </div>
-    <div className="hamburger-icon" onClick={toggleLeftSide}>
-      <FaBars />
-    </div>
-
-    <div className="rightside" style={{
-      overflowY: 'scroll'
-    }}>
-          <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
 
 
 
+      <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
+        <CandidateLeftSide user={{ userName, userId }} />
+      </div>
+
+      <div className="right-side">
+        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
           <Dropdown className="ml-2">
             <Dropdown.Toggle as="span" className="toggle-hidden cursor-pointer">
               <div

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
-import { FaBars } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -143,13 +142,8 @@ const ResumeAdd = () => {
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
-
-      <div className="rightside" style={{
-        overflowY: 'scroll'
-      }}>
+  
+      <div className="right-side">
 
         <Col xs={6}>
           <Button onClick={handleBack} variant="secondary">

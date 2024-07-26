@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Container, Form } from 'react-bootstrap';
-import { FaBars } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
@@ -127,11 +126,8 @@ const DreamCompany = () => {
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
-
-      <div className="rightside">
+ 
+      <div className="right-side">
         <Container>
           <div className="centered-content">
             {showResumePopup && (

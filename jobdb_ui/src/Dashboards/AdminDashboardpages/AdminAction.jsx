@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-import { Breadcrumb, Button, Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import swal from 'sweetalert2';
 import AdminleftSide from './AdminleftSide';
@@ -113,7 +113,7 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
         <AdminleftSide />
       </div>
 
-      <div className="rightside">
+      <div className="right-side">
         <header className="admin-header">
           <h2 style={{ color: 'wheat' }}>User Validation</h2>
         </header>
