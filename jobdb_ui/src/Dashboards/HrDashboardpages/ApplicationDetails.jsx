@@ -55,48 +55,44 @@ const ApplicationDetails = () => {
 
     return (
         <div className='dashboard-container'>
-        <div className='left-side'>
-            <HrLeftSide user={{ userName, userEmail }} />
-          </div>
-  
-          <div md={10} className="rightside" style={{
-            overflow: 'hidden'
-          }}>
+            <div className='left-side'>
+                <HrLeftSide user={{ userName, userEmail }} />
+            </div>
 
+            <div className="right-side" >
+                <div className="application-details-container">
 
-                    <div className="application-details-container">
+                    <div className="candidate-search">
+                        <div className="application-details-container">
 
-                        <div className="candidate-search">
-                            <div className="application-details-container">
+                            {job && (
+                                <div className="jobdetails">
+                                    <h2>Job Details</h2>
+                                    <p><b>Job Title: </b>{job.jobTitle}</p>
+                                    <p><b>Company Name:</b> {job.companyName}</p>
 
-                                {job && (
-                                    <div className="jobdetails">
-                                        <h2>Job Details</h2>
-                                        <p><b>Job Title: </b>{job.jobTitle}</p>
-                                        <p><b>Company Name:</b> {job.companyName}</p>
+                                    <p><b>Requirements:</b> {job.skills}</p>
+                                    <p><b>Position:</b> {job.numberOfPosition}</p>
 
-                                        <p><b>Requirements:</b> {job.skills}</p>
-                                        <p><b>Position:</b> {job.numberOfPosition}</p>
+                                    <p><b>JobType:</b> {job.jobType}</p>
+                                    <b>Job Description:</b><pre> {job.jobsummary}</pre>
+                                    {/* Add more job details as needed */}
+                                </div>
+                            )}
 
-                                        <p><b>JobType:</b> {job.jobType}</p>
-                                        <b>Job Description:</b><pre> {job.jobsummary}</pre>
-                                        {/* Add more job details as needed */}
-                                    </div>
-                                )}
+                            {candidate && (
+                                <div className="candidatedetails">
+                                    <h2>Candidate Details</h2>
+                                    <p><b>Name: </b>{candidate.userName}</p>
+                                    <p> <b>Email:</b> {candidate.userEmail}</p>
+                                    <p> <b>Phone:</b> {candidate.phone}</p>
 
-                                {candidate && (
-                                    <div className="candidatedetails">
-                                        <h2>Candidate Details</h2>
-                                        <p><b>Name: </b>{candidate.userName}</p>
-                                        <p> <b>Email:</b> {candidate.userEmail}</p>
-                                        <p> <b>Phone:</b> {candidate.phone}</p>
-
-                                    </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </div>
                     </div>
-</div></div>
+                </div>
+            </div></div>
     );
 };
 

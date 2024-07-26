@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, OverlayTrigger, Popover, Table } from 'react-bootstrap';
-import { FaBars } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -285,17 +284,10 @@ const CandidateJobs = () => {
     <div className='dashboard-container'>
       
         <div  className={`left-side ${showLeftSide ? 'show' : ''}`}>
-   
           <CandidateLeftSide user={{ userName, userId }} />
         </div>
-        <div className="hamburger-icon" onClick={toggleLeftSide}>
-          <FaBars />
-        </div>
-
-        <div  className="rightside" style={{
-          overflowY: 'scroll'
-        }}>
-
+    
+        <div  className="right-side">
           {showResumePopup && (
            <ResumeSelectionPopup
            resumes={resumes}

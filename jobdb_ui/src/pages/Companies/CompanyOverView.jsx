@@ -41,12 +41,7 @@ const CompanyOverView = ({ companyId }) => {
             <p>{overviewData.industryService}</p>
             <h4>Company Size</h4>
             <p>{overviewData.companySize === 0 ? '' : overviewData.companySize}</p>          
-          </>
-        </Card.Body>
-      </Card>
-      <Card style={{ marginTop: '20px' }}>
-        <Card.Body>
-          <>
+       
             <h4>Headquarters</h4>
             <p>{overviewData.headquaters}</p>
             <h4>Founded</h4>

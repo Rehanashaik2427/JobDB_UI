@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
-import { FaBars } from 'react-icons/fa';
 import { SiImessage } from 'react-icons/si';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -366,12 +365,7 @@ const MyApplication = () => {
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
-
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
-
-      <div className="rightside" style={{ overflowY: 'scroll' }}>
+      <div className="right-side" style={{ overflowY: 'scroll' }}>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
           <div className="search-bar">
             <input

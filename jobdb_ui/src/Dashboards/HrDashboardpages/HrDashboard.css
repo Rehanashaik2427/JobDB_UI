@@ -1,11 +1,5 @@
 /* removing scrollbars  */
-* {
-  -ms-overflow-style: none;
-}
 
-::-webkit-scrollbar {
-  display: none;
-}
 
 
 .centered-form {
@@ -46,17 +40,8 @@ label {
   color: red;
 }
 
-/* HrDashboard.css */
-.left-side {
-  height: 100vh;
-  width: 200px;
-}
 
-.rightside {
-  height: 100vh;
-  width: 100vw;
-  background-color: rgb(252, 253, 253);
-}
+
 
 #logo img {
   height: 100px;
@@ -682,52 +667,6 @@ section {
 }
 
 
-.dashboard-container {
-  .left-side {
-    @media (max-width: 768px) {
-      display: none;
-      
-    }
-  }
-
-  .hamburger-icon {
-    display: none;
-
-    @media (max-width: 768px) {
-      display: block;
-      cursor: pointer;
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 24px;
-      z-index: 1000;
-      /* Ensure the hamburger icon is above other elements */
-    }
-  }
-
-  .rightside {
-    @media (max-width: 768px) {
-      height: 100vh;
-      width: 100vw;
-
-      
-    }
-  }
-
-
-  .left-side.show {
-    display: block;
-    /* Ensure the left side shows when the hamburger icon is clicked */
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: white;
-    z-index: 999;
-    width: 250px;
-    /* Adjust width as needed */
-  }
-}
 
 .company-overview {
   /* Adjust the max-height as needed */

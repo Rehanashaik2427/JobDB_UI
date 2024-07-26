@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, OverlayTrigger, Popover, Row, Table } from "react-bootstrap";
-import { FaBars, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -349,9 +349,9 @@ const CompamyPage = () => {
 
 
   const [socialMediaLinks, setSocialMediaLinks] = useState({
-    facebooklonk: '',
-    twitterlink: '',
-    instagramlink: '',
+    facebookLink: '',
+    twitterLink: '',
+    instagramLink: '',
     linkedinLink: ''
   });
 
@@ -362,11 +362,11 @@ const CompamyPage = () => {
       const response = await axios.get(`${BASE_API_URL}/getSocialMediaLinks`, {
         params: { companyName },
       });
-      const { facebooklonk, twitterlink, instagramlink, linkedinLink } = response.data;
+      const { facebookLink, twitterLink, instagramLink, linkedinLink } = response.data;
       setSocialMediaLinks({
-        facebooklonk,
-        twitterlink,
-        instagramlink,
+        facebookLink,
+        twitterLink,
+        instagramLink,
         linkedinLink,
       });
     } catch (error) {
@@ -379,13 +379,8 @@ const CompamyPage = () => {
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
-      <div className="hamburger-icon" onClick={toggleLeftSide}>
-        <FaBars />
-      </div>
 
-      <div className="rightside" style={{
-        overflowY: 'scroll'
-      }}>
+      <div className="right-side">
         {showResumePopup && (
 
           <ResumeSelectionPopup
@@ -418,18 +413,18 @@ const CompamyPage = () => {
               <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '60px' }}>
                 
                    <div className="social-media-icons">
-                  {socialMediaLinks.facebooklonk && (
-                    <a href={socialMediaLinks.facebooklonk} target="_blank" rel="noopener noreferrer">
+                  {socialMediaLinks.facebookLink && (
+                    <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
                       <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
                     </a>
                   )}
-                  {socialMediaLinks.twitterlink && (
-                    <a href={socialMediaLinks.twitterlink} target="_blank" rel="noopener noreferrer">
+                  {socialMediaLinks.twitterLink && (
+                    <a href={socialMediaLinks.twitterLink} target="_blank" rel="noopener noreferrer">
                       <FaTwitter size={24} style={{ margin: '0 5px', color: '#1da1f2' }} />
                     </a>
                   )}
-                  {socialMediaLinks.instagramlink && (
-                    <a href={socialMediaLinks.instagramlink} target="_blank" rel="noopener noreferrer">
+                  {socialMediaLinks.instagramLink && (
+                    <a href={socialMediaLinks.instagramLink} target="_blank" rel="noopener noreferrer">
                       <FaInstagram size={24} style={{ margin: '0 5px', color: '#e4405f' }} />
                     </a>
                   )}

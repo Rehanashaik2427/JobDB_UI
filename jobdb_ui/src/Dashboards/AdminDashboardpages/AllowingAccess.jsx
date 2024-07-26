@@ -15,7 +15,7 @@ const AllowingAccess = () => {
         <AdminleftSide />
       </div>
 
-      <div className="rightside">
+      <div className="right-side">
         <div>
           <h2 style={{ textAlign: 'center' }}>Access Dashboard</h2>
 

@@ -116,9 +116,7 @@ const Applications = () => {
           <HrLeftSide user={{ userName, userEmail }} />
         </div>
 
-        <div md={10} className="rightside" style={{
-          overflow: 'hidden'
-        }}>
+        <div className="right-side">
           <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
             <div className="search-bar">
               <input

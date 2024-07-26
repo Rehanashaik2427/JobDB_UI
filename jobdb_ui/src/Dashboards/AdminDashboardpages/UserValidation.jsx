@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
@@ -58,7 +58,7 @@ const UserValidation = () => {
         <AdminleftSide />
       </div>
 
-      <div className="rightside">
+      <div className="right-side">
       {userData.length > 0 ? (
         <div className='user-table-list'>
       

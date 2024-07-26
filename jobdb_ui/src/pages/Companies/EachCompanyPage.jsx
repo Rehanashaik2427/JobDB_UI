@@ -168,9 +168,9 @@ const EachCompanyPage = () => {
 
 
   const [socialMediaLinks, setSocialMediaLinks] = useState({
-    facebooklonk: '',
-    twitterlink: '',
-    instagramlink: '',
+    facebookLink: '',
+    twitterLink: '',
+    instagramLink: '',
     linkedinLink: ''
   });
   const fetchSocialMediaLinks = async (companyName) => {
@@ -178,11 +178,11 @@ const EachCompanyPage = () => {
       const response = await axios.get(`${BASE_API_URL}/getSocialMediaLinks`, {
         params: { companyName },
       });
-      const { facebooklonk, twitterlink, instagramlink, linkedinLink } = response.data;
+      const { facebookLink, twitterLink, instagramLink, linkedinLink } = response.data;
       setSocialMediaLinks({
-        facebooklonk,
-        twitterlink,
-        instagramlink,
+        facebookLink,
+        twitterLink,
+        instagramLink,
         linkedinLink,
       });
     } catch (error) {
@@ -194,13 +194,13 @@ const EachCompanyPage = () => {
     let url;
     switch (socialMedia) {
       case 'Facebook':
-        url = socialMediaLinks.facebooklonk || `https://www.facebook.com/${companyName}`;
+        url = socialMediaLinks.facebookLink || `https://www.facebook.com/${companyName}`;
         break;
       case 'Twitter':
-        url = socialMediaLinks.twitterlink || `https://twitter.com/${companyName}`;
+        url = socialMediaLinks.twitterLink || `https://twitter.com/${companyName}`;
         break;
       case 'Instagram':
-        url = socialMediaLinks.instagramlink || `https://www.instagram.com/${companyName}`;
+        url = socialMediaLinks.instagramLink || `https://www.instagram.com/${companyName}`;
         break;
       case 'LinkedIn':
         url = socialMediaLinks.linkedinLink || `https://www.linkedin.com/company/${companyName}`;
@@ -237,17 +237,17 @@ const EachCompanyPage = () => {
             </div>
             <div>          <h1 style={{ position: 'absolute', top: '60%', right: '100px' }}>{companyName}</h1>
               <div className='social-icons-company' style={{ position: 'absolute', top: '75%', right: '100px' }}>
-                {socialMediaLinks.facebooklonk || companyName ? (
+                {socialMediaLinks.facebookLink || companyName ? (
                   <FaFacebook onClick={() => handleCompanyIconClick('Facebook')} style={{ fontSize: '24px', color: '#3b5998', cursor: 'pointer', margin: '0 5px' }} />
                 ) : (
                   <FaFacebook onClick={() => handleCompanyIconClick('Facebook')} style={{ fontSize: '24px', color: '#3b5998', cursor: 'pointer', margin: '0 5px' }} />
                 )}
-                {socialMediaLinks.twitterlink || companyName ? (
+                {socialMediaLinks.twitterLink || companyName ? (
                   <FaTwitter onClick={() => handleCompanyIconClick('Twitter')} style={{ fontSize: '24px', color: '#1da1f2', cursor: 'pointer', margin: '0 5px' }}/>
                 ) : (
                   <FaTwitter onClick={() => handleCompanyIconClick('Twitter')} style={{ fontSize: '24px', color: '#1da1f2', cursor: 'pointer', margin: '0 5px' }}/>
                 )}
-                {socialMediaLinks.instagramlink || companyName ? (
+                {socialMediaLinks.instagramLink || companyName ? (
                   <FaInstagram onClick={() => handleCompanyIconClick('Instagram')} style={{ fontSize: '24px', color: '#e4405f', cursor: 'pointer', margin: '0 5px' }}/>
                 ) : (
                   <FaInstagram onClick={() => handleCompanyIconClick('Instagram')} style={{ fontSize: '24px', color: '#e4405f', cursor: 'pointer', margin: '0 5px' }} />

@@ -97,7 +97,7 @@ const BlockAccount = () => {
         <AdminleftSide />
       </div>
 
-      <div className="rightside">
+      <div className="right-side">
         <h2>Blocked Accounts</h2>
 
         <div className="blockedAccount">

@@ -111,12 +111,12 @@ const People = () => {
         setPage(0); // Reset page when page size change
       };
     return (
-        <div fluid className="dashboard-container">
-                <div md={2} className="left-side">
+        <div  className="dashboard-container">
+                <div  className="left-side">
                     <HrLeftSide user={{ userName, userEmail }} />
                 </div>
 
-                <div md={18} className="rightside">
+                <div  className="right-side">
                     <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
 
                         <Dropdown className="ml-2">

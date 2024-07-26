@@ -136,8 +136,7 @@ const CompanyValidation = () => {
         <AdminleftSide />
       </div>
 
-      <div className="rightside ">
-       
+      <div className="right-side">   
         {companyData.length > 0 ? (
           <>
            <h2 style={{ textAlign: 'center' }}>Details of Company Validation</h2>

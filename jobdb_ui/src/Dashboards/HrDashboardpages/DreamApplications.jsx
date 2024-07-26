@@ -291,7 +291,7 @@ const DreamApplication = () => {
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
 
-      <div md={10} className="rightside" >
+      <div className="right-side" >
           <div className="application-div">
 
             <Row className="filter">

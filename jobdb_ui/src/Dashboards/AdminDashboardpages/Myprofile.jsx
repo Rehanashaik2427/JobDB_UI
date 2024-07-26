@@ -10,7 +10,7 @@ const Myprofile = ({ userType }) => {
       <AdminleftSide />
     </div>
 
-    <div className="rightside">
+    <div className="right-side">
         <div className='admin-profile'>
           <Table hover className='text-center'style={{ marginLeft: '8px' }}>
             <thead className="table-light" >
