@@ -9,8 +9,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
 import Slider from "./Slider";
 
-
-
 const ViewApplications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
@@ -33,14 +31,11 @@ const ViewApplications = () => {
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
-
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
     setPage(0); // Reset page when page size change
   };
-
-
 
   const handleFilterChange = async (e) => {
     setFilterStatus(e.target.value);
@@ -67,16 +62,14 @@ const ViewApplications = () => {
       const response = await axios.get(endpoint, { params });
       console.log(response.data);
 
-
       setApplications(response.data.content || []);
-      fetchResumeTypes(response.data.content || []);
+      fetchResumeTypes (response.data.content || []);
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
-
 
   const fetchApplications = async () => {
     setLoading(true);
@@ -90,11 +83,9 @@ const ViewApplications = () => {
         sortOrder: sortOrder
       };
 
-
-
       const response = await axios.get(`${BASE_API_URL}/getApplicationsByJobIdWithPagination`, { params });
       setApplications(response.data.content || []);
-      fetchResumeTypes(response.data.content || []);
+      fetchResumeTypes (response.data.content || []);
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
@@ -126,7 +117,6 @@ const ViewApplications = () => {
 
   };
 
-
   const updateStatus = async (applicationId, newStatus) => {
     console.log(applicationId);
     console.log(newStatus);
@@ -137,16 +127,41 @@ const ViewApplications = () => {
       console.log(error);
     }
   };
+  const [unreadMessages, setUnreadMessages] = useState([]); // State to track unread messages
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+     
+      const unread = {}; // Initialize unread messages state
+
+      for (const application of applications) {
+        try {
+         
+          const countUnread = await fetchCountUnreadMessage(application.applicationId);
+        
+          unread[application.applicationId] = countUnread;
+
+        } catch (error) {
+          console.error('Error fetching job status:', error);
+        
+        }
+      }
+      setUnreadMessages(unread); // Set unread messages state
+    };
+    fetchStatuses();
+  }, [applications]);
 
 
   const fetchResumeTypes = async (applications) => {
     const types = {};
     const fileNames = {};
+    const unread = {}; // Initialize unread messages state
     for (const application of applications) {
       try {
         const response = await axios.get(`${BASE_API_URL}/getResumeByApplicationId?resumeId=${application.resumeId}`);
         types[application.resumeId] = response.data.fileType;
         fileNames[application.resumeId] = response.data.fileName;
+       
         ///console.log(`Resume ID: ${application.resumeId}, File Type: ${response.data.fileType}, File Name: ${response.data.fileName}`);
       } catch (error) {
         console.error('Error fetching resume type:', error);
@@ -155,7 +170,17 @@ const ViewApplications = () => {
 
     setResumeTypes(types);
     setfileNames(fileNames);
+   
   };
+
+  const fetchCountUnreadMessage = async (applicationId) => {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/fetchCountUnreadMessageForHRByApplicationId?applicationId=${applicationId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  }
   const renderResumeComponent = (resumeId) => {
     const fileType = resumeTypes[resumeId];
     const fileName = fileNames[resumeId];
@@ -221,13 +246,9 @@ const ViewApplications = () => {
   }
 
 
-
-
   useEffect(() => {
     fetchCandidateDetails();
   }, [applications]);
-
-
 
   const handlePageClick = (data) => {
     setPage(data.selected);
@@ -245,6 +266,7 @@ const ViewApplications = () => {
 
   const handleChatClick = async (applicationId) => {
     setApplicationId(applicationId);
+    setUnreadMessages(0);
     // const responce= await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
     // setChats(responce.data);
     console.log('Chat icon clicked for:');
@@ -252,13 +274,17 @@ const ViewApplications = () => {
     setShowModal(true);
     setShowChat(true);
     try {
+      await axios.put(`${BASE_API_URL}/markCandidateMessagesAsRead?applicationId=${applicationId}`);
       const response = await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
       setChats(response.data);
       console.log("Chats === > " + chats)
       console.log("Chats === > " + response.data)
       setShowModal(true); // Show the modal once chats are fetched
       setShowChat(true); // Optionally manage showChat state separately
-      setNewMessageReceived(false); // Reset new message indicator
+     
+    
+
+
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
@@ -276,13 +302,20 @@ const ViewApplications = () => {
 
   const handleSend = async () => {
     // Handle send logic here
-    const responce = await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
-    console.log('Sending message:', inputValue);
-    // Close the modal or perform any other actions
-
-    setShowModal(true);
-    setInputValue('');
-    handleChatClick(applicationId) // Reset input value after sending
+    try{
+      await axios.put(`${BASE_API_URL}/markCandidateMessagesAsRead?applicationId=${applicationId}`);
+      const responce = await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
+      console.log('Sending message:', inputValue);
+      // Close the modal or perform any other actions
+     
+      setShowModal(true);
+      setInputValue('');
+      handleChatClick(applicationId)
+     // Reset input value after sending
+    }catch{
+      console.log('error')
+    }
+   
   };
   // Function to format date with only day
   function formatDate(timestamp) {
@@ -407,80 +440,109 @@ const ViewApplications = () => {
             </Modal.Footer>
           </Modal>
 
-
-            <div>
-              {loading ? (
-                <div className="d-flex justify-content-center align-items-center">
-                  <div className="spinner-bubble spinner-bubble-primary m-5" />
-                  <span>Loading...</span>
-                </div>
-              ) : applications.length === 0 ? (
-                <section>
-                  <h2>Sorry, you haven't received any applications yet.</h2>
-                </section>
-              ) : (
-                <div>
-                  <Table hover className='text-center'>
-                    <thead className="table-light">
-                      <tr>
-                        <th scope="col">Job Title</th>
-                        <th scope="col">Candidate Name</th>
-                        <th scope="col">Candidate Email</th>
-                        <th scope="col">Resume ID</th>
-                        <th scope="col" onClick={() => handleSort('appliedOn')}>
-                          Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
-                        </th>
-                        {/* <th scope="col" onClick={() => handleSort('applicationStatus')}>
+          <div>
+            {loading ? (
+              <div className="d-flex justify-content-center align-items-center">
+                <div className="spinner-bubble spinner-bubble-primary m-5" />
+                <span>Loading...</span>
+              </div>
+            ) : applications.length === 0 ? (
+              <section>
+                <h2>Sorry, you haven't received any applications yet.</h2>
+              </section>
+            ) : (
+              <div>
+                <Table hover className='text-center'>
+                  <thead className="table-light">
+                    <tr>
+                      <th scope="col">Job Title</th>
+                      <th scope="col">Candidate Name</th>
+                      <th scope="col">Candidate Email</th>
+                      <th scope="col">Resume ID</th>
+                      <th scope="col" onClick={() => handleSort('appliedOn')}>
+                        Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      {/* <th scope="col" onClick={() => handleSort('applicationStatus')}>
                           Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
                         </th> */}
-                        <th scope="col">View Details</th>
-                        <th scope="col">Action</th>
-                        <th scope="col">Chat</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applications.map((application) => (
-                        <tr key={application.applicationId}>
-                          <td>{application.jobRole}</td>
-                          <td>{candidateName[application.candidateId]}</td>
-                          <td>{candidateEmail[application.candidateId]}</td>
-                          <td>{renderResumeComponent(application.resumeId)}</td>
-                          <td>{application.appliedOn}</td>
-                          {/* <td>{application.applicationStatus}</td> */}
-                          <td>
-                            <Link
-                              to={{
-                                pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
+                      <th scope="col">View Details</th>
+                      <th scope="col">Action</th>
+                      <th scope="col">Chat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {applications.map((application) => (
+                      <tr key={application.applicationId}>
+                        <td>{application.jobRole}</td>
+                        <td>{candidateName[application.candidateId]}</td>
+                        <td>{candidateEmail[application.candidateId]}</td>
+                        <td>{renderResumeComponent(application.resumeId)}</td>
+                        <td>{application.appliedOn}</td>
+                        {/* <td>{application.applicationStatus}</td> */}
+                        <td>
+                          <Link
+                            to={{
+                              pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
+                              state: { userEmail, applicationId: application.applicationId, userName },
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
                                 state: { userEmail, applicationId: application.applicationId, userName },
-                              }}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
-                                  state: { userEmail, applicationId: application.applicationId, userName },
-                                });
+                              });
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faEye}
+                              style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
+                            />
+                          </Link>
+                        </td>
+                        <td >
+                          <Slider
+                            initialStatus={application.applicationStatus}
+                            onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
+                          />
+                        </td>
+                        <td>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                          {unreadMessages[application.applicationId] > 0 && (
+                            <span
+                              style={{
+                                position: 'absolute',
+                                top: '-5px',
+                                right: '-15px',
+                                backgroundColor: 'red',
+                                color: 'white',
+                                borderRadius: '50%',
+                                width: '20px',
+                                height: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '12px',
+                                fontWeight: 'bold',
+                                zIndex: 1, // Ensure notification badge is above SiImessage icon
                               }}
                             >
-                              <FontAwesomeIcon
-                                icon={faEye}
-                                style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
-                              />
-                            </Link>
-                          </td>
-                          <td >
-                            <Slider 
-                              initialStatus={application.applicationStatus}
-                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                            />
-                          </td>
-                          <td onClick={() => handleChatClick(application.applicationId)}>
-                            <SiImessage size={25} />
-                          </td>
+                              {unreadMessages[application.applicationId]}
+                            </span>
+                          )}
+                          <SiImessage
+                            size={25}
+                            onClick={() => {
+                              handleChatClick(application.applicationId);
+                              setShowModal(true);
+                            }}
+                            style={{ color: 'green', cursor: 'pointer' }}
+                          />
+                        </div>
+                        </td>
 
                       </tr>
                     ))}
                   </tbody>
                 </Table>
-
 
               </div>
             )}
@@ -513,8 +575,8 @@ const ViewApplications = () => {
       </div></div>
   );
 
-
-
 };
 
 export default ViewApplications;
+
+
