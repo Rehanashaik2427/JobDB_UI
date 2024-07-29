@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Popover, Table } from 'react-bootstrap';
+import { Button, Dropdown, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
@@ -105,20 +105,6 @@ const PostedJobs = () => {
     setPage(data.selected);
   };
 
-  const closeJobDescription = () => {
-    setShowJobDescription(false);
-    setSelectedJobSummary('');
-  };
-  const popover = (summary) => (
-    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-      <Popover.Body>
-        {summary}
-        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
-
-        </span>
-      </Popover.Body>
-    </Popover>
-  );
 
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();

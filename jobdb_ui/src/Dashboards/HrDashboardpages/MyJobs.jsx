@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button, Dropdown, Popover, Table } from 'react-bootstrap';
+import { Button, Dropdown, Table } from 'react-bootstrap';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -108,21 +108,6 @@ const MyJobs = () => {
   }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
 
-  const closeJobDescription = () => {
-    setShowJobDescription(false);
-    setSelectedJobSummary('');
-  };
-
-  const popover = (summary) => (
-    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-      <Popover.Body>
-        {summary}
-        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
-
-        </span>
-      </Popover.Body>
-    </Popover>
-  );
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };

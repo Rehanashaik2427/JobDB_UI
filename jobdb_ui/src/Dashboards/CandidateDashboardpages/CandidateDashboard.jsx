@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Dropdown, Row } from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import { faBuilding, faEye, faFileAlt, faStar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Chart from 'react-apexcharts';
 import CandidateLeftSide from './CandidateLeftSide';
 
@@ -198,7 +200,12 @@ const CandidateDashboard = () => {
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
   };
-
+  const DATA = [
+    { icon: faBuilding, title: countOfCompanies, subtitle: "Applied Companies", link: "/candidate-dashboard/candidate-companies" },
+    { icon: faFileAlt, title: countOfResume, subtitle: "Resumes", link: "/candidate-dashboard/resume" },
+    { icon: faEye, title: '250', subtitle: "Resume Views" },
+    { icon: faStar, title: countOfshortlistedApplications, subtitle: "Shortlist", link: '/candidate-dashboard/my-application', state: { userName, userId, applicationStatus: "Shortlisted" } }
+  ];
   return (
     <div className='dashboard-container'>
       <div className="left-side">
@@ -256,74 +263,54 @@ const CandidateDashboard = () => {
           </Dropdown>
         </div>
 
-        <div>
-          <h3 className='status-info'>My application status</h3>
-          <div className="dashboard-container-boxes">
-            <span>
-              <Link
-                to={{
-                  pathname: '/candidate-companies',
-                  state: { userName, userId }
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/candidate-dashboard/candidate-companies', { state: { userName, userId } });
-                }}
-              >
-                <h4>Count of Applied Companies
-                  <h4>{countOfCompanies !== null ? countOfCompanies : 'Loading...'}</h4>
-                </h4>
-              </Link>
-            </span>
-            <span>
-              <Link
-                to={{
-                  pathname: '/resume',
-                  state: { userName, userId }
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/candidate-dashboard/resume', { state: { userName, userId } });
-                }}
-              >
-                <h4>
-                  {countOfResume !== null ? countOfResume : 'Loading...'}
-                  <h4>resumes</h4>
-                </h4>
-              </Link>
-            </span>
-            <span>
-              <h4>250 resume views</h4>
-            </span>
-            <span>
-              <Link
-                to={{
-                  pathname: '/candidate-dashboard/my-application',
-                  state: { userName, userId, applicationStatus: "Shortlisted" }
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/candidate-dashboard/my-application', { state: { userName, userId, applicationStatus: "Shortlisted" } });
-                }}
-              >
-                <h4>
-                  {countOfshortlistedApplications !== null ? countOfshortlistedApplications : 'Loading...'}
-                <h4>shortlist</h4>
-                </h4>
-              </Link>
-            </span>
-          </div>
-
+        <Container>
+          <h3 className='status-info text-center bg-light'>My Application Status</h3>
+          <Row className="dashboard d-flex mt-4">
+            {DATA.map((item, index) => (
+              <Col lg={3} sm={6} className="mb-4" key={index}>
+                <Card className="card-icon-bg gap-3 card-icon-bg-primary o-hidden mb-4" style={{ maxWidth: '260px'}}>                  
+                  <Card.Body className="align-items-center gap-4">
+                  <FontAwesomeIcon icon={item.icon} className="text-primary mb-2 text-24" />
+                  {item.link ? (
+                    <Link
+                      to={{
+                        pathname: item.link,
+                        state: item.state ? item.state : { userName, userId }
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(item.link, { state: item.state ? item.state : { userName, userId } });
+                      }}
+                      className="nav-link"
+                    >
+                      <h4 className="text-primary mb-0">
+                        {item.subtitle}
+                        <span className="d-block mt-2">{item.title !== null ? item.title : 'Loading...'}</span>
+                      </h4>
+                    </Link>
+                  ) : (
+                    <div>
+                      <h4 className="text-primary mb-0">
+                        {item.subtitle}
+                        <span className="d-block mt-2">{item.title !== null ? item.title : 'Loading...'}</span>
+                      </h4>
+                    </div>
+                  )}
+                </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
 
           <Row className="justify-content-center mb-4">
             <Col xs={16} md={6} className='mb-4'>
-              <div className="chart-card" >
+              <div className="chart-card">
                 <Card.Title className="text-center">Applications per Day</Card.Title>
                 <Chart style={{ height: '200px' }} options={options} series={options.series} type={options.chart.type} />
               </div>
             </Col>
           </Row>
-        </div>
+        </Container>
       </div>
     </div>
   );
