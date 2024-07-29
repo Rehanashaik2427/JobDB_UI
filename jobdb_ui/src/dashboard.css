@@ -29,13 +29,13 @@
     width: 100vw;
     background-color: rgb(252, 253, 253);
     overflow-y: scroll;
-    border: 1px solid black;
   }
 
   .i-Full-Screen{
     font-size: 20px;
     margin-right:5px;
   }
+  
   /* dropdownStyles.css */
 .initials-placeholder{
   width: 30px;

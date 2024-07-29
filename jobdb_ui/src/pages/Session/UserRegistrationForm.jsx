@@ -1,12 +1,14 @@
+
+
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Col, FormControl, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
 import Swal from 'sweetalert2';
-import TextField from './sessions/TextField';
+import * as yup from 'yup';
 import SocialButtons from './sessions/SocialButtons';
+import TextField from './sessions/TextField';
 
 const UserRegistrationForm = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -18,8 +20,7 @@ const UserRegistrationForm = () => {
     const [otpVerified, setOtpVerified] = useState(false);
     const [disableFormFields, setDisableFormFields] = useState(false);
     const [userType, setUserType] = useState("");
-    // const location = useLocation();
-    // const { companyName, userRole } = location.state || {}; // Destructure state
+
     const navigate = useNavigate();
 
     // useEffect(() => {
@@ -32,10 +33,10 @@ const UserRegistrationForm = () => {
     //         setUserType(location.state.userRole);
     //     }
     // }, [location.state]);
-
+    
     // Log directly in the render method to verify the current value of userType
     console.log("Rendering with userType:", userType);
-
+    
 
 
     const initialFormValues = {
@@ -52,29 +53,48 @@ const UserRegistrationForm = () => {
 
     const [formValues, setFormValues] = useState(initialFormValues);
 
+
+    const location = useLocation();
+    const userRole = location.state?.userType; // Get the userType from navigation state
+    const companyName = location.state?.companyName;
+    const companyWebiste = location.state?.companyWebsite;
+
+    console.log(companyWebiste)
+
+console.log(companyName)
     useEffect(() => {
-        // Load userType from localStorage when component mounts
-        const storedUserType = localStorage.getItem('userType') || '';
-        setUserType(storedUserType);
-    }, []);
+        if (userRole) {
+            setUserType(userRole); // Set the default role based on userType
+        }
+        const storedFormValues = JSON.parse(localStorage.getItem('userRegistrationForm')) || formValues;
+        setFormValues(storedFormValues);
+        localStorage.setItem('userType', userRole || userType);
+    }, [userRole, userType]);
+
+    console.log("useRole", userRole)
+    console.log("userType", userType)
 
     useEffect(() => {
-        // Load form data from localStorage when component mounts
+        localStorage.setItem('userRegistrationForm', JSON.stringify(formValues));
+    }, [formValues]);
+
+
+    useEffect(() => {
+        const storedUserType = localStorage.getItem('userType') || '';
+        setUserType(storedUserType);
+
         const storedFormValues = JSON.parse(localStorage.getItem('userRegistrationForm')) || initialFormValues;
         if (Object.keys(formValues).length === 0 && formValues.constructor === Object) {
             setFormValues(storedFormValues);
         }
     }, []);
 
-    useEffect(() => {
-        // Save form data to localStorage whenever formValues change
-        localStorage.setItem('userRegistrationForm', JSON.stringify(formValues));
-    }, [formValues]);
 
     useEffect(() => {
-        // Save userType to localStorage whenever userType changes
+        localStorage.setItem('userRegistrationForm', JSON.stringify(formValues));
         localStorage.setItem('userType', userType);
-    }, [userType]);
+    }, [formValues, userType]);
+
 
     useEffect(() => {
         // Clear localStorage when the component unmounts
@@ -84,9 +104,13 @@ const UserRegistrationForm = () => {
         };
     }, []);
 
-    // Handler function to update userType state
-    const handleUserTypeChange = (e) => {
-        setUserType(e.target.value);
+    const handleUserTypeChange = (type) => {
+        setUserType(type);
+        setFormValues(prevValues => ({
+            ...prevValues,
+            companyName: type === 'HR' ? prevValues.companyName : '',
+            phone: type === 'Candidate' ? prevValues.phone : '',
+        }));
     };
     const [protocol, setProtocol] = useState('http');
     const [tld, setTld] = useState('.com');
@@ -128,6 +152,8 @@ const UserRegistrationForm = () => {
         values.userRole = userType;
         if (userType === 'HR') {
             values.phone = null;
+            values.companyName=companyName;
+            values.companyWebsite=companyWebiste;
         }
         if (userType === 'Candidate') {
             values.companyName = null;
@@ -266,30 +292,31 @@ const UserRegistrationForm = () => {
                     <p style={{ color: 'red', textAlign: 'center' }}>Please select a user type below to proceed with the form.</p>
                 )}
                 <div className="radio-group d-flex justify-content-center align-items-center">
-                    <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : ''}`}>
-                        <input
-                            type="radio"
-                            value="HR"
-                            checked={userType === 'HR'}
-                            onChange={() => setUserType('HR')}
-                        />
-                        HR
-                    </label>
+                <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : 'btn-light'}`}>
+                    <input 
+                        type="radio" 
+                        value="HR" 
+                        checked={userType === 'HR'} 
+                        onChange={() => setUserType('HR')} 
+                        disabled={userType === 'Candidate'} 
+                    />
+                    HR
+                </label>
 
-                    <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : ''}`}>
-                        <input
-                            type="radio"
-                            value="Candidate"
-                            checked={userType === 'Candidate'}
-                            onChange={() => setUserType('Candidate')}
-                        />
-                        Candidate
-                    </label>
+            <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : 'btn-light'}`}>
+                <input 
+                    type="radio" 
+                    value="Candidate" 
+                    checked={userType === 'Candidate'} 
+                    onChange={() => setUserType('Candidate')} 
+                    disabled={userType === 'HR'} 
+                />
+                Candidate
+            </label>
                 </div>
-
                 {userType && (
                     <>
-                        <h1 className="mb-3 text-18">{userType} Registration Form</h1>
+                        <h1 className="mb-3 text-18">{companyName} {userType} Registration Form</h1>
                         <p>(<span style={{ color: 'red' }}>*</span> indicates mandatory fields)</p>
 
                         <Formik
@@ -359,7 +386,8 @@ const UserRegistrationForm = () => {
                                                 />
 
 
-                                                {userType === 'HR' && (
+                                              
+            {userType === 'HR' && !companyName && (
                                                     <>
 
                                                         <TextField
@@ -372,7 +400,7 @@ const UserRegistrationForm = () => {
                                                             }
                                                             required
                                                             placeholder="Enter your company name"
-                                                            value={values.companyName}
+                                                            value={values.companyName || companyName}
                                                             onChange={handleChange}
                                                             onBlur={handleBlur}
                                                             helperText={errors.companyName}
@@ -616,4 +644,6 @@ const UserRegistrationForm = () => {
 };
 
 export default UserRegistrationForm;
+
+
 
