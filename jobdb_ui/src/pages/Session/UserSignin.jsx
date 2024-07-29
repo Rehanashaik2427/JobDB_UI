@@ -50,7 +50,7 @@ const UserSignin = () => {
                     <Row>
                         <Col md={6}>
                             <div className="p-4">
-                                <h1 className="mb-3 text-18">Sign In</h1>
+                                <h1 className="mb-3 text-18">Log In</h1>
                                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
                                     {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
                                         <form onSubmit={handleSubmit}>
@@ -63,7 +63,7 @@ const UserSignin = () => {
                                                 error={errors.password && touched.password} />
 
                                             <button type="submit" className="btn btn-rounded btn-primary w-100 my-1 mt-2" disabled={isSubmitting}>
-                                                {isSubmitting ? 'Signing In...' : 'Sign In'}
+                                                {isSubmitting ? 'Signing In...' : 'log In'}
                                             </button>
                                         </form>
                                     )}

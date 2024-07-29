@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
+import { Button, Card, Col, FormControl, Modal, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import Swal from 'sweetalert2';
@@ -32,10 +32,10 @@ const UserRegistrationForm = () => {
     //         setUserType(location.state.userRole);
     //     }
     // }, [location.state]);
-    
+
     // Log directly in the render method to verify the current value of userType
     console.log("Rendering with userType:", userType);
-    
+
 
 
     const initialFormValues = {
@@ -88,6 +88,9 @@ const UserRegistrationForm = () => {
     const handleUserTypeChange = (e) => {
         setUserType(e.target.value);
     };
+    const [protocol, setProtocol] = useState('http');
+    const [tld, setTld] = useState('.com');
+
 
     // Validation schema using Yup
     const validationSchema = yup.object().shape({
@@ -128,6 +131,7 @@ const UserRegistrationForm = () => {
         }
         if (userType === 'Candidate') {
             values.companyName = null;
+            values.companyWebsite = null;
         }
 
         try {
@@ -262,25 +266,25 @@ const UserRegistrationForm = () => {
                     <p style={{ color: 'red', textAlign: 'center' }}>Please select a user type below to proceed with the form.</p>
                 )}
                 <div className="radio-group d-flex justify-content-center align-items-center">
-                <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : ''}`}>
-                    <input 
-                        type="radio" 
-                        value="HR" 
-                        checked={userType === 'HR'} 
-                        onChange={() => setUserType('HR')} 
-                    />
-                    HR
-                </label>
+                    <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : ''}`}>
+                        <input
+                            type="radio"
+                            value="HR"
+                            checked={userType === 'HR'}
+                            onChange={() => setUserType('HR')}
+                        />
+                        HR
+                    </label>
 
-            <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : ''}`}>
-                <input 
-                    type="radio" 
-                    value="Candidate" 
-                    checked={userType === 'Candidate'} 
-                    onChange={() => setUserType('Candidate')} 
-                />
-                Candidate
-            </label>
+                    <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : ''}`}>
+                        <input
+                            type="radio"
+                            value="Candidate"
+                            checked={userType === 'Candidate'}
+                            onChange={() => setUserType('Candidate')}
+                        />
+                        Candidate
+                    </label>
                 </div>
 
                 {userType && (
@@ -376,43 +380,70 @@ const UserRegistrationForm = () => {
                                                             errorMessage={touched.companyName && errors.companyName}
                                                             disabled={disableFormFields}
                                                         />
-                                                        <TextField
-                                                            type="text"
-                                                            name="companyWebsite"
-                                                            label={
-                                                                <>
-                                                                    Company Website <span style={{ color: 'red' }}>*</span>
-                                                                </>
-                                                            }
-                                                            required
-                                                            placeholder="Enter your company website"
-                                                            value={values.companyWebsite}
-                                                            onChange={(e) => {
-                                                                const { value } = e.target;
-                                                                let formattedValue = value.trim();
-
-                                                                // Add 'https://' prefix if not already present
-                                                                if (!formattedValue.startsWith('https://') && !formattedValue.startsWith('http://')) {
-                                                                    formattedValue = `https://${formattedValue}`;
-                                                                }
-
-                                                                // Add '.com' suffix if not already present
-                                                                if (!formattedValue.endsWith('.com')) {
-                                                                    formattedValue += '.com';
-                                                                }
-
-                                                                handleChange({
-                                                                    target: {
-                                                                        name: 'companyWebsite',
-                                                                        value: formattedValue,
-                                                                    }
-                                                                });
-                                                            }}
-                                                            onBlur={handleBlur}
-                                                            helperText={errors.companyWebsite}
-                                                            error={errors.companyWebsite && touched.companyWebsite}
-                                                            disabled={disableFormFields}
-                                                        />
+                                                        <div className="form-group" style={{ display: 'flex', flexDirection:'column',alignItems: 'start', marginBottom: '5px' }}>
+                                                        <label>{<><span>Company Website</span> <span className="required" style={{ color: 'red' }}>*</span></>}</label>
+                                                            <div className="protocol-tld-container" style={{ display: 'flex', alignItems: 'center' }}>
+                                                            
+                                                                <div className="select-group" style={{ marginRight: '10px' }}>
+                                                                 
+                                                                    <select
+                                                                        id="protocol"
+                                                                        value={protocol}
+                                                                        onChange={(event) => {
+                                                                            const newProtocol = event.target.value;
+                                                                            setProtocol(newProtocol);
+                                                                            handleChange({
+                                                                                target: { name: 'companyWebsite', value: `${newProtocol}://${values.companyWebsite}${tld}` }
+                                                                            });
+                                                                        }}
+                                                                        onBlur={handleBlur}
+                                                                        disabled={disableFormFields}
+                                                                        style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
+                                                                    >
+                                                                        <option value="http">http</option>
+                                                                        <option value="https">https</option>
+                                                                    </select>
+                                                                </div>
+                                                                <TextField
+                                                                    
+                                                                    type="text"
+                                                                    name="companyWebsite"
+                                                                    
+                                                                    placeholder="www.domain"
+                                                                    style={{ marginRight: '10px', flex: '1' }}
+                                                                    disabled={disableFormFields}
+                                                                    onChange={(e) => {
+                                                                        const value = e.target.value;
+                                                                        handleChange({
+                                                                            target: { name: 'companyWebsite', value: `${protocol}://${value}${tld}` }
+                                                                        });
+                                                                    }}
+                                                                />
+                                                                <div className="select-group" style={{ marginRight: '10px' }}>
+                                                                   
+                                                                    <select
+                                                                        id="tld"
+                                                                        value={tld}
+                                                                        onChange={(event) => {
+                                                                            const newTld = event.target.value;
+                                                                            setTld(newTld);
+                                                                            handleChange({
+                                                                                target: { name: 'companyWebsite', value: `${protocol}://${values.companyWebsite}${newTld}` }
+                                                                            });
+                                                                        }}
+                                                                        onBlur={handleBlur}
+                                                                        disabled={disableFormFields}
+                                                                        style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
+                                                                    >
+                                                                        <option value=".com">.com</option>
+                                                                        <option value=".org">.org</option>
+                                                                        <option value=".net">.net</option>
+                                                                        <option value=".info">.info</option>
+                                                                        <option value=".in">.in</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                     </>
                                                 )}
