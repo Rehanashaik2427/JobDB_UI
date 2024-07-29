@@ -1,21 +1,21 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, OverlayTrigger, Popover, Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { useLocation } from 'react-router-dom';
 
 
 const CompanyJobs = ({ companyId }) => {
-    const BASE_API_URL = "http://localhost:8082/api/jobbox";
+  const BASE_API_URL = "http://localhost:8082/api/jobbox";
 
-const [jobs, setJobs] = useState([]);
-const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
-const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-const [page, setPage] = useState(0);
-const [pageSize, setPageSize] = useState(5);
-const [totalPages, setTotalPages] = useState(0);
-const location = useLocation();
-const handlePageSizeChange = (e) => {
+  const [jobs, setJobs] = useState([]);
+  const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
+  const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
+  const location = useLocation();
+  const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
     setPage(0); // Reset page when page size change
@@ -24,7 +24,7 @@ const handlePageSizeChange = (e) => {
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-const handleSort = (column) => {
+  const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
       order = sortOrder === 'asc' ? 'desc' : 'asc';
@@ -35,7 +35,7 @@ const handleSort = (column) => {
   const fetchJobs = async () => {
     try {
       const params = {
-      companyId:companyId,
+        companyId: companyId,
         page: page,
         size: pageSize,
         sortBy: sortedColumn, // Include sortedColumn and sortOrder in params
@@ -50,93 +50,88 @@ const handleSort = (column) => {
     }
   };
   useEffect(() => {
-      fetchJobs();
-    
-  }, [ page, pageSize, sortedColumn, sortOrder]);
+    fetchJobs();
 
-  const [showJobDescription, setShowJobDescription] = useState(false);
+  }, [page, pageSize, sortedColumn, sortOrder]);
+
   const [selectedJobSummary, setSelectedJobSummary] = useState(null);
   const handleViewSummary = (summary) => {
     setSelectedJobSummary(summary);
   };
-  const closeJobDescription = () => {
-    setShowJobDescription(false);
-    setSelectedJobSummary('');
+
+  const handleCloseModal = () => {
+    setSelectedJobSummary(null);
   };
-const popover = (summary) => (
-    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-      <Popover.Body>
-        {summary}
-        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
 
-        </span>
-      </Popover.Body>
-    </Popover>
-  );
   return (
-    <div  className="company-job"  style={{ marginTop: '20px', width: '100%', height:"fit-content" }}>
-            <div className="jobs_list">
-                {jobs.length > 0 && (
-                    <div>
-                        <div>
-                            <Table hover className='text-center'>
-                                <thead className="table-light">
-                                    <tr>
-                                        <th scope="col" onClick={() => handleSort('jobTitle')}>Job Title{sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                                        <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                                        <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                                        <th scope="col" onClick={() => handleSort('numberOfPosition')}>Vacancy{sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
-                                        <th scope="col">Job Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {jobs.map(job => (
-                                        <tr key={job.id}>
+    <div className="company-job" style={{ marginTop: '20px', width: '100%', height: "fit-content" }}>
+      <div className="jobs_list">
+        {jobs.length > 0 && (
+          <div>
+            <div>
+              <Table hover className='text-center'>
+                <thead className="table-light">
+                  <tr>
+                    <th scope="col" onClick={() => handleSort('jobTitle')}>Job Title{sortedColumn === 'jobTitle' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('jobType')}>Job Type{sortedColumn === 'jobType' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('skills')}>Skills{sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col" onClick={() => handleSort('numberOfPosition')}>Vacancy{sortedColumn === 'numberOfPosition' && (sortOrder === 'asc' ? '▲' : '▼')}</th>
+                    <th scope="col">Job Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobs.map(job => (
+                    <tr key={job.id}>
 
-                                            <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
-                                            <td>{job.jobType}</td>
-                                            <td>{job.skills}</td>
-                                            <td>{job.numberOfPosition}</td>
-                                            <td>
-                                                <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                                                    <Button variant="secondary" className='description btn-rounded' >Description</Button>
-                                                </OverlayTrigger>
-                                            </td>
-                                        
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-                        </div>
-
-                        {/* Pagination */}
-                        <div className="pagination-container d-flex justify-content-end align-items-center">
-                            <div className="page-size-select me-3">
-                                <label htmlFor="pageSize">Page Size:</label>
-                                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                </select>
-                            </div>
-                            <ReactPaginate
-                                previousLabel={<i className="i-Previous" />}
-                                nextLabel={<i className="i-Next1" />}
-                                breakLabel="..."
-                                breakClassName="break-me"
-                                pageCount={totalPages}
-                                marginPagesDisplayed={1}
-                                pageRangeDisplayed={2}
-                                onPageChange={handlePageClick}
-                                activeClassName="active"
-                                containerClassName="pagination"
-                                subContainerClassName="pages pagination"
-                            />
-                        </div>
-                    </div>
-                )}
+                      <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
+                      <td>{job.jobType}</td>
+                      <td>{job.skills}</td>
+                      <td>{job.numberOfPosition}</td>
+                      <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </div>
-        </div>
+            {selectedJobSummary && (
+              <div className="modal-summary">
+                <div className="modal-content-summary">
+                  <span className="close" onClick={handleCloseModal}>&times;</span>
+                  <div className="job-summary">
+                    <h3>Job Summary</h3>
+                    <pre>{selectedJobSummary}</pre>
+                  </div>
+                </div>
+              </div>
+            )}
+            {/* Pagination */}
+            <div className="pagination-container d-flex justify-content-end align-items-center">
+              <div className="page-size-select me-3">
+                <label htmlFor="pageSize">Page Size:</label>
+                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+              <ReactPaginate
+                previousLabel={<i className="i-Previous" />}
+                nextLabel={<i className="i-Next1" />}
+                breakLabel="..."
+                breakClassName="break-me"
+                pageCount={totalPages}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageClick}
+                activeClassName="active"
+                containerClassName="pagination"
+                subContainerClassName="pages pagination"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button, Dropdown, OverlayTrigger, Popover, Table } from 'react-bootstrap';
+import { Button, Dropdown, Table } from 'react-bootstrap';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -108,21 +108,6 @@ const MyJobs = () => {
   }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
 
-  const closeJobDescription = () => {
-    setShowJobDescription(false);
-    setSelectedJobSummary('');
-  };
-
-  const popover = (summary) => (
-    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-      <Popover.Body>
-        {summary}
-        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
-
-        </span>
-      </Popover.Body>
-    </Popover>
-  );
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
@@ -145,6 +130,14 @@ const MyJobs = () => {
   const [showLeftSide, setShowLeftSide] = useState(false);
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
+  };
+
+  const handleViewSummary = (summary) => {
+    setSelectedJobSummary(summary);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedJobSummary(null);
   };
 
   return (
@@ -245,11 +238,7 @@ const MyJobs = () => {
                         <td>{job.numberOfPosition}</td>
                         <td>{job.salary}</td>
                         <td>{job.applicationDeadline}</td>
-                        <td>
-                          <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                            <Button variant="secondary" className='description btn-rounded' >Description</Button>
-                          </OverlayTrigger>
-                        </td>
+                        <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId } })}>
@@ -281,7 +270,15 @@ const MyJobs = () => {
               </div>
 
             </div>
-            <div className="pagination-container d-flex justify-content-end align-items-center">
+          </>
+        ) : (
+          <section>
+            <h2>You have not posted any jobs yet. Post Now</h2>
+          </section>
+        )}
+
+
+        <div className="pagination-container d-flex justify-content-end align-items-center">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
             <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>

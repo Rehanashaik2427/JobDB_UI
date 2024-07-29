@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, OverlayTrigger, Popover, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -196,20 +196,12 @@ const CompamyPage = () => {
   const handleViewSummary = (summary) => {
     setSelectedJobSummary(summary);
   };
-  const closeJobDescription = () => {
-    setShowJobDescription(false);
-    setSelectedJobSummary('');
-  };
-  const popover = (summary) => (
-    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-      <Popover.Body>
-        {summary}
-        <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
 
-        </span>
-      </Popover.Body>
-    </Popover>
-  );
+  const handleCloseModal = () => {
+    setSelectedJobSummary(null);
+  };
+
+
   useEffect(() => {
 
     fetchJobsByCompany();
@@ -411,8 +403,8 @@ const CompamyPage = () => {
             <div>
               <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{company?.companyName}</h1>
               <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '60px' }}>
-                
-                   <div className="social-media-icons">
+
+                <div className="social-media-icons">
                   {socialMediaLinks.facebookLink && (
                     <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
                       <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
@@ -524,11 +516,8 @@ const CompamyPage = () => {
                             <td>{job.jobTitle}</td>
                             <td>{job.applicationDeadline}</td>
                             <td>{job.skills}</td>
-                            <td>
-                              <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                                <Button variant="secondary" className='description btn-rounded' >View Summary</Button>
-                              </OverlayTrigger>
-                            </td>
+
+                            <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                             <td>
                               {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
                                 <p>Applied</p>
@@ -540,6 +529,17 @@ const CompamyPage = () => {
                         ))}
                       </tbody>
                     </Table>
+                    {selectedJobSummary && (
+                      <div className="modal-summary">
+                        <div className="modal-content-summary">
+                          <span className="close" onClick={handleCloseModal}>&times;</span>
+                          <div className="job-summary">
+                            <h3>Job Summary</h3>
+                            <pre>{selectedJobSummary}</pre>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="pagination-container d-flex justify-content-end align-items-center">
                       <div className="page-size-select me-3">
                         <label htmlFor="pageSize">Page Size:</label>
@@ -582,12 +582,12 @@ const CompamyPage = () => {
                         fontSize: '18px', /* Larger font size */
                         fontWeight: 'bold', /* Bold text */
                         backgroundColor: '#e9f5e9', /* Light green background color */
-                        padding:'10px',
+                        padding: '10px',
                         borderRadius: '5px', /* Rounded corners */
                         textAlign: 'left', /* Center-align the text */
                         margin: '10px 0', /* Margin above and below the paragraph */
                         boxShadow: 'rgba(0, 0, 0, 0.1)', /* Subtle shadow effect */
-                        width:'100px'
+                        width: '100px'
                       }}>
                         Applied
                       </p>
