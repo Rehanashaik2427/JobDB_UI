@@ -281,15 +281,7 @@ const MyJobs = () => {
               </div>
 
             </div>
-          </>
-        ) : (
-          <section>
-            <h2>You have not posted any jobs yet. Post Now</h2>
-          </section>
-        )}
-
-
-        <div className="pagination-container d-flex justify-content-end align-items-center">
+            <div className="pagination-container d-flex justify-content-end align-items-center">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
             <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
@@ -312,6 +304,15 @@ const MyJobs = () => {
             subContainerClassName="pages pagination"
           />
         </div>
+          </>
+        ) : (
+          <section>
+            <h2>You have not posted any jobs yet. Post Now</h2>
+          </section>
+        )}
+
+
+       
         {!loading && jobs.length >= 0 && (
           <Button className='add-job-button position-absolute top-70 start-40 translate-middle'>
             <Link

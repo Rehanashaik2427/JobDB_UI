@@ -343,7 +343,7 @@ const DreamApplication = () => {
       </div>
 
       <div className="right-side" >
-          <div className="application-div">
+          <div className="application-div " style={{ marginTop:"50px" }}>
 
             <Row className="filter">
               <Col className="filter" style={{ maxWidth: '40%' }}>
@@ -524,7 +524,7 @@ const DreamApplication = () => {
               </div>
             )}
             {applications.length === 0 && (
-              <section class='not-yet'>
+              <section class=''>
                 <h2>Sorry, you haven't received any applications yet.</h2>
               </section>
             )}

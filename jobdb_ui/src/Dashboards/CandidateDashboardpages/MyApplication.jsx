@@ -8,6 +8,8 @@ import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
+import Swal from 'sweetalert2';
+import { MdDelete } from 'react-icons/md';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -288,16 +290,28 @@ const MyApplication = () => {
       const response = await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
       setChatsByApplication(response.data);
       // Mark messages as read when opening chat modal
-    
+
       setShowModal(true);
-        
+
       // Clear unread message indicator
-     // setUnreadMessages({ ...unreadMessages, [applicationId]: false });
+      // setUnreadMessages({ ...unreadMessages, [applicationId]: false });
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
   };
-
+  const handleDelete = async(applicationId) => {
+   
+   try{
+    const confirmDelete =  await axios.delete(`${BASE_API_URL}/deleteApplicationByApplicationId?applicationId=${applicationId}`);
+if(confirmDelete.data)
+{
+  fetchApplications();
+}
+   }catch{
+    console.log("Unable to delete appliction")
+   } // Show a confirmation dialog before deletion
+   
+  };
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -313,7 +327,7 @@ const MyApplication = () => {
       await axios.put(`${BASE_API_URL}/markHRMessagesAsRead?applicationId=${applicationId}`);
       const responce = await axios.put(`${BASE_API_URL}/saveCandidateChatByApplicationId?applicationId=${applicationId}&candidatechat=${inputValue}`);
       console.log('Sending message:', inputValue);
-     
+
       // console.log('Messages marked as read for applicationId:', applicationId);
 
       // // Clear unread message indicator
@@ -322,15 +336,15 @@ const MyApplication = () => {
       // Fetch updated chat messages or update state as needed
       fetchChatByApplication(applicationId);
       setInputValue('');
-      
+
     } catch (error) {
       console.error('Error marking messages as read:', error);
     }
   };
 
 
-   // Function to format time with AM/PM
-   function formatMessageDateTime(timestamp) {
+  // Function to format time with AM/PM
+  function formatMessageDateTime(timestamp) {
     const date = new Date(timestamp);
     const hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -345,8 +359,8 @@ const MyApplication = () => {
     return day1 !== day2;
   }
 
-   // Function to format date with only day
-   function formatDate(timestamp) {
+  // Function to format date with only day
+  function formatDate(timestamp) {
     const date = new Date(timestamp);
     const options = { weekday: 'long' }; // Show only the full day name
     return date.toLocaleDateString('en-US', options);
@@ -415,16 +429,16 @@ const MyApplication = () => {
           </Modal.Header>
 
           <Modal.Body ref={modalBodyRef}>
-          <div className="chat-messages">
+            <div className="chat-messages">
               {chatsByApplication.length > 0 ? (
                 chatsByApplication.map((chat, index) => (
                   <div key={chat.id} className="chat-message">
                     {/* Render date if it's the first message or a new day */}
                     {index === 0 || isDifferentDay(chatsByApplication[index - 1].createdAt, chat.createdAt) && (
-                        <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
-                          {formatDate(chat.createdAt)}
-                        </div>
- )}
+                      <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
+                        {formatDate(chat.createdAt)}
+                      </div>
+                    )}
                     {/* Render HR message if present */}
                     {chat.hrMessage && (
                       <div className="message-right">
@@ -449,10 +463,10 @@ const MyApplication = () => {
               ) : (
                 <p>Loading...</p>
               )}
-                 </div>
-            </Modal.Body>
+            </div>
+          </Modal.Body>
 
-          
+
 
           <Modal.Footer>
             <Form.Group controlId="messageInput" className="mb-2">
@@ -493,6 +507,7 @@ const MyApplication = () => {
                       Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
                     </th>
                     <th scope="col">Chat</th>
+                    <th scope="col">Delete</th>
                   </tr>
                 </thead>
 
@@ -509,81 +524,99 @@ const MyApplication = () => {
                       <td>
                         {chats[index] && chats[index].length > 0 ? (
                           <div style={{ position: 'relative', display: 'inline-block' }}>
-                          {unreadMessages[application.applicationId] > 0 && (
-                            <span
-                              style={{
-                                position: 'absolute',
-                                top: '-5px',
-                                right: '-15px',
-                                backgroundColor: 'red',
-                                color: 'white',
-                                borderRadius: '50%',
-                                width: '20px',
-                                height: '20px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '12px',
-                                fontWeight: 'bold',
-                                zIndex: 1, // Ensure notification badge is above SiImessage icon
+                            {unreadMessages[application.applicationId] > 0 && (
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: '-5px',
+                                  right: '-15px',
+                                  backgroundColor: 'red',
+                                  color: 'white',
+                                  borderRadius: '50%',
+                                  width: '20px',
+                                  height: '20px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontSize: '12px',
+                                  fontWeight: 'bold',
+                                  zIndex: 1, // Ensure notification badge is above SiImessage icon
+                                }}
+                              >
+                                {unreadMessages[application.applicationId]}
+                              </span>
+                            )}
+                            <SiImessage
+                              size={25}
+                              onClick={() => {
+                                fetchChatByApplication(application.applicationId);
+
                               }}
-                            >
-                              {unreadMessages[application.applicationId]}
-                            </span>
-                          )}
+                              style={{ color: 'green', cursor: 'pointer' }}
+                            />
+                          </div>
+
+                        ) : (
                           <SiImessage
                             size={25}
-                            onClick={() => {
-                              fetchChatByApplication(application.applicationId);
-                            
-                            }}
-                            style={{ color: 'green', cursor: 'pointer' }}
+                            style={{ color: 'grey', cursor: 'not-allowed' }}
                           />
-                        </div>
-                        
-                      ) : (
-                      <SiImessage
-                        size={25}
-                        style={{ color: 'grey', cursor: 'not-allowed' }}
-                      />
                         )}
-                    </td>
-
+                      </td>
+                      <td>
+                      <span className='delete cursor-pointer text-danger me-2' onClick={() => {
+                              Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  handleDelete(application.applicationId);
+                                }
+                              });
+                            }}>
+                              <MdDelete className="text-danger" size={18} />
+                            </span>
+                      </td>
                     </tr>
                   ))}
-              </tbody>
-            </Table>
+                </tbody>
+              </Table>
 
-          <div className="pagination-container d-flex justify-content-end align-items-center">
-            <div className="page-size-select me-3">
-              <label htmlFor="pageSize">Page Size:</label>
-              <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
-            </div>
+              <div className="pagination-container d-flex justify-content-end align-items-center">
+                <div className="page-size-select me-3">
+                  <label htmlFor="pageSize">Page Size:</label>
+                  <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
 
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
-          </div>
-        </>
-        ) : (
-        <h4 className='text-center'>No Applications Found..!!</h4>
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+              </div>
+            </>
+          ) : (
+            <h4 className='text-center'>No Applications Found..!!</h4>
           )}
+        </div>
       </div>
-    </div>
     </div >
   );
 };

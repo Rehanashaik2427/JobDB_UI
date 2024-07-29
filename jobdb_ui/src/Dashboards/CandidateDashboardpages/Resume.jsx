@@ -174,35 +174,41 @@ const Resume = () => {
 
         <div>
           <h1 className='text-center'>MY RESUMES</h1>
-          <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content'}}>            
-            {resumes.map((resume, index) => (
-            <Card className='resume-card' style={{ width: '200px', margin: '12px' }} key={index}>
-                <Card.Body>
-                  <Card.Title>Resume : {index + 1}</Card.Title>
-                  <Card.Text>{resume.message}</Card.Text>
+          <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content' }}>
+            {resumes.length === 0 ? (
+              <div className="no-resumes" style={{ textAlign: 'center', width: '100%', padding: '20px' }}>
+                <h4>No resumes found</h4>
+              </div>
+            ) : (
+              resumes.map((resume, index) => (
+                <Card className='resume-card' style={{ width: '200px', margin: '12px' }} key={index}>
+                  <Card.Body>
+                    <Card.Title>Resume : {index + 1}</Card.Title>
+                    <Card.Text>{resume.message}</Card.Text>
 
-                  {resume.fileType === 'file' && (  
-                    <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
-                  )}
-                  {resume.fileType === 'link' && (
-                    <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
-                  )}
-                  {resume.fileType === 'brief' && (
-                    <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
-                  )}
+                    {resume.fileType === 'file' && (
+                      <Button size="sm" className='download' variant="primary" onClick={() => handleDownload(resume.id, resume.fileName)}>Download</Button>
+                    )}
+                    {resume.fileType === 'link' && (
+                      <Card.Link href={resume.fileName} target="_blank">Open Link</Card.Link>
+                    )}
+                    {resume.fileType === 'brief' && (
+                      <Button variant="secondary" size="sm" className='open-brief-modal' onClick={() => handleBrief(resume.id, resume.fileType)}>Open Brief</Button>
+                    )}
 
                     <Button variant="danger" size="sm" className='delete' style={{ marginLeft: '10px' }} onClick={() => handleDelete(resume.id, resume.fileName)}>Delete</Button>
                   </Card.Body>
                 </Card>
-              ))}
-            </div>
-            <div className='adding-resumes' style={{ marginTop: '50px' }}>
-              <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
-                e.preventDefault();
-                navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
-              }} >ADD NEW RESUME</Link>
-            </div>
+              ))
+            )}
           </div>
+          <div className='adding-resumes' style={{ marginTop: '50px' }}>
+            <Link to={{ pathname: '/candidate-dashboard/resumeAdd', state: { userName, userId } }} onClick={(e) => {
+              e.preventDefault();
+              navigate('/candidate-dashboard/resumeAdd', { state: { userName, userId } });
+            }} ><Button>ADD NEW RESUME</Button></Link>
+          </div>
+        </div>
       </div>
     </div>
   );
