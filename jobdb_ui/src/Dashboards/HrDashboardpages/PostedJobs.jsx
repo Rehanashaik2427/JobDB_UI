@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, OverlayTrigger, Popover, Table } from 'react-bootstrap';
+import { Button, Dropdown, Popover, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import HrLeftSide from './HrLeftSide';
@@ -206,17 +206,24 @@ const PostedJobs = () => {
                         <td>{job.jobType}</td>
                         <td>{job.skills}</td>
                         <td>{job.numberOfPosition}</td>
-                        <td>
-                          <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                            <Button variant="secondary" className='description btn-rounded' >Description</Button>
-                          </OverlayTrigger>
-                        </td>
+                        <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                         <td>{job.applicationDeadline}</td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
               </div>
+              {selectedJobSummary && (
+            <div className="modal-summary">
+            <div className="modal-content-summary">
+                  <span className="close" onClick={handleCloseModal}>&times;</span>
+                  <div className="job-summary">
+                    <h3>Job Summary</h3>
+                    <pre>{selectedJobSummary}</pre>
+                  </div>
+                </div>
+              </div>
+            )}
 
               {/* Pagination */}
               <div className="pagination-container d-flex justify-content-end align-items-center">

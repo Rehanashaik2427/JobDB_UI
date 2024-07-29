@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -23,20 +23,8 @@ const UserRegistrationForm = () => {
 
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     // Log location.state and userRole to verify correct values
-    //     console.log("Location state in effect:", location.state);
-    //     console.log("userRole in effect:", userRole);
-    //     console.log("Location userRole state in effect:", location.state.userRole);
-    //     if (location.state && location.state.userRole) {
-    //         // Set userType based on userRole from location.state
-    //         setUserType(location.state.userRole);
-    //     }
-    // }, [location.state]);
-    
-    // Log directly in the render method to verify the current value of userType
     console.log("Rendering with userType:", userType);
-    
+
 
 
     const initialFormValues = {
@@ -61,7 +49,7 @@ const UserRegistrationForm = () => {
 
     console.log(companyWebiste)
 
-console.log(companyName)
+    console.log(companyName)
     useEffect(() => {
         if (userRole) {
             setUserType(userRole); // Set the default role based on userType
@@ -152,8 +140,8 @@ console.log(companyName)
         values.userRole = userType;
         if (userType === 'HR') {
             values.phone = null;
-            values.companyName=companyName;
-            values.companyWebsite=companyWebiste;
+            values.companyName = companyName;
+            values.companyWebsite = companyWebiste;
         }
         if (userType === 'Candidate') {
             values.companyName = null;
@@ -292,27 +280,27 @@ console.log(companyName)
                     <p style={{ color: 'red', textAlign: 'center' }}>Please select a user type below to proceed with the form.</p>
                 )}
                 <div className="radio-group d-flex justify-content-center align-items-center">
-                <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : 'btn-light'}`}>
-                    <input 
-                        type="radio" 
-                        value="HR" 
-                        checked={userType === 'HR'} 
-                        onChange={() => setUserType('HR')} 
-                        disabled={userType === 'Candidate'} 
-                    />
-                    HR
-                </label>
+                    <label className={`btn btn-outline-primary ${userType === 'HR' ? 'active' : 'btn-light'}`}>
+                        <input
+                            type="radio"
+                            value="HR"
+                            checked={userType === 'HR'}
+                            onChange={() => setUserType('HR')}
+                            disabled={userType === 'Candidate'}
+                        />
+                        HR
+                    </label>
 
-            <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : 'btn-light'}`}>
-                <input 
-                    type="radio" 
-                    value="Candidate" 
-                    checked={userType === 'Candidate'} 
-                    onChange={() => setUserType('Candidate')} 
-                    disabled={userType === 'HR'} 
-                />
-                Candidate
-            </label>
+                    <label className={`btn btn-outline-primary ${userType === 'Candidate' ? 'active' : 'btn-light'}`}>
+                        <input
+                            type="radio"
+                            value="Candidate"
+                            checked={userType === 'Candidate'}
+                            onChange={() => setUserType('Candidate')}
+                            disabled={userType === 'HR'}
+                        />
+                        Candidate
+                    </label>
                 </div>
                 {userType && (
                     <>
@@ -386,8 +374,8 @@ console.log(companyName)
                                                 />
 
 
-                                              
-            {userType === 'HR' && !companyName && (
+
+                                                {userType === 'HR' && !companyName && (
                                                     <>
 
                                                         <TextField
@@ -408,12 +396,12 @@ console.log(companyName)
                                                             errorMessage={touched.companyName && errors.companyName}
                                                             disabled={disableFormFields}
                                                         />
-                                                        <div className="form-group" style={{ display: 'flex', flexDirection:'column',alignItems: 'start', marginBottom: '5px' }}>
-                                                        <label>{<><span>Company Website</span> <span className="required" style={{ color: 'red' }}>*</span></>}</label>
+                                                        <div className="form-group" style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginBottom: '5px' }}>
+                                                            <label>{<><span>Company Website</span> <span className="required" style={{ color: 'red' }}>*</span></>}</label>
                                                             <div className="protocol-tld-container" style={{ display: 'flex', alignItems: 'center' }}>
-                                                            
+
                                                                 <div className="select-group" style={{ marginRight: '10px' }}>
-                                                                 
+
                                                                     <select
                                                                         id="protocol"
                                                                         value={protocol}
@@ -433,10 +421,10 @@ console.log(companyName)
                                                                     </select>
                                                                 </div>
                                                                 <TextField
-                                                                    
+
                                                                     type="text"
                                                                     name="companyWebsite"
-                                                                    
+
                                                                     placeholder="www.domain"
                                                                     style={{ marginRight: '10px', flex: '1' }}
                                                                     disabled={disableFormFields}
@@ -448,7 +436,7 @@ console.log(companyName)
                                                                     }}
                                                                 />
                                                                 <div className="select-group" style={{ marginRight: '10px' }}>
-                                                                   
+
                                                                     <select
                                                                         id="tld"
                                                                         value={tld}

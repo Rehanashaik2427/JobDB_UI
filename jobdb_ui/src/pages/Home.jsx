@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Carousel, Container, Nav, Navbar, OverlayTrigger, Popover, Table } from 'react-bootstrap';
+import { Button, Card, Carousel, Container, Nav, Navbar, Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
 import HomeFooter from './HomeFooter';
@@ -145,21 +145,14 @@ console.log(imageKeys)
     setSortOrder(order);
   };
 
-  const popover = (summary) => (
-    <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-      <Popover.Body>
-        {summary}
-        <span className="float-end" onClick={handleCloseModalSummary} style={{ cursor: 'pointer' }}>
-          <i className="fas fa-times"></i> {/* Close icon */}
-        </span>
-      </Popover.Body>
-    </Popover>
-  );
-
-  const handleCloseModalSummary = () => {
-    setSelectedJobSummary(null);
-    setShowModalSummary(false);
+  const handleViewSummary = (summary) => {
+    setSelectedJobSummary(summary);
   };
+
+  const handleCloseModal = () => {
+    setSelectedJobSummary(null);
+  };
+
 
   const handlePageClick = (data) => {
     setPage(data.selected);
@@ -258,15 +251,22 @@ console.log(imageKeys)
                     <td>{job.companyName}</td>
                     <td>{job.applicationDeadline}</td>
                     <td>{job.skills}</td>
-                    <td>
-                      <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                        <Button variant="secondary" className='description btn-rounded'>View Summary</Button>
-                      </OverlayTrigger>
-                    </td>
+                    <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                   </tr>
                 ))}
               </tbody>
             </Table>
+            {selectedJobSummary && (
+            <div className="modal-summary">
+            <div className="modal-content-summary">
+                  <span className="close" onClick={handleCloseModal}>&times;</span>
+                  <div className="job-summary">
+                    <h3>Job Summary</h3>
+                    <pre>{selectedJobSummary}</pre>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="pagination-container d-flex justify-content-end align-items-center">
               <div className="page-size-select me-3">
