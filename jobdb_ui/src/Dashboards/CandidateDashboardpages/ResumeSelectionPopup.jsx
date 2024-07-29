@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 
 const ResumeSelectionPopup = ({ resumes, onSelectResume, onClose }) => {
-    // const handleResumeSelect = (e) => {
-    //     const selectedResumeUrl = e.target.value;
-    //     // onSelectResume(selectedResumeUrl);
-    //     // onClose(); // Close the popup after selecting the resume
-    // };
+
     const [errMessage,setErrMessage]=useState();
     const handleOkClick = () => {
         const selectedResumeUrl = document.getElementById("resumeSelect").value;
