@@ -206,13 +206,7 @@ const Applications = () => {
 
 
               </div>
-            </>
-          ) : (
-            <section>
-              <h2>You have not posted any jobs yet. Post Now</h2>
-            </section>
-          )}
-           {/* Pagination */}
+                {/* Pagination */}
          <div className="pagination-container d-flex justify-content-end align-items-center">
                   <div className="page-size-select me-3">
                     <label htmlFor="pageSize">Page Size:</label>
@@ -237,6 +231,13 @@ const Applications = () => {
                   />
                 </div>
 
+            </>
+          ) : (
+            <section>
+              <h2>You have not posted any jobs yet. Post Now</h2>
+            </section>
+          )}
+         
         </div>
         </div>
 

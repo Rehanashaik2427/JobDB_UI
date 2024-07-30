@@ -14,7 +14,7 @@ const CompanyShowCase = () => {
   const location = useLocation();
   const userName = location.state?.userName || '';
   const userEmail = location.state?.userEmail || '';
-  const [activeTab, setActiveTab] = useState('home'); // State to control the active tab
+  const [activeTab, setActiveTab] = useState('overview'); // State to control the active tab
   const [userData, setUserData] = useState({});
   const [countOfHr, setCountOfHR] = useState();
   const [countOfApplications, setCountOfApplications] = useState(0);
@@ -277,7 +277,7 @@ const CompanyShowCase = () => {
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
-   
+
       <div className="right-side">
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
@@ -302,7 +302,15 @@ const CompanyShowCase = () => {
                 src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
                 alt="Company Logo"
                 className="logo-image"
-                style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
+                style={{
+                  width: '18vw', // Adjust width to 20% of viewport width
+                  height: 'auto', // Maintain aspect ratio
+                  maxWidth: '200px', // Optional: max-width to avoid it growing too large
+                  cursor: 'pointer',
+                  border: '5px solid white',
+                  borderRadius: '50%',
+                  objectFit: 'cover', // Ensure the image covers the given width and height without distortion
+                }}
                 onClick={() => handleCameraIconClick('logo')}
               />
               <input
@@ -316,10 +324,12 @@ const CompanyShowCase = () => {
             <div>
               <h1 style={{ position: 'absolute', top: '65%', right: '100px' }}>{userData.companyName}</h1>
 
-              <div className='social-icons-company' style={{ position: 'absolute', top: '80%', left: '920px' }}>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '80%', right: '60px' }}>
 
-                <div className="social-media-buttons">
-                  <Button variant="primary" onClick={setShowModal}>Add Social Media Links</Button>
+                <div className='social-media-buttons' >
+                  <Button variant='primary' onClick={() => setShowModal(true)}>
+                    Add Social Media Links
+                  </Button>
                 </div>
                 <Modal show={showModal} onHide={handleCloseModal}>
                   <Modal.Header closeButton>
@@ -403,51 +413,74 @@ const CompanyShowCase = () => {
 
               </div>
             </div>
-            <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
-              <li>
-                <span>
-                  <a onClick={() => handleTabClick('overview')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                    About
-                  </a>
-                </span>
-              </li>
+            <div
+              style={{
+                position: 'absolute',
+                top: '80%',
+                left: '5%', // Adjusted to be responsive
+                transform: 'translateX(-5%)', // Centered horizontally relative to the left margin
+                width: '90%', // Responsive width
+                display: 'flex',
+                justifyContent: 'flex-start', // Align items to the start (left side)
+                overflowX: 'auto', // Allow horizontal scroll if needed
+                boxSizing: 'border-box',
+              }}
+            >
+              <ul
+                className="nav-links"
+                style={{
+                  listStyleType: 'none',
+                  display: 'flex',
+                  margin: 0,
+                  padding: 0,
+                  flexWrap: 'wrap', // Wrap items to fit smaller screens
+                }}
+              >
+                <li>
+                  <span>
+                    <a
+                      onClick={() => handleTabClick('overview')}
+                      style={{
+                        paddingLeft: '2vw', // Responsive padding
+                        fontSize: '2vw', // Responsive font size
+                        color: activeTab === 'overview' ? 'purple' : 'gray',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      About
+                    </a>
+                  </span>
+                </li>
 
-              <li>
-                <span>
-                  <a onClick={() => handleTabClick('jobs')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                    Jobs
-                  </a>
-                </span>
-              </li>
-            </ul>
+                <li>
+                  <span>
+                    <a
+                      onClick={() => handleTabClick('jobs')}
+                      style={{
+                        paddingLeft: '2vw', // Responsive padding
+                        fontSize: '2vw', // Responsive font size
+                        color: activeTab === 'jobs' ? 'purple' : 'gray',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Jobs
+                    </a>
+                  </span>
+                </li>
+              </ul>
+            </div>
 
           </Card.Body>
         </Card>
 
         <Row>
-          <Col xs={8}>
-            {activeTab === 'home' && (
-              <div>
-                <Card onClick={() => handleTabClick('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
-                  <Card.Body>
-                    <h3>About {userData.companyName}</h3>
-                    <p>Click to view Overview content...</p>
-                  </Card.Body>
-                </Card>
-
-                <Card onClick={() => handleTabClick('jobs')} style={{ cursor: 'pointer', marginTop: '20px' }}>
-                  <Card.Body>
-                    <h3>Jobs</h3>
-                    <p>Click to view Jobs content...</p>
-                  </Card.Body>
-                </Card>
-              </div>
-            )}
+          <Col xs={12} md={8}>
+          
             {activeTab === 'overview' && <CompnayOverview style={{ overflowY: 'scroll' }} />}
             {activeTab === 'jobs' && <CompanyJobs />}
           </Col>
-          <Col xs={4}>
-            <Card style={{ height: '90%', marginTop: '5px', marginRight: '30px' }} className='key-stats'>
+          <Col xs={12} md={4}>
+            <Card className='key-stats' style={{ width: '80%', height: 'fit-content' }}>
               <Card.Body>
                 <Row className="mb-3">
                   <h1>Other Information</h1>

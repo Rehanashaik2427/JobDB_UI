@@ -426,7 +426,7 @@ const CompanyDetailsByAdmin = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                name="headquarters"
+                name="headquaters"
                 value={companyDetails.headquaters}
                 onChange={handleInputChange}
               />

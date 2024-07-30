@@ -192,7 +192,7 @@ const PostedJobs = () => {
                         <td>{job.jobType}</td>
                         <td>{job.skills}</td>
                         <td>{job.numberOfPosition}</td>
-                        <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+                        <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                         <td>{job.applicationDeadline}</td>
                       </tr>
                     ))}

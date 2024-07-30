@@ -238,7 +238,7 @@ const MyJobs = () => {
                         <td>{job.numberOfPosition}</td>
                         <td>{job.salary}</td>
                         <td>{job.applicationDeadline}</td>
-                        <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+                        <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId } })}>
@@ -270,16 +270,13 @@ const MyJobs = () => {
               </div>
 
             </div>
-          </>
-        ) : (
-          <section>
-            <h2>You have not posted any jobs yet. Post Now</h2>
-          </section>
-        )}
+          
+        
+
+       
 
 
-        <div className="pagination-container d-flex justify-content-end align-items-center">
-          <div className="page-size-select me-3">
+        <div className="pagination-container d-flex justify-content-end align-items-center">          <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
             <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
               <option value="5">5</option>
@@ -324,7 +321,17 @@ const MyJobs = () => {
           </Button>
         )}
       </div>
-
+      {selectedJobSummary && (
+          <div className="modal-summary">
+            <div className="modal-content-summary">
+              <span className="close" onClick={handleCloseModal}>&times;</span>
+              <div className="job-summary">
+                <h3>Job Summary</h3>
+                <pre>{selectedJobSummary}</pre>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
 
 

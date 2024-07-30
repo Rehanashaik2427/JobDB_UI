@@ -20,7 +20,7 @@ const CompamyPage = () => {
   const [countOfApplications, setCountOfApplications] = useState();
   const [countOfHR, setCountOfHR] = useState();
   const [countOfJobs, setCountOfJobs] = useState();
-  const [activeTab, setActiveTab] = useState('home'); // State to control the active tab
+  const [activeTab, setActiveTab] = useState('overview'); // State to control the active tab
   const [companyLogo, setCompanyLogo] = useState("");
   const [companyBanner, setCompanyBanner] = useState("");
   const [jobs, setJobs] = useState([]);
@@ -397,8 +397,15 @@ const CompamyPage = () => {
                 src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
                 alt="Company Logo"
                 className="logo-image"
-                style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
-              />
+                style={{
+                  width: '18vw', // Adjust width to 20% of viewport width
+                  height: 'auto', // Maintain aspect ratio
+                  maxWidth: '200px', // Optional: max-width to avoid it growing too large
+                  cursor: 'pointer',
+                  border: '5px solid white',
+                  borderRadius: '50%',
+                  objectFit: 'cover', // Ensure the image covers the given width and height without distortion
+                }}              />
             </div>
             <div>
               <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{company?.companyName}</h1>
@@ -430,57 +437,79 @@ const CompamyPage = () => {
               </div>
 
             </div>
-            <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
-              <li>
-                <span>
-                  <a onClick={() => setActiveTab('overview')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                    About
-                  </a>
-                </span>
-              </li>
-              <li>
-                <span>
-                  <a onClick={() => setActiveTab('jobs')} style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}>
-                    Jobs
-                  </a>
-                </span>
-              </li>
-            </ul>
+            <div
+              style={{
+                position: 'absolute',
+                top: '80%',
+                left: '5%', // Adjusted to be responsive
+                transform: 'translateX(-5%)', // Centered horizontally relative to the left margin
+                width: '90%', // Responsive width
+                display: 'flex',
+                justifyContent: 'flex-start', // Align items to the start (left side)
+                overflowX: 'auto', // Allow horizontal scroll if needed
+                boxSizing: 'border-box',
+              }}
+            >
+              <ul
+                className="nav-links"
+                style={{
+                  listStyleType: 'none',
+                  display: 'flex',
+                  margin: 0,
+                  padding: 0,
+                  flexWrap: 'wrap', // Wrap items to fit smaller screens
+                }}
+              >
+                <li>
+                  <span>
+                    <a
+                      onClick={() => setActiveTab('overview')}
+                      style={{
+                        paddingLeft: '2vw', // Responsive padding
+                        fontSize: '2vw', // Responsive font size
+                        color: activeTab === 'overview' ? 'purple' : 'gray',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      About
+                    </a>
+                  </span>
+                </li>
+
+                <li>
+                  <span>
+                    <a
+                      onClick={() => setActiveTab('jobs')}
+                      style={{
+                        paddingLeft: '2vw', // Responsive padding
+                        fontSize: '2vw', // Responsive font size
+                        color: activeTab === 'jobs' ? 'purple' : 'gray',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Jobs
+                    </a>
+                  </span>
+                </li>
+              </ul>
+            </div>
+
           </Card.Body>
         </Card>
 
         <Row>
           <Col xs={8}>
-            {activeTab === 'home' && (
-              <div>
-                <Card onClick={() => setActiveTab('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
-                  <Card.Body>
-                    <h3>About {company?.companyName}</h3>
-                    <p>Click to view Overview content...</p>
-                  </Card.Body>
-                </Card>
-                <Card onClick={() => setActiveTab('jobs')} style={{ cursor: 'pointer', marginTop: '20px' }}>
-                  <Card.Body>
-                    <h3>Jobs</h3>
-                    <p>Click to view Jobs content...</p>
-                  </Card.Body>
-                </Card>
-              </div>
-            )}
             {activeTab === 'overview' && (
               <>
                 <div className='company-overview'>
-                  <Card>
+                <Card style={{ marginTop: '20px', width: '100%', height:"fit-content" }}>
                     <Card.Body>
                       <h3>About {company?.companyName} </h3>
                       <p><strong>Overview:</strong> {companyInfo.overView}</p>
                       <p><strong>Website:</strong> <a href={companyInfo.websiteLink} target="_blank" rel="noopener noreferrer">{companyInfo.websiteLink}</a></p>
                       <p><strong>Industry Service:</strong> {companyInfo.industryService}</p>
                       <p><strong>Company Size:</strong> {companyInfo.companySize}</p>
-                    </Card.Body>
-                  </Card>
-                  <Card>
-                    <Card.Body>
+                  
                       <p><strong>Headquarters:</strong> {companyInfo.headquaters}</p>
                       <p><strong>Year Founded:</strong> {companyInfo.year}</p>
                       <p><strong>Specialties:</strong> {companyInfo.specialties}</p>
@@ -491,6 +520,8 @@ const CompamyPage = () => {
             )}
             {activeTab === 'jobs' && (
               <>
+                 <div className="company-job" style={{ marginTop: '20px', width: '100%', height: "fit-content" }}>
+                 <div className="jobs_list">
                 {jobs.length > 0 && (
                   <div className="company-job">
                     <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
@@ -517,7 +548,7 @@ const CompamyPage = () => {
                             <td>{job.applicationDeadline}</td>
                             <td>{job.skills}</td>
 
-                            <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+                            <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                             <td>
                               {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
                                 <p>Applied</p>
@@ -566,12 +597,14 @@ const CompamyPage = () => {
                   </div>
                 )}
                 {jobs.length === 0 && <h1>No jobs found.</h1>}
+                </div>
+                </div>
               </>
             )}
           </Col>
 
-          <Col xs={4}>
-            <Card className='key-stats'>
+          <Col xs={12} md={4}>
+          <Card className='key-stats' style={{ width: '80%', height: 'fit-content' }}>
               <Card.Body>
                 <Row className="mb-3">
 
@@ -598,6 +631,7 @@ const CompamyPage = () => {
 
                   </Col>
                 </Row>
+              
                 <h1>Other Information</h1>
                 <Row className="mb-2">
 

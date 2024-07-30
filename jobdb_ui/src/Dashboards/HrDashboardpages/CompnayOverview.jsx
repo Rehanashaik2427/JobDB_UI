@@ -80,7 +80,7 @@ const CompnayOverview = () => {
 
     return (
         <div className='company-overview'>
-            <Card style={{ marginTop: '20px' }}>
+           <Card style={{ marginTop: '20px', width: '100%', height:"fit-content" }}>
                 <Card.Body>
                     {companyinfoieditMode ? (
                         <Form>
