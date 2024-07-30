@@ -140,8 +140,7 @@ const UserRegistrationForm = () => {
         values.userRole = userType;
         if (userType === 'HR') {
             values.phone = null;
-            // values.companyName = companyName;
-            // values.companyWebsite = companyWebiste;
+           
         }
         if (userType === 'Candidate') {
             values.companyName = null;

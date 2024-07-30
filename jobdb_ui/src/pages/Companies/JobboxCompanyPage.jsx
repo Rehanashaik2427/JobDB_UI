@@ -41,10 +41,6 @@ const JobboxCompanyPage = () => {
     fetchCompanyBySearch();
   };
 
-
-
-
-
   const fetchCompanyBySearch = async () => {
     try {
       const response = await axios.get(`${BASE_API_URL}/searchCompany`, { params: { search: search, page: page, size: pageSize } });
@@ -75,9 +71,6 @@ const JobboxCompanyPage = () => {
     // alert('Button clicked!');
   };
  
-
-
-
   return (
     <div className="top-right-content">
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
@@ -100,7 +93,6 @@ const JobboxCompanyPage = () => {
                 <Card className="company-card-job" key={company.companyId} style={{ minWidth: '350px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}>                  <Card.Body>
                   <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
                   <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-
                   <Button onClick={() => handleClick(company.companyId)}>
                     View
                   </Button>
