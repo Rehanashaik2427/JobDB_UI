@@ -79,7 +79,7 @@ const AddJob = () => {
 
         <div className="right-side">
         <h3 className='text-center'>Post Job</h3>
-          <Card style={{marginTop:'10px',width:'100%'}}>
+          <Card style={{marginTop:'5px',width:'98%',marginLeft:'10px'}}>
           
             <Form onSubmit={handleSubmit}>
               <Card.Body>

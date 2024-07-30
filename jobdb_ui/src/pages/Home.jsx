@@ -251,8 +251,8 @@ console.log(imageKeys)
                     <td>{job.companyName}</td>
                     <td>{job.applicationDeadline}</td>
                     <td>{job.skills}</td>
-                    <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
-                  </tr>
+                    <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+                    </tr>
                 ))}
               </tbody>
             </Table>

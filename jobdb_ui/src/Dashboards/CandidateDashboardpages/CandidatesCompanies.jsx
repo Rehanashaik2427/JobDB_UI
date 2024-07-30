@@ -152,7 +152,7 @@ const CandidatesCompanies = () => {
               <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}>
                 <Card.Body>
                   <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                  <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+                  <Card.Text>Industry: <b>{company.industryService}</b></Card.Text>
 
                   <Button onClick={() => handleClick(company.companyId)}>
                     View

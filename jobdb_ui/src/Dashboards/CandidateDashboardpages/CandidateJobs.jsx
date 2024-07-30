@@ -368,7 +368,7 @@ const CandidateJobs = () => {
                       <td>{job.companyName}</td>
                       <td>{job.applicationDeadline}</td>
                       <td>{job.skills}</td>
-                      <td><Button onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+                      <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                       <td>
                         {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
                           <p>Applied</p>

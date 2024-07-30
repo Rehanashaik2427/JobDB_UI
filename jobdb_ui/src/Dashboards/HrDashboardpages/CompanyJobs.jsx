@@ -71,6 +71,9 @@ const CompanyJobs = () => {
         setSortedColumn(column);
         setSortOrder(order);
     };
+    const handleCloseModal = () => {
+        setSelectedJobSummary(null);
+      };
     const [showJobDescription, setShowJobDescription] = useState(false);
     const [selectedJobSummary, setSelectedJobSummary] = useState(null);
     const handleViewSummary = (summary) => {
@@ -80,19 +83,10 @@ const CompanyJobs = () => {
         setShowJobDescription(false);
         setSelectedJobSummary('');
     };
-    const popover = (summary) => (
-        <Popover id="popover-basic" style={{ left: '50%', transform: 'translateX(-50%)' }}>
-            <Popover.Body>
-                {summary}
-                <span className="float-end" onClick={closeJobDescription} style={{ cursor: 'pointer' }}>
-
-                </span>
-            </Popover.Body>
-        </Popover>
-    );
+  
 
     return (
-        <div className="company-job">
+        <div className="company-job" style={{ marginTop: '20px', width: '100%', height: "fit-content" }}>
             <div className="jobs_list">
                 {jobs.length > 0 ? (
                     <div>
@@ -110,21 +104,30 @@ const CompanyJobs = () => {
                                 <tbody>
                                     {jobs.map(job => (
                                         <tr key={job.id}>
-                                            <td><a onClick={() => handleViewSummary(job.jobsummary)}>{job.jobTitle}</a></td>
+                                            <td>{job.jobTitle}</td>
                                             <td>{job.jobType}</td>
                                             <td>{job.skills}</td>
                                             <td>{job.numberOfPosition}</td>
-                                            <td>
-                                                <OverlayTrigger trigger="click" placement="left" overlay={popover(job.jobsummary)} style={{ fontSize: '20px' }}>
-                                                    <Button variant="secondary" className='description btn-rounded' >Description</Button>
-                                                </OverlayTrigger>
-                                            </td>
+
+                                            <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+
+
                                         </tr>
                                     ))}
                                 </tbody>
                             </Table>
                         </div>
-
+                        {selectedJobSummary && (
+                      <div className="modal-summary">
+                        <div className="modal-content-summary">
+                          <span className="close" onClick={handleCloseModal}>&times;</span>
+                          <div className="job-summary">
+                            <h3>Job Summary</h3>
+                            <pre>{selectedJobSummary}</pre>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                         {/* Pagination */}
                         <div className="pagination-container d-flex justify-content-end align-items-center">
                             <div className="page-size-select me-3">

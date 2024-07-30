@@ -236,8 +236,15 @@ const EachCompanyPage = () => {
                   src={companyLogo || "https://static.vecteezy.com/system/resources/previews/013/899/376/original/cityscape-design-corporation-of-buildings-logo-for-real-estate-business-company-vector.jpg"}
                   alt="Company Logo"
                   className="logo-image"
-                  style={{ width: '200px', height: '120px', cursor: 'pointer', border: '5px solid white', borderRadius: '50%' }}
-                />
+                  style={{
+                    width: '18vw', // Adjust width to 20% of viewport width
+                    height: 'auto', // Maintain aspect ratio
+                    maxWidth: '200px', // Optional: max-width to avoid it growing too large
+                    cursor: 'pointer',
+                    border: '5px solid white',
+                    borderRadius: '50%',
+                    objectFit: 'cover', // Ensure the image covers the given width and height without distortion
+                  }}                      />
               </label>
             </div>
             <div>
@@ -261,24 +268,64 @@ const EachCompanyPage = () => {
                 />
               </div>
             </div>
-            <ul className="nav-links" style={{ position: 'absolute', top: '80%', listStyleType: 'none', display: 'flex', width: 'fit-content' }}>
-              <li>
-                <a
-                  onClick={() => handleTabClick('overview')}
-                  style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'overview' ? 'purple' : 'gray', cursor: 'pointer' }}
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  onClick={() => handleTabClick('jobs')}
-                  style={{ paddingLeft: '24px', fontSize: '24px', color: activeTab === 'jobs' ? 'purple' : 'gray', cursor: 'pointer' }}
-                >
-                  Jobs
-                </a>
-              </li>
-            </ul>
+            <div
+              style={{
+                position: 'absolute',
+                top: '80%',
+                left: '5%', // Adjusted to be responsive
+                transform: 'translateX(-5%)', // Centered horizontally relative to the left margin
+                width: '90%', // Responsive width
+                display: 'flex',
+                justifyContent: 'flex-start', // Align items to the start (left side)
+                overflowX: 'auto', // Allow horizontal scroll if needed
+                boxSizing: 'border-box',
+              }}
+            >
+              <ul
+                className="nav-links"
+                style={{
+                  listStyleType: 'none',
+                  display: 'flex',
+                  margin: 0,
+                  padding: 0,
+                  flexWrap: 'wrap', // Wrap items to fit smaller screens
+                }}
+              >
+                <li>
+                  <span>
+                    <a
+                      onClick={() => handleTabClick('overview')}
+                      style={{
+                        paddingLeft: '2vw', // Responsive padding
+                        fontSize: '2vw', // Responsive font size
+                        color: activeTab === 'overview' ? 'purple' : 'gray',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      About
+                    </a>
+                  </span>
+                </li>
+
+                <li>
+                  <span>
+                    <a
+                      onClick={() => handleTabClick('jobs')}
+                      style={{
+                        paddingLeft: '2vw', // Responsive padding
+                        fontSize: '2vw', // Responsive font size
+                        color: activeTab === 'jobs' ? 'purple' : 'gray',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Jobs
+                    </a>
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+           
           </Card.Body>
         </Card>
 

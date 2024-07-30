@@ -140,6 +140,8 @@ const UserRegistrationForm = () => {
         values.userRole = userType;
         if (userType === 'HR') {
             values.phone = null;
+                   }
+        if (userRole === 'HR' ) {       
            
         }
         if (userType === 'Candidate') {
@@ -383,7 +385,7 @@ const UserRegistrationForm = () => {
                                                             }
                                                             required
                                                             placeholder="Enter your company name"
-                                                            value={values.companyName || companyName}
+                                                            value={values.companyName}
                                                             onChange={handleChange}
                                                             onBlur={handleBlur}
                                                             helperText={errors.companyName}
@@ -404,15 +406,15 @@ const UserRegistrationForm = () => {
                                                                             const newProtocol = event.target.value;
                                                                             setProtocol(newProtocol);
                                                                             handleChange({
-                                                                                target: { name: 'companyWebsite', value: `${newProtocol}://${values.companyWebsite}${tld}` }
+                                                                                target: { name: 'companyWebsite', value: `${newProtocol}://www.${values.companyWebsite}${tld}` }
                                                                             });
                                                                         }}
                                                                         onBlur={handleBlur}
                                                                         disabled={disableFormFields}
                                                                         style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
                                                                     >
-                                                                        <option value="http">http</option>
-                                                                        <option value="https">https</option>
+                                                                        <option value="http">http://www.</option>
+                                                                        <option value="https">https://www.</option>
                                                                     </select>
                                                                 </div>
                                                                 <TextField
@@ -420,7 +422,7 @@ const UserRegistrationForm = () => {
                                                                     type="text"
                                                                     name="companyWebsite"
 
-                                                                    placeholder="www.domain"
+                                                                    placeholder="domain"
                                                                     style={{ marginRight: '10px', flex: '1' }}
                                                                     disabled={disableFormFields}
                                                                     onChange={(e) => {
