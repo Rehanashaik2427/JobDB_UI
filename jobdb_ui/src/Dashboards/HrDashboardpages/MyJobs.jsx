@@ -301,13 +301,7 @@ const MyJobs = () => {
             subContainerClassName="pages pagination"
           />
         </div>
-          </>
-        ) : (
-          <section>
-            <h2>You have not posted any jobs yet. Post Now</h2>
-          </section>
-        )}
-
+   
 
        
         {!loading && jobs.length >= 0 && (

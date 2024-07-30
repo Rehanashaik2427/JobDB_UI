@@ -140,8 +140,8 @@ const UserRegistrationForm = () => {
         values.userRole = userType;
         if (userType === 'HR') {
             values.phone = null;
-            values.companyName = companyName;
-            values.companyWebsite = companyWebiste;
+            // values.companyName = companyName;
+            // values.companyWebsite = companyWebiste;
         }
         if (userType === 'Candidate') {
             values.companyName = null;
@@ -272,10 +272,9 @@ const UserRegistrationForm = () => {
     }
 
     return (
-        <div>
-            <div className="auth-layout-wrap" style={{ overflow: 'hidden' }}>
+        <div className='register-page'>
+            <div className="auth-layout-wrap" >
                 <h1 className="heading">User Registration</h1>
-
                 {userType === '' && (
                     <p style={{ color: 'red', textAlign: 'center' }}>Please select a user type below to proceed with the form.</p>
                 )}
@@ -314,14 +313,14 @@ const UserRegistrationForm = () => {
                             enableReinitialize
                         >
                             {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
-                                <Form className='form' style={{ Width: '800px' }} >
-                                    <Card className="form-card " >
+                                <Form className='form'>
+                                    <Card className="form-card " style={{width:'1200px'}}>
                                         <Row>
                                             {/* Left Section */}
                                             <Col md={6} className="text-center auth-cover">
                                                 <div className="ps-3 auth-right">
                                                     <div className="auth-logo text-center mt-4">
-                                                        <img src="/jb_logo.png" alt="JobDB" />
+                                                        <img src="/jb_logo.png" alt="JobDB" style={{ height: '100px', width: '250px' }} />
                                                     </div>
                                                     <div className="w-100 h-100 justify-content-center d-flex flex-column">
                                                         <SocialButtons
@@ -373,11 +372,8 @@ const UserRegistrationForm = () => {
                                                     disabled={disableFormFields || emailExistsError}
                                                 />
 
-
-
                                                 {userType === 'HR' && !companyName && (
                                                     <>
-
                                                         <TextField
                                                             type="text"
                                                             name="companyName"
@@ -541,8 +537,8 @@ const UserRegistrationForm = () => {
                                                 >
                                                     validate my email
                                                 </Button>
-
-                                                <div className="form-group form-check">
+                                                <br></br><br></br>
+                                                <div>
                                                     <Field
                                                         type="checkbox"
                                                         name="agreeToTermsAndCondition"
@@ -556,9 +552,8 @@ const UserRegistrationForm = () => {
                                                         }}
                                                         style={{ marginRight: '10px', transform: 'scale(1)', borderColor: 'black' }}
                                                         disabled={userType === ''}
-
                                                     />
-                                                    <label className="form-check-label" htmlFor="agreeToTermsAndCondition">
+                                                    <label>
                                                         I agree to the{' '}
                                                         <Link to="/terms-and-conditions" target="_blank">
                                                             Terms and Conditions
@@ -569,8 +564,6 @@ const UserRegistrationForm = () => {
                                                         <div className="invalid-feedback">{errors.agreeToTermsAndCondition}</div>
                                                     )}
                                                 </div>
-
-
                                                 {emailExistsError && (
                                                     <div>
                                                         <p className="error-message">
@@ -586,7 +579,7 @@ const UserRegistrationForm = () => {
 
                                                 <Button
                                                     type="submit"
-                                                    className="btn btn-primary w-100 my-1 btn-rounded mt-3"
+                                                    className="btn btn-primary w-50 my-1 btn-rounded mt-3 d-flex justify-content-center align-items-cen"
                                                     disabled={!otpVerified || isSubmitting || emailExistsError || userType === ''}
                                                 >
                                                     {isSubmitting ? 'Registering...' : 'Register'}

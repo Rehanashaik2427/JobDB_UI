@@ -401,10 +401,8 @@ const CompamyPage = () => {
               />
             </div>
             <div>
-              <h1 style={{ position: 'absolute', top: '70%', right: '100px' }}>{company?.companyName}</h1>
-              <div className='social-icons-company' style={{ position: 'absolute', top: '85%', right: '60px' }}>
-
-                <div className="social-media-icons">
+              <h1 style={{ position: 'absolute', top: '60%', right: '100px' }}>{company?.companyName}</h1>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '70%', right: '60px' }}>
                   {socialMediaLinks.facebookLink && (
                     <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
                       <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
@@ -426,10 +424,7 @@ const CompamyPage = () => {
                     </a>
                   )}
                 </div>
-
               </div>
-
-            </div>
             <ul className="nav-links" style={{ position: 'absolute', top: '80%', left: '50px', listStyleType: 'none', display: 'flex' }}>
               <li>
                 <span>
@@ -450,7 +445,7 @@ const CompamyPage = () => {
         </Card>
 
         <Row>
-          <Col xs={8}>
+          <Col xs={12} md={8}>
             {activeTab === 'home' && (
               <div>
                 <Card onClick={() => setActiveTab('overview')} style={{ cursor: 'pointer', marginTop: '20px' }}>
@@ -570,8 +565,8 @@ const CompamyPage = () => {
             )}
           </Col>
 
-          <Col xs={4}>
-            <Card className='key-stats'>
+          <Col xs={12} md={4}>
+            <Card className='key-stats' style={{ width: '80%', height: 'fit-content' }}>
               <Card.Body>
                 <Row className="mb-3">
 
@@ -623,8 +618,7 @@ const CompamyPage = () => {
                       <li>Active Job Postings:{countOfJobs}</li> {/* Placeholder values */}
                       <li>Shortlisted Applications:{countOfshortlistedApplications} </li>
                       <li>Avg. Time to Fill a Job: 7 days</li>
-                      {/* <li>Top Searched Job: Software Engineer</li>
-                        <li>User Engagement: 75% daily active users</li> */}
+                   
                     </ul>
                   </Col>
                 </Row>

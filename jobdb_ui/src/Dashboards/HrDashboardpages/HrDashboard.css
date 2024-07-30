@@ -679,8 +679,6 @@ section {
 }
 .key-stats {
   height: 100%; /* Set height to 100% */
-  /* overflow-y: scroll; Enable vertical scrolling */
- 
   margin-top: 8px; /* Top margin of 8px */
   margin-right: 20px; /* Right margin of 20px */
   margin-left: 5px;
@@ -695,3 +693,15 @@ section {
     padding: 15px;
   }
 }
+
+.custom-modal .modal-dialog {
+  position: fixed;
+  right: 3px;   /* 20px from the left edge of the viewport */
+  top: 80px;    /* 20px from the top edge of the viewport */
+}
+
+
+.custom-modal .modal-content {
+  border-radius: 8px;
+}
+
