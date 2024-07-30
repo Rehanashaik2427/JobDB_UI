@@ -278,6 +278,7 @@ const CompanyShowCase = () => {
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
 
+
       <div className="right-side">
         <Card style={{ width: '100%', height: '60%' }}>
           <Card.Body style={{ padding: 0, position: 'relative' }}>
@@ -321,6 +322,7 @@ const CompanyShowCase = () => {
                 accept="image/*"
               />
             </div>
+
             <div>
               <h1 style={{ position: 'absolute', top: '65%', right: '100px' }}>{userData.companyName}</h1>
 

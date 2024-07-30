@@ -380,7 +380,7 @@ const ViewApplications = () => {
             </Modal>
           )}
 
-          <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+          <Modal show={showModal} onHide={handleCloseModal}  className="custom-modal bottom-left-modal">
             <Modal.Header closeButton>
               <Modal.Title>Chat</Modal.Title>
             </Modal.Header>
@@ -431,7 +431,7 @@ const ViewApplications = () => {
                   placeholder="Enter your message"
                   value={inputValue}
                   onChange={handleInputChange}
-                  style={{ width: '350px' }} // Custom styles to increase size
+                  style={{ width: '300px',height:'20px' }} // Custom styles to increase size
                 />
               </Form.Group>
               <Button variant="primary" onClick={handleSend}>

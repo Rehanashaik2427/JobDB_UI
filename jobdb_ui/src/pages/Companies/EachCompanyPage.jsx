@@ -105,6 +105,7 @@ const EachCompanyPage = () => {
       setCompanyLogo(image);
     } catch (error) {
       console.error('Error fetching company logo:', error);
+      
     }
   };
   const fetchCompanyBanner = async (companyName) => {
@@ -116,6 +117,7 @@ const EachCompanyPage = () => {
       setCompanyBanner(image);
     } catch (error) {
       console.error('Error fetching company banner:', error);
+      
     }
   };
 
@@ -245,9 +247,9 @@ const EachCompanyPage = () => {
                   }}                      />
               </label>
             </div>
-            <div style={{ position: 'absolute', top: '70%', left: '5%', width: '90%' }}>
-              <h1 style={{ fontSize: 'clamp(24px, 4vw, 36px)', textAlign: 'end', margin: 0 }}>{companyName}</h1>
-              <div className='social-icons-company d-flex flex-row' style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'end', marginTop: '10px' }}>
+            <div>
+              <h1 style={{ position: 'absolute', top: '60%', right: '100px' }}>{companyName}</h1>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '70%', right: '60px' }}>
                 <FaFacebook
                   onClick={() => handleCompanyIconClick('Facebook')}
                   style={{ fontSize: 'clamp(24px, 4vw, 30px)', cursor: 'pointer', color: '#4267B2', margin: '5px' }}

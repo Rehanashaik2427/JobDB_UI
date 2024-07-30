@@ -184,7 +184,7 @@ const ForgetPassword = () => {
                         <Col md={6} className="text-center auth-cover">
                             <div className="pe-3 auth-right">
                                 <div className="auth-logo text-center mb-4">
-                                    <img src="https://jobbox.com.tr/wp-content/uploads/2022/12/jobbox-1-e1672119718429.png" alt="Gull" />
+                                    <img src="/jb_logo.png" alt="JobDB" style={{ height: '100px', width: '250px' }} />
                                 </div>
 
                                 <SocialButtons

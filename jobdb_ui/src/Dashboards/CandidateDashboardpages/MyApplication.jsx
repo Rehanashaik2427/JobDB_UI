@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Dropdown, Form, Modal, Table } from 'react-bootstrap';
+import { MdDelete } from 'react-icons/md';
 import { SiImessage } from 'react-icons/si';
 import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import './CandidateDashboard.css';
 import CandidateLeftSide from './CandidateLeftSide';
-import Swal from 'sweetalert2';
-import { MdDelete } from 'react-icons/md';
 
 const MyApplication = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
@@ -374,6 +374,7 @@ if(confirmDelete.data)
     }
   }, [chatsByApplication]);
 
+  
   return (
     <div className='dashboard-container'>
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>

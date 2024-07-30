@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, FormGroup, Modal } from 'react-bootstrap';
 import { FaEdit, FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './AdminDashboard.css';
 import AdminleftSide from './AdminleftSide';
 
@@ -26,7 +26,6 @@ const CompanyDetailsByAdmin = () => {
   });
 
 
-  const navigate = useNavigate();
   const location = useLocation();
 
   const companyName = location.state?.companyName;
@@ -61,13 +60,6 @@ const CompanyDetailsByAdmin = () => {
     }
   };
 
-
-  const [activeTab, setActiveTab] = useState('home'); // State to control the active tab
-
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
   const handleCameraIconClick = (type) => {
     document.getElementById(`${type}Input`).click();
   };
@@ -132,30 +124,6 @@ const CompanyDetailsByAdmin = () => {
     }
   }, [companyName])
 
-
-  const handleCompanyIconClick = (socialMedia) => {
-    let url;
-    switch (socialMedia) {
-      case 'Facebook':
-        url = `https://www.facebook.com/${companyName}`;
-        break;
-      case 'Twitter':
-        url = `https://twitter.com/${companyName}`;
-        break;
-      case 'Instagram':
-        url = `https://www.instagram.com/${companyName}`;
-        break;
-      case 'LinkedIn':
-        url = `https://www.linkedin.com/company/${companyName}`;
-        break;
-      default:
-        url = '';
-    }
-    if (url) {
-      window.open(url, '_blank');
-    }
-  };
-
   const [showModal, setShowModal] = useState(false);
   const [socialMediaLinks, setSocialMediaLinks] = useState({
     facebookLink: '',
@@ -195,8 +163,8 @@ const CompanyDetailsByAdmin = () => {
     try {
       // Save the updated social media links
       await axios.put(`${BASE_API_URL}/updateSocialMediaLinks?companyName=${companyName}`, {
-        facebookink: socialMediaLinks.facebookLink,
-        twitterLink: socialMediaLinks.twitterLInk,
+        facebookLink: socialMediaLinks.facebookLink,
+        twitterLink: socialMediaLinks.twitterLink,
         instagramLink: socialMediaLinks.instagramLink,
         linkedinLink: socialMediaLinks.linkedinLink
       });
@@ -258,14 +226,32 @@ const CompanyDetailsByAdmin = () => {
               />
             </div>
             <div>
-              <h1 style={{ position: 'absolute', top: '65%', right: '100px' }}>{companyName}</h1>
-
-              <div className='social-icons-company' style={{ position: 'absolute', top: '80%', left: '920px' }}>
-
-                <div className="social-media-buttons">
-                  <Button variant="primary" onClick={setShowModal}>Add Social Media Links</Button>
-                </div>
-                <Modal show={showModal} onHide={handleCloseModal}>
+              <h1 style={{ position: 'absolute', top: '60%', right: '100px' }}>{companyName}</h1>
+              <div className='social-icons-company' style={{ position: 'absolute', top: '70%', right: '60px' }}>
+                  <Button variant="primary" onClick={setShowModal}>Add Social Media Links</Button><br></br>
+                  {socialMediaLinks.facebookLink && (
+                    <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
+                      <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.twitterLink && (
+                    <a href={socialMediaLinks.twitterLink} target="_blank" rel="noopener noreferrer">
+                      <FaTwitter size={24} style={{ margin: '0 5px', color: '#1da1f2' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.instagramLink && (
+                    <a href={socialMediaLinks.instagramLink} target="_blank" rel="noopener noreferrer">
+                      <FaInstagram size={24} style={{ margin: '0 5px', color: '#e4405f' }} />
+                    </a>
+                  )}
+                  {socialMediaLinks.linkedinLink && (
+                    <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">
+                      <FaLinkedin size={24} style={{ margin: '0 5px', color: '#0077b5' }} />
+                    </a>
+                  )}
+              </div>
+            </div>
+            <Modal show={showModal} onHide={handleCloseModal}>
                   <Modal.Header closeButton>
                     <Modal.Title>Add Social Media Links</Modal.Title>
                   </Modal.Header>
@@ -322,31 +308,6 @@ const CompanyDetailsByAdmin = () => {
                     </Button>
                   </Modal.Footer>
                 </Modal>
-                <div className="social-media-icons">
-                  {socialMediaLinks.facebookLink && (
-                    <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
-                      <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
-                    </a>
-                  )}
-                  {socialMediaLinks.twitterLink && (
-                    <a href={socialMediaLinks.twitterLink} target="_blank" rel="noopener noreferrer">
-                      <FaTwitter size={24} style={{ margin: '0 5px', color: '#1da1f2' }} />
-                    </a>
-                  )}
-                  {socialMediaLinks.instagramLink && (
-                    <a href={socialMediaLinks.instagramLink} target="_blank" rel="noopener noreferrer">
-                      <FaInstagram size={24} style={{ margin: '0 5px', color: '#e4405f' }} />
-                    </a>
-                  )}
-                  {socialMediaLinks.linkedinLink && (
-                    <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">
-                      <FaLinkedin size={24} style={{ margin: '0 5px', color: '#0077b5' }} />
-                    </a>
-                  )}
-                </div>
-
-              </div>
-            </div>
             <h3 style={{ position: 'absolute', top: '80%' }}>About {companyName}</h3>
           </Card.Body>
         </Card>
@@ -387,13 +348,13 @@ const CompanyDetailsByAdmin = () => {
                 onChange={handleInputChange}
               />
             </FormGroup>
-            <FormGroup controlId="description">
+            <FormGroup controlId="discription">
               <Form.Label>
                 <h4>Description</h4>
               </Form.Label>
               <Form.Control
                 type="text"
-                name="description"
+                name="discription"
                 value={companyDetails.discription}
                 onChange={handleInputChange}
               />

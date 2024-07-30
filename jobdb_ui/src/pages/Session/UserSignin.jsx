@@ -77,7 +77,7 @@ const UserSignin = () => {
                         <Col md={6} className="text-center auth-cover">
                             <div className="pe-3 auth-right">
                                 <div className="auth-logo text-center mb-4">
-                                    <img src="/jb_logo.png" alt="jobdblogo" />
+                                <img src="/jb_logo.png" alt="JobDB" style={{height:'100px',width:'250px'}} />
                                 </div>
                                 <SocialButtons routeUrl="/signup/userSignup" googleHandler={() => alert("google")} facebookHandler={() => alert("facebook")} />
                             </div>

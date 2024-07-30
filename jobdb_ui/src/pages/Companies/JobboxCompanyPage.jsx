@@ -1,8 +1,6 @@
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 
 import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,9 +14,6 @@ const JobboxCompanyPage = () => {
   const [pageSize, setPageSize] = useState(6);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
-
-
-
 
 
   const handlePageClick = (data) => {
@@ -79,22 +74,12 @@ const JobboxCompanyPage = () => {
     navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })
     // alert('Button clicked!');
   };
-  const handleBack = () => {
-    navigate("/"); // Navigate back to previous page
-  };
+ 
 
 
 
   return (
     <div className="top-right-content">
-      <Col xs={6}>
-        <Button onClick={handleBack} variant="secondary">
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </Button>
-
-      </Col>
-
-      <div>
         <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
           <div className="search-bar" >
             <input style={{ borderRadius: '6px', height: '35px' }}
@@ -107,20 +92,19 @@ const JobboxCompanyPage = () => {
           </div>
         </div>
 
-        <div className="companyJob mt-4">
+        <div className="companyJob mt-4" >
           <h1>Companies that we have</h1>
-          <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content', minWidth: '800px' }}>
-            {companies.length > 0 ? (  
+          <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content', minWidth: '800px',marginLeft:'45px' }}>
+            {companies.length > 0 ? (
               companies.map((company) => (
-                <Card className="company-card-job" key={company.companyId} style={{ minWidth: '300px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}>
-                  <Card.Body>
-                    <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                    <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+                <Card className="company-card-job" key={company.companyId} style={{ minWidth: '350px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}>                  <Card.Body>
+                  <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                  <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
 
-                    <Button onClick={() => handleClick(company.companyId)}>
-                      View
-                    </Button>
-                  </Card.Body>
+                  <Button onClick={() => handleClick(company.companyId)}>
+                    View
+                  </Button>
+                </Card.Body>
                 </Card>
               ))
             ) : (
@@ -132,7 +116,7 @@ const JobboxCompanyPage = () => {
             <div className="page-size-select me-3">
               <label htmlFor="pageSize">Page Size:</label>
               <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                <option value="5">5</option>
+                <option value="6">6</option>
                 <option value="10">10</option>
                 <option value="20">20</option>
               </select>
@@ -151,8 +135,6 @@ const JobboxCompanyPage = () => {
               subContainerClassName="pages pagination"
             />
           </div>
-
-        </div>
       </div>
     </div>
   );
