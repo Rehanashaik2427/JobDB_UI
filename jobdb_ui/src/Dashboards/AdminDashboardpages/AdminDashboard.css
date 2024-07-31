@@ -241,6 +241,8 @@ company details by admin */
     text-align: center;
     margin-bottom: 20px;
     color: wheat;
+    margin-right: 20px;
+    margin-left: 12px;
   }
   
   /* HR Request container */
@@ -304,3 +306,4 @@ company details by admin */
   overflow-y: scroll; /* Enable vertical scrolling */
   padding-right: 15px; /* Ensure content does not get hidden by scrollbar */
  }
+

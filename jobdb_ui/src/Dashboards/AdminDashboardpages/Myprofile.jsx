@@ -6,13 +6,13 @@ import AdminleftSide from './AdminleftSide';
 const Myprofile = ({ userType }) => {
   return (
     <div className='dashboard-container'>
-    <div className='left-side'>
-      <AdminleftSide />
-    </div>
+      <div className='left-side'>
+        <AdminleftSide />
+      </div>
 
-    <div className="right-side">
-        <div className='admin-profile'>
-          <Table hover className='text-center'style={{ marginLeft: '8px' }}>
+      <div className="right-side">
+        <div className='table-details-list'>
+          <Table hover className='text-center' >
             <thead className="table-light" >
               <tr>
                 <th>Company Name</th>

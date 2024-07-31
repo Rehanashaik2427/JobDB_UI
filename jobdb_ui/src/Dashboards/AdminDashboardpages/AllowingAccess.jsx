@@ -19,7 +19,8 @@ const AllowingAccess = () => {
         <div>
           <h2 style={{ textAlign: 'center' }}>Access Dashboard</h2>
 
-            <Table hover className='text-center'style={{ marginLeft: '12px' }}>
+          <div className='table-details-list'>
+          <Table hover className='text-center' >
               <thead className="table-light">
                 <tr >
                   <th >User</th>
@@ -37,6 +38,7 @@ const AllowingAccess = () => {
                 ))}
               </tbody>
             </Table>
+            </div>
           </div>
         </div>
       </div>

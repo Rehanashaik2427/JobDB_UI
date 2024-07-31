@@ -149,41 +149,41 @@ const People = () => {
                     </Dropdown>
                 </div>
                 {people.length > 0 && (
-                    <div><div>
-
-                        <Table hover className='text-center'>
-                            <thead className="table-light">
-                                <tr>
-                                    <th scope="col" onClick={() => handleSort('userId')}>
-                                        HR ID {sortedColumn === 'userId' && (sortOrder === 'asc' ? '▲' : '▼')}
-                                    </th>
-                                    <th scope="col" onClick={() => handleSort('userName')}>
-                                        HR Name {sortedColumn === 'userName' && (
-                                            sortOrder === 'asc' ? '▲' : '▼'
-                                        )}
-                                    </th>
-                                    <th scope="col" onClick={() => handleSort('userEmail')}>
-                                        Email {sortedColumn === 'userEmail' && (
-                                            sortOrder === 'asc' ? '▲' : '▼'
-                                        )}
-                                    </th>
-                                    <th scope="col">Company Name </th>
-                                    <th scope="col">PhoneNumber</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {people.map(person => (
-                                    <tr key={person.userId}>
-                                        <td>{person.userId}</td>
-                                        <td>{person.userName}</td>
-                                        <td>{person.userEmail}</td>
-                                        <td>{person.companyName}</td>
-                                        <td>{person.phone}</td>
+                    <div>
+                        <div className='table-details-list'>
+                            <Table hover className='text-center'>
+                                <thead className="table-light">
+                                    <tr>
+                                        <th scope="col" onClick={() => handleSort('userId')}>
+                                            HR ID {sortedColumn === 'userId' && (sortOrder === 'asc' ? '▲' : '▼')}
+                                        </th>
+                                        <th scope="col" onClick={() => handleSort('userName')}>
+                                            HR Name {sortedColumn === 'userName' && (
+                                                sortOrder === 'asc' ? '▲' : '▼'
+                                            )}
+                                        </th>
+                                        <th scope="col" onClick={() => handleSort('userEmail')}>
+                                            Email {sortedColumn === 'userEmail' && (
+                                                sortOrder === 'asc' ? '▲' : '▼'
+                                            )}
+                                        </th>
+                                        <th scope="col">Company Name </th>
+                                        <th scope="col">PhoneNumber</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {people.map(person => (
+                                        <tr key={person.userId}>
+                                            <td>{person.userId}</td>
+                                            <td>{person.userName}</td>
+                                            <td>{person.userEmail}</td>
+                                            <td>{person.companyName}</td>
+                                            <td>{person.phone}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </div>
                         {/* Pagination */}
                         <div className="pagination-container d-flex justify-content-end align-items-center">
                             <div className="page-size-select me-3">

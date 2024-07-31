@@ -38,12 +38,12 @@ const AdminAction = () => {
   }, [page, pageSize]);
 
   const appliedOn = new Date(); // Get current date and time
-const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
-const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
-const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
+  const year = appliedOn.getFullYear(); // Get the full year (e.g., 2024)
+  const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
+  const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
 
-const formattedDate = `${year}-${month}-${day}`;
-console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
+  const formattedDate = `${year}-${month}-${day}`;
+  console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
 
   const approveRequest = async (userEmail, userId) => {
     console.log('Request Approved');
@@ -77,7 +77,7 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
     console.log('Request Rejected');
     const rejected = "Rejected";
     try {
-      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${formattedDate }&userStatus=${rejected}`);
+      const res = await axios.put(`${BASE_API_URL}/updateApprove?userEmail=${userEmail}&approvedOn=${formattedDate}&userStatus=${rejected}`);
       console.log(res.data);
 
       if (res.data) {
@@ -117,57 +117,59 @@ console.log(formattedDate); // Output: 2024-07-09 (example for today's date)
         <header className="admin-header">
           <h2 style={{ color: 'wheat' }}>User Validation</h2>
         </header>
-        <Table hover className='text-center' style={{ marginLeft: '12px' }}>
-          <thead className="table-light">
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hrDetails.map(hr => (
-              <tr key={hr.userId}>
-                <td>{hr.userName} ({hr.companyName} HR)</td>
-                <td>{hr.userEmail}</td>
-                <td>
-                  <Button key='success' variant='success' className="m-1 text-capitalize" onClick={() => approveRequest(hr.userEmail, hr.userId)}>
-                    Approve
-                  </Button>
-
-                  <Button key='danger' variant='danger' className="m-1 text-capitalize" onClick={() => rejectRequest(hr.userEmail, hr.userId)}>
-                    Reject
-                  </Button>
-                </td>
+        <div className='table-details-list'>
+          <Table hover className='text-center'>
+            <thead className="table-light">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {hrDetails.map(hr => (
+                <tr key={hr.userId}>
+                  <td>{hr.userName} ({hr.companyName} HR)</td>
+                  <td>{hr.userEmail}</td>
+                  <td>
+                    <Button key='success' variant='success' className="m-1 text-capitalize" onClick={() => approveRequest(hr.userEmail, hr.userId)}>
+                      Approve
+                    </Button>
 
-         {/* Pagination */}
-         <div className="pagination-container d-flex justify-content-end align-items-center">
-                  <div className="page-size-select me-3">
-                    <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                    </select>
-                  </div>
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={2}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
-                </div>
+                    <Button key='danger' variant='danger' className="m-1 text-capitalize" onClick={() => rejectRequest(hr.userEmail, hr.userId)}>
+                      Reject
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        <div className="pagination-container d-flex justify-content-end align-items-center">
+          <div className="page-size-select me-3">
+            <label htmlFor="pageSize">Page Size:</label>
+            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
       </div>
     </div>
 

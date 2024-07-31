@@ -60,10 +60,10 @@ const UserValidation = () => {
 
       <div className="right-side">
       {userData.length > 0 ? (
-        <div className='user-table-list'>
-      
+      <>
           <h2>Users List</h2>
-          <Table hover className='text-center' style={{ marginLeft: '12px' }}>
+          <div className='table-details-list'>
+          <Table hover className='text-center' >
             <thead className="table-light">
               <tr>
                 <th onClick={() => handleSort('userName')}>
@@ -96,7 +96,7 @@ const UserValidation = () => {
             </tbody>
           </Table>
            
-        </div>
+        </div></>
          ): (
           <h4 className='text-center'>Loading.. .!!</h4>
         )}

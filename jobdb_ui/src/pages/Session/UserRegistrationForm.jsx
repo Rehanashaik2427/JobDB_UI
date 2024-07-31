@@ -204,7 +204,6 @@ const UserRegistrationForm = () => {
             setPasswordCriteriaError(true);
             return false;
         }
-
         if (!passwordsMatch) {
             setErrorMessage('Passwords do not match');
             return false;

@@ -66,7 +66,8 @@ const AddCompanyDetails = () => {
     {companyData.length > 0 ? (
           <>
             <h2>Add Company Details</h2>
-            <Table hover className='text-center' style={{ marginLeft: '12px' }}>
+            <div className='table-details-list'>
+            <Table hover className='text-center'>
               <thead className="table-light">
                 <tr>
                   <th>Company Name</th>
@@ -111,6 +112,7 @@ const AddCompanyDetails = () => {
                 ))}
               </tbody>
             </Table>
+            </div>
           </>
         ) : (
           <h4 className='text-center'>Loading.. .!!</h4>

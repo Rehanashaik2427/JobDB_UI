@@ -696,3 +696,6 @@ section {
   border-radius: 8px;
 }
 
+.hr{
+  overflow-y: scroll;
+}
