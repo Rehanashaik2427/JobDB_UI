@@ -98,7 +98,7 @@ const PostedJobs = () => {
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
-    setPage(0); // Reset page when page size change
+    //setPage(0); // Reset page when page size change
   };
 
   const handlePageClick = (data) => {

@@ -8,41 +8,35 @@ import swal from 'sweetalert2';
 import './HrDashboard.css';
 import HrLeftSide from './HrLeftSide';
 
-
 const MyJobs = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
   const userEmail = location.state?.userEmail;
   const userName = location.state?.userName;
   const [jobs, setJobs] = useState([]);
-
-  const [showJobDescription, setShowJobDescription] = useState(false);
   const [selectedJobSummary, setSelectedJobSummary] = useState('');
-
   const navigate = useNavigate();
-
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(5); // Default to 5 items per page
   const [totalPages, setTotalPages] = useState(0);
-
-
-  const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
-  const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
 
-  const handlePageClick = (data) => {
-    setPage(data.selected); // Update the page state with the new selected page index
+  const handlePageSizeChange = (e) => {
+    const size = parseInt(e.target.value);
+    setPageSize(size);
+    setPage(0); // Reset page when page size changes
   };
 
-
-
+  const handlePageClick = (data) => {
+    setPage(data.selected);
+  };
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -51,7 +45,7 @@ const MyJobs = () => {
         userEmail: userEmail,
         page: page,
         size: pageSize,
-        sortBy: sortedColumn, // Include sortedColumn and sortOrder in params
+        sortBy: sortedColumn,
         sortOrder: sortOrder,
       };
       const response = await axios.get(`${BASE_API_URL}/jobsPostedByHrEmail`, { params });
@@ -61,7 +55,7 @@ const MyJobs = () => {
     } catch (error) {
       console.error('Error fetching HR data:', error);
     }
-  }
+  };
 
   const handleSort = (column) => {
     let order = 'asc';
@@ -72,18 +66,16 @@ const MyJobs = () => {
     setSortOrder(order);
   };
 
-
   const handleDelete = async (jobId) => {
     try {
       await axios.delete(`${BASE_API_URL}/deleteJob?jobId=${jobId}`);
-      // Remove the job from the frontend list
       setJobs(prevJobs => prevJobs.filter(job => job.jobId !== jobId));
     } catch (error) {
       console.error('Error deleting job:', error);
     }
   };
 
-  const fetchJobBysearch = async () => {
+  const fetchJobBySearch = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${BASE_API_URL}/searchJobsByHR`, {
@@ -92,28 +84,26 @@ const MyJobs = () => {
       setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
       setLoading(false);
-      console.log(response.data);
     } catch (error) {
-      console.log("Error searching:", error);
-      alert("Error searching for jobs. Please try again later.");
+      console.error('Error searching:', error);
+      alert('Error searching for jobs. Please try again later.');
     }
+  };
 
-  }
   useEffect(() => {
     if (search) {
-      fetchJobBysearch();
+      fetchJobBySearch();
     } else {
       fetchJobs();
     }
   }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
-
 
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
 
   const getInitials = (name) => {
-    if (!name) return ''; // Handle case where name is undefined
+    if (!name) return '';
     const nameParts = name.split(' ');
     if (nameParts.length > 1) {
       return convertToUpperCase(nameParts[0][0] + nameParts[1][0]);
@@ -121,12 +111,9 @@ const MyJobs = () => {
       return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
     }
   };
+
   const initials = getInitials(userName);
-  const handlePageSizeChange = (e) => {
-    const size = parseInt(e.target.value);
-    setPageSize(size);
-    setPage(0); // Reset page when page size changes
-  };
+
   const [showLeftSide, setShowLeftSide] = useState(false);
   const toggleLeftSide = () => {
     setShowLeftSide(!showLeftSide);
@@ -142,7 +129,6 @@ const MyJobs = () => {
 
   return (
     <div className="dashboard-container">
-
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
@@ -175,7 +161,7 @@ const MyJobs = () => {
                   fontWeight: 'bold',
                 }}
               >
-                {userName[0]}
+                {initials}
               </div>
             </Dropdown.Toggle>
             <Dropdown.Menu className="mt-3">
@@ -197,79 +183,71 @@ const MyJobs = () => {
         ) : jobs.length > 0 ? (
           <>
             <h2 className='text-center'>Jobs posted by {userName}</h2>
-            <div>
-              <Table hover className='text-center'>
-                <thead className="table-light">
-                  <tr>
-                    {['jobTitle', 'jobType', 'postingDate', 'skills', 'numberOfPosition', 'salary', 'applicationDeadline'].map((column) => (
-                      <th
-                        key={column}
-                        scope="col"
-                        onClick={() => handleSort(column)}
-                      >
-                        {column.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                        {sortedColumn === column && (sortOrder === 'asc' ? ' ▲' : ' ▼')}
-                      </th>
-                    ))}
-                    <th scope="col">Job Description</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {jobs.map((job) => (
-                    <tr key={job.jobId}>
-                      <td>{job.jobTitle}</td>
-                      <td>{job.jobType}</td>
-                      <td>{job.postingDate}</td>
-                      <td>{job.skills}</td>
-                      <td>{job.numberOfPosition}</td>
-                      <td>{job.salary}</td>
-                      <td>{job.applicationDeadline}</td>
-                      <td>
-                        <Button
-                          variant="secondary"
-                          className='description btn-rounded'
-                          onClick={() => handleViewSummary(job.jobSummary)}
-                        >
-                          Summary
-                        </Button>
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          <span
-                            className="cursor-pointer text-success me-2 update"
-                            onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId } })}
-                          >
-                            <MdEdit size={18} className="text-success" />
-                          </span>
-                          <span
-                            className='delete cursor-pointer text-danger me-2'
-                            onClick={() => {
-                              swal.fire({
-                                title: "Are you sure?",
-                                text: "You won't be able to revert this!",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#3085d6",
-                                cancelButtonColor: "#d33",
-                                confirmButtonText: "Yes, delete it!"
-                              }).then((result) => {
-                                if (result.isConfirmed) {
-                                  handleDelete(job.jobId);
-                                }
-                              });
-                            }}
-                          >
-                            <MdDelete className="text-danger" size={18} />
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
+            <Table hover className='text-center'>
+              <thead className="table-light">
+                <tr>
+                  {['jobTitle', 'jobType', 'postingDate', 'skills', 'numberOfPosition', 'salary', 'applicationDeadline'].map((column) => (
+                    <th
+                      key={column}
+                      scope="col"
+                      onClick={() => handleSort(column)}
+                    >
+                      {column.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      {sortedColumn === column && (sortOrder === 'asc' ? ' ▲' : ' ▼')}
+                    </th>
                   ))}
-                </tbody>
-              </Table>
-            </div>
+                  <th scope="col">Job Description</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {jobs.map((job) => (
+                  <tr key={job.jobId}>
+                    <td>{job.jobTitle}</td>
+                    <td>{job.jobType}</td>
+                    <td>{job.postingDate}</td>
+                    <td>{job.skills}</td>
+                    <td>{job.numberOfPosition}</td>
+                    <td>{job.salary}</td>
+                    <td>{job.applicationDeadline}</td>
+                    <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
 
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <span
+                          className="cursor-pointer text-success me-2 update"
+                          onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId } })}
+                        >
+                          <MdEdit size={18} className="text-success" />
+                        </span>
+                        <span
+                          className='delete cursor-pointer text-danger me-2'
+                          onClick={() => {
+                            swal.fire({
+                              title: "Are you sure?",
+                              text: "You won't be able to revert this!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#3085d6",
+                              cancelButtonColor: "#d33",
+                              confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                handleDelete(job.jobId);
+                              }
+                            });
+                          }}
+                        >
+                          <MdDelete className="text-danger" size={18} />
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+
+            {/* Pagination */}
             <div className="pagination-container d-flex justify-content-end align-items-center">
               <div className="page-size-select me-3">
                 <label htmlFor="pageSize">Page Size:</label>
@@ -285,8 +263,8 @@ const MyJobs = () => {
                 breakLabel="..."
                 breakClassName="break-me"
                 pageCount={totalPages}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
                 onPageChange={handlePageClick}
                 activeClassName="active"
                 containerClassName="pagination"
@@ -295,7 +273,7 @@ const MyJobs = () => {
             </div>
 
             {!loading && jobs.length >= 0 && (
-              <Button className='add-job-button position-absolute top-70 start-40 translate-middle'>
+              <Button className='add-job-button position-relative top-70 start-40 translate-middle'>
                 <Link
                   to={{ pathname: '/hr-dashboard/my-jobs/addJob', state: { userName, userEmail } }}
                   onClick={(e) => {
@@ -324,9 +302,8 @@ const MyJobs = () => {
           </div>
         )}
       </div>
-      </div>
-
-      );
+    </div>
+  );
 };
 
-      export default MyJobs;
+export default MyJobs;

@@ -14,7 +14,16 @@ const JobboxCompanyPage = () => {
   const [pageSize, setPageSize] = useState(6);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
+ // Save the current page to local storage whenever it changes
+ useEffect(() => {
+  localStorage.setItem('currentPage', page);
+}, [page]);
 
+// Retrieve the page number from local storage on component mount
+useEffect(() => {
+  const storedPage = parseInt(localStorage.getItem('currentPage')) || 0;
+  setPage(storedPage);
+}, []);
 
   const handlePageClick = (data) => {
     setPage(data.selected);
@@ -35,15 +44,6 @@ const JobboxCompanyPage = () => {
     setSearch(event.target.value);
     fetchCompanyBySearch();
   };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    fetchCompanyBySearch();
-  };
-
-
-
-
 
   const fetchCompanyBySearch = async () => {
     try {

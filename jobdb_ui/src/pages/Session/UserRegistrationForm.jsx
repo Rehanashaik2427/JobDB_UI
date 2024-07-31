@@ -12,6 +12,7 @@ import TextField from './sessions/TextField';
 
 const UserRegistrationForm = () => {
     const [errorMessage, setErrorMessage] = useState('');
+    const [passwordMatchError, setPasswordMatchError] = useState(false);
     const [emailExistsError, setEmailExistsError] = useState(false);
     const [passwordCriteriaError, setPasswordCriteriaError] = useState(false);
     const [showOTPModal, setShowOTPModal] = useState(false);
@@ -20,9 +21,9 @@ const UserRegistrationForm = () => {
     const [otpVerified, setOtpVerified] = useState(false);
     const [disableFormFields, setDisableFormFields] = useState(false);
     const [userType, setUserType] = useState("");
-
+    const [agreeToTermsAndConditionByCheck,  setAgreeToTermsAndConditionByCheck] = useState(false);
     const navigate = useNavigate();
-
+   
     console.log("Rendering with userType:", userType);
 
 
@@ -140,9 +141,9 @@ const UserRegistrationForm = () => {
         values.userRole = userType;
         if (userType === 'HR') {
             values.phone = null;
-           
+
         }
-        if (userRole === 'HR' ) {       
+        if (userRole === 'HR') {
             values.companyName = companyName;
             values.companyWebsite = companyWebiste;
         }
@@ -208,7 +209,7 @@ const UserRegistrationForm = () => {
         }
 
         if (!passwordsMatch) {
-            setErrorMessage('Passwords do not match');
+            setPasswordMatchError(true);
             return false;
         }
 
@@ -315,9 +316,9 @@ const UserRegistrationForm = () => {
                             onSubmit={handleSubmit}
                             enableReinitialize
                         >
-                            {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
+                            {({ values, errors, touched, handleChange, handleBlur, isSubmitting,isValidating }) => (
                                 <Form className='form'>
-                                    <Card className="form-card " style={{width:'1200px'}}>
+                                    <Card className="form-card " style={{ width: '1200px' }}>
                                         <Row>
                                             {/* Left Section */}
                                             <Col md={6} className="text-center auth-cover">
@@ -430,7 +431,7 @@ const UserRegistrationForm = () => {
                                                                     onChange={(e) => {
                                                                         const value = e.target.value;
                                                                         handleChange({
-                                                                            target: { name: 'companyWebsite', value: `${protocol}://${value}${tld}` }
+                                                                            target: { name: 'companyWebsite', value: `${protocol}://www.${value}${tld}` }
                                                                         });
                                                                     }}
                                                                 />
@@ -522,23 +523,27 @@ const UserRegistrationForm = () => {
                                                     value={values.confirmPassword}
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
-                                                    helperText={errors.password}
-                                                    error={errors.password && touched.password}
+                                                    helperText={errors.confirmPassword}
+                                                    error={errors.confirmPassword && touched.confirmPassword}
                                                     fullWidth
                                                     errorMessage={touched.confirmPassword && errors.confirmPassword}
                                                     disabled={disableFormFields}
                                                 />
-                                                <Button
-                                                    disabled={disableFormFields || userType === '' || otpVerified}
+                                                {passwordMatchError &&(
+                                                     <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                                                     Password did not match, plese try again...
+                                                 </p>
+                                                )}
+                                                   <Button
+                                                    disabled={disableFormFields || userType === '' ||  otpVerified }
                                                     className="mt-3"
-                                                    onClick={(e) => {
-                                                        handleChange(e);
-
-                                                        sendOTP(values.userEmail);
-
+                                                    onClick={() => {
+                                                        setDisableFormFields(true);
+                                                            sendOTP(values.userEmail);
+                                                      
                                                     }}
                                                 >
-                                                    validate my email
+                                                    Validate my email
                                                 </Button>
                                                 <br></br><br></br>
                                                 <div>
@@ -550,8 +555,7 @@ const UserRegistrationForm = () => {
                                                         checked={values.agreeToTermsAndCondition}
                                                         onChange={(e) => {
                                                             handleChange(e);
-                                                            setDisableFormFields(e.target.checked);
-
+                                                            setAgreeToTermsAndConditionByCheck(true);
                                                         }}
                                                         style={{ marginRight: '10px', transform: 'scale(1)', borderColor: 'black' }}
                                                         disabled={userType === ''}
@@ -583,7 +587,7 @@ const UserRegistrationForm = () => {
                                                 <Button
                                                     type="submit"
                                                     className="btn btn-primary w-50 my-1 btn-rounded mt-3 d-flex justify-content-center align-items-cen"
-                                                    disabled={!otpVerified || isSubmitting || emailExistsError || userType === ''}
+                                                    disabled={!otpVerified || isSubmitting || emailExistsError || userType === '' || agreeToTermsAndConditionByCheck===false }
                                                 >
                                                     {isSubmitting ? 'Registering...' : 'Register'}
                                                 </Button>
@@ -596,7 +600,7 @@ const UserRegistrationForm = () => {
                     </>
                 )}
 
-                {errorMessage && <p className="text-danger">{errorMessage}</p>}
+              
             </div>
 
             {/* OTP Modal */}
