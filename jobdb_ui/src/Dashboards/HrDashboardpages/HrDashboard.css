@@ -1,14 +1,5 @@
 /* removing scrollbars  */
 
-
-
-.centered-form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 .form-container {
   width: 400px;
   padding: 20px;
@@ -705,3 +696,6 @@ section {
   border-radius: 8px;
 }
 
+.hr{
+  overflow-y: scroll;
+}

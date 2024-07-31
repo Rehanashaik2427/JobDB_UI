@@ -72,9 +72,6 @@ const PostedJobs = () => {
   }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
 
-  const [showJobDescription, setShowJobDescription] = useState(false);
-
-
   const navigate = useNavigate();
   const toggleSettings = () => {
     navigate('/');
@@ -169,7 +166,7 @@ const PostedJobs = () => {
         <div className="jobs_list">
           {jobs.length > 0 ? (
             <div>
-              <div>
+              <div className='table-details-list'>
                 <Table hover className='text-center'>
                   <thead className="table-light">
                     <tr>
@@ -200,16 +197,16 @@ const PostedJobs = () => {
                 </Table>
               </div>
               {selectedJobSummary && (
-            <div className="modal-summary">
-            <div className="modal-content-summary">
-                  <span className="close" onClick={handleCloseModal}>&times;</span>
-                  <div className="job-summary">
-                    <h3>Job Summary</h3>
-                    <pre>{selectedJobSummary}</pre>
+                <div className="modal-summary">
+                  <div className="modal-content-summary">
+                    <span className="close" onClick={handleCloseModal}>&times;</span>
+                    <div className="job-summary">
+                      <h3>Job Summary</h3>
+                      <pre>{selectedJobSummary}</pre>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
               {/* Pagination */}
               <div className="pagination-container d-flex justify-content-end align-items-center">

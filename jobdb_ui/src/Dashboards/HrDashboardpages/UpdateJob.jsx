@@ -8,10 +8,9 @@ import HrLeftSide from './HrLeftSide';
 const UpdateJob = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  const { userName, userEmail, jobId } = location.state || {};
+  const { userName, userEmail, jobId, currentPage } = location.state;
 
-
-
+  console.log("coming current page",currentPage)
   const navigate = useNavigate();
 
   const [editableJobDetails, setEditableJobDetails] = useState(false);
@@ -29,8 +28,15 @@ const UpdateJob = () => {
     skills: '',
   });
 
+  const handleBack = () => {
+    navigate('/hr-dashboard/my-jobs', {
+      state: { userName, userEmail, currentPage },
+      replace:true
+    });
+    console.log("sending current page",currentPage)
 
-
+  };
+  console.log(currentPage)
   useEffect(() => {
     if (jobId) {
       fetchJobDetails(jobId);
@@ -70,16 +76,15 @@ const UpdateJob = () => {
     try {
       await axios.put(`${BASE_API_URL}/updateJob?jobId=${jobId}`, formData);
       alert('Job details updated successfully.');
-      navigate('/hr-dashboard/my-jobs', {
-        state: {
-          userName: userName,
-          userEmail: userEmail,
-        },
+       navigate('/hr-dashboard/my-jobs', {
+        state: { userName, userEmail, currentPage },
+        replace:true
       });
     } catch (error) {
       console.error('Error updating job details:', error);
     }
   };
+  
 
   return (
     <div className='dashboard-container'>
@@ -217,7 +222,8 @@ const UpdateJob = () => {
                   <Button variant="info" type="button" onClick={handleEditJobDetails}><FaEdit /> Edit</Button>
                 )}
                 <Button variant="success" type="submit">Post</Button>
-
+                
+                <Button variant='primary' onClick={handleBack}>Back</Button>
               </div>
             </Card.Footer>
 

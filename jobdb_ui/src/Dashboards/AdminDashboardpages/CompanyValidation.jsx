@@ -140,7 +140,8 @@ const CompanyValidation = () => {
         {companyData.length > 0 ? (
           <>
            <h2 style={{ textAlign: 'center' }}>Details of Company Validation</h2>
-            <Table hover className='text-center' style={{ marginLeft: '8px' }}>
+           <div className='table-details-list'>
+           <Table hover className='text-center' >
               <thead className="table-light">
                 <tr>
                   <th onClick={() => handleSort('companyName')}>
@@ -166,6 +167,7 @@ const CompanyValidation = () => {
                 ))}
               </tbody>
             </Table>
+            </div>
             </>
         ): (
           <h4 className='text-center'>Loading.. .!!</h4>

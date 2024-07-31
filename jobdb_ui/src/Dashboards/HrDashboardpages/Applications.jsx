@@ -157,7 +157,6 @@ const Applications = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-
         {loading ? (
           <div className="d-flex justify-content-center align-items-center">
             <div className="spinner-bubble spinner-bubble-primary m-5" />
@@ -165,7 +164,6 @@ const Applications = () => {
           </div>
         ) : jobs.length > 0 ? (
           <>
-
             <div className='job-list'>
               <Table hover className='text-center'>
                 <thead className="table-light">
@@ -197,7 +195,6 @@ const Applications = () => {
                             <Button>View Application</Button>
                           </Link>
                         </td>
-
                       </tr>
                     )
                   ))}
@@ -206,37 +203,36 @@ const Applications = () => {
 
 
             </div>
-            {/* Pagination */}
-            <div className="pagination-container d-flex justify-content-end align-items-center">
-              <div className="page-size-select me-3">
-                <label htmlFor="pageSize">Page Size:</label>
-                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                </select>
-              </div>
-              <ReactPaginate
-                previousLabel={<i className="i-Previous" />}
-                nextLabel={<i className="i-Next1" />}
-                breakLabel="..."
-                breakClassName="break-me"
-                pageCount={totalPages}
-                marginPagesDisplayed={1}
-                pageRangeDisplayed={2}
-                onPageChange={handlePageClick}
-                activeClassName="active"
-                containerClassName="pagination"
-                subContainerClassName="pages pagination"
-              />
-            </div>
-
           </>
         ) : (
           <section>
             <h2>You have not posted any jobs yet. Post Now</h2>
           </section>
         )}
+        {/* Pagination */}
+        <div className="pagination-container d-flex justify-content-end align-items-center">
+          <div className="page-size-select me-3">
+            <label htmlFor="pageSize">Page Size:</label>
+            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+          />
+        </div>
 
       </div>
     </div>

@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
 import { SiImessage } from "react-icons/si";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
 import Slider from "./Slider";
@@ -352,9 +352,8 @@ const ViewApplications = () => {
       <div className='left-side'>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
-
-      <div className="right-side" >
-        <div className="application-div" style={{ marginTop: "50px" }}>
+      <div md={10} className="right-side" >
+        <div className="application-div">
           <Row className="filter">
             <Col className="filter" style={{ maxWidth: '40%' }}>
               <label htmlFor="status">Filter by Status:</label>
@@ -379,8 +378,7 @@ const ViewApplications = () => {
               <Modal.Body style={{ overflowY: 'auto' }}>{showMessage}</Modal.Body>
             </Modal>
           )}
-
-          <Modal show={showModal} onHide={handleCloseModal}  className="custom-modal bottom-left-modal">
+          <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
             <Modal.Header closeButton>
               <Modal.Title>Chat</Modal.Title>
             </Modal.Header>
@@ -393,7 +391,6 @@ const ViewApplications = () => {
                         <div className="d-flex justify-content-center align-items-center text-center font-weight-bold my-3">
                           {formatDate(chat.createdAt)}
                         </div>
-
                       )}
                       {chat.candidateMessage && (
                         <div className="message-right">
@@ -403,7 +400,6 @@ const ViewApplications = () => {
                           </div>
                         </div>
                       )}
-
                       {/* Render HR message if present */}
                       {chat.hrMessage && (
                         <div className="message-left">
@@ -420,7 +416,6 @@ const ViewApplications = () => {
                 )}
               </div>
               {/* Message input section */}
-
             </Modal.Body>
             <Modal.Footer>
               <Form.Group controlId="messageInput" className="mb-3">
@@ -431,7 +426,7 @@ const ViewApplications = () => {
                   placeholder="Enter your message"
                   value={inputValue}
                   onChange={handleInputChange}
-                  style={{ width: '300px',height:'20px' }} // Custom styles to increase size
+                  style={{ width: '350px' }} // Custom styles to increase size
                 />
               </Form.Group>
               <Button variant="primary" onClick={handleSend}>
@@ -441,110 +436,115 @@ const ViewApplications = () => {
           </Modal>
 
           <div>
-      {loading ? (
-        <div className="d-flex justify-content-center align-items-center">
-          <div className="spinner-bubble spinner-bubble-primary m-5" />
-          <span>Loading...</span>
-        </div>
-      ) : applications.length === 0 ? (
-        <section>
-          <h2>Sorry, you haven't received any applications yet.</h2>
-        </section>
-      ) : (
-        <div>
-          <Table hover className="text-center">
-            <thead className="table-light">
-              <tr>
-                <th scope="col">Job Title</th>
-                <th scope="col">Candidate Name</th>
-                <th scope="col">Candidate Email</th>
-                <th scope="col">Resume ID</th>
-                <th
-                  scope="col"
-                  onClick={() => handleSort('appliedOn')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
-                </th>
-                <th scope="col">View Details</th>
-                <th scope="col">Action</th>
-                <th scope="col">Chat</th>
-              </tr>
-            </thead>
-            <tbody>
-              {applications.map((application) => (
-                <tr key={application.applicationId}>
-                  <td>{application.jobRole}</td>
-                  <td>{candidateName[application.candidateId]}</td>
-                  <td>{candidateEmail[application.candidateId]}</td>
-                  <td>{renderResumeComponent(application.resumeId)}</td>
-                  <td>{application.appliedOn}</td>
-                  <td>
-                    <Link
-                      to={{
-                        pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
-                        state: { userEmail, applicationId: application.applicationId, userName },
-                      }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
-                          state: { userEmail, applicationId: application.applicationId, userName },
-                        });
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
-                      />
-                    </Link>
-                  </td>
-                  <td>
-                    <Slider
-                      initialStatus={application.applicationStatus}
-                      onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                    />
-                  </td>
-                  <td>
-                    <div style={{ position: 'relative', display: 'inline-block' }}>
-                      {unreadMessages[application.applicationId] > 0 && (
-                        <span
-                          style={{
-                            position: 'absolute',
-                            top: '-5px',
-                            right: '-15px',
-                            backgroundColor: 'red',
-                            color: 'white',
-                            borderRadius: '50%',
-                            width: '20px',
-                            height: '20px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '12px',
-                            fontWeight: 'bold',
-                            zIndex: 1, // Ensure notification badge is above SiImessage icon
-                          }}
-                        >
-                          {unreadMessages[application.applicationId]}
-                        </span>
-                      )}
-                      <SiImessage
-                        size={25}
-                        onClick={() => {
-                          handleChatClick(application.applicationId);
-                          setShowModal(true);
-                        }}
-                        style={{ color: 'green', cursor: 'pointer' }}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+            {loading ? (
+              <div className="d-flex justify-content-center align-items-center">
+                <div className="spinner-bubble spinner-bubble-primary m-5" />
+                <span>Loading...</span>
+              </div>
+            ) : applications.length === 0 ? (
+              <section>
+                <h2>Sorry, you haven't received any applications yet.</h2>
+              </section>
+            ) : (
+              <div className='table-details-list'>
+                <Table hover className='text-center'>
+                  <thead className="table-light">
+                    <tr>
+                      <th scope="col">Job Title</th>
+                      <th scope="col">Candidate Name</th>
+                      <th scope="col">Candidate Email</th>
+                      <th scope="col">Resume ID</th>
+                      <th scope="col" onClick={() => handleSort('appliedOn')}>
+                        Date {sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      {/* <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                          Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                        </th> */}
+                      <th scope="col">View Details</th>
+                      <th scope="col">Action</th>
+                      <th scope="col">Chat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {applications.map((application) => (
+                      <tr key={application.applicationId}>
+                        <td>{application.jobRole}</td>
+                        <td>{candidateName[application.candidateId]}</td>
+                        <td>{candidateEmail[application.candidateId]}</td>
+                        <td>{renderResumeComponent(application.resumeId)}</td>
+                        <td>{application.appliedOn}</td>
+                        {/* <td>{application.applicationStatus}</td> */}
+                        <td>
+                          <Link
+                            to={{
+                              pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
+                              state: { userEmail, applicationId: application.applicationId, userName },
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
+                                state: { userEmail, applicationId: application.applicationId, userName },
+                              });
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faEye}
+                              style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
+                            />
+                          </Link>
+                        </td>
+                        <td >
+                          <Slider
+                            initialStatus={application.applicationStatus}
+                            onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
+                          />
+                        </td>
+                        <td>
+                          <div style={{ position: 'relative', display: 'inline-block' }}>
+                            {unreadMessages[application.applicationId] > 0 && (
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: '-5px',
+                                  right: '-15px',
+                                  backgroundColor: 'red',
+                                  color: 'white',
+                                  borderRadius: '50%',
+                                  width: '20px',
+                                  height: '20px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontSize: '12px',
+                                  fontWeight: 'bold',
+                                  zIndex: 1, // Ensure notification badge is above SiImessage icon
+                                }}
+                              >
+                                {unreadMessages[application.applicationId]}
+                              </span>
+                            )}
+                            <SiImessage
+                              size={25}
+                              onClick={() => {
+                                handleChatClick(application.applicationId);
+                                setShowModal(true);
+                              }}
+                              style={{ color: 'green', cursor: 'pointer' }}
+                            />
+                          </div>
+                        </td>
 
-          {/* Pagination */}
-          <div className="pagination-container d-flex justify-content-end align-items-center mt-3">
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+
+              </div>
+            )}
+            {/* Pagination */}
+
+          </div>
+          <div className="pagination-container d-flex justify-content-end align-items-center">
             <div className="page-size-select me-3">
               <label htmlFor="pageSize">Page Size:</label>
               <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
@@ -568,10 +568,9 @@ const ViewApplications = () => {
             />
           </div>
         </div>
-      )}
-    </div>
-        </div>
-      </div></div>
+      </div>
+    </div >
+
   );
 
 };

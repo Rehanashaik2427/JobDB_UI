@@ -299,18 +299,17 @@ const MyApplication = () => {
       console.error("Error fetching chats:", error);
     }
   };
-  const handleDelete = async(applicationId) => {
-   
-   try{
-    const confirmDelete =  await axios.delete(`${BASE_API_URL}/deleteApplicationByApplicationId?applicationId=${applicationId}`);
-if(confirmDelete.data)
-{
-  fetchApplications();
-}
-   }catch{
-    console.log("Unable to delete appliction")
-   } // Show a confirmation dialog before deletion
-   
+  const handleDelete = async (applicationId) => {
+
+    try {
+      const confirmDelete = await axios.delete(`${BASE_API_URL}/deleteApplicationByApplicationId?applicationId=${applicationId}`);
+      if (confirmDelete.data) {
+        fetchApplications();
+      }
+    } catch {
+      console.log("Unable to delete appliction")
+    } // Show a confirmation dialog before deletion
+
   };
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -374,7 +373,7 @@ if(confirmDelete.data)
     }
   }, [chatsByApplication]);
 
-  
+
   return (
     <div className='dashboard-container'>
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
@@ -487,107 +486,108 @@ if(confirmDelete.data)
           </Modal.Footer>
         </Modal>
 
-        <div style={{ marginLeft: '5px', marginRight: '50px' }}>
+        <div>
           {applications.length > 0 ? (
             <>
-              <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
-                <thead className="table-light">
-                  <tr>
-                    <th scope="col" onClick={() => handleSort('companyName')}>
-                      Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th scope="col" onClick={() => handleSort('jobRole')}>
-                      Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th scope="col" onClick={() => handleSort('appliedOn')}>
-                      Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th scope="col">Resume Profile</th>
-                    <th scope="col">Job Status</th>
-                    <th scope="col" onClick={() => handleSort('applicationStatus')}>
-                      Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
-                    </th>
-                    <th scope="col">Chat</th>
-                    <th scope="col">Delete</th>
-                  </tr>
-                </thead>
+              <div className='table-details-list'>
+                <Table hover className='text-center'>
+                  <thead className="table-light">
+                    <tr>
+                      <th scope="col" onClick={() => handleSort('companyName')}>
+                        Company Name{sortedColumn === 'companyName' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      <th scope="col" onClick={() => handleSort('jobRole')}>
+                        Job Title{sortedColumn === 'jobRole' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      <th scope="col" onClick={() => handleSort('appliedOn')}>
+                        Applied On{sortedColumn === 'appliedOn' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      <th scope="col">Resume Profile</th>
+                      <th scope="col">Job Status</th>
+                      <th scope="col" onClick={() => handleSort('applicationStatus')}>
+                        Action {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
+                      </th>
+                      <th scope="col">Chat</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {applications.map((application, index) => (
-                    <tr key={index}>
-                      <td>{application.companyName}</td>
-                      <td>{application.jobRole}</td>
-                      <td>{application.appliedOn}</td>
-                      <td>{resumeNames[application.resumeId]}</td>
-                      <td>{renderJobStatus(application.applicationId)}</td>
-                      <td>{application.applicationStatus}</td>
+                  <tbody>
+                    {applications.map((application, index) => (
+                      <tr key={index}>
+                        <td>{application.companyName}</td>
+                        <td>{application.jobRole}</td>
+                        <td>{application.appliedOn}</td>
+                        <td>{resumeNames[application.resumeId]}</td>
+                        <td>{renderJobStatus(application.applicationId)}</td>
+                        <td>{application.applicationStatus}</td>
 
-                      <td>
-                        {chats[index] && chats[index].length > 0 ? (
-                          <div style={{ position: 'relative', display: 'inline-block' }}>
-                            {unreadMessages[application.applicationId] > 0 && (
-                              <span
-                                style={{
-                                  position: 'absolute',
-                                  top: '-5px',
-                                  right: '-15px',
-                                  backgroundColor: 'red',
-                                  color: 'white',
-                                  borderRadius: '50%',
-                                  width: '20px',
-                                  height: '20px',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  fontSize: '12px',
-                                  fontWeight: 'bold',
-                                  zIndex: 1, // Ensure notification badge is above SiImessage icon
+                        <td>
+                          {chats[index] && chats[index].length > 0 ? (
+                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                              {unreadMessages[application.applicationId] > 0 && (
+                                <span
+                                  style={{
+                                    position: 'absolute',
+                                    top: '-5px',
+                                    right: '-15px',
+                                    backgroundColor: 'red',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    width: '20px',
+                                    height: '20px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold',
+                                    zIndex: 1, // Ensure notification badge is above SiImessage icon
+                                  }}
+                                >
+                                  {unreadMessages[application.applicationId]}
+                                </span>
+                              )}
+                              <SiImessage
+                                size={25}
+                                onClick={() => {
+                                  fetchChatByApplication(application.applicationId);
+
                                 }}
-                              >
-                                {unreadMessages[application.applicationId]}
-                              </span>
-                            )}
+                                style={{ color: 'green', cursor: 'pointer' }}
+                              />
+                            </div>
+
+                          ) : (
                             <SiImessage
                               size={25}
-                              onClick={() => {
-                                fetchChatByApplication(application.applicationId);
-
-                              }}
-                              style={{ color: 'green', cursor: 'pointer' }}
+                              style={{ color: 'grey', cursor: 'not-allowed' }}
                             />
-                          </div>
-
-                        ) : (
-                          <SiImessage
-                            size={25}
-                            style={{ color: 'grey', cursor: 'not-allowed' }}
-                          />
-                        )}
-                      </td>
-                      <td>
-                      <span className='delete cursor-pointer text-danger me-2' onClick={() => {
-                              Swal.fire({
-                                title: "Are you sure?",
-                                text: "You won't be able to revert this!",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#3085d6",
-                                cancelButtonColor: "#d33",
-                                confirmButtonText: "Yes, delete it!"
-                              }).then((result) => {
-                                if (result.isConfirmed) {
-                                  handleDelete(application.applicationId);
-                                }
-                              });
-                            }}>
-                              <MdDelete className="text-danger" size={18} />
-                            </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-
+                          )}
+                        </td>
+                        <td>
+                          <span className='delete cursor-pointer text-danger me-2' onClick={() => {
+                            Swal.fire({
+                              title: "Are you sure?",
+                              text: "You won't be able to revert this!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#3085d6",
+                              cancelButtonColor: "#d33",
+                              confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                handleDelete(application.applicationId);
+                              }
+                            });
+                          }}>
+                            <MdDelete className="text-danger" size={18} />
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
               <div className="pagination-container d-flex justify-content-end align-items-center">
                 <div className="page-size-select me-3">
                   <label htmlFor="pageSize">Page Size:</label>

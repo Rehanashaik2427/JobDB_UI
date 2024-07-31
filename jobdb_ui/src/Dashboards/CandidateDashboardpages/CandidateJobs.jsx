@@ -337,12 +337,10 @@ const CandidateJobs = () => {
             </select>
           </div>
           {jobs.length > 0 && (
-            <div style={{ marginLeft: '5px', marginRight: '50px' }}> 
-            
-              <div className="d-flex align-items-center justify-content-between mb-3">
-                <h2>Jobs For {userName}</h2>
-              </div>
-              <Table hover className='text-center' style={{ marginLeft: '5px', marginRight: '12px' }}>
+            <div>
+              <h2>Jobs For {userName}</h2>
+              <div className='table-details-list'>
+              <Table hover className='text-center'>                
                 <thead className="table-light">
                   <tr>
                     <th scope='col' onClick={() => handleSort('jobTitle')}>
@@ -380,6 +378,7 @@ const CandidateJobs = () => {
                   ))}
                 </tbody>
               </Table>
+              </div>
               {selectedJobSummary && (
             <div className="modal-summary">
             <div className="modal-content-summary">
