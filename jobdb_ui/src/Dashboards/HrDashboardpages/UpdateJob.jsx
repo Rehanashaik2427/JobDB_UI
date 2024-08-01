@@ -31,12 +31,11 @@ const UpdateJob = () => {
   
 
   const handleBack = () => {
-    
     const state1 = location.state || {};
     console.log(state1)
-
     navigate('/hr-dashboard/my-jobs', { state: {userEmail,userName,jobId,currentPage} })
     console.log("sending current page", currentPage)
+    
   };
   useEffect(() => {
     if (jobId) {

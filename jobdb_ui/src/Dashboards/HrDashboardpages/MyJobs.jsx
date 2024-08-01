@@ -19,7 +19,7 @@ const MyJobs = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [pageSize, setPageSize] = useState(1); // Default to 5 items per page
+  const [pageSize, setPageSize] = useState(5); // Default to 5 items per page
   const [totalPages, setTotalPages] = useState(0);
 
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
