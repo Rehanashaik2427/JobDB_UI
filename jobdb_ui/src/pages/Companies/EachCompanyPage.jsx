@@ -28,10 +28,8 @@ const EachCompanyPage = () => {
   useEffect(() => {
     if (companyId) {
       fetchCompany();
-      fetchCountOfApplicationByCompany();
-      fetchCountOfHRByCompany();
-      fetchCountOfJobsByCompany();
-      fetchCountOfTotalJobsByCompany()
+      fetchData();
+     
     }
   }, [companyId]);
 
@@ -42,8 +40,7 @@ const EachCompanyPage = () => {
     
       // Now use companyData instead of company directly
       console.log(companyData.companyName);  // This should log the correct companyName
-      const companyName = companyData.companyName;
-      const companyWebsite = companyData.companyWebiste;  // Added for company website
+     
       setCompany(companyData);  // Update state
 
       console.log(companyData.companyName);  // This should log the correct companyName
@@ -59,43 +56,26 @@ const EachCompanyPage = () => {
     }
   };
 
-  const fetchCountOfApplicationByCompany = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_API_URL}/countOfApplicationsByCompany?companyId=${companyId}`);
-      setCountOfApplications(response.data);
-    } catch (error) {
-      console.error('Error fetching count of applications:', error);
-    }
-  };
+      const fetchCountOfApplicationByCompany = await axios.get(`${BASE_API_URL}/countOfApplicationsByCompany?companyId=${companyId}`);
+      setCountOfApplications(fetchCountOfApplicationByCompany.data);
 
-  const fetchCountOfHRByCompany = async () => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/countOfHRByCompany?companyId=${companyId}`);
-      setCountOfHR(response.data);
-    } catch (error) {
-      console.error('Error fetching count of HRs:', error);
-    }
-  };
+      const fetchCountOfHRByCompany = await axios.get(`${BASE_API_URL}/countOfHRByCompany?companyId=${companyId}`);
+      setCountOfHR(fetchCountOfHRByCompany.data);
 
-  const fetchCountOfJobsByCompany = async () => {
-    try {
-      const response = await axios.get(`${BASE_API_URL}/countOfJobsByCompany?companyId=${companyId}`);
-      setCountOfJobs(response.data);
-    } catch (error) {
-      console.error('Error fetching count of jobs:', error);
-    }
-  };
+      const countOfJobsByCompany = await axios.get(`${BASE_API_URL}/countOfJobsByCompany?companyId=${companyId}`);
+      setCountOfJobs(countOfJobsByCompany.data);
 
-  const fetchCountOfTotalJobsByCompany = async () => {
-    try {
-      const response = await axios.get(
+      const fetchCountOfTotalJobsByCompany = await axios.get(
         `${BASE_API_URL}/countOfTotalJobsByCompany?companyId=${companyId}`
       );
-      setCountOfTotalJobs(response.data);
+      setCountOfTotalJobs(fetchCountOfTotalJobsByCompany.data);
     } catch (error) {
-      console.error('Error fetching count of jobs:', error);
+      console.error('Error fetching data:', error);
     }
   };
+
   const fetchCompanyLogo = async (companyName) => {
     try {
       const response = await axios.get(`${BASE_API_URL}/logo`, { params: { companyName }, responseType: 'arraybuffer' });
@@ -121,10 +101,6 @@ const EachCompanyPage = () => {
     }
   };
 
-
-  const handleBack = () => {
-    navigate("/jobdbcompanies"); // Navigate back to previous page
-  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
