@@ -218,6 +218,10 @@ const UserRegistrationForm = () => {
 
     // Function to send OTP
     const sendOTP = async (email) => {
+        if (!email || email === 'undefined' || email === '') {
+            alert('please enter email first');
+            setDisableFormFields(false);
+        }else{
         try {
             const response = await axios.get(`http://localhost:8082/api/jobbox/validateUserEmail?userEmail=${email}`);
             setOtpValue(response.data);
@@ -226,6 +230,7 @@ const UserRegistrationForm = () => {
             console.error('Error sending OTP:', error);
             setErrorMessage('Error sending OTP. Please try again later.');
         }
+    }
     };
 
     // Function to handle OTP verification
