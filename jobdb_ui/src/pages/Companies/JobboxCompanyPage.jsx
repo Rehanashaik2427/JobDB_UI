@@ -11,23 +11,18 @@ const JobboxCompanyPage = () => {
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
- // Save the current page to local storage whenever it changes
- useEffect(() => {
-  localStorage.setItem('currentPage', page);
-}, [page]);
 
-// Retrieve the page number from local storage on component mount
-useEffect(() => {
-  const storedPage = parseInt(localStorage.getItem('currentPage')) || 0;
-  setPage(storedPage);
-}, []);
+  
 
   const handlePageClick = (data) => {
-    setPage(data.selected);
+    const selectedPage = data.selected;
+    setPage(selectedPage);
+    localStorage.setItem('currentPage', selectedPage); // Store the page number in localStorage
   };
+  
 
 
   const fetchCompany = async () => {
@@ -66,6 +61,10 @@ useEffect(() => {
     } else {
       fetchCompany();
     }
+    const storedPage = localStorage.getItem('currentPage');
+    if (storedPage !== null) {
+      setPage(Number(storedPage));
+    }
   }, [search, page, pageSize]);
 
   const handlePageSizeChange = (e) => {
@@ -79,63 +78,65 @@ useEffect(() => {
     navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })
     // alert('Button clicked!');
   };
- 
+
   return (
     <div className="top-right-content">
-        <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
-          <div className="search-bar" >
-            <input style={{ borderRadius: '6px', height: '35px' }}
-              type="text"
-              name="search"
-              placeholder="Search"
-              value={search}
-              onChange={handleSearchChange}
-            />
+      <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+        <div className="search-bar" >
+          <input style={{ borderRadius: '6px', height: '35px' }}
+            type="text"
+            name="search"
+            placeholder="Search"
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+
+      <div className="companyJob mt-4" >
+        <h1>Companies that we have</h1>
+        <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content', minWidth: '800px', marginLeft: '45px' }}>
+          {companies.length > 0 ? (
+            companies.map((company) => (
+              <Card className="company-card-job" key={company.companyId} style={{ minWidth: '350px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}>                  <Card.Body>
+                <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
+                <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
+                <Button onClick={() => handleClick(company.companyId)}>
+                  View
+                </Button>
+              </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <p>Company not found. Please <Link to='/findCompany/company-form'>fill company details</Link>.</p>
+          )}
+        </div>
+        {/* Pagination */}
+        <div className="pagination-container d-flex justify-content-end align-items-center">
+          <div className="page-size-select me-3">
+            <label htmlFor="pageSize">Page Size:</label>
+            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
           </div>
+          <ReactPaginate
+            previousLabel={<i className="i-Previous" />}
+            nextLabel={<i className="i-Next1" />}
+            breakLabel="..."
+            breakClassName="break-me"
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={handlePageClick}
+            activeClassName="active"
+            containerClassName="pagination"
+            subContainerClassName="pages pagination"
+            forcePage={page}
+          />
         </div>
 
-        <div className="companyJob mt-4" >
-          <h1>Companies that we have</h1>
-          <div className="cards d-flex flex-wrap justify-content-start" style={{ minHeight: 'fit-content', minWidth: '800px',marginLeft:'45px' }}>
-            {companies.length > 0 ? (
-              companies.map((company) => (
-                <Card className="company-card-job" key={company.companyId} style={{ minWidth: '350px', maxWidth: '400px', flex: '1 0 300px', margin: '12px' }}>                  <Card.Body>
-                  <Card.Title>Company Name: <b>{company.companyName}</b></Card.Title>
-                  <Card.Text>Industry: <b>{company.industry}</b></Card.Text>
-                  <Button onClick={() => handleClick(company.companyId)}>
-                    View
-                  </Button>
-                </Card.Body>
-                </Card>
-              ))
-            ) : (
-              <p>Company not found. Please <Link to='/findCompany/company-form'>fill company details</Link>.</p>
-            )}
-          </div>
-          {/* Pagination */}
-          <div className="pagination-container d-flex justify-content-end align-items-center">
-            <div className="page-size-select me-3">
-              <label htmlFor="pageSize">Page Size:</label>
-              <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                <option value="6">6</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-            <ReactPaginate
-              previousLabel={<i className="i-Previous" />}
-              nextLabel={<i className="i-Next1" />}
-              breakLabel="..."
-              breakClassName="break-me"
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              activeClassName="active"
-              containerClassName="pagination"
-              subContainerClassName="pages pagination"
-            />
-          </div>
       </div>
     </div>
   );

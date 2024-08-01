@@ -46,9 +46,9 @@ const UserRegistrationForm = () => {
     const location = useLocation();
     const userRole = location.state?.userType; // Get the userType from navigation state
     const companyName = location.state?.companyName;
-    const companyWebiste = location.state?.companyWebsite;
+    const companyWebsite = location.state?.companyWebsite;
 
-    console.log(companyWebiste)
+    console.log(companyWebsite)
 
     console.log(companyName)
     useEffect(() => {
@@ -145,7 +145,7 @@ const UserRegistrationForm = () => {
         }
         if (userRole === 'HR') {
             values.companyName = companyName;
-            values.companyWebsite = companyWebiste;
+            values.companyWebsite = companyWebsite;
         }
         if (userType === 'Candidate') {
             values.companyName = null;
@@ -197,6 +197,7 @@ const UserRegistrationForm = () => {
         }
     };
 
+    console.log("website",companyWebsite)
     // Function to validate password criteria
     const validatePassword = (values) => {
         const { password, confirmPassword } = values;
@@ -265,7 +266,7 @@ const UserRegistrationForm = () => {
                 setErrorMessage(true);
                 return;
             }
-        } catch (error) {
+        } catch (error) { 
             console.error('Error updating user data:', error);
             alert('Data not updated');
         }
@@ -449,7 +450,7 @@ const UserRegistrationForm = () => {
                                                                             const newTld = event.target.value;
                                                                             setTld(newTld);
                                                                             handleChange({
-                                                                                target: { name: 'companyWebsite', value: `${protocol}://${values.companyWebsite}${newTld}` }
+                                                                                target: { name: 'companyWebsite', value: `${protocol}://www.${values.companyWebsite}${newTld}` }
                                                                             });
                                                                         }}
                                                                         onBlur={handleBlur}
