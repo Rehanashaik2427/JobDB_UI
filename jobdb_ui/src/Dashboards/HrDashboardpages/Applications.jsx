@@ -17,8 +17,7 @@ const Applications = () => {
 
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
-  const currentPage = location.state?.currentPage || 0;
-  const [page, setPage] = useState(currentPage); 
+  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
@@ -39,11 +38,12 @@ const Applications = () => {
     }
     else{
       fetchJobs()
-    }
-    const storedPage = localStorage.getItem('currentPage');
-    if (storedPage !== null) {
-      setPage(Number(storedPage));
-    }
+      }
+      const storedPage = localStorage.getItem('currentApplicationPage');
+      if (storedPage !== null) {
+        setPage(Number(storedPage));
+      }else
+      setPage(0)
   }, [userEmail, search, page, pageSize, sortOrder, sortedColumn]);
 
 
@@ -104,7 +104,7 @@ const Applications = () => {
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setPage(selectedPage);
-    localStorage.setItem('currentPage', selectedPage);
+    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
   };
 
   const convertToUpperCase = (str) => {

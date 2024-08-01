@@ -25,8 +25,8 @@ const MyJobs = () => {
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   
-  const currentPage = location.state?.currentPage || 0;
-  const [page, setPage] = useState(currentPage); 
+  // const currentPage = location.state?.currentPage || 0;
+   const [page, setPage] = useState(0); 
  
   // const state1 = location.state || {};
   // console.log(state1)
@@ -54,11 +54,11 @@ const MyJobs = () => {
     }
   };
   
-  useEffect(() => {
-    if (location.state?.currentPage === undefined) {
-      setPage(0);
-    }
-  }, [location.state?.currentPage]);
+  // useEffect(() => {
+  //   if (location.state?.currentPage === undefined) {
+  //     setPage(0);
+  //   }
+  // }, [location.state?.currentPage]);
 
   console.log("page", page)
   const handleSort = (column) => {
@@ -100,7 +100,7 @@ const MyJobs = () => {
     } else {
       fetchJobs();
     }
-    const storedPage = localStorage.getItem('currentPage');
+    const storedPage = localStorage.getItem('currentJobPage');
     if (storedPage !== null) {
       setPage(Number(storedPage));
     }
@@ -145,7 +145,7 @@ const MyJobs = () => {
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setPage(selectedPage);
-    localStorage.setItem('currentPage', selectedPage); // Store the page number in localStorage
+    localStorage.setItem('currentJobPage', selectedPage); // Store the page number in localStorage
   };
   return (
     <div className='dashboard-container'>

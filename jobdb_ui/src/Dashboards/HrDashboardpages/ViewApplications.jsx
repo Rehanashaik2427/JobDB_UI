@@ -107,6 +107,10 @@ const ViewApplications = () => {
 
   useEffect(() => {
     fetchApplications();
+    const storedPage = localStorage.getItem('currentViewPage');
+    if (storedPage !== null) {
+      setPage(Number(storedPage));
+    }
   }, [jobId, page, pageSize, sortedColumn, sortOrder]);
 
   const handleSort = (column) => {
@@ -253,7 +257,9 @@ const ViewApplications = () => {
   }, [applications]);
 
   const handlePageClick = (data) => {
-    setPage(data.selected);
+    const selectedPage = data.selected;
+    setPage(selectedPage);
+    localStorage.setItem('currentViewPage', selectedPage); // Store the page number in localStorage
   };
 
   const navigate = useNavigate();
@@ -575,6 +581,7 @@ const ViewApplications = () => {
               activeClassName="active"
               containerClassName="pagination"
               subContainerClassName="pages pagination"
+              forcePage={page}
             />
           </div>
         </div>

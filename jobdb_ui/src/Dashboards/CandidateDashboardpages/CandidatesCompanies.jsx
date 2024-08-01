@@ -17,7 +17,7 @@ const CandidatesCompanies = () => {
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
 
   const handleSearchChange = (event) => {
@@ -54,6 +54,10 @@ const CandidatesCompanies = () => {
     } else {
       fetchCompany();
     }
+    const storedPage = localStorage.getItem('currentCandidateCompanyPage');
+    if (storedPage !== null) {
+      setPage(Number(storedPage));
+    }else setPage(0);
   }, [search, page, pageSize]);
 
   const toggleSettings = () => {
@@ -65,7 +69,9 @@ const CandidatesCompanies = () => {
   };
 
   const handlePageClick = (data) => {
-    setPage(data.selected);
+    const selectedPage = data.selected;
+    setPage(selectedPage);
+    localStorage.setItem('currentCandidateCompanyPage', selectedPage); // Store the page number in localStorage
   };
   const user = {
     userName: userName,
@@ -191,6 +197,7 @@ const CandidatesCompanies = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
+            forcePage={page}
           />
         </div>
       </div>
