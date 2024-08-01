@@ -12,10 +12,12 @@ import Slider from "./Slider";
 const ViewApplications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  const userEmail = location.state?.userEmail;
-  const userName = location.state?.userName;
-  const jobId = location.state?.jobId;
+  // const userEmail = location.state?.userEmail;
+  // const userName = location.state?.userName;
+  // const jobId = location.state?.jobId;
   // console.log(jobId);
+  const { userEmail, userName, jobId, currentPage } = location.state || {};
+
   const [applications, setApplications] = useState([]);
   const [resumeTypes, setResumeTypes] = useState({});
   const [filterStatus, setFilterStatus] = useState('all');
@@ -25,7 +27,7 @@ const ViewApplications = () => {
   const [toDate, setToDate] = useState('');
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
@@ -347,6 +349,14 @@ const ViewApplications = () => {
       modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
     }
   }, [chats]);
+
+  const handleBack = () => {
+    const state1 = location.state || {};
+    console.log(state1)
+    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId,currentPage} })
+    console.log("sending current page", currentPage)
+    
+  };
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
@@ -542,7 +552,7 @@ const ViewApplications = () => {
               </div>
             )}
             {/* Pagination */}
-
+            <Button variant='primary' onClick={handleBack}>Back</Button>
           </div>
           <div className="pagination-container d-flex justify-content-end align-items-center">
             <div className="page-size-select me-3">

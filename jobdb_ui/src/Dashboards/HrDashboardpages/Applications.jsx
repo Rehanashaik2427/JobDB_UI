@@ -17,7 +17,8 @@ const Applications = () => {
 
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
+  const currentPage = location.state?.currentPage || 0;
+  const [page, setPage] = useState(currentPage); 
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
@@ -32,11 +33,17 @@ const Applications = () => {
 
 
   useEffect(() => {
+    
     if (search) {
       fetchJobBysearch();
     }
-    else
+    else{
       fetchJobs()
+    }
+    const storedPage = localStorage.getItem('currentPage');
+    if (storedPage !== null) {
+      setPage(Number(storedPage));
+    }
   }, [userEmail, search, page, pageSize, sortOrder, sortedColumn]);
 
 
@@ -59,6 +66,8 @@ const Applications = () => {
       console.error('Error fetching HR data:', error);
     }
   }
+
+  console.log("page", page)
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
@@ -93,7 +102,9 @@ const Applications = () => {
 
 
   const handlePageClick = (data) => {
-    setPage(data.selected);
+    const selectedPage = data.selected;
+    setPage(selectedPage);
+    localStorage.setItem('currentPage', selectedPage);
   };
 
   const convertToUpperCase = (str) => {
@@ -107,8 +118,16 @@ const Applications = () => {
       return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
     }
   };
+const state1 = location.state || {};
+  console.log(state1)
+  console.log("current page from update job",currentPage)
 
   const initials = getInitials(userName);
+  useEffect(() => {
+    if (location.state?.currentPage === undefined) {
+      setPage(0);
+    }
+  }, [location.state?.currentPage]);
   return (
 
     <div className='dashboard-container'>
@@ -188,7 +207,7 @@ const Applications = () => {
                             to="/hr-dashboard/hr-applications/view-applications"
                             onClick={(e) => {
                               e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } });
+                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId,currentPage: page } });
                             }}
                             className="nav-link"
                           >
@@ -231,6 +250,7 @@ const Applications = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
+            forcePage={page}
           />
         </div>
 
