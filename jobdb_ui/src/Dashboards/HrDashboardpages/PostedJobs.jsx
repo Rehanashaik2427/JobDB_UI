@@ -69,6 +69,7 @@ const PostedJobs = () => {
     } else {
       fetchJobs();
     }
+   
   }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
 
@@ -99,7 +100,9 @@ const PostedJobs = () => {
   };
 
   const handlePageClick = (data) => {
-    setPage(data.selected);
+    const selectedPage = data.selected;
+    setPage(selectedPage);
+   
   };
 
 

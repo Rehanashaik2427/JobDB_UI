@@ -17,11 +17,7 @@ const JobboxCompanyPage = () => {
 
   
 
-  const handlePageClick = (data) => {
-    const selectedPage = data.selected;
-    setPage(selectedPage);
-    localStorage.setItem('currentPage', selectedPage); // Store the page number in localStorage
-  };
+ 
   
 
 
@@ -61,10 +57,10 @@ const JobboxCompanyPage = () => {
     } else {
       fetchCompany();
     }
-    const storedPage = localStorage.getItem('currentPage');
+    const storedPage = localStorage.getItem('currentCompanyPage');
     if (storedPage !== null) {
       setPage(Number(storedPage));
-    }
+    }else setPage(0);
   }, [search, page, pageSize]);
 
   const handlePageSizeChange = (e) => {
@@ -72,7 +68,11 @@ const JobboxCompanyPage = () => {
     setPageSize(size);
     setPage(0); // Reset page when page size change
   };
-
+  const handlePageClick = (data) => {
+    const selectedPage = data.selected;
+    setPage(selectedPage);
+    localStorage.setItem('currentCompanyPage', selectedPage); // Store the page number in localStorage
+  };
 
   const handleClick = (companyId) => {
     navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })

@@ -18,7 +18,7 @@ const Applications = () => {
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
@@ -35,8 +35,14 @@ const Applications = () => {
     if (search) {
       fetchJobBysearch();
     }
-    else
+    else{
       fetchJobs()
+      }
+      const storedPage = localStorage.getItem('currentApplicationPage');
+      if (storedPage !== null) {
+        setPage(Number(storedPage));
+      }else
+      setPage(0)
   }, [userEmail, search, page, pageSize, sortOrder, sortedColumn]);
 
 
@@ -93,7 +99,9 @@ const Applications = () => {
 
 
   const handlePageClick = (data) => {
-    setPage(data.selected);
+    const selectedPage = data.selected;
+    setPage(selectedPage);
+    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
   };
 
   const convertToUpperCase = (str) => {
@@ -231,6 +239,7 @@ const Applications = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
+            forcePage={page}
           />
         </div>
 

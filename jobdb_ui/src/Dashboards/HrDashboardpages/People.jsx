@@ -28,8 +28,10 @@ const People = () => {
         if (searchQuery) {
             handleSearch();
         }
-        else
+        else{
             fetchHRData();
+        }
+          
     }, [userEmail, page, pageSize, sortedColumn, sortOrder]); // Empty dependency array ensures the effect runs only once when the component mounts
 
 
@@ -90,8 +92,10 @@ const People = () => {
     };
 
     const handlePageClick = (data) => {
-        setPage(data.selected);
-    };
+        const selectedPage = data.selected;
+        setPage(selectedPage);
+       
+      };
     const convertToUpperCase = (str) => {
         return String(str).toUpperCase();
     };
