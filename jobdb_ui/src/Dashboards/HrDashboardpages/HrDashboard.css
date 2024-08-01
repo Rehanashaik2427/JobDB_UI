@@ -688,7 +688,7 @@ section {
 .custom-modal .modal-dialog {
   position: fixed;
   right: 3px;   /* 20px from the left edge of the viewport */
-  top: 80px;    /* 20px from the top edge of the viewport */
+  top: 180px;    /* 20px from the top edge of the viewport */
 }
 
 
@@ -699,3 +699,4 @@ section {
 .hr{
   overflow-y: scroll;
 }
+

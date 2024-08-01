@@ -951,8 +951,7 @@ button.com:hover {
 .custom-modal .modal-content {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  height: 600px;
+  height: 400px;
 }
 .custom-modal .modal-body {
   height: 90vh; /* Increase height to 90% of viewport height */

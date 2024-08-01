@@ -524,7 +524,7 @@ const MyApplication = () => {
 
                         <td>
                           {chats[index] && chats[index].length > 0 ? (
-                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                            <div style={{ position:'relative', display: 'inline-block' }}>
                               {unreadMessages[application.applicationId] > 0 && (
                                 <span
                                   style={{

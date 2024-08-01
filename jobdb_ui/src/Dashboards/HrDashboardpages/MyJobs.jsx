@@ -19,28 +19,21 @@ const MyJobs = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5); // Default to 5 items per page
   const [totalPages, setTotalPages] = useState(0);
 
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-
-
-
-
+  const currentPage = location.state?.currentPage || 0;
+  const [page, setPage] = useState(currentPage); 
+ 
+  // const state1 = location.state || {};
+  // console.log(state1)
+  // console.log("current page from update job",currentPage)
+  
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
-  useEffect(() => {
-    const state = location.state;
-    if (state && state.currentPage != undefined) {
-      setPage(state.currentPage);
-    }
-    console.log(state.currentPage)
-  }, [location.state]);
- 
-
   const fetchJobs = async () => {
     setLoading(true);
     try {
@@ -59,8 +52,14 @@ const MyJobs = () => {
       console.error('Error fetching HR data:', error);
     }
   };
+  
+  useEffect(() => {
+    if (location.state?.currentPage === undefined) {
+      setPage(0);
+    }
+  }, [location.state?.currentPage]);
 
-  console.log("page",page)
+  console.log("page", page)
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
