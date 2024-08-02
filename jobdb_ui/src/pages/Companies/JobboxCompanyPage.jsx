@@ -15,14 +15,42 @@ const JobboxCompanyPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
-  
 
- 
-  
+  const handlePageClick = (data) => {
+    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
+    setPage(selectedPage);
+    localStorage.setItem('currentCompanyPage', selectedPage); // Store the page number in localStorage
+  };
+
+  useEffect(() => {
+
+
+    if (search) {
+      fetchCompanyBySearch();
+    } else {
+      fetchCompany();
+    }
+
+  }, [search, page, pageSize]);
+
+
+  useEffect(() => {
+    const storedPage = localStorage.getItem('currentCompanyPage');
+    if (storedPage !== null) {
+      const parsedPage = Number(storedPage);
+      if (parsedPage < totalPages) {
+        setPage(parsedPage);
+        console.log(page);
+      }
+    }
+  }, [totalPages]); // Make sure to include totalPages dependency to sync the state
 
 
   const fetchCompany = async () => {
+
+
     try {
+      console.log(page)
       const response = await axios.get(`${BASE_API_URL}/companiesList?page=${page}&size=${pageSize}`);
       setCompanies(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -42,6 +70,7 @@ const JobboxCompanyPage = () => {
   };
 
   const fetchCompanyBySearch = async () => {
+    debugger
     try {
       const response = await axios.get(`${BASE_API_URL}/searchCompany`, { params: { search: search, page: page, size: pageSize } });
       setCompanies(response.data.content);
@@ -51,28 +80,14 @@ const JobboxCompanyPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (search) {
-      fetchCompanyBySearch();
-    } else {
-      fetchCompany();
-    }
-    const storedPage = localStorage.getItem('currentCompanyPage');
-    if (storedPage !== null) {
-      setPage(Number(storedPage));
-    }else setPage(0);
-  }, [search, page, pageSize]);
+
 
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
     setPage(0); // Reset page when page size change
   };
-  const handlePageClick = (data) => {
-    const selectedPage = data.selected;
-    setPage(selectedPage);
-    localStorage.setItem('currentCompanyPage', selectedPage); // Store the page number in localStorage
-  };
+
 
   const handleClick = (companyId) => {
     navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId: companyId } })
@@ -133,8 +148,9 @@ const JobboxCompanyPage = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
-            forcePage={page}
+            forcePage={page < totalPages ? page : totalPages - 1} // Adjust forcePage to valid range
           />
+
         </div>
 
       </div>

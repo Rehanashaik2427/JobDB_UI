@@ -23,7 +23,32 @@ const CandidatesCompanies = () => {
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
+  const handlePageClick = (data) => {
+    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
+    setPage(selectedPage);
+    localStorage.setItem('currentCandidateCompanyPage', selectedPage); // Store the page number in localStorage
+  };
 
+  useEffect(() => {
+    if (search) {
+      fetchCompanyBySearch();
+    } else {
+      fetchCompany();
+    }
+   
+  }, [search, page, pageSize]);
+
+
+  useEffect(() => {
+    const storedPage = localStorage.getItem('currentCandidateCompanyPage');
+    if (storedPage !== null) {
+      const parsedPage = Number(storedPage);
+      if (parsedPage < totalPages) {
+        setPage(parsedPage);
+        console.log(page);
+      }
+    }
+  }, [totalPages]); // Make sure to include totalPages dependency to sync the state
 
   const fetchCompany = async () => {
     const response = await axios.get(`${BASE_API_URL}/companiesList?page=${page}&size=${pageSize}`);
@@ -48,18 +73,7 @@ const CandidatesCompanies = () => {
     }
   };
 
-  useEffect(() => {
-    if (search) {
-      fetchCompanyBySearch();
-    } else {
-      fetchCompany();
-    }
-    const storedPage = localStorage.getItem('currentCandidateCompanyPage');
-    if (storedPage !== null) {
-      setPage(Number(storedPage));
-    }else setPage(0);
-  }, [search, page, pageSize]);
-
+ 
   const toggleSettings = () => {
     navigate('/');
   };
@@ -67,12 +81,8 @@ const CandidatesCompanies = () => {
   const handleClick = (companyId) => {
     navigate("/candidate-dashboard/companyPage", { state: { companyId: companyId, userName: userName, userId: userId } });
   };
-
-  const handlePageClick = (data) => {
-    const selectedPage = data.selected;
-    setPage(selectedPage);
-    localStorage.setItem('currentCandidateCompanyPage', selectedPage); // Store the page number in localStorage
-  };
+ 
+ 
   const user = {
     userName: userName,
     userId: userId,
@@ -197,7 +207,7 @@ const CandidatesCompanies = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
-            forcePage={page}
+            forcePage={page < totalPages ? page : totalPages - 1} // Adjust forcePage to valid range
           />
         </div>
       </div>

@@ -29,6 +29,11 @@ const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0
     setPageSize(size);
     setPage(0); // Reset page when page size change
   };
+  const handlePageClick = (data) => {
+    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
+    setPage(selectedPage);
+    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
+  };
 
   useEffect(() => {
     if (search) {
@@ -37,12 +42,20 @@ const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0
     else{
       fetchJobs()
       }
-      // const storedPage = localStorage.getItem('currentApplicationPage');
-      // if (storedPage !== null) {
-      //   setPage(Number(storedPage));
-      // }else
-      // setPage(0)
+      
   }, [userEmail, search, page, pageSize, sortOrder, sortedColumn]);
+
+  useEffect(() => {
+    const storedPage = localStorage.getItem('currentApplicationPage');
+    if (storedPage !== null) {
+      const parsedPage = Number(storedPage);
+      if (parsedPage < totalPages) {
+        setPage(parsedPage);
+        console.log(page);
+      }
+    }
+  }, [totalPages]);
+
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -97,9 +110,9 @@ const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0
   };
 
   const handlePageClick = (data) => {
-    const selectedPage = data.selected;
+    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
     setPage(selectedPage);
-    // localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
+    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
   };
 
   const convertToUpperCase = (str) => {
@@ -208,13 +221,7 @@ const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0
               </Table>
 
             </div>
-          </>
-        ) : (
-          <section>
-            <h2>You have not posted any jobs yet. Post Now</h2>
-          </section>
-        )}
-        {/* Pagination */}
+             {/* Pagination */}
         <div className="pagination-container d-flex justify-content-end align-items-center">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
@@ -236,9 +243,16 @@ const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
-            forcePage={page}
+            forcePage={page < totalPages ? page : totalPages - 1} // Adjust forcePage to valid range
           />
         </div>
+          </>
+        ) : (
+          <section>
+            <h2>You have not posted any jobs yet. Post Now</h2>
+          </section>
+        )}
+       
 
       </div>
     </div>
