@@ -24,8 +24,6 @@ const ViewApplications = () => {
   const [fileNames, setfileNames] = useState({});
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
-
-  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
