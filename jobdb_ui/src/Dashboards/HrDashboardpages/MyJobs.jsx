@@ -19,7 +19,7 @@ const MyJobs = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [pageSize, setPageSize] = useState(5); // Default to 5 items per page
+  const [pageSize, setPageSize] = useState(2); // Default to 5 items per page
   const [totalPages, setTotalPages] = useState(0);
 
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
@@ -27,10 +27,30 @@ const MyJobs = () => {
   
   // const currentPage = location.state?.currentPage || 0;
    const [page, setPage] = useState(0); 
- 
-  // const state1 = location.state || {};
-  // console.log(state1)
-  // console.log("current page from update job",currentPage)
+
+   const handlePageClick = (data) => {
+    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
+    setPage(selectedPage);
+    localStorage.setItem('currentJobPage', selectedPage); // Store the page number in localStorage
+  };
+   useEffect(() => {
+    if (search) {
+      fetchJobBySearch();
+    } else {
+      fetchJobs();
+    }
+   
+  }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
+  useEffect(() => {
+    const storedPage = localStorage.getItem('currentJobPage');
+    if (storedPage !== null) {
+      const parsedPage = Number(storedPage);
+      if (parsedPage < totalPages) {
+        setPage(parsedPage);
+        console.log(page);
+      }
+    }
+  }, [totalPages]);
   
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -94,18 +114,7 @@ const MyJobs = () => {
     }
   };
 
-  useEffect(() => {
-    if (search) {
-      fetchJobBySearch();
-    } else {
-      fetchJobs();
-    }
-    const storedPage = localStorage.getItem('currentJobPage');
-    if (storedPage !== null) {
-      setPage(Number(storedPage));
-    }
-  }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
-
+ 
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
@@ -141,12 +150,8 @@ const MyJobs = () => {
     setPageSize(size);
     setPage(0); // Reset page when page size change
   };
-
-  const handlePageClick = (data) => {
-    const selectedPage = data.selected;
-    setPage(selectedPage);
-    localStorage.setItem('currentJobPage', selectedPage); // Store the page number in localStorage
-  };
+ 
+ 
   return (
     <div className='dashboard-container'>
 
@@ -298,7 +303,7 @@ const MyJobs = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
-            forcePage={page}
+            forcePage={page < totalPages ? page : totalPages - 1} // Adjust forcePage to valid range
           />
         </div>
 

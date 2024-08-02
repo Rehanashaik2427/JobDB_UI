@@ -18,7 +18,7 @@ const Applications = () => {
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
@@ -29,22 +29,33 @@ const Applications = () => {
     setPageSize(size);
     setPage(0); // Reset page when page size change
   };
-
+  const handlePageClick = (data) => {
+    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
+    setPage(selectedPage);
+    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
+  };
 
   useEffect(() => {
+    localStorage.setItem('currentViewPage', 0);
     if (search) {
       fetchJobBysearch();
     }
     else{
       fetchJobs()
       }
-      const storedPage = localStorage.getItem('currentApplicationPage');
-      if (storedPage !== null) {
-        setPage(Number(storedPage));
-      }else
-      setPage(0)
+      
   }, [userEmail, search, page, pageSize, sortOrder, sortedColumn]);
 
+  useEffect(() => {
+    const storedPage = localStorage.getItem('currentApplicationPage');
+    if (storedPage !== null) {
+      const parsedPage = Number(storedPage);
+      if (parsedPage < totalPages) {
+        setPage(parsedPage);
+        console.log(page);
+      }
+    }
+  }, [totalPages]);
 
 
   const fetchJobs = async () => {
@@ -98,11 +109,7 @@ const Applications = () => {
   };
 
 
-  const handlePageClick = (data) => {
-    const selectedPage = data.selected;
-    setPage(selectedPage);
-    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
-  };
+  
 
   const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
@@ -196,7 +203,7 @@ const Applications = () => {
                             to="/hr-dashboard/hr-applications/view-applications"
                             onClick={(e) => {
                               e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } });
+                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId} });
                             }}
                             className="nav-link"
                           >
@@ -211,13 +218,7 @@ const Applications = () => {
 
 
             </div>
-          </>
-        ) : (
-          <section>
-            <h2>You have not posted any jobs yet. Post Now</h2>
-          </section>
-        )}
-        {/* Pagination */}
+             {/* Pagination */}
         <div className="pagination-container d-flex justify-content-end align-items-center">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
@@ -239,9 +240,16 @@ const Applications = () => {
             activeClassName="active"
             containerClassName="pagination"
             subContainerClassName="pages pagination"
-            forcePage={page}
+            forcePage={page < totalPages ? page : totalPages - 1} // Adjust forcePage to valid range
           />
         </div>
+          </>
+        ) : (
+          <section>
+            <h2>You have not posted any jobs yet. Post Now</h2>
+          </section>
+        )}
+       
 
       </div>
     </div>
