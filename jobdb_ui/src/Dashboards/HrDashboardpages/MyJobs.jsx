@@ -19,18 +19,18 @@ const MyJobs = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [pageSize, setPageSize] = useState(2); // Default to 5 items per page
+  const [pageSize, setPageSize] = useState(); // Default to 5 items per page
   const [totalPages, setTotalPages] = useState(0);
 
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   
-  // const currentPage = location.state?.currentPage || 0;
-   const [page, setPage] = useState(0); 
+  const currentPage = location.state?.currentPage || 0;
+   const [page, setPage] = useState(currentPage); 
  
-  // const state1 = location.state || {};
-  // console.log(state1)
-  // console.log("current page from update job",currentPage)
+  const state1 = location.state || {};
+  console.log(state1)
+  console.log("current page from update job",currentPage)
   
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -54,11 +54,11 @@ const MyJobs = () => {
     }
   };
   
-  // useEffect(() => {
-  //   if (location.state?.currentPage === undefined) {
-  //     setPage(0);
-  //   }
-  // }, [location.state?.currentPage]);
+  useEffect(() => {
+    if (location.state?.currentPage === undefined) {
+      setPage(0);
+    }
+  }, [location.state?.currentPage]);
 
   console.log("page", page)
   const handleSort = (column) => {
@@ -100,10 +100,7 @@ const MyJobs = () => {
     } else {
       fetchJobs();
     }
-    const storedPage = localStorage.getItem('currentJobPage');
-    if (storedPage !== null) {
-      setPage(Number(storedPage));
-    }
+  
   }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
   const convertToUpperCase = (str) => {
@@ -145,7 +142,7 @@ const MyJobs = () => {
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setPage(selectedPage);
-    localStorage.setItem('currentJobPage', selectedPage); // Store the page number in localStorage
+    
   };
   return (
     <div className='dashboard-container'>

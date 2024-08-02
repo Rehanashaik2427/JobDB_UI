@@ -11,7 +11,7 @@ const JobboxCompanyPage = () => {
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(6);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
@@ -116,7 +116,7 @@ const JobboxCompanyPage = () => {
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
             <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-              <option value="5">5</option>
+              <option value="6">6</option>
               <option value="10">10</option>
               <option value="20">20</option>
             </select>

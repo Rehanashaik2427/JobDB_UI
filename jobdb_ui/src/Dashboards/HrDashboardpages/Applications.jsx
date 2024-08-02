@@ -12,41 +12,37 @@ const Applications = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userEmail = location.state?.userEmail;
-
-
-
+const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0;
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(currentJobApplicationPage);
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
-
+  const state1 = location.state || {};
+  console.log(state1)
+  console.log("current page from view Application",currentJobApplicationPage)
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
     setPage(0); // Reset page when page size change
   };
 
-
   useEffect(() => {
-    
     if (search) {
       fetchJobBysearch();
     }
     else{
       fetchJobs()
       }
-      const storedPage = localStorage.getItem('currentApplicationPage');
-      if (storedPage !== null) {
-        setPage(Number(storedPage));
-      }else
-      setPage(0)
+      // const storedPage = localStorage.getItem('currentApplicationPage');
+      // if (storedPage !== null) {
+      //   setPage(Number(storedPage));
+      // }else
+      // setPage(0)
   }, [userEmail, search, page, pageSize, sortOrder, sortedColumn]);
-
-
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -67,8 +63,6 @@ const Applications = () => {
     }
   }
 
-  console.log("page", page)
-
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   }
@@ -88,9 +82,11 @@ const Applications = () => {
     }
 
   }
-
-
-
+  useEffect(() => {
+    if (location.state?.currentJobApplicationPage === undefined) {
+      setPage(0);
+    }
+  }, [location.state?.currentJobApplicationPage]);
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
@@ -100,11 +96,10 @@ const Applications = () => {
     setSortOrder(order);
   };
 
-
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setPage(selectedPage);
-    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
+    // localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
   };
 
   const convertToUpperCase = (str) => {
@@ -118,16 +113,8 @@ const Applications = () => {
       return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
     }
   };
-const state1 = location.state || {};
-  console.log(state1)
-  console.log("current page from update job",currentPage)
 
   const initials = getInitials(userName);
-  useEffect(() => {
-    if (location.state?.currentPage === undefined) {
-      setPage(0);
-    }
-  }, [location.state?.currentPage]);
   return (
 
     <div className='dashboard-container'>
@@ -207,7 +194,7 @@ const state1 = location.state || {};
                             to="/hr-dashboard/hr-applications/view-applications"
                             onClick={(e) => {
                               e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId,currentPage: page } });
+                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId,currentJobApplicationPage:page} });
                             }}
                             className="nav-link"
                           >
@@ -219,7 +206,6 @@ const state1 = location.state || {};
                   ))}
                 </tbody>
               </Table>
-
 
             </div>
           </>
@@ -257,8 +243,9 @@ const state1 = location.state || {};
       </div>
     </div>
 
-
   );
 }
 
 export default Applications;
+
+

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
 import { SiImessage } from "react-icons/si";
 import ReactPaginate from "react-paginate";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import HrLeftSide from "./HrLeftSide";
 import Slider from "./Slider";
 
@@ -15,23 +15,27 @@ const ViewApplications = () => {
   // const userEmail = location.state?.userEmail;
   // const userName = location.state?.userName;
   // const jobId = location.state?.jobId;
-  // console.log(jobId);
-  const { userEmail, userName, jobId, currentPage } = location.state || {};
+  // currentJobApplicationPage:page
+  const { userEmail, userName, jobId, currentJobApplicationPage } = location.state || {};
 
   const [applications, setApplications] = useState([]);
   const [resumeTypes, setResumeTypes] = useState({});
   const [filterStatus, setFilterStatus] = useState('all');
   const [fileNames, setfileNames] = useState({});
-
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
-
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(1);
+  // const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(2);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
+
+  const currentApplicationPage = location.state?.currentApplicationPage || 0;
+  const [page, setPage] = useState(currentApplicationPage); 
+  const state1 = location.state || {};
+  console.log(state1)
+  console.log("current page from Application details",currentApplicationPage)
 
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
@@ -43,6 +47,11 @@ const ViewApplications = () => {
     setFilterStatus(e.target.value);
     handleSelect(e.target.value);
   };
+  useEffect(() => {
+    if (location.state?.currentApplicationPage === undefined) {
+      setPage(0);
+    }
+  }, [location.state?.currentApplicationPage]);
 
   const handleSelect = async (filterStatus, fromDate, toDate) => {
     setLoading(true);
@@ -78,7 +87,6 @@ const ViewApplications = () => {
     try {
       const params = {
         jobId: jobId,
-
         page: page,
         size: pageSize,
         sortBy: sortedColumn,
@@ -99,6 +107,7 @@ const ViewApplications = () => {
     setFromDate(date);
     handleSelect(filterStatus, date, toDate);
   };
+  console.log(page)
 
   const handleToDateChange = (date) => {
     setToDate(date);
@@ -107,12 +116,14 @@ const ViewApplications = () => {
 
   useEffect(() => {
     fetchApplications();
-    const storedPage = localStorage.getItem('currentViewPage');
-    if (storedPage !== null) {
-      setPage(Number(storedPage));
-    }
+    
   }, [jobId, page, pageSize, sortedColumn, sortOrder]);
 
+  useEffect(() => {
+    console.log('currentViewPage', page)
+    localStorage.removeItem('currentViewPage', page);
+  }, [page]);
+  
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
@@ -259,7 +270,6 @@ const ViewApplications = () => {
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setPage(selectedPage);
-    localStorage.setItem('currentViewPage', selectedPage); // Store the page number in localStorage
   };
 
   const navigate = useNavigate();
@@ -359,8 +369,8 @@ const ViewApplications = () => {
   const handleBack = () => {
     const state1 = location.state || {};
     console.log(state1)
-    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId,currentPage} })
-    console.log("sending current page", currentPage)
+    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId,currentJobApplicationPage} })
+    console.log("sending current page", currentJobApplicationPage)
     
   };
   return (
@@ -491,23 +501,15 @@ const ViewApplications = () => {
                         <td>{application.appliedOn}</td>
                         {/* <td>{application.applicationStatus}</td> */}
                         <td>
-                          <Link
-                            to={{
-                              pathname: '/hr-dashboard/hr-applications/view-applications/applicationDetails',
-                              state: { userEmail, applicationId: application.applicationId, userName },
-                            }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
-                                state: { userEmail, applicationId: application.applicationId, userName },
-                              });
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faEye}
-                              style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
-                            />
-                          </Link>
+                          <FontAwesomeIcon onClick={(e) => {
+                            e.preventDefault();
+                            navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
+                              state: { userEmail, applicationId: application.applicationId, userName, currentApplicationPage: page ,jobId },
+                            });
+                          }}
+                            icon={faEye}
+                            style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
+                          />
                         </td>
                         <td >
                           <Slider
@@ -559,7 +561,7 @@ const ViewApplications = () => {
             )}
             {/* Pagination */}
             <Button variant='primary' onClick={handleBack}>Back</Button>
-          </div>
+            </div>
           <div className="pagination-container d-flex justify-content-end align-items-center">
             <div className="page-size-select me-3">
               <label htmlFor="pageSize">Page Size:</label>
