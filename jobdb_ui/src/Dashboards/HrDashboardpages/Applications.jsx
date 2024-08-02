@@ -109,13 +109,8 @@ const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0
     setSortOrder(order);
   };
 
-  const handlePageClick = (data) => {
-    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
-    setPage(selectedPage);
-    localStorage.setItem('currentApplicationPage', selectedPage); // Store the page number in localStorage
-  };
 
-  const convertToUpperCase = (str) => {
+const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
   const getInitials = (name) => {
