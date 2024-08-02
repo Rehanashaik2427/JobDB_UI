@@ -18,7 +18,7 @@ const Applications = () => {
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
@@ -36,7 +36,6 @@ const Applications = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem('currentViewPage', 0);
     if (search) {
       fetchJobBysearch();
     }
@@ -76,6 +75,8 @@ const Applications = () => {
       console.error('Error fetching HR data:', error);
     }
   }
+
+  console.log("page", page)
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
@@ -122,8 +123,16 @@ const Applications = () => {
       return convertToUpperCase(nameParts[0][0] + nameParts[0][1]);
     }
   };
+const state1 = location.state || {};
+  console.log(state1)
+  console.log("current page from update job",currentPage)
 
   const initials = getInitials(userName);
+  useEffect(() => {
+    if (location.state?.currentPage === undefined) {
+      setPage(0);
+    }
+  }, [location.state?.currentPage]);
   return (
 
     <div className='dashboard-container'>
@@ -203,7 +212,7 @@ const Applications = () => {
                             to="/hr-dashboard/hr-applications/view-applications"
                             onClick={(e) => {
                               e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId} });
+                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } });
                             }}
                             className="nav-link"
                           >

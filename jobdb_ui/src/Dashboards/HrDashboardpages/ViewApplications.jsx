@@ -18,6 +18,7 @@ const ViewApplications = () => {
  
  
 
+
   const [applications, setApplications] = useState([]);
   const [resumeTypes, setResumeTypes] = useState({});
   const [filterStatus, setFilterStatus] = useState('all');
@@ -373,6 +374,14 @@ const ViewApplications = () => {
       modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
     }
   }, [chats]);
+
+  const handleBack = () => {
+    const state1 = location.state || {};
+    console.log(state1)
+    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId} })
+    console.log("sending current page", currentPage)
+    
+  };
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
@@ -596,6 +605,8 @@ const ViewApplications = () => {
             )}
 
 
+            {/* Pagination */}
+            <Button variant='primary' onClick={handleBack}>Back</Button>
           </div>
 
         </div>
