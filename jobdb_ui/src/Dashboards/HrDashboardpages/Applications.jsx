@@ -12,13 +12,12 @@ const Applications = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userEmail = location.state?.userEmail;
-
-
-
+  const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0;
+  const currentJobApplicationPageSize = location.state?.currentJobApplicationPageSize || 5;
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(1);
+  const [page, setPage] = useState(currentJobApplicationPage);
+  const [pageSize, setPageSize] = useState(currentJobApplicationPageSize);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
@@ -28,6 +27,8 @@ const Applications = () => {
   const isLastPage = page === totalPages - 1;
   const isPageSizeDisabled = isLastPage;
 
+ 
+  console.log("current page from view Application",currentJobApplicationPage)
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
@@ -81,8 +82,6 @@ const Applications = () => {
     }
   }
 
-  console.log("page", page)
-
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   }
@@ -102,9 +101,12 @@ const Applications = () => {
     }
 
   }
-
-
-
+  useEffect(() => {
+    if (location.state?.currentJobApplicationPage === undefined && location.state?.currentJobApplicationPageSize === undefined ) {
+      setPage(0);
+      setPageSize(5)
+    }
+  }, [location.state?.currentJobApplicationPage,location.state?.currentJobApplicationPageSize]);
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
@@ -115,9 +117,7 @@ const Applications = () => {
   };
 
 
-  
-
-  const convertToUpperCase = (str) => {
+const convertToUpperCase = (str) => {
     return String(str).toUpperCase();
   };
   const getInitials = (name) => {
@@ -133,11 +133,6 @@ const state1 = location.state || {};
   console.log("current page from update job")
 
   const initials = getInitials(userName);
-  useEffect(() => {
-    if (location.state?.currentPage === undefined) {
-      setPage(0);
-    }
-  }, [location.state?.currentPage]);
   return (
 
     <div className='dashboard-container'>
@@ -217,7 +212,7 @@ const state1 = location.state || {};
                             to="/hr-dashboard/hr-applications/view-applications"
                             onClick={(e) => {
                               e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId } });
+                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId,currentJobApplicationPage:page,currentJobApplicationPageSize:pageSize} });
                             }}
                             className="nav-link"
                           >
@@ -229,7 +224,6 @@ const state1 = location.state || {};
                   ))}
                 </tbody>
               </Table>
-
 
             </div>
              {/* Pagination */}
@@ -268,8 +262,9 @@ const state1 = location.state || {};
       </div>
     </div>
 
-
   );
 }
 
 export default Applications;
+
+

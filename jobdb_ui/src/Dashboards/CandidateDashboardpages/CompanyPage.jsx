@@ -191,7 +191,6 @@ const CompamyPage = () => {
     setSortedColumn(column);
     setSortOrder(order);
   };
-  const [showJobDescription, setShowJobDescription] = useState(false);
   const [selectedJobSummary, setSelectedJobSummary] = useState(null);
   const handleViewSummary = (summary) => {
     setSelectedJobSummary(summary);
@@ -511,10 +510,10 @@ const CompamyPage = () => {
                       <p><strong>Overview:</strong> {companyInfo.overView}</p>
                       <p><strong>Website:</strong> <a href={companyInfo.websiteLink} target="_blank" rel="noopener noreferrer">{companyInfo.websiteLink}</a></p>
                       <p><strong>Industry Service:</strong> {companyInfo.industryService}</p>
-                      <p><strong>Company Size:</strong> {companyInfo.companySize}</p>
+                      <p><strong>Company Size:</strong> {companyInfo.companySize === '0' ? '': companyInfo.companySize}</p>
                   
                       <p><strong>Headquarters:</strong> {companyInfo.headquaters}</p>
-                      <p><strong>Year Founded:</strong> {companyInfo.year}</p>
+                      <p><strong>Year Founded:</strong> {companyInfo.year === '0' ? '': companyInfo.year}</p>
                       <p><strong>Specialties:</strong> {companyInfo.specialties}</p>
                     </Card.Body>
                   </Card>
