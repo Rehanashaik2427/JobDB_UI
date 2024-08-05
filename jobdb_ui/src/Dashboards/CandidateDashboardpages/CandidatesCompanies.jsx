@@ -17,7 +17,7 @@ const CandidatesCompanies = () => {
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
 
   const handleSearchChange = (event) => {
@@ -113,6 +113,10 @@ const CandidatesCompanies = () => {
     setPageSize(size);
     setPage(0); // Reset page when page size changes
   };
+
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
+ 
   return (
     <div className='dashboard-container'>
 
@@ -189,7 +193,7 @@ const CandidatesCompanies = () => {
         <div className="pagination-container d-flex justify-content-end align-items-center mt-4">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
-            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
               <option value="6">6</option>
               <option value="10">10</option>
               <option value="20">20</option>

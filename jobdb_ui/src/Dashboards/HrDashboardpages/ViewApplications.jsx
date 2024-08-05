@@ -15,8 +15,8 @@ const ViewApplications = () => {
   const userEmail = location.state?.userEmail;
   const userName = location.state?.userName;
   const jobId = location.state?.jobId;
- 
- 
+
+
 
 
   const [applications, setApplications] = useState([]);
@@ -34,6 +34,10 @@ const ViewApplications = () => {
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
+
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
+
   const handlePageClick = (data) => {
     const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
     setPage(selectedPage);
@@ -47,7 +51,7 @@ const ViewApplications = () => {
 
   }, [jobId, page, pageSize, sortedColumn, sortOrder]);
   useEffect(() => {
-   
+
     const storedPage = localStorage.getItem('currentViewPage');
     if (storedPage !== null) {
       const parsedPage = Number(storedPage);
@@ -378,9 +382,9 @@ const ViewApplications = () => {
   const handleBack = () => {
     const state1 = location.state || {};
     console.log(state1)
-    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId} })
-    console.log("sending current page", currentPage)
-    
+    navigate('/hr-dashboard/hr-applications', { state: { userEmail, userName, jobId } })
+    console.log("sending current page")
+
   };
   return (
     <div className='dashboard-container'>
@@ -580,7 +584,7 @@ const ViewApplications = () => {
                 <div className="pagination-container d-flex justify-content-end align-items-center">
                   <div className="page-size-select me-3">
                     <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
                       <option value="5">5</option>
                       <option value="10">10</option>
                       <option value="20">20</option>

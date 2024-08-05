@@ -365,6 +365,9 @@ const CompamyPage = () => {
       console.error('Error fetching social media links:', error);
     }
   };
+
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
   return (
     <div className='dashboard-container'>
 
@@ -574,8 +577,8 @@ const CompamyPage = () => {
                     <div className="pagination-container d-flex justify-content-end align-items-center">
                       <div className="page-size-select me-3">
                         <label htmlFor="pageSize">Page Size:</label>
-                        <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                          <option value="5">5</option>
+                        <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
+                        <option value="5">5</option>
                           <option value="10">10</option>
                           <option value="20">20</option>
                         </select>

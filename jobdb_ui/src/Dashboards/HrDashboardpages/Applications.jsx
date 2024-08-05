@@ -24,6 +24,10 @@ const Applications = () => {
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
+
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
+
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
     setPageSize(size);
@@ -36,6 +40,7 @@ const Applications = () => {
   };
 
   useEffect(() => {
+    localStorage.setItem('currentViewPage', 0);
     if (search) {
       fetchJobBysearch();
     }
@@ -125,7 +130,7 @@ const Applications = () => {
   };
 const state1 = location.state || {};
   console.log(state1)
-  console.log("current page from update job",currentPage)
+  console.log("current page from update job")
 
   const initials = getInitials(userName);
   useEffect(() => {
@@ -231,7 +236,7 @@ const state1 = location.state || {};
         <div className="pagination-container d-flex justify-content-end align-items-center">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
-            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="20">20</option>
