@@ -15,7 +15,6 @@ const CompanyForm = () => {
     date: '',
   });
 
-  const companyName = formData.companyName;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -71,7 +70,7 @@ const CompanyForm = () => {
   };
 
   return (
-    <Card style={{ marginTop: '30px' }}>
+    <Card style={{ marginTop: '30px',width:'100vw',height:'100vh' }}>
       <Card.Body>
         <Card.Title className="d-flex justify-content-center">Fill Company Details</Card.Title>
         <Form onSubmit={handleSubmit}>

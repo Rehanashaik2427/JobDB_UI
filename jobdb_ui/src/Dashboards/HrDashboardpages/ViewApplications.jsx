@@ -12,32 +12,24 @@ import Slider from "./Slider";
 const ViewApplications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  // const userEmail = location.state?.userEmail;
-  // const userName = location.state?.userName;
-  // const jobId = location.state?.jobId;
-  // currentJobApplicationPage:page
-  const { userEmail, userName, jobId, currentJobApplicationPage } = location.state || {};
-
+  const { userEmail, userName, jobId, currentJobApplicationPage,currentJobApplicationPageSize } = location.state || {};
   const [applications, setApplications] = useState([]);
   const [resumeTypes, setResumeTypes] = useState({});
   const [filterStatus, setFilterStatus] = useState('all');
   const [fileNames, setfileNames] = useState({});
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
-  const [pageSize, setPageSize] = useState(2);
+ 
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
-  const handlePageClick = (data) => {
-    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
-    setPage(selectedPage);
-    localStorage.setItem('currentViewPage', selectedPage);
-    // Store the page number in localStorage
-  };
-
-
+  const currentApplicationPage = location.state?.currentApplicationPage || 0;
+  const [page, setPage] = useState(currentApplicationPage);
+  
+  const currentApplicationPageSize = location.state?.currentApplicationPageSize || 5;
+  const [pageSize, setPageSize] = useState(currentApplicationPageSize);
   useEffect(() => {
     fetchApplications();
 
@@ -58,8 +50,7 @@ const ViewApplications = () => {
 
   }, [totalPages]);
 
-  const currentApplicationPage = location.state?.currentApplicationPage || 0;
-  const [page, setPage] = useState(currentApplicationPage); 
+  
   const state1 = location.state || {};
   console.log(state1)
   console.log("current page from Application details",currentApplicationPage)
@@ -75,10 +66,11 @@ const ViewApplications = () => {
     handleSelect(e.target.value);
   };
   useEffect(() => {
-    if (location.state?.currentApplicationPage === undefined) {
+    if (location.state?.currentApplicationPage === undefined &&  location.state?.currentApplicationPageSize) {
       setPage(0);
+      setPageSize(5);
     }
-  }, [location.state?.currentApplicationPage]);
+  }, [location.state?.currentApplicationPage,location.state?.currentApplicationPageSize]);
 
   const handleSelect = async (filterStatus, fromDate, toDate) => {
     setLoading(true);
@@ -108,6 +100,12 @@ const ViewApplications = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const handlePageClick = (data) => {
+    const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1)); // Ensure selectedPage is within range
+    setPage(selectedPage);
+    localStorage.setItem('currentViewPage', selectedPage);
+    // Store the page number in localStorage
   };
 
   const fetchApplications = async () => {
@@ -391,7 +389,7 @@ const ViewApplications = () => {
   const handleBack = () => {
     const state1 = location.state || {};
     console.log(state1)
-    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId,currentJobApplicationPage} })
+    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId,currentJobApplicationPage,currentJobApplicationPageSize} })
     console.log("sending current page", currentJobApplicationPage)
     
   };
@@ -527,7 +525,7 @@ const ViewApplications = () => {
                           <FontAwesomeIcon onClick={(e) => {
                             e.preventDefault();
                             navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
-                              state: { userEmail, applicationId: application.applicationId, userName, currentApplicationPage: page ,jobId },
+                              state: { userEmail, applicationId: application.applicationId, userName, currentApplicationPage: page ,jobId ,currentApplicationPageSize:pageSize},
                             });
                           }}
                             icon={faEye}

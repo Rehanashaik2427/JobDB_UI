@@ -343,8 +343,7 @@ const DreamApplication = () => {
       </div>
 
       <div className="right-side" >
-          <div className="application-div " style={{ marginTop:"50px" }}>
-
+          <div className="application-div">
             <Row className="filter">
               <Col className="filter" style={{ maxWidth: '40%' }}>
                 <label htmlFor="status">Filter by Status:</label>

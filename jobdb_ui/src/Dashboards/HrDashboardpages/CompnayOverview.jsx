@@ -167,11 +167,11 @@ const CompnayOverview = () => {
                             <h4>Industry</h4>
                             <p>{companyInfo.industryService}</p>
                             <h4>Company Size</h4>
-                            <p>{companyInfo.companySize === 0 ? '' : companyInfo.companySize}</p>
+                            <p>{companyInfo.companySize === '0' ? '' : companyInfo.companySize}</p>
                             <h4>Headquarters</h4>
                             <p>{companyInfo.headquaters}</p>
                             <h4>Founded</h4>
-                            <p>{companyInfo.year === 0 ? '' : companyInfo.year}</p>
+                            <p>{companyInfo.year === '0' ? '' : companyInfo.year}</p>
                             <h4>Specialties</h4>
                             <p>{companyInfo.specialties}</p>
                         </>

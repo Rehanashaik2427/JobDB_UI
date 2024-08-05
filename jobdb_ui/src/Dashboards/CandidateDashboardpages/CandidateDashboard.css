@@ -1026,3 +1026,12 @@ margin-right: auto;
   width: 200px;
   margin: 12px;
 }
+
+.center-container-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 30px;
+  margin: 180px
+}

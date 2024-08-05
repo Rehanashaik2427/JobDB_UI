@@ -12,11 +12,12 @@ const Applications = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userEmail = location.state?.userEmail;
-const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0;
+  const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0;
+  const currentJobApplicationPageSize = location.state?.currentJobApplicationPageSize || 5;
   const [jobs, setJobs] = useState('')
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(currentJobApplicationPage);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(currentJobApplicationPageSize);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
@@ -96,10 +97,11 @@ const currentJobApplicationPage = location.state?.currentJobApplicationPage || 0
 
   }
   useEffect(() => {
-    if (location.state?.currentJobApplicationPage === undefined) {
+    if (location.state?.currentJobApplicationPage === undefined && location.state?.currentJobApplicationPageSize === undefined ) {
       setPage(0);
+      setPageSize(5)
     }
-  }, [location.state?.currentJobApplicationPage]);
+  }, [location.state?.currentJobApplicationPage,location.state?.currentJobApplicationPageSize]);
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
@@ -202,7 +204,7 @@ const convertToUpperCase = (str) => {
                             to="/hr-dashboard/hr-applications/view-applications"
                             onClick={(e) => {
                               e.preventDefault();
-                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId,currentJobApplicationPage:page} });
+                              navigate('/hr-dashboard/hr-applications/view-applications', { state: { userName: userName, userEmail: userEmail, jobId: job.jobId,currentJobApplicationPage:page,currentJobApplicationPageSize:pageSize} });
                             }}
                             className="nav-link"
                           >

@@ -10,7 +10,7 @@ import HrLeftSide from './HrLeftSide';
 const UpdateJob = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
-  const { userEmail, userName, jobId, currentPage } = location.state || {};
+  const { userEmail, userName, jobId, currentPage , currentPageSize } = location.state || {};
 
   const navigate = useNavigate();
 
@@ -33,8 +33,8 @@ const UpdateJob = () => {
   const handleBack = () => {
     const state1 = location.state || {};
     console.log(state1)
-    navigate('/hr-dashboard/my-jobs', { state: {userEmail,userName,jobId,currentPage} })
-    console.log("sending current page", currentPage)
+    navigate('/hr-dashboard/my-jobs', { state: {userEmail,userName,jobId,currentPage , currentPageSize} })
+    console.log("sending current page", currentPage , "and page size", currentPageSize)
     
   };
   useEffect(() => {
@@ -73,11 +73,11 @@ const UpdateJob = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    handleSaveJobDetails();
     try {
       await axios.put(`${BASE_API_URL}/updateJob?jobId=${jobId}`, formData);
-      alert('Job details updated successfully.');
-      const currentPage = localStorage.getItem('currentPage') || 1; // Default to page 1 if not set
-      navigate('/hr-dashboard/my-jobs', { state: { userName, userEmail, currentPage } })
+      alert('Job details updated successfully.')
+      navigate('/hr-dashboard/my-jobs', { state: { userName, userEmail,  currentPage,currentPageSize } });
     } catch (error) {
       console.error('Error updating job details:', error);
     }
@@ -213,14 +213,13 @@ const UpdateJob = () => {
 
             </Card.Body>
             <Card.Footer>
-              <div className='job-save-edit-buttons'>
+            <div className='job-save-edit-buttons'>
                 {editableJobDetails ? (
                   <Button variant="primary" type="button" onClick={handleSaveJobDetails}><FaSave /> Save</Button>
                 ) : (
                   <Button variant="info" type="button" onClick={handleEditJobDetails}><FaEdit /> Edit</Button>
                 )}
                 <Button variant="success" type="submit">Post</Button>
-
                 <Button variant='primary' onClick={handleBack}>Back</Button>
               </div>
             </Card.Footer>

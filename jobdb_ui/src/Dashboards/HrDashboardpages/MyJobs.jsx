@@ -19,19 +19,20 @@ const MyJobs = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [pageSize, setPageSize] = useState(); // Default to 5 items per page
   const [totalPages, setTotalPages] = useState(0);
 
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
-  
+
   const currentPage = location.state?.currentPage || 0;
-   const [page, setPage] = useState(currentPage); 
- 
+  const [page, setPage] = useState(currentPage);
+
+  const currentPageSize = location.state?.currentPageSize || 5; // Default page size
+  const [pageSize, setPageSize] = useState(currentPageSize); // Default to 5 items per page
+
   const state1 = location.state || {};
-  console.log(state1)
-  console.log("current page from update job",currentPage)
-  
+  console.log(state1);
+  console.log("current page from update job", currentPage, " page size", currentPageSize);
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
@@ -53,12 +54,13 @@ const MyJobs = () => {
       console.error('Error fetching HR data:', error);
     }
   };
-  
+
   useEffect(() => {
-    if (location.state?.currentPage === undefined) {
+    if (location.state?.currentPage === undefined && location.state?.currentPageSize === undefined) {
       setPage(0);
+      setPageSize(5); // Set default page size to 5
     }
-  }, [location.state?.currentPage]);
+  }, [location.state?.currentPage, location.state?.currentPageSize]);
 
   console.log("page", page)
   const handleSort = (column) => {
@@ -70,12 +72,41 @@ const MyJobs = () => {
     setSortOrder(order);
   };
 
-  const handleDelete = async (jobId) => {
+  const handleDelete = (jobId) => {
+    swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Delete job only if user confirms
+        deleteJob(jobId);
+      }
+    });
+  };
+
+  // Function to perform the delete action
+  const deleteJob = async (jobId) => {
     try {
       await axios.delete(`${BASE_API_URL}/deleteJob?jobId=${jobId}`);
       setJobs(prevJobs => prevJobs.filter(job => job.jobId !== jobId));
+      swal.fire(
+        'Deleted!',
+        'The job has been deleted.',
+        'success'
+      );
     } catch (error) {
       console.error('Error deleting job:', error);
+      swal.fire(
+        'Error!',
+        'An error occurred while deleting the job.',
+        'error'
+      );
     }
   };
 
@@ -100,7 +131,7 @@ const MyJobs = () => {
     } else {
       fetchJobs();
     }
-  
+
   }, [userEmail, page, pageSize, sortedColumn, sortOrder, search]);
 
   const convertToUpperCase = (str) => {
@@ -142,7 +173,7 @@ const MyJobs = () => {
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setPage(selectedPage);
-    
+
   };
   return (
     <div className='dashboard-container'>
@@ -236,15 +267,10 @@ const MyJobs = () => {
                         <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId, currentPage: page } })}>
+                            <span className="cursor-pointer text-success me-2 update" onClick={() => navigate('/hr-dashboard/my-jobs/update-job', { state: { userName, userEmail, jobId: job.jobId, currentPage: page,currentPageSize:pageSize } })}>
                               <MdEdit size={18} className="text-success" />
                             </span>
-                            <span className='delete cursor-pointer text-danger me-2' onClick={() => {
-                              swal.fire({
-                                title: "Are you sure?",
-                                text: "You won't be able to revert this!",
-                              });
-                            }}>
+                            <span className='delete cursor-pointer text-danger me-2' onClick={() => handleDelete(job.jobId)}>
                               <MdDelete className="text-danger" size={18} />
                             </span>
                           </div>

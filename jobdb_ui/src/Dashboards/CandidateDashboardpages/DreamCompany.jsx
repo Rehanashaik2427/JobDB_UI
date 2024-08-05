@@ -126,7 +126,7 @@ const DreamCompany = () => {
       <div className={`left-side ${showLeftSide ? 'show' : ''}`}>
         <CandidateLeftSide user={{ userName, userId }} />
       </div>
- 
+
       <div className="right-side">
         <Container>
           <div className="centered-content">
@@ -137,45 +137,50 @@ const DreamCompany = () => {
                 onClose={() => setShowResumePopup(false)}
               />
             )}
-            <Form onSubmit={handleSubmit} className="centered-form">
-              <Form.Group>
-                <Form.Label htmlFor="companyName">Company Name:</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="companyName"
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <br />
-              <Form.Group>
-                <Form.Label htmlFor="resume">Resume:</Form.Label>
-                <Button variant='info' onClick={handleApplyButtonClick}>Select Resume</Button>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-              </Form.Group>
 
-              {showMessage && (
-                <Card className="success-message">
-                  <Card.Body>
-                    <Card.Title>Congratulations</Card.Title>
-                    <Card.Text>
-                      You successfully applied to your Dream Company
-                    </Card.Text>
-                    <Card.Text>
-                      <Link to={{
-                        pathname: '/candidate-dashboard',
-                        state: { userName: userName, userId: userId }
-                      }} onClick={(e) => {
-                        e.preventDefault();
-                        navigate('/candidate-dashboard', { state: { userName, userId } });
-                      }}>Go back to dashboard</Link>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              )}
-            </Form>
+            <Card className="center-container-card">
+              <Form onSubmit={handleSubmit} className="center-form-card">
+                <Form.Group>
+                  <Form.Label htmlFor="companyName">Company Name:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="companyName"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <br />
+                <Form.Group>
+                  <Form.Label htmlFor="resume">Resume:</Form.Label>
+                  <Button variant='info' onClick={handleApplyButtonClick}>Select Resume</Button>
+                  
+                </Form.Group>
+
+                {showMessage && (
+                  <Card className="success-message mt-3">
+                    <Card.Body>
+                      <Card.Title>Congratulations</Card.Title>
+                      <Card.Text>
+                        You successfully applied to your Dream Company
+                      </Card.Text>
+                      <Card.Text>
+                        <Link to={{
+                          pathname: '/candidate-dashboard',
+                          state: { userName: userName, userId: userId }
+                        }} onClick={(e) => {
+                          e.preventDefault();
+                          navigate('/candidate-dashboard', { state: { userName, userId } });
+                        }}>Go back to dashboard</Link>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                )}
+              </Form>
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
+            </Card>
+           
           </div>
         </Container>
       </div>

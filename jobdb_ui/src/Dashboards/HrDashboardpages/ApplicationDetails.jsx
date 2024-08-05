@@ -8,7 +8,7 @@ import HrLeftSide from "./HrLeftSide";
 const ApplicationDetails = () => {
     const BASE_API_URL = "http://localhost:8082/api/jobbox";
     const location = useLocation();
-    const { userEmail, userName, applicationId, currentApplicationPage, jobId } = location.state || {};
+    const { userEmail, userName, applicationId, currentApplicationPage, jobId ,currentApplicationPageSize } = location.state || {};
     const [application, setApplication] = useState(null);
     const [candidate, setCandidate] = useState(null);
     const [job, setJob] = useState(null);
@@ -71,7 +71,7 @@ const ApplicationDetails = () => {
     }, [application, BASE_API_URL]);
 
     const handleBack = () => {
-        navigate('/hr-dashboard/hr-applications/view-applications', { state: { userEmail, applicationId, userName, currentApplicationPage, jobId } });
+        navigate('/hr-dashboard/hr-applications/view-applications', { state: { userEmail, applicationId, userName, currentApplicationPage, jobId, currentApplicationPageSize } });
     };
 
     return (

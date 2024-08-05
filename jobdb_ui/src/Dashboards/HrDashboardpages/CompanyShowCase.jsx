@@ -322,91 +322,91 @@ const CompanyShowCase = () => {
                 accept="image/*"
               />
             </div>
-
-            <div>
+              <divs>
               <h1 style={{ position: 'absolute', top: '60%', right: '100px' }}>{userData.companyName}</h1>
-
-              <div className='social-icons-company' style={{ position: 'absolute', top: '75%', right: '60px' }}>
-                  <Button variant="primary" onClick={setShowModal}>Add Social Media Links</Button><br></br>
-                  {socialMediaLinks.facebookLink && (
-                    <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
-                      <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
-                    </a>
-                  )}
-                  {socialMediaLinks.twitterLink && (
-                    <a href={socialMediaLinks.twitterLink} target="_blank" rel="noopener noreferrer">
-                      <FaTwitter size={24} style={{ margin: '0 5px', color: '#1da1f2' }} />
-                    </a>
-                  )}
-                  {socialMediaLinks.instagramLink && (
-                    <a href={socialMediaLinks.instagramLink} target="_blank" rel="noopener noreferrer">
-                      <FaInstagram size={24} style={{ margin: '0 5px', color: '#e4405f' }} />
-                    </a>
-                  )}
-                  {socialMediaLinks.linkedinLink && (
-                    <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">
-                      <FaLinkedin size={24} style={{ margin: '0 5px', color: '#0077b5' }} />
-                    </a>
-                  )}
+              <div className='social-icons-company' style={{ position: 'absolute', top: '70%', right: '60px', zIndex: 10 }}>
+                <Button variant="primary" onClick={setShowModal}>Add Social Media Links</Button>
+                <br />
+                {socialMediaLinks.facebookLink && (
+                  <a href={socialMediaLinks.facebookLink} target="_blank" rel="noopener noreferrer">
+                    <FaFacebook size={24} style={{ margin: '0 5px', color: '#3b5998' }} />
+                  </a>
+                )}
+                {socialMediaLinks.twitterLink && (
+                  <a href={socialMediaLinks.twitterLink} target="_blank" rel="noopener noreferrer">
+                    <FaTwitter size={24} style={{ margin: '0 5px', color: '#1da1f2' }} />
+                  </a>
+                )}
+                {socialMediaLinks.instagramLink && (
+                  <a href={socialMediaLinks.instagramLink} target="_blank" rel="noopener noreferrer">
+                    <FaInstagram size={24} style={{ margin: '0 5px', color: '#e4405f' }} />
+                  </a>
+                )}
+                {socialMediaLinks.linkedinLink && (
+                  <a href={socialMediaLinks.linkedinLink} target="_blank" rel="noopener noreferrer">
+                    <FaLinkedin size={24} style={{ margin: '0 5px', color: '#0077b5' }} />
+                  </a>
+                )}
               </div>
-            </div>
+            </divs>
+
             <Modal show={showModal} onHide={handleCloseModal}>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Add Social Media Links</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <Form>
-                      <Form.Group controlId='facebookLink'>
-                        <Form.Label>Facebook</Form.Label>
-                        <Form.Control
-                          type='text'
-                          name='facebookLink'
-                          value={socialMediaLinks.facebookLink}
-                          onChange={handleSocialInputChange}
-                          placeholder='Enter Facebook link'
-                        />
-                      </Form.Group>
-                      <Form.Group controlId='twitterLink'>
-                        <Form.Label>Twitter</Form.Label>
-                        <Form.Control
-                          type='text'
-                          name='twitterLink'
-                          value={socialMediaLinks.twitterLink}
-                          onChange={handleSocialInputChange}
-                          placeholder='Enter Twitter link'
-                        />
-                      </Form.Group>
-                      <Form.Group controlId='instagramLink'>
-                        <Form.Label>Instagram</Form.Label>
-                        <Form.Control
-                          type='text'
-                          name='instagramLink'
-                          value={socialMediaLinks.instagramLink}
-                          onChange={handleSocialInputChange}
-                          placeholder='Enter Instagram link'
-                        />
-                      </Form.Group>
-                      <Form.Group controlId='linkedinLink'>
-                        <Form.Label>LinkedIn</Form.Label>
-                        <Form.Control
-                          type='text'
-                          name='linkedinLink'
-                          value={socialMediaLinks.linkedinLink}
-                          onChange={handleSocialInputChange}
-                          placeholder='Enter LinkedIn link'
-                        />
-                      </Form.Group>
-                    </Form>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant='secondary' onClick={handleCloseModal}>
-                      Close
-                    </Button>
-                    <Button variant='primary' onClick={handleSaveLinks}>
-                      Save Changes
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
+              <Modal.Header closeButton>
+                <Modal.Title>Add Social Media Links</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <Form.Group controlId='facebookLink'>
+                    <Form.Label>Facebook</Form.Label>
+                    <Form.Control
+                      type='text'
+                      name='facebookLink'
+                      value={socialMediaLinks.facebookLink}
+                      onChange={handleSocialInputChange}
+                      placeholder='Enter Facebook link'
+                    />
+                  </Form.Group>
+                  <Form.Group controlId='twitterLink'>
+                    <Form.Label>Twitter</Form.Label>
+                    <Form.Control
+                      type='text'
+                      name='twitterLink'
+                      value={socialMediaLinks.twitterLink}
+                      onChange={handleSocialInputChange}
+                      placeholder='Enter Twitter link'
+                    />
+                  </Form.Group>
+                  <Form.Group controlId='instagramLink'>
+                    <Form.Label>Instagram</Form.Label>
+                    <Form.Control
+                      type='text'
+                      name='instagramLink'
+                      value={socialMediaLinks.instagramLink}
+                      onChange={handleSocialInputChange}
+                      placeholder='Enter Instagram link'
+                    />
+                  </Form.Group>
+                  <Form.Group controlId='linkedinLink'>
+                    <Form.Label>LinkedIn</Form.Label>
+                    <Form.Control
+                      type='text'
+                      name='linkedinLink'
+                      value={socialMediaLinks.linkedinLink}
+                      onChange={handleSocialInputChange}
+                      placeholder='Enter LinkedIn link'
+                    />
+                  </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant='secondary' onClick={handleCloseModal}>
+                  Close
+                </Button>
+                <Button variant='primary' onClick={handleSaveLinks}>
+                  Save Changes
+                </Button>
+              </Modal.Footer>
+            </Modal>
             <div
               style={{
                 position: 'absolute',
@@ -501,8 +501,7 @@ const CompanyShowCase = () => {
                       <li>Shortlisted Candidates: {countOfShortlistedCandiCompany}</li>
                       <li>Avg. Time to Fill a Job: 7 days</li>
                       <li>Dream Applications: {countOfDreamApplicationsInCompany}</li>
-                      {/* <li>Top Searched Job: Software Engineer</li>
-                        <li>User Engagement: 75% daily active users</li> */}
+
                     </ul>
                   </Col>
                 </Row>
