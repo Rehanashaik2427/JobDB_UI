@@ -24,6 +24,10 @@ const People = () => {
     const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
     const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
 
+
+    const isLastPage = page === totalPages - 1;
+    const isPageSizeDisabled = isLastPage;
+
     useEffect(() => {
         if (searchQuery) {
             handleSearch();
@@ -192,7 +196,7 @@ const People = () => {
                         <div className="pagination-container d-flex justify-content-end align-items-center">
                             <div className="page-size-select me-3">
                                 <label htmlFor="pageSize">Page Size:</label>
-                                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="20">20</option>

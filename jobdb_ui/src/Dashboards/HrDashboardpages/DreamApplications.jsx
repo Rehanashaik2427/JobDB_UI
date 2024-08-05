@@ -336,6 +336,10 @@ const DreamApplication = () => {
       modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
     }
   }, [chats]);
+
+
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
   return (
     <div className='dashboard-container'>
       <div className='left-side'>
@@ -496,39 +500,39 @@ const DreamApplication = () => {
                 </Table>
               </div>
 
-              {/* Pagination */}
-              <div className="pagination-container d-flex justify-content-end align-items-center">
-                <div className="page-size-select me-3">
-                  <label htmlFor="pageSize">Page Size:</label>
-                  <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                {/* Pagination */}
+                <div className="pagination-container d-flex justify-content-end align-items-center">
+                  <div className="page-size-select me-3">
+                    <label htmlFor="pageSize">Page Size:</label>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
                     <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                  </select>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
+                  <ReactPaginate
+                    previousLabel={<i className="i-Previous" />}
+                    nextLabel={<i className="i-Next1" />}
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={totalPages}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={2}
+                    onPageChange={handlePageClick}
+                    activeClassName="active"
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                  />
                 </div>
-                <ReactPaginate
-                  previousLabel={<i className="i-Previous" />}
-                  nextLabel={<i className="i-Next1" />}
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={totalPages}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  onPageChange={handlePageClick}
-                  activeClassName="active"
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                />
               </div>
-            </div>
-          )}
-          {applications.length === 0 && (
-            <section class=''>
-              <h2>Sorry, you haven't received any applications yet.</h2>
-            </section>
-          )}
-        </div>
-      </div></div>
+            )}
+            {applications.length === 0 && (
+              <section class=''>
+                <h2>Sorry, you haven't received any applications yet.</h2>
+              </section>
+            )}
+          </div>
+</div></div>
   );
 };
 export default DreamApplication;

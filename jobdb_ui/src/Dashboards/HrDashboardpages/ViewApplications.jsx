@@ -12,6 +12,10 @@ import Slider from "./Slider";
 const ViewApplications = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const location = useLocation();
+
+
+
+
   const { userEmail, userName, jobId, currentJobApplicationPage,currentJobApplicationPageSize } = location.state || {};
   const [applications, setApplications] = useState([]);
   const [resumeTypes, setResumeTypes] = useState({});
@@ -25,17 +29,23 @@ const ViewApplications = () => {
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
+
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
+
+ 
+
+
   const currentApplicationPage = location.state?.currentApplicationPage || 0;
   const [page, setPage] = useState(currentApplicationPage);
   
   const currentApplicationPageSize = location.state?.currentApplicationPageSize || 5;
-  const [pageSize, setPageSize] = useState(currentApplicationPageSize);
-  useEffect(() => {
+  const [pageSize, setPageSize] = useState(currentApplicationPageSize);  useEffect(() => {
     fetchApplications();
 
   }, [jobId, page, pageSize, sortedColumn, sortOrder]);
   useEffect(() => {
-   
+
     const storedPage = localStorage.getItem('currentViewPage');
     if (storedPage !== null) {
       const parsedPage = Number(storedPage);
@@ -389,6 +399,7 @@ const ViewApplications = () => {
   const handleBack = () => {
     const state1 = location.state || {};
     console.log(state1)
+   
     navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId,currentJobApplicationPage,currentJobApplicationPageSize} })
     console.log("sending current page", currentJobApplicationPage)
     
@@ -583,7 +594,7 @@ const ViewApplications = () => {
                 <div className="pagination-container d-flex justify-content-end align-items-center">
                   <div className="page-size-select me-3">
                     <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
                       <option value="5">5</option>
                       <option value="10">10</option>
                       <option value="20">20</option>
