@@ -177,19 +177,19 @@ const DreamApplication = () => {
 
   useEffect(() => {
     const fetchStatuses = async () => {
-     
+
       const unread = {}; // Initialize unread messages state
 
       for (const application of applications) {
         try {
-         
+
           const countUnread = await fetchCountUnreadMessage(application.applicationId);
-        
+
           unread[application.applicationId] = countUnread;
 
         } catch (error) {
           console.error('Error fetching job status:', error);
-        
+
         }
       }
       setUnreadMessages(unread); // Set unread messages state
@@ -253,7 +253,7 @@ const DreamApplication = () => {
   const [chats, setChats] = useState([]);
 
   const handleChatClick = async (applicationId) => {
-   setApplicationId(applicationId);
+    setApplicationId(applicationId);
     setUnreadMessages(0);
     // const responce= await axios.get(`${BASE_API_URL}/fetchChatByApplicationId?applicationId=${applicationId}`);
     // setChats(responce.data);
@@ -269,8 +269,8 @@ const DreamApplication = () => {
       console.log("Chats === > " + response.data)
       setShowModal(true); // Show the modal once chats are fetched
       setShowChat(true); // Optionally manage showChat state separately
-     
-    
+
+
 
 
     } catch (error) {
@@ -290,20 +290,20 @@ const DreamApplication = () => {
 
   const handleSend = async () => {
     // Handle send logic here
-    try{
+    try {
       await axios.put(`${BASE_API_URL}/markCandidateMessagesAsRead?applicationId=${applicationId}`);
       const response = await axios.put(`${BASE_API_URL}/saveHRChatByApplicationId?applicationId=${applicationId}&hrchat=${inputValue}`);
       console.log('Sending message:', inputValue);
       // Close the modal or perform any other actions
-     
+
       setShowModal(true);
       setInputValue('');
       handleChatClick(applicationId)
-     // Reset input value after sending
-    }catch{
+      // Reset input value after sending
+    } catch {
       console.log('error')
     }
-   
+
   };
   // Function to format date with only day
   function formatDate(timestamp) {
@@ -338,38 +338,38 @@ const DreamApplication = () => {
   }, [chats]);
   return (
     <div className='dashboard-container'>
-    <div className='left-side'>
+      <div className='left-side'>
         <HrLeftSide user={{ userName, userEmail }} />
       </div>
 
       <div className="right-side" >
-          <div className="application-div">
-            <Row className="filter">
-              <Col className="filter" style={{ maxWidth: '40%' }}>
-                <label htmlFor="status">Filter by Status:</label>
-                <select id="status" onChange={handleFilterChange} value={filterStatus}>
-                  <option value="all">All</option>
-                  <option value="Shortlisted">Shortlisted</option>
-                  <option value="Not Seen">Not Seen</option>
-                  <option value="Not Shortlisted">Not Shortlisted</option>
-                </select>
-              </Col>
-              <Col className="filter">
-                <label htmlFor="date" className="mr-2">Filter by Date:</label>
-                From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
-                To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
-              </Col>
-            </Row>
-            {showBriefSettings && (
-              <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
+        <div className="application-div">
+          <Row className="filter">
+            <Col className="filter" style={{ maxWidth: '40%' }}>
+              <label htmlFor="status">Filter by Status:</label>
+              <select id="status" onChange={handleFilterChange} value={filterStatus}>
+                <option value="all">All</option>
+                <option value="Shortlisted">Shortlisted</option>
+                <option value="Not Seen">Not Seen</option>
+                <option value="Not Shortlisted">Not Shortlisted</option>
+              </select>
+            </Col>
+            <Col className="filter">
+              <label htmlFor="date" className="mr-2">Filter by Date:</label>
+              From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
+              To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
+            </Col>
+          </Row>
+          {showBriefSettings && (
+            <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
               <Modal.Header closeButton>
                 <Modal.Title>Brief Resume</Modal.Title>
               </Modal.Header>
               <Modal.Body style={{ overflowY: 'auto' }}>{showMessage}</Modal.Body>
             </Modal>
-            )}
+          )}
 
-<Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
+          <Modal show={showModal} onHide={handleCloseModal} className="custom-modal">
             <Modal.Header closeButton>
               <Modal.Title>Chat</Modal.Title>
             </Modal.Header>
@@ -428,107 +428,107 @@ const DreamApplication = () => {
               </Button>
             </Modal.Footer>
           </Modal>
-            {applications.length > 0 && (
+          {applications.length > 0 && (
+            <div>
               <div>
-                <div>
-                  <Table hover className='text-center'>
-                    <thead className="table-light">
-                      <tr style={{ textAlign: 'center' }}>
-                        <th>Candidate Name</th>
-                        <th>Candidate Email</th>
-                        <th>Resume ID</th>
-                        <th scope="col" onClick={() => handleSort('appliedOn')}> Date {sortedColumn === 'appliedOn' && sortOrder === 'asc' && '▲'}
-                          {sortedColumn === 'appliedOn' && sortOrder === 'desc' && '▼'}</th>
-                        <th>Action</th>
-                        <th scope="col">Chat</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applications.map(application => (
-                        <tr key={application.id}>
-                          <td>{candidateName[application.candidateId]}</td>
-                          <td>{candidateEmail[application.candidateId]}</td>
-                          <td>{renderResumeComponent(application.resumeId)}</td>
-                          <td>{application.appliedOn}</td>
-                          <td>
-                            <Slider
-                              initialStatus={application.applicationStatus}
-                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                            />
-                          </td>
-                          <td >
-                          <div style={{ position: 'relative', display: 'inline-block' }}>
-                          {unreadMessages[application.applicationId] > 0 && (
-                            <span
-                              style={{
-                                position: 'absolute',
-                                top: '-5px',
-                                right: '-15px',
-                                backgroundColor: 'red',
-                                color: 'white',
-                                borderRadius: '50%',
-                                width: '20px',
-                                height: '20px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '12px',
-                                fontWeight: 'bold',
-                                zIndex: 1, // Ensure notification badge is above SiImessage icon
-                              }}
-                            >
-                              {unreadMessages[application.applicationId]}
-                            </span>
-                          )}
-                          <SiImessage
-                            size={25}
-                            onClick={() => {
-                              handleChatClick(application.applicationId);
-                              setShowModal(true);
-                            }}
-                            style={{ color: 'green', cursor: 'pointer' }}
+                <Table hover className='text-center'>
+                  <thead className="table-light">
+                    <tr style={{ textAlign: 'center' }}>
+                      <th>Candidate Name</th>
+                      <th>Candidate Email</th>
+                      <th>Resume ID</th>
+                      <th scope="col" onClick={() => handleSort('appliedOn')}> Date {sortedColumn === 'appliedOn' && sortOrder === 'asc' && '▲'}
+                        {sortedColumn === 'appliedOn' && sortOrder === 'desc' && '▼'}</th>
+                      <th>Action</th>
+                      <th scope="col">Chat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {applications.map(application => (
+                      <tr key={application.id}>
+                        <td>{candidateName[application.candidateId]}</td>
+                        <td>{candidateEmail[application.candidateId]}</td>
+                        <td>{renderResumeComponent(application.resumeId)}</td>
+                        <td>{application.appliedOn}</td>
+                        <td>
+                          <Slider
+                            initialStatus={application.applicationStatus}
+                            onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
                           />
-                        </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-
-                {/* Pagination */}
-                <div className="pagination-container d-flex justify-content-end align-items-center">
-                  <div className="page-size-select me-3">
-                    <label htmlFor="pageSize">Page Size:</label>
-                    <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                    </select>
-                  </div>
-                  <ReactPaginate
-                    previousLabel={<i className="i-Previous" />}
-                    nextLabel={<i className="i-Next1" />}
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={totalPages}
-                    marginPagesDisplayed={1}
-                    pageRangeDisplayed={2}
-                    onPageChange={handlePageClick}
-                    activeClassName="active"
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                  />
-                </div>
+                        </td>
+                        <td >
+                          <div style={{ position: 'relative', display: 'inline-block' }}>
+                            {unreadMessages[application.applicationId] > 0 && (
+                              <span
+                                style={{
+                                  position: 'absolute',
+                                  top: '-5px',
+                                  right: '-15px',
+                                  backgroundColor: 'red',
+                                  color: 'white',
+                                  borderRadius: '50%',
+                                  width: '20px',
+                                  height: '20px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontSize: '12px',
+                                  fontWeight: 'bold',
+                                  zIndex: 1, // Ensure notification badge is above SiImessage icon
+                                }}
+                              >
+                                {unreadMessages[application.applicationId]}
+                              </span>
+                            )}
+                            <SiImessage
+                              size={25}
+                              onClick={() => {
+                                handleChatClick(application.applicationId);
+                                setShowModal(true);
+                              }}
+                              style={{ color: 'green', cursor: 'pointer' }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               </div>
-            )}
-            {applications.length === 0 && (
-              <section class=''>
-                <h2>Sorry, you haven't received any applications yet.</h2>
-              </section>
-            )}
-          </div>
-</div></div>
+
+              {/* Pagination */}
+              <div className="pagination-container d-flex justify-content-end align-items-center">
+                <div className="page-size-select me-3">
+                  <label htmlFor="pageSize">Page Size:</label>
+                  <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+                <ReactPaginate
+                  previousLabel={<i className="i-Previous" />}
+                  nextLabel={<i className="i-Next1" />}
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={totalPages}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handlePageClick}
+                  activeClassName="active"
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                />
+              </div>
+            </div>
+          )}
+          {applications.length === 0 && (
+            <section class=''>
+              <h2>Sorry, you haven't received any applications yet.</h2>
+            </section>
+          )}
+        </div>
+      </div></div>
   );
 };
 export default DreamApplication;
