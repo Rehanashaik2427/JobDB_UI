@@ -404,7 +404,6 @@ const UserRegistrationForm = () => {
                                                         />
                                                         <div className="form-group" style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginBottom: '5px' }}>
                                                             <label>{<><span>Company Website</span> <span className="required" style={{ color: 'red' }}>*</span></>}</label>
-
                                                             <div className="protocol-tld-container" style={{ display: 'flex', alignItems: 'center' }}>
 
                                                                 <div className="select-group" style={{ marginRight: '10px' }}>
