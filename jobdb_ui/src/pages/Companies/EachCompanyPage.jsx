@@ -302,7 +302,6 @@ const EachCompanyPage = () => {
                 </ul>
               </div>
 
-
             </Card.Body>
           </Card>
 
@@ -418,8 +417,7 @@ const EachCompanyPage = () => {
             </Container>
           </Row>
         </Col>
-
-
+                                                                                                   
         {/* Modal for Apply button */}
         <Modal show={showModal} onHide={closeModal}>
           <Modal.Header closeButton style={{ backgroundColor: '#faccc', color: 'white', borderBottom: 'none' }}>
