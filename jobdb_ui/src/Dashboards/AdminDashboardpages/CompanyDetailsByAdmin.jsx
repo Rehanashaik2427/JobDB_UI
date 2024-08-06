@@ -32,7 +32,7 @@ const CompanyDetailsByAdmin = () => {
 
   // const companyName = location.state?.companyName;
 
-  const { currentCompanyPage, companyName, currentCompanyPageSize } = location.state || {}
+  const { currentAdminCompanyPage, companyName, currentAdminCompanyPageSize } = location.state || {}
 
   // Fetch company details when component mounts
   useEffect(() => {
@@ -190,8 +190,8 @@ const CompanyDetailsByAdmin = () => {
   const handleBack = () => {
     const state1 = location.state || {};
     console.log(state1)
-    navigate("/admin-dashboard/add-company-details", { state: { companyName: companyName, currentCompanyPage, currentCompanyPageSize } })
-    console.log("sending current page", currentCompanyPage)
+    navigate("/admin-dashboard/add-company-details", { state: { companyName: companyName, currentAdminCompanyPage, currentAdminCompanyPageSize } })
+    console.log("sending current page", currentAdminCompanyPage)
 
   };
 

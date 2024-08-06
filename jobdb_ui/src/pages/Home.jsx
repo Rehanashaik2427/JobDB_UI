@@ -23,19 +23,19 @@ const Home = () => {
     const fetchImages = async () => {
       try {
         const response = await axios.get(`${BASE_API_URL}/companylogos`);
-        
+
         // Process the Map into an array of objects with id and image
         const imagesMap = response.data;
         const imagesArray = Object.entries(imagesMap).map(([id, imageData]) => ({
           id: parseInt(id, 10),
           src: `data:image/jpeg;base64,${imageData}`
         }));
-        
+
         const imageSrcKeys = imagesArray.reduce((acc, { id, src }) => {
           acc[src] = id;
           return acc;
         }, {});
-        
+
         setImageKeys(imageSrcKeys);
         setGroupedImages(groupeImages(imagesArray, 4));
       } catch (error) {
@@ -62,7 +62,7 @@ const Home = () => {
 
     }
   };
-console.log(imageKeys)
+  console.log(imageKeys)
   const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -90,7 +90,7 @@ console.log(imageKeys)
 
   useEffect(() => {
     localStorage.setItem('currentCompanyPage', 0);
-    localStorage.setItem('currentCompanyPageSize', 5);
+    localStorage.setItem('currentCompanyPageSize', 6);
     if (search) {
       fetchJobBySearch();
     } else {
@@ -159,7 +159,8 @@ console.log(imageKeys)
   const handlePageClick = (data) => {
     setPage(data.selected);
   };
-
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary" style={{ width: '100%' }}>
@@ -212,12 +213,11 @@ console.log(imageKeys)
           <div className='search-bar'>
             <input
               type="text"
-              placeholder="Company, JobRole, Location etc...."
+              placeholder="Search by keywords jobrole,companyname,skills"
               value={search}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
             />
-            <Button onClick={fetchJobBySearch}>Search</Button>
           </div>
           <div className="text-center">
             <p><b>Popular Searches:</b> Designer, Web Developer, IOS, Developer, PHP, Senior Developer, Engineer</p>
@@ -254,13 +254,13 @@ console.log(imageKeys)
                     <td>{job.applicationDeadline}</td>
                     <td>{job.skills}</td>
                     <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
-                    </tr>
+                  </tr>
                 ))}
               </tbody>
             </Table>
             {selectedJobSummary && (
-            <div className="modal-summary">
-            <div className="modal-content-summary">
+              <div className="modal-summary">
+                <div className="modal-content-summary">
                   <span className="close" onClick={handleCloseModal}>&times;</span>
                   <div className="job-summary">
                     <h3>Job Summary</h3>
@@ -273,7 +273,7 @@ console.log(imageKeys)
             <div className="pagination-container d-flex justify-content-end align-items-center">
               <div className="page-size-select me-3">
                 <label htmlFor="pageSize">Page Size:</label>
-                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
                   <option value="5">5</option>
                   <option value="10">10</option>
                   <option value="20">20</option>
@@ -299,33 +299,33 @@ console.log(imageKeys)
       </div>
 
       <Card body className="text-center" style={{ width: '100%' }}>
-          <Carousel>
-            {groupedImages.length > 0 ? (
-              groupedImages.map((group, index) => (
-                <Carousel.Item key={index}>
-                  <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-                    {group.map((img, imgIndex) => (
-                      <div className="p-2" key={imgIndex} onClick={() => handleImageClick(img.src)}>
-                        <img
-                          className="d-block carousel-image"
-                          src={img.src}
-                          alt={`Slide ${index}-${imgIndex}`}
-                          style={{ width: '200px', height: '150px', objectFit: 'cover', margin: '20px' }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </Carousel.Item>
-              ))
-            ) : (
-              <Carousel.Item>
-                <div className="d-flex justify-content-center">
-                  <p>No images available</p>
+        <Carousel>
+          {groupedImages.length > 0 ? (
+            groupedImages.map((group, index) => (
+              <Carousel.Item key={index}>
+                <div className="d-flex justify-content-center" style={{ backgroundColor: "gainsboro", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+                  {group.map((img, imgIndex) => (
+                    <div className="p-2" key={imgIndex} onClick={() => handleImageClick(img.src)}>
+                      <img
+                        className="d-block carousel-image"
+                        src={img.src}
+                        alt={`Slide ${index}-${imgIndex}`}
+                        style={{ width: '200px', height: '150px', objectFit: 'cover', margin: '20px' }}
+                      />
+                    </div>
+                  ))}
                 </div>
               </Carousel.Item>
-            )}
-          </Carousel>
-        </Card>
+            ))
+          ) : (
+            <Carousel.Item>
+              <div className="d-flex justify-content-center">
+                <p>No images available</p>
+              </div>
+            </Carousel.Item>
+          )}
+        </Carousel>
+      </Card>
 
       <div>
         <HomeFooter />

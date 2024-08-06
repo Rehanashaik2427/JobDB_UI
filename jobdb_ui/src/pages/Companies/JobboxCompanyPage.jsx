@@ -2,26 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const JobboxCompanyPage = () => {
   const BASE_API_URL = "http://localhost:8082/api/jobbox";
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(3);
+ const [pageSize, setPageSize] = useState(6); 
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
-
-  // useEffect(() => {
-  //   const storedPage = localStorage.getItem('currentCompanyPage');
-  //   if (storedPage !== null) {
-  //     setPage(Number(storedPage));
-  //   }
-  //   console.log(page);
-  // }, [totalPages]); // Adjust when totalPages changes
-
+  console.log(pageSize); 
   const handlePageClick = (data) => {
     const selectedPage = Math.max(0, Math.min(data.selected, totalPages - 1));
     setPage(selectedPage);
@@ -30,7 +22,7 @@ const JobboxCompanyPage = () => {
     console.log(selectedPage);
   };
 
-   console.log(page);
+  console.log(page);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,28 +32,29 @@ const JobboxCompanyPage = () => {
 
           const params = {
             search,
+            page,
+            size: pageSize
           };
-  
-          // Include page parameter only if it meets certain conditions
-          const storedPage = localStorage.getItem('currentCompanyPage');
-          const storedPageSize = localStorage.getItem('currentCompanyPageSize');
-          if (storedPage !== null) {
-            params.page =  Number(storedPage);
-            setPage(Number(storedPage));
-          
-          }
-          else{
-            params.page = page;
-        
-          }
-  
-          if (storedPageSize !== null) {
-          params.size =  Number(storedPageSize);
+          console.log("Fetching data with params:", params); //
+        const storedPage = localStorage.getItem('currentCompanyPage');
+        const storedPageSize = localStorage.getItem('currentCompanyPageSize');
+        if (storedPage !== null) {
+          params.page = Number(storedPage);
+          setPage(Number(storedPage));
+
+        }
+        else {
+          params.page = page;
+
+        }
+
+        if (storedPageSize !== null) {
+          params.size = Number(storedPageSize);
           setPageSize(Number(storedPageSize));
-          }
-          else{
-            params.size=pageSize;
-          }
+        }
+        else {
+          params.size = pageSize;
+        }
         const response = await axios.get(url, { params });
         setCompanies(response.data.content);
         setTotalPages(response.data.totalPages);
@@ -79,33 +72,44 @@ const JobboxCompanyPage = () => {
     setPage(0); // Reset to page 0 on search
   };
 
+
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value, 10);
+    console.log("Selected Page Size:", size); // Log selected page size
+  
     localStorage.setItem('currentCompanyPageSize', size);
     setPageSize(size);
     setPage(0); // Reset to page 0 on page size change
   };
+  
 
   const handleClick = (companyId) => {
     navigate("/jobboxCompanyPage/eachCompanyPage", { state: { companyId } });
   };
- // Determine if the page size selector should be disabled
- const isLastPage = page === totalPages - 1;
- const isPageSizeDisabled = isLastPage;
+  // Determine if the page size selector should be disabled
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
   return (
     <div className="top-right-content">
-      <div className="d-flex justify-content-end align-items-center mb-3 mt-12">
+      <div className="d-flex justify-content-between align-items-center mb-3 mt-12">
+        <img
+          src="/jb_logo.png"
+          alt="JobBox Logo"
+          className="logo"
+          style={{ backgroundColor: 'transparent', marginLeft: '12px' }}
+        />
         <div className="search-bar">
           <input
             style={{ borderRadius: '6px', height: '35px' }}
             type="text"
             name="search"
-            placeholder="Search"
+            placeholder="Search Company"
             value={search}
             onChange={handleSearchChange}
           />
         </div>
       </div>
+
 
       <div className="companyJob mt-4">
         <h1>Companies that we have</h1>
@@ -123,15 +127,16 @@ const JobboxCompanyPage = () => {
               </Card>
             ))
           ) : (
-            <p>Company not found. Please <Link to='/findCompany/company-form'>fill company details</Link>.</p>
+            // <p>Company not found. Please <Link to='/findCompany/company-form'>fill company details</Link>.</p>
+            <h2 className="text-center">Company Not found!!</h2>
           )}
         </div>
         {/* Pagination */}
         <div className="pagination-container d-flex justify-content-end align-items-center">
-        <div className="page-size-select me-3">
+          <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
             <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
-              <option value="5">5</option>
+              <option value="6">6</option>
               <option value="10">10</option>
               <option value="20">20</option>
             </select>

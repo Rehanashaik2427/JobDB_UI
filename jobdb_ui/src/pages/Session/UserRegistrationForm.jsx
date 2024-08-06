@@ -19,9 +19,9 @@ const UserRegistrationForm = () => {
     const [otpVerified, setOtpVerified] = useState(false);
     const [disableFormFields, setDisableFormFields] = useState(false);
     const [userType, setUserType] = useState("");
-    const [agreeToTermsAndConditionByCheck,  setAgreeToTermsAndConditionByCheck] = useState(false);
+    const [agreeToTermsAndConditionByCheck, setAgreeToTermsAndConditionByCheck] = useState(false);
     const navigate = useNavigate();
-   
+
     console.log("Rendering with userType:", userType);
 
     const initialFormValues = {
@@ -188,7 +188,7 @@ const UserRegistrationForm = () => {
         }
     };
 
-    console.log("website",companyWebsite)
+    console.log("website", companyWebsite)
     // Function to validate password criteria
     const validatePassword = (values) => {
         const { password, confirmPassword } = values;
@@ -213,16 +213,16 @@ const UserRegistrationForm = () => {
         if (!email || email === 'undefined' || email === '') {
             alert('please enter email first');
             setDisableFormFields(false);
-        }else{
-        try {
-            const response = await axios.get(`http://localhost:8082/api/jobbox/validateUserEmail?userEmail=${email}`);
-            setOtpValue(response.data);
-            setShowOTPModal(true);
-        } catch (error) {
-            console.error('Error sending OTP:', error);
-            setErrorMessage('Error sending OTP. Please try again later.');
+        } else {
+            try {
+                const response = await axios.get(`http://localhost:8082/api/jobbox/validateUserEmail?userEmail=${email}`);
+                setOtpValue(response.data);
+                setShowOTPModal(true);
+            } catch (error) {
+                console.error('Error sending OTP:', error);
+                setErrorMessage('Error sending OTP. Please try again later.');
+            }
         }
-    }
     };
 
     // Function to handle OTP verification
@@ -257,7 +257,7 @@ const UserRegistrationForm = () => {
                 setErrorMessage(true);
                 return;
             }
-        } catch (error) { 
+        } catch (error) {
             console.error('Error updating user data:', error);
             alert('Data not updated');
         }
@@ -313,7 +313,7 @@ const UserRegistrationForm = () => {
                             onSubmit={handleSubmit}
                             enableReinitialize
                         >
-                            {({ values, errors, touched, handleChange, handleBlur, isSubmitting,isValidating }) => (
+                            {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
                                 <Form className='form'>
                                     <Card className="form-card " style={{ width: '1200px' }}>
                                         <Row>
@@ -456,6 +456,9 @@ const UserRegistrationForm = () => {
                                                                     </select>
                                                                 </div>
                                                             </div>
+                                                            <span style={{ color:'purple'}}>
+                                                                (Note:Before entering domain name, select URL of protocol and extension.)
+                                                            </span>
                                                         </div>
 
                                                     </>
@@ -525,18 +528,18 @@ const UserRegistrationForm = () => {
                                                     errorMessage={touched.confirmPassword && errors.confirmPassword}
                                                     disabled={disableFormFields}
                                                 />
-                                                {passwordMatchError &&(
-                                                     <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                                                     Password did not match, plese try again...
-                                                 </p>
+                                                {passwordMatchError && (
+                                                    <p style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                                                        Password did not match, plese try again...
+                                                    </p>
                                                 )}
-                                                   <Button
-                                                    disabled={disableFormFields || userType === '' ||  otpVerified }
+                                                <Button
+                                                    disabled={disableFormFields || userType === '' || otpVerified}
                                                     className="mt-3"
                                                     onClick={() => {
                                                         setDisableFormFields(true);
-                                                            sendOTP(values.userEmail);
-                                                      
+                                                        sendOTP(values.userEmail);
+
                                                     }}
                                                 >
                                                     Validate my email
@@ -583,7 +586,7 @@ const UserRegistrationForm = () => {
                                                 <Button
                                                     type="submit"
                                                     className="btn btn-primary w-50 my-1 btn-rounded mt-3 d-flex justify-content-center align-items-cen"
-                                                    disabled={!otpVerified || isSubmitting || emailExistsError || userType === '' || agreeToTermsAndConditionByCheck===false }
+                                                    disabled={!otpVerified || isSubmitting || emailExistsError || userType === '' || agreeToTermsAndConditionByCheck === false}
                                                 >
                                                     {isSubmitting ? 'Registering...' : 'Register'}
                                                 </Button>
@@ -596,7 +599,7 @@ const UserRegistrationForm = () => {
                     </>
                 )}
 
-              
+
             </div>
 
             {/* OTP Modal */}

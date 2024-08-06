@@ -13,16 +13,16 @@ const AddCompanyDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [companyData, setCompanyData] = useState([]);
-  const currentCompanyPage = location.state?.currentCompanyPage || 0;
-  const [page, setPage] = useState(currentCompanyPage);
-  const currentCompanyPageSize = location.state?.currentCompanyPageSize || 5;
-  const [pageSize, setPageSize] = useState(currentCompanyPageSize);
+  const currentAdminCompanyPage = location.state?.currentAdminCompanyPage || 0;
+  const [page, setPage] = useState(currentAdminCompanyPage);
+  const currentAdminCompanyPageSize = location.state?.currentAdminCompanyPageSize || 5;
+  const [pageSize, setPageSize] = useState(currentAdminCompanyPageSize);
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
   const state1 = location.state || {};
   console.log(state1)
-  console.log("current page from company details by admin", currentCompanyPage)
+  console.log("current page from company details by admin", currentAdminCompanyPage)
 
   const handleSort = (column) => {
     let order = 'asc';
@@ -32,12 +32,13 @@ const AddCompanyDetails = () => {
     setSortedColumn(column);
     setSortOrder(order);
   };
-
+  const isLastPage = page === totalPages - 1;
+ const isPageSizeDisabled = isLastPage;
   useEffect(() => {
-    if (location.state?.currentCompanyPage === undefined && location.state?.currentCompanyPageSize) {
+    if (location.state?.currentAdminCompanyPage === undefined && location.state?.currentAdminCompanyPageSize) {
       setPage(0);
     }
-  }, [location.state?.currentCompanyPage, location.state?.currentCompanyPageSize]);
+  }, [location.state?.currentAdminCompanyPage, location.state?.currentAdminCompanyPageSize]);
   useEffect(() => {
     fetchCompanyData();
   }, [page, pageSize]);
@@ -108,10 +109,10 @@ const AddCompanyDetails = () => {
                       <td>{company.actionDate}</td>
                       <td><Link to={{
                         pathname: '/admin-dashboard/companyDetailsByAdmin',
-                        state: { companyName: company.companyName, currentCompanyPage: page ,currentCompanyPageSize:pageSize}
+                        state: { companyName: company.companyName, currentAdminCompanyPage: page ,currentAdminCompanyPageSize:pageSize}
                       }} onClick={(e) => {
                         e.preventDefault();
-                        navigate('/admin-dashboard/companyDetailsByAdmin', { state: { companyName: company.companyName, currentCompanyPage: page ,currentCompanyPageSize:pageSize} });
+                        navigate('/admin-dashboard/companyDetailsByAdmin', { state: { companyName: company.companyName, currentAdminCompanyPage: page ,currentAdminCompanyPageSize:pageSize} });
                       }}>ADD</Link></td>
                     </tr>
 
@@ -127,7 +128,7 @@ const AddCompanyDetails = () => {
         <div className="pagination-container d-flex justify-content-end align-items-center">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
-            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+            <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="20">20</option>
