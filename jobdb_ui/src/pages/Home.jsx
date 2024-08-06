@@ -90,7 +90,7 @@ console.log(imageKeys)
 
   useEffect(() => {
     localStorage.setItem('currentCompanyPage', 0);
-    localStorage.setItem('currentCompanyPageSize', 5);
+    localStorage.setItem('currentCompanyPageSize', 6);
     if (search) {
       fetchJobBySearch();
     } else {

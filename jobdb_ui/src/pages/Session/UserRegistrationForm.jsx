@@ -322,7 +322,7 @@ const UserRegistrationForm = () => {
                             onSubmit={handleSubmit}
                             enableReinitialize
                         >
-                            {({ values, errors, touched, handleChange, handleBlur, isSubmitting,isValidating }) => (
+                            {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
                                 <Form className='form'>
                                     <Card className="form-card " style={{ width: '1200px' }}>
                                         <Row>

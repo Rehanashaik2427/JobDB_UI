@@ -35,15 +35,15 @@ const LocationSelector = () => {
           'X-RapidAPI-Key': GEO_DB_API_KEY,
         },
       })
-      .then(response => {
-        const stateData = response.data.data.map(state => ({
-          name: state.name,
-          code: state.regionCode,
-        }));
-        setStates(stateData);
-        setCities([]);
-      })
-      .catch(error => console.error('Error fetching states:', error));
+        .then(response => {
+          const stateData = response.data.data.map(state => ({
+            name: state.name,
+            code: state.regionCode,
+          }));
+          setStates(stateData);
+          setCities([]);
+        })
+        .catch(error => console.error('Error fetching states:', error));
     }
   }, [selectedCountry]);
 
@@ -55,15 +55,15 @@ const LocationSelector = () => {
           'X-RapidAPI-Key': GEO_DB_API_KEY,
         },
       })
-      .then(response => {
-        const cityData = response.data.data.map(city => ({
-          name: city.city,
-          lat: city.latitude,
-          lng: city.longitude,
-        }));
-        setCities(cityData);
-      })
-      .catch(error => console.error('Error fetching cities:', error));
+        .then(response => {
+          const cityData = response.data.data.map(city => ({
+            name: city.city,
+            lat: city.latitude,
+            lng: city.longitude,
+          }));
+          setCities(cityData);
+        })
+        .catch(error => console.error('Error fetching cities:', error));
     }
   }, [selectedState]);
 
@@ -86,62 +86,62 @@ const LocationSelector = () => {
   };
 
   return (
-<div>
-        <h4>All Locations</h4>
-        <Form>
-          <Form.Group controlId="countrySelect">
-            <Form.Label>Country</Form.Label>
-            <Form.Control as="select" onChange={handleCountryChange}>
-              <option value="">Select Country</option>
-              {countries.map((country) => (
-                <option key={country.code} value={country.code}>
-                  {country.name}
+    <div>
+      <h4>All Locations</h4>
+      <Form>
+        <Form.Group controlId="countrySelect">
+          <Form.Label>Country</Form.Label>
+          <Form.Control as="select" onChange={handleCountryChange}>
+            <option value="">Select Country</option>
+            {countries.map((country) => (
+              <option key={country.code} value={country.code}>
+                {country.name}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+
+        {selectedCountry && (
+          <Form.Group controlId="stateSelect">
+            <Form.Label>State</Form.Label>
+            <Form.Control as="select" onChange={handleStateChange}>
+              <option value="">Select State</option>
+              {states.map((state) => (
+                <option key={state.code} value={state.code}>
+                  {state.name}
                 </option>
               ))}
             </Form.Control>
           </Form.Group>
+        )}
 
-          {selectedCountry && (
-            <Form.Group controlId="stateSelect">
-              <Form.Label>State</Form.Label>
-              <Form.Control as="select" onChange={handleStateChange}>
-                <option value="">Select State</option>
-                {states.map((state) => (
-                  <option key={state.code} value={state.code}>
-                    {state.name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-          )}
+        {selectedState && (
+          <Form.Group controlId="citySelect">
+            <Form.Label>City</Form.Label>
+            <Form.Control as="select" onChange={handleCityChange}>
+              <option value="">Select City</option>
+              {cities.map((city) => (
+                <option key={city.name} value={city.name}>
+                  {city.name}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        )}
+      </Form>
 
-          {selectedState && (
-            <Form.Group controlId="citySelect">
-              <Form.Label>City</Form.Label>
-              <Form.Control as="select" onChange={handleCityChange}>
-                <option value="">Select City</option>
-                {cities.map((city) => (
-                  <option key={city.name} value={city.name}>
-                    {city.name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-          )}
-        </Form>
-
-          <MapContainer center={[51.505, -0.09]} zoom={3}>
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-            {selectedCity && (
-              <Marker position={[selectedCity.lat, selectedCity.lng]}>
-                <Popup>{selectedCity.name}</Popup>
-              </Marker>
-            )}
-          </MapContainer>
-          </div>
+      <MapContainer center={[51.505, -0.09]} zoom={3}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {selectedCity && (
+          <Marker position={[selectedCity.lat, selectedCity.lng]}>
+            <Popup>{selectedCity.name}</Popup>
+          </Marker>
+        )}
+      </MapContainer>
+    </div>
   );
 };
 
