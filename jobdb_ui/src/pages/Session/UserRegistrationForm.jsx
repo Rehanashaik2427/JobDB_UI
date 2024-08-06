@@ -1,5 +1,3 @@
-
-
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -26,8 +24,6 @@ const UserRegistrationForm = () => {
    
     console.log("Rendering with userType:", userType);
 
-
-
     const initialFormValues = {
         userName: '',
         userEmail: '',
@@ -41,7 +37,6 @@ const UserRegistrationForm = () => {
     };
 
     const [formValues, setFormValues] = useState(initialFormValues);
-
 
     const location = useLocation();
     const userRole = location.state?.userType; // Get the userType from navigation state
@@ -67,7 +62,6 @@ const UserRegistrationForm = () => {
         localStorage.setItem('userRegistrationForm', JSON.stringify(formValues));
     }, [formValues]);
 
-
     useEffect(() => {
         const storedUserType = localStorage.getItem('userType') || '';
         setUserType(storedUserType);
@@ -78,12 +72,10 @@ const UserRegistrationForm = () => {
         }
     }, []);
 
-
     useEffect(() => {
         localStorage.setItem('userRegistrationForm', JSON.stringify(formValues));
         localStorage.setItem('userType', userType);
     }, [formValues, userType]);
-
 
     useEffect(() => {
         // Clear localStorage when the component unmounts
@@ -103,7 +95,6 @@ const UserRegistrationForm = () => {
     };
     const [protocol, setProtocol] = useState('http');
     const [tld, setTld] = useState('.com');
-
 
     // Validation schema using Yup
     const validationSchema = yup.object().shape({
@@ -490,7 +481,6 @@ const UserRegistrationForm = () => {
 
                                                 )}
 
-
                                                 <TextField
                                                     type="password"
                                                     name="password"
@@ -638,6 +628,3 @@ const UserRegistrationForm = () => {
 };
 
 export default UserRegistrationForm;
-
-
-

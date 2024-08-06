@@ -16,34 +16,38 @@ const ViewApplications = () => {
 
 
 
-  const { userEmail, userName, jobId, currentJobApplicationPage,currentJobApplicationPageSize } = location.state || {};
+  const { userEmail, userName, jobId, currentJobApplicationPage, currentJobApplicationPageSize } = location.state || {};
   const [applications, setApplications] = useState([]);
   const [resumeTypes, setResumeTypes] = useState({});
   const [filterStatus, setFilterStatus] = useState('all');
   const [fileNames, setfileNames] = useState({});
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
- 
+
   const [totalPages, setTotalPages] = useState(0);
   const [sortedColumn, setSortedColumn] = useState(null); // Track the currently sorted column
   const [sortOrder, setSortOrder] = useState(' '); // Track the sort order (asc or desc)
   const [loading, setLoading] = useState(true);
 
+  const currentApplicationPage = location.state?.currentApplicationPage || 0;
+  const [page, setPage] = useState(currentApplicationPage);
+
+  const currentApplicationPageSize = location.state?.currentApplicationPageSize || 5;
+  const [pageSize, setPageSize] = useState(currentApplicationPageSize);
 
   const isLastPage = page === totalPages - 1;
   const isPageSizeDisabled = isLastPage;
 
- 
 
 
-  const currentApplicationPage = location.state?.currentApplicationPage || 0;
-  const [page, setPage] = useState(currentApplicationPage);
-  
-  const currentApplicationPageSize = location.state?.currentApplicationPageSize || 5;
-  const [pageSize, setPageSize] = useState(currentApplicationPageSize);  useEffect(() => {
+
+
+
+  useEffect(() => {
     fetchApplications();
 
   }, [jobId, page, pageSize, sortedColumn, sortOrder]);
+
   useEffect(() => {
 
     const storedPage = localStorage.getItem('currentViewPage');
@@ -60,10 +64,10 @@ const ViewApplications = () => {
 
   }, [totalPages]);
 
-  
+
   const state1 = location.state || {};
   console.log(state1)
-  console.log("current page from Application details",currentApplicationPage)
+  console.log("current page from Application details", currentApplicationPage)
 
   const handlePageSizeChange = (e) => {
     const size = parseInt(e.target.value);
@@ -76,11 +80,11 @@ const ViewApplications = () => {
     handleSelect(e.target.value);
   };
   useEffect(() => {
-    if (location.state?.currentApplicationPage === undefined &&  location.state?.currentApplicationPageSize) {
+    if (location.state?.currentApplicationPage === undefined && location.state?.currentApplicationPageSize) {
       setPage(0);
       setPageSize(5);
     }
-  }, [location.state?.currentApplicationPage,location.state?.currentApplicationPageSize]);
+  }, [location.state?.currentApplicationPage, location.state?.currentApplicationPageSize]);
 
   const handleSelect = async (filterStatus, fromDate, toDate) => {
     setLoading(true);
@@ -152,14 +156,14 @@ const ViewApplications = () => {
   };
   useEffect(() => {
     fetchApplications();
-    
+
   }, [jobId, page, pageSize, sortedColumn, sortOrder]);
 
   useEffect(() => {
     console.log('currentViewPage', page)
     localStorage.removeItem('currentViewPage', page);
   }, [page]);
-  
+
   const handleSort = (column) => {
     let order = 'asc';
     if (sortedColumn === column) {
@@ -399,10 +403,10 @@ const ViewApplications = () => {
   const handleBack = () => {
     const state1 = location.state || {};
     console.log(state1)
-   
-    navigate('/hr-dashboard/hr-applications', { state: {userEmail,userName,jobId,currentJobApplicationPage,currentJobApplicationPageSize} })
+
+    navigate('/hr-dashboard/hr-applications', { state: { userEmail, userName, jobId, currentJobApplicationPage, currentJobApplicationPageSize } })
     console.log("sending current page", currentJobApplicationPage)
-    
+
   };
   return (
     <div className='dashboard-container'>
@@ -411,22 +415,89 @@ const ViewApplications = () => {
       </div>
       <div md={10} className="right-side" >
         <div className="application-div">
-          <Row className="filter">
-            <Col className="filter" style={{ maxWidth: '40%' }}>
-              <label htmlFor="status">Filter by Status:</label>
-              <select id="status" onChange={handleFilterChange} value={filterStatus}>
+          <Row className="mb-4 m-3">
+            <Col
+              className="filter p-3 border rounded shadow-sm"
+               style={{ maxWidth: '30%', backgroundColor: '#f4f4f9' }}
+            >
+              <label
+                htmlFor="status"
+                className="form-label"
+                style={{ color: '#6c5b7b' }} // Purple color for the label
+              >
+                Filter by Status:
+              </label>
+              <select
+                id="status"
+                onChange={handleFilterChange}
+                value={filterStatus}
+                className="form-select form-select-sm fs-5" // Adjust the fs-* class as needed
+                style={{ borderColor: '#6c5b7b' }} // Purple border color
+              >
                 <option value="all">All</option>
                 <option value="Shortlisted">Shortlisted</option>
                 <option value="Not Seen">Not Seen</option>
                 <option value="Not Shortlisted">Not Shortlisted</option>
               </select>
             </Col>
-            <Col className="filter">
-              <label htmlFor="date" className="mr-2">Filter by Date:</label>
-              From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
-              To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
+            <Col
+              className="filter p-3 border rounded shadow-sm ms-3"
+              style={{ maxWidth: '30%', backgroundColor: '#f4f4f9' }} // Background color for consistency
+            >
+              <label
+                htmlFor="date"
+                className="form-label"
+                style={{ color: '#6c5b7b' }} // Purple color for the label
+              >
+                Filter by Date:
+              </label>
+              <div className="d-flex align-items-center gap-3">
+              <div className="d-flex flex-row ">
+                  <label
+                    htmlFor="fromDate"
+                    className="form-label mb-1"
+                    style={{ color: '#6c5b7b' }} // Purple color for the label
+                  >
+                    From:
+                  </label>
+                  <input
+                    type="date"
+                    id="fromDate"
+                    value={fromDate}
+                    onChange={(e) => handleFromDateChange(e.target.value)}
+                    className="form-control form-control-sm fs-7"
+                    style={{
+                      maxWidth: '150px',
+                      borderColor: '#6c5b7b', // Purple border color
+                      boxShadow: 'none'
+                    }}
+                  />
+                </div>
+                <div className="d-flex flex-row ">
+                  <label
+                    htmlFor="toDate"
+                    className="form-label mb-1"
+                    style={{ color: '#6c5b7b' }} // Purple color for the label
+                  >
+                    To:
+                  </label>
+                  <input
+                    type="date"
+                    id="toDate"
+                    value={toDate}
+                    onChange={(e) => handleToDateChange(e.target.value)}
+                    className="form-control form-control-sm fs-7"
+                    style={{
+                      maxWidth: '150px',
+                      borderColor: '#6c5b7b', // Purple border color
+                      boxShadow: 'none'
+                    }}
+                  />
+                </div>
+              </div>
             </Col>
           </Row>
+
           {showBriefSettings && (
             <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
               <Modal.Header closeButton>
@@ -518,71 +589,71 @@ const ViewApplications = () => {
                         {/* <th scope="col" onClick={() => handleSort('applicationStatus')}>
                           Application Status {sortedColumn === 'applicationStatus' && (sortOrder === 'asc' ? '▲' : '▼')}
                         </th> */}
-                      <th scope="col">View Details</th>
-                      <th scope="col">Action</th>
-                      <th scope="col">Chat</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {applications.map((application) => (
-                      <tr key={application.applicationId}>
-                        <td>{application.jobRole}</td>
-                        <td>{candidateName[application.candidateId]}</td>
-                        <td>{candidateEmail[application.candidateId]}</td>
-                        <td>{renderResumeComponent(application.resumeId)}</td>
-                        <td>{application.appliedOn}</td>
-                        {/* <td>{application.applicationStatus}</td> */}
-                        <td>
-                          <FontAwesomeIcon onClick={(e) => {
-                            e.preventDefault();
-                            navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
-                              state: { userEmail, applicationId: application.applicationId, userName, currentApplicationPage: page ,jobId ,currentApplicationPageSize:pageSize},
-                            });
-                          }}
-                            icon={faEye}
-                            style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
-                          />
-                        </td>
-                        <td >
-                          <Slider
-                            initialStatus={application.applicationStatus}
-                            onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                          />
-                        </td>
-                        <td>
-                          <div style={{ position: 'relative', display: 'inline-block' }}>
-                            {unreadMessages[application.applicationId] > 0 && (
-                              <span
-                                style={{
-                                  position: 'absolute',
-                                  top: '-5px',
-                                  right: '-15px',
-                                  backgroundColor: 'red',
-                                  color: 'white',
-                                  borderRadius: '50%',
-                                  width: '20px',
-                                  height: '20px',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  fontSize: '12px',
-                                  fontWeight: 'bold',
-                                  zIndex: 1, // Ensure notification badge is above SiImessage icon
-                                }}
-                              >
-                                {unreadMessages[application.applicationId]}
-                              </span>
-                            )}
-                            <SiImessage
-                              size={25}
-                              onClick={() => {
-                                handleChatClick(application.applicationId);
-                                setShowModal(true);
-                              }}
-                              style={{ color: 'green', cursor: 'pointer' }}
+                        <th scope="col">View Details</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Chat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {applications.map((application) => (
+                        <tr key={application.applicationId}>
+                          <td>{application.jobRole}</td>
+                          <td>{candidateName[application.candidateId]}</td>
+                          <td>{candidateEmail[application.candidateId]}</td>
+                          <td>{renderResumeComponent(application.resumeId)}</td>
+                          <td>{application.appliedOn}</td>
+                          {/* <td>{application.applicationStatus}</td> */}
+                          <td>
+                            <FontAwesomeIcon onClick={(e) => {
+                              e.preventDefault();
+                              navigate('/hr-dashboard/hr-applications/view-applications/applicationDetails', {
+                                state: { userEmail, applicationId: application.applicationId, userName, currentApplicationPage: page, jobId, currentApplicationPageSize: pageSize },
+                              });
+                            }}
+                              icon={faEye}
+                              style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
                             />
-                          </div>
-                        </td>
+                          </td>
+                          <td >
+                            <Slider
+                              initialStatus={application.applicationStatus}
+                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
+                            />
+                          </td>
+                          <td>
+                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                              {unreadMessages[application.applicationId] > 0 && (
+                                <span
+                                  style={{
+                                    position: 'absolute',
+                                    top: '-5px',
+                                    right: '-15px',
+                                    backgroundColor: 'red',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    width: '20px',
+                                    height: '20px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold',
+                                    zIndex: 1, // Ensure notification badge is above SiImessage icon
+                                  }}
+                                >
+                                  {unreadMessages[application.applicationId]}
+                                </span>
+                              )}
+                              <SiImessage
+                                size={25}
+                                onClick={() => {
+                                  handleChatClick(application.applicationId);
+                                  setShowModal(true);
+                                }}
+                                style={{ color: 'green', cursor: 'pointer' }}
+                              />
+                            </div>
+                          </td>
 
                         </tr>
                       ))}

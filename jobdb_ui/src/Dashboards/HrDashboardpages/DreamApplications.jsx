@@ -348,22 +348,89 @@ const DreamApplication = () => {
 
       <div className="right-side" >
           <div className="application-div">
-            <Row className="filter">
-              <Col className="filter" style={{ maxWidth: '40%' }}>
-                <label htmlFor="status">Filter by Status:</label>
-                <select id="status" onChange={handleFilterChange} value={filterStatus}>
-                  <option value="all">All</option>
-                  <option value="Shortlisted">Shortlisted</option>
-                  <option value="Not Seen">Not Seen</option>
-                  <option value="Not Shortlisted">Not Shortlisted</option>
-                </select>
-              </Col>
-              <Col className="filter">
-                <label htmlFor="date" className="mr-2">Filter by Date:</label>
-                From:<input type="date" id="fromDate" value={fromDate} onChange={(e) => handleFromDateChange(e.target.value)} className="mr-2" />
-                To:<input type="date" id="toDate" value={toDate} onChange={(e) => handleToDateChange(e.target.value)} />
-              </Col>
-            </Row>
+          <Row className="mb-4 m-3">
+            <Col
+              className="filter p-3 border rounded shadow-sm"
+              style={{ maxWidth: '30%', backgroundColor: '#f4f4f9' }}
+            >
+              <label
+                htmlFor="status"
+                className="form-label"
+                style={{ color: '#6c5b7b' }} // Purple color for the label
+              >
+                Filter by Status:
+              </label>
+              <select
+                id="status"
+                onChange={handleFilterChange}
+                value={filterStatus}
+                className="form-select form-select-sm fs-5" // Adjust the fs-* class as needed
+                style={{ borderColor: '#6c5b7b' }} // Purple border color
+              >
+                <option value="all">All</option>
+                <option value="Shortlisted">Shortlisted</option>
+                <option value="Not Seen">Not Seen</option>
+                <option value="Not Shortlisted">Not Shortlisted</option>
+              </select>
+            </Col>
+            <Col
+              className="filter p-3 border rounded shadow-sm ms-3"
+              style={{ maxWidth: '30%', backgroundColor: '#f4f4f9' }} // Background color for consistency
+            >
+              <label
+                htmlFor="date"
+                className="form-label"
+                style={{ color: '#6c5b7b' }} // Purple color for the label
+              >
+                Filter by Date:
+              </label>
+              <div className="d-flex align-items-center gap-3">
+                <div className="d-flex flex-row align-items-center">
+                  <label
+                    htmlFor="fromDate"
+                    className="form-label mb-1"
+                    style={{ color: '#6c5b7b' }} // Purple color for the label
+                  >
+                    From:
+                  </label>
+                  <input
+                    type="date"
+                    id="fromDate"
+                    value={fromDate}
+                    onChange={(e) => handleFromDateChange(e.target.value)}
+                    className="form-control form-control-sm fs-7"
+                    style={{
+                      maxWidth: '150px',
+                      borderColor: '#6c5b7b', // Purple border color
+                      boxShadow: 'none'
+                    }}
+                  />
+                </div>
+                <div className="d-flex flex-row">
+                  <label
+                    htmlFor="toDate"
+                    className="form-label mb-1"
+                    style={{ color: '#6c5b7b' }} // Purple color for the label
+                  >
+                    To:
+                  </label>
+                  <input
+                    type="date"
+                    id="toDate"
+                    value={toDate}
+                    onChange={(e) => handleToDateChange(e.target.value)}
+                    className="form-control form-control-sm fs-7"
+                    style={{
+                      maxWidth: '150px',
+                      borderColor: '#6c5b7b', // Purple border color
+                      boxShadow: 'none'
+                    }}
+                  />
+                </div>
+              </div>
+            </Col>
+          </Row>
+
             {showBriefSettings && (
               <Modal show={showBriefSettings} onHide={() => setShowBriefSettings(false)}>
               <Modal.Header closeButton>

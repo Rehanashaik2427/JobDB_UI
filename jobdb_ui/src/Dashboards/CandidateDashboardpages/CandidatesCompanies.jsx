@@ -66,6 +66,7 @@ const CandidatesCompanies = () => {
           title: "Oops...",
           text: "Company not found!"
         });
+        setSearch(null);
       }
       setCompanies(response.data.content);
       setTotalPages(response.data.totalPages);
