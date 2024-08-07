@@ -210,7 +210,7 @@ const Home = () => {
 
       <div className='jobs'>
         <div className='search'>
-          <div className='search-bar'>
+          <div className='home-search-bar'>
             <input
               type="text"
               placeholder="Search by keywords jobrole,companyname,skills"

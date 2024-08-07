@@ -30,8 +30,6 @@ const CompanyDetailsByAdmin = () => {
 
   const location = useLocation();
 
-  // const companyName = location.state?.companyName;
-
   const { currentAdminCompanyPage, companyName, currentAdminCompanyPageSize } = location.state || {}
 
   // Fetch company details when component mounts
@@ -55,9 +53,9 @@ const CompanyDetailsByAdmin = () => {
   const handleSave = async () => {
     try {
       const response = await axios.put(`${BASE_API_URL}/updateCompanyDetailsByAdmin?companyName=${companyName}`, companyDetails);
-      console.log(response.data); // Log success message or handle response as needed
-      setCompanyDetails({ ...companyDetails }); // Update local state with saved values
-      setEditableCompanyDetails(false); // Exit edit mode
+      console.log(response.data); 
+      setCompanyDetails({ ...companyDetails }); 
+      setEditableCompanyDetails(false); 
     } catch (error) {
       console.error('Error updating company details:', error);
       // Handle error state or display error message to user
