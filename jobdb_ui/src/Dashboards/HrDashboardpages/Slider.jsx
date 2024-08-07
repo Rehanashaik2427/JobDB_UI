@@ -23,7 +23,7 @@ const Slider = ({ initialStatus, onChangeStatus }) => {
     } else if (newValue === 2) {
       onChangeStatus('Shortlisted');
     } else {
-      onChangeStatus(''); // Middle position
+      onChangeStatus('Not Seen'); // Middle position
     }
   };
 

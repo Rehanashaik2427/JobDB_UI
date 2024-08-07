@@ -62,9 +62,10 @@ const CompanyJobs = ({ companyId }) => {
   const handleCloseModal = () => {
     setSelectedJobSummary(null);
   };
-
+  const isLastPage = page === totalPages - 1;
+  const isPageSizeDisabled = isLastPage;
   return (
-    <div className="company-job" style={{ marginTop: '20px', width: '100%', height: "fit-content" }}>
+    <div className="company-job" style={{ marginTop: '20px', width: '100%', height: "fit-content", marginLeft:'10px' }}>
       <div className="jobs_list">
         {jobs.length > 0 && (
           <div>
@@ -108,7 +109,7 @@ const CompanyJobs = ({ companyId }) => {
             <div className="pagination-container d-flex justify-content-end align-items-center">
               <div className="page-size-select me-3">
                 <label htmlFor="pageSize">Page Size:</label>
-                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize}>
+                <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
                   <option value="5">5</option>
                   <option value="10">10</option>
                   <option value="20">20</option>
@@ -130,7 +131,12 @@ const CompanyJobs = ({ companyId }) => {
             </div>
           </div>
         )}
+       
       </div>
+      <span style={{ marginTop: '20px', width: '100%', height: "fit-content"}} >
+      {jobs.length === 0 && <h1 >No jobs found.</h1>}
+      </span>
+      
     </div>
   )
 }

@@ -26,7 +26,7 @@ const CompanyOverView = ({ companyId }) => {
 
   return (
     <div>
-      <Card style={{ marginTop: '20px', width: '100%', height:"fit-content" }}>
+      <Card style={{ marginTop: '20px', width: '100%', height:"fit-content" ,marginLeft:'10px'}}>
         <Card.Body>
           <>
             <h3>About {overviewData.companyName} </h3>

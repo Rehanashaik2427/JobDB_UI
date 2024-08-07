@@ -285,25 +285,7 @@ const MyJobs = () => {
               </div>
 
             </div>
-          </>
-        ) : (
-          <section>
-            <h2>You have not posted any jobs yet. Post Now</h2>
-          </section>
-        )}
-        {selectedJobSummary && (
-          <div className="modal-summary">
-            <div className="modal-content-summary">
-              <span className="close" onClick={handleCloseModal}>&times;</span>
-              <div className="job-summary">
-                <h3>Job Summary</h3>
-                <pre>{selectedJobSummary}</pre>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="pagination-container d-flex justify-content-end align-items-center">
+            <div className="pagination-container d-flex justify-content-end align-items-center">
           <div className="page-size-select me-3">
             <label htmlFor="pageSize">Page Size:</label>
             <select id="pageSize" onChange={handlePageSizeChange} value={pageSize} disabled={isPageSizeDisabled}>
@@ -327,6 +309,25 @@ const MyJobs = () => {
             forcePage={page}
           />
         </div>
+          </>
+        ) : (
+          <section>
+            <h2>You have not posted any jobs yet. Post Now</h2>
+          </section>
+        )}
+        {selectedJobSummary && (
+          <div className="modal-summary">
+            <div className="modal-content-summary">
+              <span className="close" onClick={handleCloseModal}>&times;</span>
+              <div className="job-summary">
+                <h3>Job Summary</h3>
+                <pre>{selectedJobSummary}</pre>
+              </div>
+            </div>
+          </div>
+        )}
+
+       
 
         {!loading && jobs.length >= 0 && (
           <Button className='add-job-button position-relative top-70 start-40 translate-middle'>

@@ -85,16 +85,17 @@ const UserRegistrationForm = () => {
         };
     }, []);
 
-    const handleUserTypeChange = (type) => {
-        setUserType(type);
-        setFormValues(prevValues => ({
-            ...prevValues,
-            companyName: type === 'HR' ? prevValues.companyName : '',
-            phone: type === 'Candidate' ? prevValues.phone : '',
-        }));
-    };
+    // const handleUserTypeChange = (type) => {
+    //     setUserType(type);
+    //     setFormValues(prevValues => ({
+    //         ...prevValues,
+    //         companyName: type === 'HR' ? prevValues.companyName : '',
+    //         phone: type === 'Candidate' ? prevValues.phone : '',
+    //     }));
+    // };
     const [protocol, setProtocol] = useState('http');
     const [tld, setTld] = useState('.com');
+    const [domain, setDomain] = useState('');
 
     // Validation schema using Yup
     const validationSchema = yup.object().shape({
@@ -142,7 +143,13 @@ const UserRegistrationForm = () => {
             values.companyName = null;
             values.companyWebsite = null;
         }
+        if(domain)
+        {
+            values.companyWebsite=`${protocol}://www.${domain}${tld}`;
+            console.log(values.companyWebsite+"   company Website")
+        }
 
+        console.log(values.companyWebsite+"   company Website")
         try {
             const response = await axios.post('http://localhost:8082/api/jobbox/saveUser', values);
 
@@ -395,7 +402,14 @@ const UserRegistrationForm = () => {
                                                         />
                                                         <div className="form-group" style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginBottom: '5px' }}>
                                                             <label>{<><span>Company Website</span> <span className="required" style={{ color: 'red' }}>*</span></>}</label>
-                                                            <div className="protocol-tld-container" style={{ display: 'flex', alignItems: 'center' }}>
+                                                            <div className="protocol-tld-container" style={{ display: 'flex', alignItems: 'center' }} >
+{/*                                                             
+                                                            // onChange={() => {
+                                                               
+                                                            //     handleChange({
+                                                            //         target: { name: 'companyWebsite', value: `${protocol}://www.${domain}${tld}` }
+                                                            //     });
+                                                            // }}> */}
 
                                                                 <div className="select-group" style={{ marginRight: '10px' }}>
 
@@ -405,9 +419,9 @@ const UserRegistrationForm = () => {
                                                                         onChange={(event) => {
                                                                             const newProtocol = event.target.value;
                                                                             setProtocol(newProtocol);
-                                                                            handleChange({
-                                                                                target: { name: 'companyWebsite', value: `${newProtocol}://www.${values.companyWebsite}${tld}` }
-                                                                            });
+                                                                            // handleChange({
+                                                                            //     target: { name: 'companyWebsite', value: `${newProtocol}://www.${values.companyWebsite}${tld}` }
+                                                                            // });
                                                                         }}
                                                                         onBlur={handleBlur}
                                                                         disabled={disableFormFields}
@@ -427,9 +441,7 @@ const UserRegistrationForm = () => {
                                                                     disabled={disableFormFields}
                                                                     onChange={(e) => {
                                                                         const value = e.target.value;
-                                                                        handleChange({
-                                                                            target: { name: 'companyWebsite', value: `${protocol}://www.${value}${tld}` }
-                                                                        });
+                                                                       setDomain(value);
                                                                     }}
                                                                 />
                                                                 <div className="select-group" style={{ marginRight: '10px' }}>
@@ -440,9 +452,9 @@ const UserRegistrationForm = () => {
                                                                         onChange={(event) => {
                                                                             const newTld = event.target.value;
                                                                             setTld(newTld);
-                                                                            handleChange({
-                                                                                target: { name: 'companyWebsite', value: `${protocol}://www.${values.companyWebsite}${newTld}` }
-                                                                            });
+                                                                            // handleChange({
+                                                                            //     target: { name: 'companyWebsite', value: `${protocol}://www.${domain}${newTld}` }
+                                                                            // });
                                                                         }}
                                                                         onBlur={handleBlur}
                                                                         disabled={disableFormFields}
@@ -456,9 +468,10 @@ const UserRegistrationForm = () => {
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <span style={{ color:'purple'}}>
+                                                            {/* <span style={{ color:'purple'}}>
                                                                 (Note:Before entering domain name, select URL of protocol and extension.)
-                                                            </span>
+                                                                {values.companyWebsite}
+                                                            </span> */}
                                                         </div>
 
                                                     </>
