@@ -1035,3 +1035,11 @@ margin-right: auto;
   padding: 30px;
   margin: 180px
 }
+
+.job-details-text {
+  font-family: nunito, sans-serif; /* Replace with the font family used in other tags */
+  font-size: 13px; /* Ensure font size matches if needed */
+  line-height: 1.5; /* Adjust line height for better readability */
+  
+}
+

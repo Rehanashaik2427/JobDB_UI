@@ -8,6 +8,7 @@ import CandidateJobs from './CandidateJobs'
 import CandidatesCompanies from './CandidatesCompanies'
 import CompamyPage from './CompanyPage'
 import DreamCompany from './DreamCompany'
+import JobDescription from './JobDescription'
 import MyApplication from './MyApplication'
 import Payment from './Payment'
 import Profile from './Profile'
@@ -31,6 +32,7 @@ const CandidateDashbaordRoute = () => {
       <Route path='/companyPage' element={<CompamyPage />} />
       <Route path='/resumePopUp' element={<ResumeSelectionPopup />} />
       <Route path='/dream-company' element={<DreamCompany/>}/>
+      <Route path='/job-description' element={<JobDescription />}/>
     </Routes>
 
   )
