@@ -13,7 +13,6 @@ const CandidateJobs = () => {
   const location = useLocation();
   const userName = location.state?.userName;
   const userId = location.state?.userId;
-
   const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [applyjobs, setApplyJobs] = useState([]);
@@ -28,7 +27,6 @@ const CandidateJobs = () => {
   const [resumes, setResumes] = useState([]);
   const [hasUserApplied, setHasUserApplied] = useState({});
   const [selectedJobSummary, setSelectedJobSummary] = useState(null);
-  const [showModalSummary, setShowModalSummary] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
   const handleFilterChange = async (e) => {
 
@@ -80,15 +78,6 @@ const CandidateJobs = () => {
       };
       console.log(filterStatus)
 
-
-      // if (filterStatus === 'Apply') {
-      //   // Fetch jobs where user has not applied
-      //   params.userId = userId; // Example parameter to pass to backend API
-      // } else if (filterStatus === 'Applied') {
-      //   // Fetch jobs where user has applied
-      //   params.userId = 0; // Example parameter to pass to backend API
-      // }
-
       const response = await axios.get(`${BASE_API_URL}/paginationFilterJobs`, { params });
       setJobs(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -100,6 +89,7 @@ const CandidateJobs = () => {
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
+
 
   const handleApplyButtonClick = (jobId) => {
     setSelectedJobId(jobId);
@@ -276,6 +266,7 @@ const CandidateJobs = () => {
   const isPageSizeDisabled = isLastPage;
 
 
+
   return (
     <div className='dashboard-container'>
 
@@ -362,6 +353,7 @@ const CandidateJobs = () => {
                       Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
                     </th>
                     <th scope='col'>Job Summary</th>
+                    <th scope='col'>Job description</th>
                     <th scope='col'>Actions</th>
                   </tr>
                 </thead>
@@ -373,6 +365,13 @@ const CandidateJobs = () => {
                       <td>{job.applicationDeadline}</td>
                       <td>{job.skills}</td>
                       <td><Button variant="secondary" className='description btn-rounded' onClick={() => handleViewSummary(job.jobsummary)}>Summary</Button></td>
+                      <td>
+                        <Button variant="secondary" className='description btn-rounded'
+                          onClick={() => navigate('/candidate-dashboard/job-description', { state: { companyName: job.companyName ,jobId:job.jobId,userId: userId} })}
+                        >
+                          View Job Description
+                        </Button>
+                      </td>
                       <td>
                         {hasUserApplied[job.jobId] === true || (applyjobs && applyjobs.jobId === job.jobId) ? (
                           <p>Applied</p>
