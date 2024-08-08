@@ -178,7 +178,7 @@ const ViewApplications = () => {
     console.log(applicationId);
     console.log(newStatus);
     try {
-     await axios.put(`${BASE_API_URL}/updateApplicationStatus?applicationId=${applicationId}&newStatus=${newStatus}&hrEmail=${userEmail}`);
+      await axios.put(`${BASE_API_URL}/updateApplicationStatus?applicationId=${applicationId}&newStatus=${newStatus}&hrEmail=${userEmail}`);
       fetchApplications();
     } catch (error) {
       console.log(error);
@@ -418,7 +418,7 @@ const ViewApplications = () => {
           <Row className="mb-4 m-3">
             <Col
               className="filter p-3 border rounded shadow-sm"
-               style={{ maxWidth: '30%', backgroundColor: '#f4f4f9' }}
+              style={{ maxWidth: '30%', backgroundColor: '#f4f4f9' }}
             >
               <label
                 htmlFor="status"
@@ -452,7 +452,7 @@ const ViewApplications = () => {
                 Filter by Date:
               </label>
               <div className="d-flex align-items-center gap-3">
-              <div className="d-flex flex-row ">
+                <div className="d-flex flex-row ">
                   <label
                     htmlFor="fromDate"
                     className="form-label mb-1"
@@ -614,11 +614,13 @@ const ViewApplications = () => {
                               style={{ cursor: 'pointer', fontSize: '20px', color: 'black' }}
                             />
                           </td>
-                          <td >
-                            <Slider
-                              initialStatus={application.applicationStatus}
-                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                            />
+                          <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                              <Slider
+                                initialStatus={application.applicationStatus}
+                                onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
+                              />
+                            </div>
                           </td>
                           <td>
                             <div style={{ position: 'relative', display: 'inline-block' }}>

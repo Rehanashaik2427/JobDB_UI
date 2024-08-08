@@ -534,18 +534,21 @@ const DreamApplication = () => {
                         <td>{candidateEmail[application.candidateId]}</td>
                         <td>{renderResumeComponent(application.resumeId)}</td>
                         <td>{application.appliedOn}</td>
-                        <td className="text-center">
+                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                           {application.applicationStatus === "Shortlisted" && hrEmail[application.hrId] !== userEmail ? (
                             <div>
                               Shortlisted by {hrName[application.hrId] || 'Unknown HR'} of {application.companyName}
                             </div>
                           ) : (
-                            <Slider
-                              initialStatus={application.applicationStatus}
-                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus, application.hrId)}
-                            />
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                              <Slider
+                                initialStatus={application.applicationStatus}
+                                onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus, application.hrId)}
+                              />
+                            </div>
                           )}
                         </td>
+                      
 
                         <td >
                           {hrEmail[application.hrId] === userEmail ? (
