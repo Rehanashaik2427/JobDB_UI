@@ -178,7 +178,7 @@ const ViewApplications = () => {
     console.log(applicationId);
     console.log(newStatus);
     try {
-      await axios.put(`${BASE_API_URL}/updateApplicationStatus?applicationId=${applicationId}&newStatus=${newStatus}`);
+     await axios.put(`${BASE_API_URL}/updateApplicationStatus?applicationId=${applicationId}&newStatus=${newStatus}&hrEmail=${userEmail}`);
       fetchApplications();
     } catch (error) {
       console.log(error);

@@ -119,7 +119,7 @@ const JobDescription = () => {
       const month = String(appliedOn.getMonth() + 1).padStart(2, '0'); // Get month (January is 0, so we add 1)
       const day = String(appliedOn.getDate()).padStart(2, '0'); // Get day of the month
 
-      const formattedDate = `${year}-${month}-${day}`;
+      const formattedDate = `${year}-${month}-${day}`;  
 
       const response = await axios.put(`${BASE_API_URL}/applyJob`, null, {
         params: { jobId, userId, formattedDate, resumeId },
@@ -265,7 +265,7 @@ const JobDescription = () => {
                 style={{
                   width: '18vw', // Adjust width to 20% of viewport width
                   height: 'auto', // Maintain aspect ratio
-                  maxWidth: '200px', // Optional: max-width to avoid it growing too large
+                  maxWidth: '150px', // Optional: max-width to avoid it growing too large
                   cursor: 'pointer',
                   border: '5px solid white',
                   borderRadius: '50%',
