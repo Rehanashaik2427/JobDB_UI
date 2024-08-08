@@ -14,6 +14,7 @@ import UserRoute from './Session/UserRoute';
 import UserSignin from './Session/UserSignin';
 
 import AdminDashboardRoute from '../Dashboards/AdminDashboardpages/AdminDashboardRoute';
+import AboutJobbox from './AboutJobbox';
 import Contact from './Contact';
 import PrivacyPolicy from './PrivacyPolicy';
 import TermsAndConditions from './TermsAndConditions';
@@ -30,6 +31,7 @@ const PagesRoute = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/aboutus" element={<About />} />
+          <Route path="/about-jobbox" element={<AboutJobbox />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/termsandconditions" element={<TermsAndConditions />} />
           <Route path='/userRoute/*' element={<UserRoute />} />
@@ -48,8 +50,6 @@ const PagesRoute = () => {
           <Route path='/candidate-dashboard/*' element={< CandidateDashbaordRoute />} />
           <Route path='/admin-register/*' element={<AdminRegister />} />
           <Route path='/admin-dashboard/*' element={<AdminDashboardRoute />} />
-
-
         </Routes>
 
       </Router>

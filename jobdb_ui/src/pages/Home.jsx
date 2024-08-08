@@ -180,7 +180,7 @@ const Home = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/" style={{ marginRight: '40px', marginLeft: '150px' }}>Home</Nav.Link>
-              <Nav.Link as={Link} to='/about-jobbox' style={{ marginRight: '40px' }}>About Jobbox</Nav.Link>
+              <Nav.Link as={Link} to="/about-jobbox" style={{ marginRight: '40px' }}>About Jobbox</Nav.Link>
               <Nav.Link as={Link} to="/aboutus" style={{ marginRight: '40px' }}>About Us</Nav.Link>
               <Nav.Link as={Link} to="/admin-register" style={{ marginRight: '40px' }}>Admin</Nav.Link>
               <Nav.Link as={Link} to="/jobdbcompanies" style={{ marginRight: '40px' }}>Companies</Nav.Link>
