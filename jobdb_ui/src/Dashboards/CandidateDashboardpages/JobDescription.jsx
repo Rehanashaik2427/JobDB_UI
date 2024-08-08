@@ -22,8 +22,6 @@ const JobDescription = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(4); // Default page size
   const [totalPages, setTotalPages] = useState(0)
-  const [sortedColumn, setSortedColumn] = useState(null);
-  const [sortOrder, setSortOrder] = useState('asc');
   const [companyLogo, setCompanyLogo] = useState("");
   const [companyBanner, setCompanyBanner] = useState("");
   const [jobDetails, setJobDetails] = useState({
@@ -44,7 +42,7 @@ const JobDescription = () => {
     }
   }, [companyName, page, pageSize]);
 
-  
+
 
   const fetchCompanyLogo = async (companyName) => {
     try {
@@ -217,9 +215,9 @@ const JobDescription = () => {
   };
   return (
     <div>
-      <Navbar expand="lg" className="bg-body-tertiary" style={{ width: '100%' }}>
+      <Navbar expand="lg" className="bg-body-tertiary" style={{ width: '100%', position: 'fixed', top: '0', zIndex: '1000' }}>
         <Container fluid>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand>
             <img
               src="/jb_logo.png"
               alt="JobBox Logo"

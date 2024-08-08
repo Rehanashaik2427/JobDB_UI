@@ -353,7 +353,7 @@ const CandidateJobs = () => {
                       Skills {sortedColumn === 'skills' && (sortOrder === 'asc' ? '▲' : '▼')}
                     </th>
                     <th scope='col'>Job Summary</th>
-                    <th scope='col'>Job description</th>
+                    <th scope='col'>View Job description</th>
                     <th scope='col'>Actions</th>
                   </tr>
                 </thead>
@@ -369,7 +369,7 @@ const CandidateJobs = () => {
                         <Button variant="secondary" className='description btn-rounded'
                           onClick={() => navigate('/candidate-dashboard/job-description', { state: { companyName: job.companyName ,jobId:job.jobId,userId: userId} })}
                         >
-                          View Job Description
+                          View
                         </Button>
                       </td>
                       <td>
