@@ -128,11 +128,11 @@ const DreamApplication = () => {
     fetchApplications();
   }, [userEmail, page, pageSize]);
 
-  const updateStatus = async (applicationId, newStatus) => {
+  const updateStatus = async (applicationId, newStatus, hrId) => {
     console.log(applicationId);
     console.log(newStatus);
     try {
-      const response = await axios.put(`${BASE_API_URL}/updateApplicationStatus?applicationId=${applicationId}&newStatus=${newStatus}`);
+      const response = await axios.put(`${BASE_API_URL}/updateApplicationStatus?applicationId=${applicationId}&newStatus=${newStatus}&hrEmail=${userEmail}`);
       console.log(response.data);
       fetchApplications();
     } catch (error) {
@@ -151,10 +151,13 @@ const DreamApplication = () => {
 
   const [candidateName, setCandidateName] = useState();
   const [candidateEmail, setCandidateEmail] = useState();
-
+  const [hrName, setHrName] = useState();
+  const [hrEmail, setHrEmail] = useState();
   const fetchCandidateDetails = async () => {
     const candidateNames = {};
     const candidateEmails = {};
+    const hrNames = {};
+    const hrEmails = {};
     for (const application of applications) {
       const res = await axios.get(`${BASE_API_URL}/getUserName`, {
         params: {
@@ -165,15 +168,25 @@ const DreamApplication = () => {
       candidateNames[application.candidateId] = res.data.userName;
       candidateEmails[application.candidateId] = res.data.userEmail;
 
+      const response = await axios.get(`${BASE_API_URL}/getUserName`, {
+        params: {
+          userId: application.hrId
+        }
+      });
+      hrNames[application.hrId] = response.data.userName;
+      hrEmails[application.hrId] = response.data.userEmail;
     }
     setCandidateName(candidateNames);
     setCandidateEmail(candidateEmails);
+    setHrName(hrNames);
+    setHrEmail(hrEmails);
   }
   useEffect(() => {
     fetchCandidateDetails();
     fetchResumeTypes(applications);
   }, [applications]);
   const [unreadMessages, setUnreadMessages] = useState([]); // State to track unread messages
+
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -521,45 +534,60 @@ const DreamApplication = () => {
                         <td>{candidateEmail[application.candidateId]}</td>
                         <td>{renderResumeComponent(application.resumeId)}</td>
                         <td>{application.appliedOn}</td>
-                        <td>
-                          <Slider
-                            initialStatus={application.applicationStatus}
-                            onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus)}
-                          />
+                        <td className="text-center">
+                          {application.applicationStatus === "Shortlisted" && hrEmail[application.hrId] !== userEmail ? (
+                            <div>
+                              Shortlisted by {hrName[application.hrId] || 'Unknown HR'} of {application.companyName}
+                            </div>
+                          ) : (
+                            <Slider
+                              initialStatus={application.applicationStatus}
+                              onChangeStatus={(newStatus) => updateStatus(application.applicationId, newStatus, application.hrId)}
+                            />
+                          )}
                         </td>
+
                         <td >
-                          <div style={{ position: 'relative', display: 'inline-block' }}>
-                            {unreadMessages[application.applicationId] > 0 && (
-                              <span
-                                style={{
-                                  position: 'absolute',
-                                  top: '-5px',
-                                  right: '-15px',
-                                  backgroundColor: 'red',
-                                  color: 'white',
-                                  borderRadius: '50%',
-                                  width: '20px',
-                                  height: '20px',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  fontSize: '12px',
-                                  fontWeight: 'bold',
-                                  zIndex: 1, // Ensure notification badge is above SiImessage icon
+                          {hrEmail[application.hrId] === userEmail ? (
+                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                              {unreadMessages[application.applicationId] > 0 && (
+                                <span
+                                  style={{
+                                    position: 'absolute',
+                                    top: '-5px',
+                                    right: '-15px',
+                                    backgroundColor: 'red',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    width: '20px',
+                                    height: '20px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold',
+                                    zIndex: 1, // Ensure notification badge is above SiImessage icon
+                                  }}
+                                >
+                                  {unreadMessages[application.applicationId]}
+                                </span>
+                              )}
+                              <SiImessage
+                                size={25}
+                                onClick={() => {
+                                  handleChatClick(application.applicationId);
+                                  setShowModal(true);
                                 }}
-                              >
-                                {unreadMessages[application.applicationId]}
-                              </span>
-                            )}
+                                style={{ color: 'green', cursor: 'pointer' }}
+                              />
+                            </div>
+                          ) : (
                             <SiImessage
                               size={25}
-                              onClick={() => {
-                                handleChatClick(application.applicationId);
-                                setShowModal(true);
-                              }}
-                              style={{ color: 'green', cursor: 'pointer' }}
+                              style={{ color: 'grey', cursor: 'not-allowed' }}
                             />
-                          </div>
+                          )
+                          }
                         </td>
                       </tr>
                     ))}
